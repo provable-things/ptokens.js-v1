@@ -1,1 +1,1 @@
-# @ptokens/peos
+# ptokens-peos
