@@ -1,0 +1,15 @@
+{
+  "name": "ptokens-peos",
+  "version": "0.0.1",
+  "description": "repo holding the code for interacting with pEOS",
+  "main": "dist/ptokens-peos.cjs.js",
+  "module": "dist/ptokens-peos.esm.js",
+  "browser": "dist/ptokens-peos.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ./"
+  },
+  "author": "alle.manfredi@gmail.com @Provable",
+  "license": "ISC"
+}

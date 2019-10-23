@@ -1,0 +1,19 @@
+{
+  "name": "ptokens",
+  "version": "0.0.1",
+  "description": "ptokens js main lib",
+  "main": "dist/ptokens.cjs.js",
+  "module": "dist/ptokens.esm.js",
+  "browser": "dist/ptokens.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ./"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.3.1",
+    "ptokens-peos": "^0.0.1"
+},
+  "author": "alle.manfredi@gmail.com @Provable",
+  "license": "ISC"
+}
