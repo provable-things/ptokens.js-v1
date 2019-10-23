@@ -7,9 +7,19 @@
   "browser": "dist/ptokens-peos.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "npx eslint ./"
   },
   "author": "alle.manfredi@gmail.com @Provable",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.3.1",
+    "eventemitter3": "^4.0.0",
+    "secp256k1": "^3.7.1",
+    "web3": "^1.2.2",
+    "web3-core-promievent": "^1.2.1"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  }
 }

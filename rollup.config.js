@@ -29,7 +29,7 @@ const config = [
             {
               modules: false,
               targets: {
-                node: '8',
+                node: 'current',
                 browsers: 'last 2 versions'
               }
             }
