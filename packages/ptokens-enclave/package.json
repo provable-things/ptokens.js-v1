@@ -13,7 +13,9 @@
   "author": "alle.manfredi@gmail.com @Provable",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.3.1"
+    "@babel/runtime": "^7.3.1",
+    "axios": "^0.19.0",
+    "chai": "^4.2.0"
   },
   "devDependencies": {
     "jest": "^24.9.0"
