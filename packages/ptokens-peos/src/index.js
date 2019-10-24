@@ -2,18 +2,17 @@ import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
 import { Api, JsonRpc, RpcError } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
-import fetch  from 'node-fetch'
+import fetch from 'node-fetch'
 import { TextEncoder, TextDecoder } from 'util'
-import { eosTransact } from './utils'          
+import { eosTransact } from './utils'
 
 class pEOS {
-
   /**
-   * 
-   * @param {Object} options 
-   * @param {Object} web3 
+   *
+   * @param {Object} options
+   * @param {Object} web3
    */
-  constructor(options, web3 = null) {
+  constructor (options, web3 = null) {
     this.eosPrivateKey = options.eosPrivateKey
     this.eosRpc = options.eosRpc
     this.eosAccountName = options.eosAccountName
@@ -23,11 +22,11 @@ class pEOS {
   }
 
   /**
-   * 
-   * @param {Float} amount 
-   * @param {String} ethAddress 
+   *
+   * @param {Float} amount
+   * @param {String} ethAddress
    */
-  issue(amount, ethAddress, permission = 'active') { 
+  issue (amount, ethAddress, permission = 'active') {
     new Promise(async (resolve, reject) => {
       try {
         const accurateAmount = amount.toFixed(4)
@@ -49,12 +48,12 @@ class pEOS {
   }
 
   /**
-   * 
-   * @param {Float} amount 
-   * @param {String} eosAccount 
+   *
+   * @param {Float} amount
+   * @param {String} eosAccount
    */
-  redeem(amount, eosAccount) {
-    //TODO
+  redeem (amount, eosAccount) {
+    // TODO
   }
 }
 
@@ -62,9 +61,9 @@ export {
   pEOS
 }
 
-/*const issue = (amount, ethAddress, ) => {
+/* const issue = (amount, ethAddress, ) => {
   const promiEvent = Web3PromiEvent()
-    
+
   /*setTimeout(function() {
       promiEvent.eventEmitter.emit('done', 'Hello!')
       promiEvent.resolve('Hello!')
@@ -88,6 +87,6 @@ export {
     blocksBehind: 3,
     expireSeconds: 30,
   })
-  
+
   return promiEvent.eventEmitter
-}*/
+} */

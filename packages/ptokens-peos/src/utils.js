@@ -1,14 +1,14 @@
 import { Api, JsonRpc, RpcError } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
-import fetch  from 'node-fetch'
-import { TextEncoder, TextDecoder } from 'util'    
+import fetch from 'node-fetch'
+import { TextEncoder, TextDecoder } from 'util'
 
 /**
- * 
- * @param {Object} transfer 
+ *
+ * @param {Object} transfer
  */
 const eosTransact = transfer => {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       const {
         eosApi
@@ -19,18 +19,18 @@ const eosTransact = transfer => {
           name: 'transfer',
           authorization: [{
             actor: transfer.actor,
-            permission: transfer.permission,
+            permission: transfer.permission
           }],
           data: {
             from: transfer.from,
             to: transfer.to,
             quantity: transfer.amount + ' EOS',
             memo: transfer.memo
-          },
+          }
         }]
       }, {
         blocksBehind: 3,
-        expireSeconds: 30,
+        expireSeconds: 30
       })
       resolve(result)
     } catch (e) {
@@ -40,9 +40,9 @@ const eosTransact = transfer => {
 }
 
 /**
- * 
- * @param {String} privateKey 
- * @param {String} rpcAddress 
+ *
+ * @param {String} privateKey
+ * @param {String} rpcAddress
  */
 const _getEosJsComponents = (privateKey, rpcAddress) => {
   const eosSignatureProvider = new JsSignatureProvider([privateKey])
@@ -50,8 +50,8 @@ const _getEosJsComponents = (privateKey, rpcAddress) => {
   const eosApi = new Api({
     rpc: eosRpc,
     signatureProvider: eosSignatureProvider,
-    textDecoder: new TextDecoder(), 
-    textEncoder: new TextEncoder() 
+    textDecoder: new TextDecoder(),
+    textEncoder: new TextEncoder()
   })
   return {
     eosSignatureProvider,
