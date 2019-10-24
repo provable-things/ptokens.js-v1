@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rollup -c",
     "test": "jest",
-    "lint": "npx eslint ./"
+    "lint": "npx eslint ./ --fix"
   },
   "author": "alle.manfredi@gmail.com @Provable",
   "license": "ISC",
