@@ -32,7 +32,7 @@ class pEOS {
 
   /**
    *
-   * @param {Float} amount
+   * @param {Integer} amount
    * @param {String} ethAddress
    */
   issue (amount, ethAddress) {
@@ -119,7 +119,7 @@ class pEOS {
 
   /**
    *
-   * @param {Float} amount
+   * @param {Integer} amount
    * @param {String} eosAccount
    */
   redeem (amount, eosAccount, options) {
