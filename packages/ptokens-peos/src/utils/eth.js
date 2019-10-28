@@ -1,4 +1,4 @@
-import abi from '../contract/pEOSToken'
+import abi from '../contract/pEOSToken.json'
 
 const contractAddress = '0x4AEAFc6F72eD16665a70A45297500a0BD9d8c2F0'
 
