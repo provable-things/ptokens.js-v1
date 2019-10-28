@@ -11,6 +11,12 @@
     "publish": "npm run bootstrap && lerna publish --skip-git",
     "test": "lerna run test"
   },
+  "keywords": [
+    "pTokens",
+    "JavaScript",
+    "Ethereum",
+    "EOS"
+  ],
   "author": "alle.manfredi@gmail.com @Provable",
   "repository": {
     "type": "git",
