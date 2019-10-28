@@ -4,11 +4,11 @@ import { Enclave } from 'ptokens-enclave'
 import {
   _getEthAccount,
   _getEthContract,
-  _sendSignedTx,
+  _sendSignedTx
 } from './utils/eth'
 import {
   _getEosJsApi,
-  _isValidEosAccount,
+  _isValidEosAccount
 } from './utils/eos'
 import polling from 'light-async-polling'
 
@@ -16,7 +16,6 @@ const MININUM_NUMBER_OF_PEOS_MINTED = 1
 const TOKEN_DECIMALS = 4
 
 class pEOS {
-
   constructor (options, web3 = null) {
     this.eosjs = _getEosJsApi(options.eosPrivateKey, options.eosProvider)
     this.enclave = new Enclave()
@@ -38,12 +37,11 @@ class pEOS {
    * @param {Function=} null - cb
    */
   issue (amount, ethAddress, cb) {
-    if (amount < MININUM_NUMBER_OF_PEOS_MINTED) {
+    if (amount < MININUM_NUMBER_OF_PEOS_MINTED)
       throw new Error('Amount to issue must be greater than 1 pEOS')
-    }
-    if (!this.web3.utils.isAddress(ethAddress)) {
+
+    if (!this.web3.utils.isAddress(ethAddress))
       throw new Error('Eth Address is not valid')
-    }
 
     const promiEvent = Web3PromiEvent()
 
@@ -99,19 +97,19 @@ class pEOS {
 
         await polling(async () => {
           r = await this.web3.eth.getTransactionReceipt(broadcastedTx)
-            if (r) {
-              if (r.status) {
-                promiEvent.eventEmitter.emit('onEthTxConfirmed', r)
-                
-                return true
-              } else {
-                return false
-              }
+          if (r) {
+            if (r.status) {
+              promiEvent.eventEmitter.emit('onEthTxConfirmed', r)
+
+              return true
             } else {
-             return false
+              return false
             }
+          } else {
+            return false
+          }
         }, 3000)
-        
+
         const result = {
           success: true,
           payload: {
@@ -119,23 +117,21 @@ class pEOS {
             to: ethAddress
           }
         }
-        if (cb) {
+        if (cb)
           cb(result)
-        } else {
+        else
           promiEvent.resolve(result)
-        }
       }
       start()
-    } catch (err) {
+    } catch (e) {
       const error = {
         success: false,
         error: e
       }
-      if (cb) {
+      if (cb)
         cb(error)
-      } else {
+      else
         promiEvent.reject(error)
-      }
     }
     return promiEvent.eventEmitter
   }
@@ -147,12 +143,11 @@ class pEOS {
    * @param {Function=} null - cb
    */
   redeem (amount, eosAccount, cb) {
-    if (amount === 0) {
+    if (amount === 0)
       throw new Error('Impossible to burn 0 pEOS')
-    }
-    if (!_isValidEosAccount(eosAccount)){
+
+    if (!_isValidEosAccount(eosAccount))
       throw new Error('Invalid Eos account provided')
-    }
 
     const promiEvent = Web3PromiEvent()
 
@@ -171,8 +166,8 @@ class pEOS {
             ]
           )
         } else {
-          const account = await _getAccount(web3)
-          const contract = await _getContract(web3)
+          const account = await _getEthAccount(this.web3)
+          const contract = await _getEthContract(this.web3)
           r = await contract.methods.burn(amount, eosAccount).send({
             from: account
           })
@@ -200,8 +195,8 @@ class pEOS {
               return false
             }
           }
-        }, 100)        
-        
+        }, 100)
+
         await polling(async () => {
           r = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
           if (r.trx.receipt.status === 'executed') {
@@ -211,7 +206,7 @@ class pEOS {
             return false
           }
         }, 300)
-        
+
         const result = {
           success: true,
           payload: {
@@ -219,25 +214,21 @@ class pEOS {
             to: eosAccount
           }
         }
-        if (cb) {
+        if (cb)
           cb(result)
-        } else {
+        else
           promiEvent.resolve(result)
-        }
-        
       }
       start()
-
     } catch (e) {
       const error = {
         success: false,
         error: e
       }
-      if (cb) {
+      if (cb)
         cb(error)
-      } else {
+      else
         promiEvent.reject(error)
-      }
     }
     return promiEvent.eventEmitter
   }

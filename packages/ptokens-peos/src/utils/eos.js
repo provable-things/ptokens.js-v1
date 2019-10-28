@@ -21,8 +21,8 @@ const _getEosJsApi = (privateKey, rpcAddress) => {
 }
 
 /**
- * 
- * @param {String} account 
+ *
+ * @param {String} account
  */
 const _isValidEosAccount = account => {
   const regex = new RegExp('([a-z]|[1-5]){12}')
@@ -31,5 +31,5 @@ const _isValidEosAccount = account => {
 
 export {
   _getEosJsApi,
-  _isValidEosAccount,
+  _isValidEosAccount
 }
