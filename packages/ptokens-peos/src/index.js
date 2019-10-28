@@ -5,14 +5,15 @@ import {
   _getEthAccount,
   _getEthContract,
   _sendSignedBurnTx,
+} from './utils/eth'
+import {
   _getEosJsApi,
   _isValidEosAccount,
-   sleep 
-} from './utils'
+} from './utils/eos'
 import polling from 'light-async-polling'
 
-
 const MININUM_NUMBER_OF_PEOS_MINTED = 1
+const TOKEN_DECIMALS = 4
 
 class pEOS {
 
@@ -23,7 +24,7 @@ class pEOS {
       this.isWeb3Injected = true
       this.web3 = web3
     } else {
-      this.web3 = new Web3(new Web3.providers.HttpProvider(options.ethProvider))
+      this.web3 = new Web3(options.ethProvider)
       const account = this.web3.eth.accounts.privateKeyToAccount(options.ethPrivateKey)
       this.web3.eth.defaultAccount = account.address
       this.ethPrivateKey = options.ethPrivateKey
@@ -99,7 +100,8 @@ class pEOS {
           r = await this.web3.eth.getTransactionReceipt(broadcastedTx)
             if (r) {
               if (r.status) {
-                promiEvent.eventEmitter.emit('onEthConfirmedTx', r)
+                promiEvent.eventEmitter.emit('onEthTxConfirmed', r)
+                
                 return true
               } else {
                 return false
@@ -108,6 +110,7 @@ class pEOS {
              return false
             }
         }, 3000)
+        
         promiEvent.resolve()
       }
       start()
@@ -135,17 +138,59 @@ class pEOS {
     try {
       const start = async () => {
         let r = null
+        const accurateAmount = amount * Math.pow(10, TOKEN_DECIMALS)
         if (!this.isWeb3Injected) {
-          const r = await _sendSignedBurnTx(
+          r = await _sendSignedBurnTx(
             this.web3,
             this.ethPrivateKey,
-            amount,
-            eosAccount
+            [
+              accurateAmount,
+              eosAccount
+            ]
           )
         } else {
-          //TODO: injected web3
+          const account = await _getAccount(web3)
+          const contract = await _getContract(web3)
+          r = await contract.methods.burn(amount, eosAccount).send({
+            from: account
+          })
         }
         promiEvent.eventEmitter.emit('onEthTxConfirmed', r)
+
+        const polledTx = r.transactionHash
+        let broadcastedTx = ''
+        let isSeen = false
+        await polling(async () => {
+          r = await this.enclave.getIncomingTransactionStatus(polledTx)
+          if (r.status !== 200) {
+            promiEvent.reject('Error during the comunication with the Enclave')
+            return true
+          } else {
+            if (r.data.broadcast === false && !isSeen) {
+              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
+              isSeen = true
+              return false
+            } else if (r.data.broadcast === true) {
+              promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', r.data)
+              broadcastedTx = r.data.broadcast_transaction_hash
+              return true
+            } else {
+              return false
+            }
+          }
+        }, 100)        
+        
+        await polling(async () => {
+          r = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
+          if (r.trx.receipt.status === 'executed') {
+            promiEvent.eventEmitter.emit('onEosTxConfirmed', r.data)
+            return true
+          } else {
+            return false
+          }
+        }, 300)
+        
+        promiEvent.resolve()
       }
       start()
     } catch (e) {
