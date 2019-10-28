@@ -8,7 +8,8 @@ const config = {
   coveragePathIgnorePatterns: [
       'node_modules',
       'dist',
-  ]
+  ],
+  verbose: true
 }
 
 module.exports = () => {
