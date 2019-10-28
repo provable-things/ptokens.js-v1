@@ -1,5 +1,5 @@
 {
-  "name": "ptokens.js",
+  "name": "ptokens",
   "description": "repo holding the code for interacting with ptokens",
   "private": true,
   "scripts": {
