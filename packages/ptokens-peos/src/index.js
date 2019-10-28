@@ -115,27 +115,14 @@ class pEOS {
         }, 3000)
 
         const result = {
-          success: true,
-          payload: {
-            totalIssued: amount.toFixed(TOKEN_DECIMALS),
-            to: ethAddress
-          }
+          totalIssued: amount.toFixed(TOKEN_DECIMALS),
+          to: ethAddress
         }
-        if (cb)
-          cb(result)
-        else
-          promiEvent.resolve(result)
+        cb ? cb(result, null) : promiEvent.resolve(result)
       }
       start()
     } catch (e) {
-      const error = {
-        success: false,
-        error: e
-      }
-      if (cb)
-        cb(error)
-      else
-        promiEvent.reject(error)
+      cb ? cb(null, e) : promiEvent.reject(e)
     }
     return promiEvent.eventEmitter
   }
@@ -171,7 +158,7 @@ class pEOS {
           )
         } else {
           const account = await _getEthAccount(this.web3)
-          const contract = await _getEthContract(this.web3)
+          const contract = _getEthContract(this.web3, account)
           r = await contract.methods.burn(amount, eosAccount).send({
             from: account
           })
@@ -192,6 +179,9 @@ class pEOS {
               isSeen = true
               return false
             } else if (r.data.broadcast === true) {
+              if (!isSeen)
+                promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
+
               promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', r.data)
               broadcastedTx = r.data.broadcast_transaction_hash
               return true
@@ -212,29 +202,62 @@ class pEOS {
         }, 300)
 
         const result = {
-          success: true,
-          payload: {
-            totalRedeemed: amount.toFixed(TOKEN_DECIMALS),
-            to: eosAccount
-          }
+          totalRedeemed: amount.toFixed(TOKEN_DECIMALS),
+          to: eosAccount
         }
-        if (cb)
-          cb(result)
-        else
-          promiEvent.resolve(result)
+        cb ? cb(result, null) : promiEvent.resolve(result)
       }
       start()
     } catch (e) {
-      const error = {
-        success: false,
-        error: e
-      }
-      if (cb)
-        cb(error)
-      else
-        promiEvent.reject(error)
+      cb ? cb(null, e) : promiEvent.reject(e)
     }
     return promiEvent.eventEmitter
+  }
+
+  /**
+   *
+   * @param {Function=} null - cb
+   */
+  getTotalIssued (cb = null) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let account = null
+        if (this.isWeb3Injected)
+          account = await _getEthAccount(this.web3)
+        else
+          account = this.web3.eth.defaultAccount
+
+        const contract = _getEthContract(this.web3, account)
+        const totalMinted = await contract.methods.totalMinted().call()
+        const totalIssued = totalMinted / Math.pow(10, TOKEN_DECIMALS)
+        cb ? cb(totalIssued, null) : resolve(totalIssued)
+      } catch (e) {
+        cb ? cb(null, e) : reject(e)
+      }
+    })
+  }
+
+  /**
+   *
+   * @param {Function=} null - cb
+   */
+  getTotalRedeemed (cb = null) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let account = null
+        if (this.isWeb3Injected)
+          account = await _getEthAccount(this.web3)
+        else
+          account = this.web3.eth.defaultAccount
+
+        const contract = _getEthContract(this.web3, account)
+        const totalBurned = await contract.methods.totalBurned().call()
+        const totalRedeemed = totalBurned / Math.pow(10, TOKEN_DECIMALS)
+        cb ? cb(totalRedeemed, null) : resolve(totalRedeemed)
+      } catch (e) {
+        cb ? cb(null, e) : reject(e)
+      }
+    })
   }
 }
 

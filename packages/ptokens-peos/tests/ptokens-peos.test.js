@@ -26,11 +26,8 @@ test('Should issue 1 pEOS with callback', async () => {
       const peos = new pEOS(configs)
       peos.issue(peosToIssue, to, r => {
         expect(r).to.deep.include({
-          success: true,
-          payload: {
-            totalIssued: expectedAmountIssued,
-            to: expectedEthAccount
-          }
+          totalIssued: expectedAmountIssued,
+          to: expectedEthAccount
         })
         resolve()
       })
@@ -72,11 +69,8 @@ test('Should issue 1 pEOS with promises', async () => {
         .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
         .then(r => {
           expect(r).to.deep.include({
-            success: true,
-            payload: {
-              totalIssued: expectedAmountIssued,
-              to: expectedEthAccount
-            }
+            totalIssued: expectedAmountIssued,
+            to: expectedEthAccount
           })
           resolve()
         })
@@ -112,11 +106,8 @@ test('Should redeem 1 pEOS with callback', async () => {
       peos.issue(peosToIssue, ethAddress)
       peos.redeem(peosToRedeem, to, r => {
         expect(r).to.deep.include({
-          success: true,
-          payload: {
-            totalRedeemed: expectedAmountRedeemed,
-            to: expectedEosAccount
-          }
+          totalRedeemed: expectedAmountRedeemed,
+          to: expectedEosAccount
         })
         resolve()
       })
@@ -161,11 +152,8 @@ test('Should redeem 1 pEOS with promises', async () => {
         .once('onEosTxConfirmed', () => { eosTxIsConfirmed = true })
         .then(r => {
           expect(r).to.deep.include({
-            success: true,
-            payload: {
-              totalRedeemed: expectedAmountRedeemed,
-              to: expectedEosAccount
-            }
+            totalRedeemed: expectedAmountRedeemed,
+            to: expectedEosAccount
           })
           resolve()
         })
@@ -175,4 +163,88 @@ test('Should redeem 1 pEOS with promises', async () => {
   expect(enclaveHasReceivedTx).to.equal(true)
   expect(enclaveHasBroadcastedTx).to.equal(true)
   expect(eosTxIsConfirmed).to.equal(true)
+})
+
+test('Should get total number of issued pEOS with callback', async () => {
+  const configs = {
+    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
+    eosProvider: 'https://ptoken-eos.provable.xyz:443'
+  }
+  const peos = new pEOS(configs)
+  const currentTotalIssued = await peos.getTotalIssued()
+  const peosToIssue = 1
+  const expectedTotalIssue = currentTotalIssued + peosToIssue
+  const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+
+  await peos.issue(peosToIssue, to)
+  const check = () =>
+    new Promise(resolve => {
+      peos.getTotalIssued(totalIssued => {
+        expect(totalIssued).to.be.equal(expectedTotalIssue)
+        resolve()
+      })
+    })
+  await check()
+})
+
+test('Should get total number of issued pEOS with promises', async () => {
+  const configs = {
+    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
+    eosProvider: 'https://ptoken-eos.provable.xyz:443'
+  }
+  const peos = new pEOS(configs)
+  const currentTotalIssued = await peos.getTotalIssued()
+  const peosToIssue = 1
+  const expectedTotalIssue = currentTotalIssued + peosToIssue
+  const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+
+  await peos.issue(peosToIssue, to)
+  const totalIssued = await peos.getTotalIssued()
+  expect(totalIssued).to.be.equal(expectedTotalIssue)
+})
+
+test('Should get total number of redemeed pEOS with callback', async () => {
+  const configs = {
+    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
+    eosProvider: 'https://ptoken-eos.provable.xyz:443'
+  }
+  const peos = new pEOS(configs)
+  const currentTotalRedeemed = await peos.getTotalRedeemed()
+  const peosToRedeem = 1
+  const expectedTotalRedeemed = currentTotalRedeemed + peosToRedeem
+  const to = 'all3manfr4di'
+
+  await peos.redeem(peosToRedeem, to)
+  const check = () =>
+    new Promise(resolve => {
+      peos.getTotalRedeemed(totalRedeemed => {
+        expect(totalRedeemed).to.be.equal(expectedTotalRedeemed)
+        resolve()
+      })
+    })
+  await check()
+})
+
+test('Should get total number of redemeed pEOS with promises', async () => {
+  const configs = {
+    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
+    eosProvider: 'https://ptoken-eos.provable.xyz:443'
+  }
+  const peos = new pEOS(configs)
+  const currentTotalRedeemed = await peos.getTotalRedeemed()
+  const peosToRedeem = 1
+  const expectedTotalRedeemed = currentTotalRedeemed + peosToRedeem
+  const to = 'all3manfr4di'
+
+  await peos.redeem(peosToRedeem, to)
+  const totalRedeemed = await peos.getTotalRedeemed()
+  expect(totalRedeemed).to.be.equal(expectedTotalRedeemed)
 })
