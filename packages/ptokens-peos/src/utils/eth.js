@@ -30,7 +30,7 @@ const _getEthContract = async web3 => {
  * @param {Integer} amount 
  * @param {String} eosAccount 
  */
-const _sendSignedBurnTx = (web3, privateKey, params) =>
+const _sendSignedTx = (web3, privateKey, method, params) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = new web3.eth.Contract(abi, contractAddress, {
@@ -38,7 +38,7 @@ const _sendSignedBurnTx = (web3, privateKey, params) =>
       })
       const nonce = await web3.eth.getTransactionCount(web3.eth.defaultAccount, 'pending')
       const gasPrice = await web3.eth.getGasPrice()
-      const functionAbi = contract.methods.burn(...params).encodeABI()
+      const functionAbi = contract.methods[method](...params).encodeABI()
       /*const estimatedGas = await web3.eth.estimateGas({
           to: contractAddress,
           data: functionAbi
@@ -65,5 +65,5 @@ const _sendSignedBurnTx = (web3, privateKey, params) =>
 export {
   _getEthAccount,
   _getEthContract,
-  _sendSignedBurnTx
+  _sendSignedTx
 }

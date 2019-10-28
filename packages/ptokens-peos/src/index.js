@@ -4,7 +4,7 @@ import { Enclave } from 'ptokens-enclave'
 import {
   _getEthAccount,
   _getEthContract,
-  _sendSignedBurnTx,
+  _sendSignedTx,
 } from './utils/eth'
 import {
   _getEosJsApi,
@@ -140,9 +140,10 @@ class pEOS {
         let r = null
         const accurateAmount = amount * Math.pow(10, TOKEN_DECIMALS)
         if (!this.isWeb3Injected) {
-          r = await _sendSignedBurnTx(
+          r = await _sendSignedTx(
             this.web3,
             this.ethPrivateKey,
+            'burn',
             [
               accurateAmount,
               eosAccount
