@@ -36,7 +36,7 @@ class pEOS {
    * @param {Integer} amount
    * @param {String} ethAddress
    */
-  issue (amount, ethAddress) {
+  issue (amount, ethAddress, cb) {
     if (amount < MININUM_NUMBER_OF_PEOS_MINTED) {
       throw new Error('Amount to issue must be greater than 1 pEOS')
     }
@@ -111,11 +111,30 @@ class pEOS {
             }
         }, 3000)
         
-        promiEvent.resolve()
+        const result = {
+          success: true,
+          payload: {
+            totalBurned: amount.toFixed(),
+            to: ethAddress
+          }
+        }
+        if (cb) {
+          cb(result)
+        } else {
+          promiEvent.resolve(result)
+        }
       }
       start()
     } catch (err) {
-      promiEvent.reject(err)
+      const error = {
+        success: false,
+        error: e
+      }
+      if (cb) {
+        cb(error)
+      } else {
+        promiEvent.reject(error)
+      }
     }
     return promiEvent.eventEmitter
   }
@@ -125,7 +144,7 @@ class pEOS {
    * @param {Integer} amount
    * @param {String} eosAccount
    */
-  redeem (amount, eosAccount, options) {
+  redeem (amount, eosAccount, cb) {
     if (amount === 0) {
       throw new Error('Impossible to burn 0 pEOS')
     }
@@ -191,11 +210,32 @@ class pEOS {
           }
         }, 300)
         
-        promiEvent.resolve()
+        const result = {
+          success: true,
+          payload: {
+            totalRedeemed: amount.toFixed(),
+            to: eosAccount
+          }
+        }
+        if (cb) {
+          cb(result)
+        } else {
+          promiEvent.resolve(result)
+        }
+        
       }
       start()
+
     } catch (e) {
-      promiEvent.reject(e)
+      const error = {
+        success: false,
+        error: e
+      }
+      if (cb) {
+        cb(error)
+      } else {
+        promiEvent.reject(error)
+      }
     }
     return promiEvent.eventEmitter
   }
