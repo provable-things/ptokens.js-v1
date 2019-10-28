@@ -15,8 +15,7 @@ const _getEthAccount = async web3 => {
  *
  * @param {Object} web3
  */
-const _getEthContract = async web3 => {
-  const account = await _getEthAccount(web3)
+const _getEthContract = (web3, account) => {
   const contract = new web3.eth.Contract(abi, contractAddress, {
     defaultAccount: account
   })
@@ -33,9 +32,7 @@ const _getEthContract = async web3 => {
 const _sendSignedTx = (web3, privateKey, method, params) =>
   new Promise(async (resolve, reject) => {
     try {
-      const contract = new web3.eth.Contract(abi, contractAddress, {
-        defaultAccount: web3.eth.defaultAccount
-      })
+      const contract = _getEthContract(web3, web3.eth.defaultAccount)
       const nonce = await web3.eth.getTransactionCount(web3.eth.defaultAccount, 'pending')
       const gasPrice = await web3.eth.getGasPrice()
       const functionAbi = contract.methods[method](...params).encodeABI()
