@@ -172,6 +172,7 @@ test('Should redeem 1 pEOS with promises', async () => {
             to: expectedEosAccount
           }
         })
+        //NOTE: it can happen that the promise is resolved before the event even if the execution order is not so
         sleep(100)
         resolve()
       })
