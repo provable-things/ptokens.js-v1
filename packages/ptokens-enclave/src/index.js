@@ -23,7 +23,7 @@ class Enclave {
    * @param {Integer} limit
    * @param {Function=} null - cb
    */
-  getEthReport (limit = null, cb = null) {
+  getEthReport (limit, cb = null) {
     return new Promise((resolve, reject) => {
       api.get(`/eth-reports/limit/${limit}`)
         .then(r => cb
