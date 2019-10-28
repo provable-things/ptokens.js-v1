@@ -94,7 +94,7 @@ class pEOS {
               return false
             }
           }
-        }, 100)
+        }, 200)
 
         await polling(async () => {
           r = await this.web3.eth.getTransactionReceipt(broadcastedTx)
@@ -114,7 +114,7 @@ class pEOS {
         const result = {
           success: true,
           payload: {
-            totalBurned: amount.toFixed(),
+            totalIssued: amount.toFixed(TOKEN_DECIMALS),
             to: ethAddress
           }
         }
@@ -213,7 +213,7 @@ class pEOS {
         const result = {
           success: true,
           payload: {
-            totalRedeemed: amount.toFixed(),
+            totalRedeemed: amount.toFixed(TOKEN_DECIMALS),
             to: eosAccount
           }
         }
