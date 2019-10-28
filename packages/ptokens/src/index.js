@@ -1,7 +1,11 @@
-import peos from 'ptokens-peos'
+import { pEOS } from 'ptokens-peos'
+import { Enclave } from 'ptokens-enclave'
 
-export default class Ptokens {
-  constructor() {
-    this.peos = peos
+class Ptokens {
+  constructor (configs) {
+    this.peos = new pEOS(configs)
+    this.enclave = new Enclave()
   }
 }
+
+export default Ptokens
