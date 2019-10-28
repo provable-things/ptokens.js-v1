@@ -27,8 +27,8 @@ const _getEthContract = async web3 => {
  * 
  * @param {Object} web3 
  * @param {String} privateKey 
- * @param {Integer} amount 
- * @param {String} eosAccount 
+ * @param {String} method 
+ * @param {Array} params 
  */
 const _sendSignedTx = (web3, privateKey, method, params) =>
   new Promise(async (resolve, reject) => {
