@@ -12,7 +12,7 @@ const configs = {
 
 jest.setTimeout(3000000)
 
-/*test('Should issue 1 pEOS with callback', async () => {
+test('Should issue 1 pEOS with callback', async () => {
   const peosToIssue = 1
   const expectedAmountIssued = peosToIssue.toFixed(TOKEN_DECIMALS)
   const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
@@ -206,7 +206,7 @@ test('Should get total number of redemeed pEOS with promises', async () => {
   await peos.redeem(peosToRedeem, to)
   const totalRedeemed = await peos.getTotalRedeemed()
   expect(totalRedeemed).to.be.equal(expectedTotalRedeemed)
-})*/
+})
 
 test('Should get total number of circulating pEOS with callback', async () => {
   const peos = new pEOS(configs)
