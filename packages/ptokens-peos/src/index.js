@@ -86,6 +86,10 @@ class pEOS {
               isSeen = true
               return false
             } else if (r.data.broadcast === true) {
+              // NOTE: could happen that eos tx is confirmed before enclave received it
+              if (!isSeen)
+                promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
+
               promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', r.data)
               broadcastedTx = r.data.broadcast_transaction_hash
               return true
