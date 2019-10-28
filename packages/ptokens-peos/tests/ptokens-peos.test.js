@@ -3,19 +3,20 @@ import { expect } from 'chai'
 
 const TOKEN_DECIMALS = 4
 
-jest.setTimeout(300000)
+const configs = {
+  ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+  ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+  eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
+  eosProvider: 'https://ptoken-eos.provable.xyz:443'
+}
 
-test('Should issue 1 pEOS with callback', async () => {
+jest.setTimeout(3000000)
+
+/*test('Should issue 1 pEOS with callback', async () => {
   const peosToIssue = 1
   const expectedAmountIssued = peosToIssue.toFixed(TOKEN_DECIMALS)
   const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
   const expectedEthAccount = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
 
   let eosTxIsConfirmed = false
   let enclaveHasReceivedTx = false
@@ -48,12 +49,6 @@ test('Should issue 1 pEOS with promises', async () => {
   const expectedAmountIssued = peosToIssue.toFixed(TOKEN_DECIMALS)
   const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
   const expectedEthAccount = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
 
   let eosTxIsConfirmed = false
   let enclaveHasReceivedTx = false
@@ -89,12 +84,6 @@ test('Should redeem 1 pEOS with callback', async () => {
   const ethAddress = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
   const to = 'all3manfr4di'
   const expectedEosAccount = 'all3manfr4di'
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
 
   let ethTxIsConfirmed = false
   let enclaveHasReceivedTx = false
@@ -130,12 +119,6 @@ test('Should redeem 1 pEOS with promises', async () => {
   const ethAddress = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
   const to = 'all3manfr4di'
   const expectedEosAccount = 'all3manfr4di'
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
 
   let ethTxIsConfirmed = false
   let enclaveHasReceivedTx = false
@@ -166,12 +149,6 @@ test('Should redeem 1 pEOS with promises', async () => {
 })
 
 test('Should get total number of issued pEOS with callback', async () => {
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
   const peos = new pEOS(configs)
   const currentTotalIssued = await peos.getTotalIssued()
   const peosToIssue = 1
@@ -190,12 +167,6 @@ test('Should get total number of issued pEOS with callback', async () => {
 })
 
 test('Should get total number of issued pEOS with promises', async () => {
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
   const peos = new pEOS(configs)
   const currentTotalIssued = await peos.getTotalIssued()
   const peosToIssue = 1
@@ -208,12 +179,6 @@ test('Should get total number of issued pEOS with promises', async () => {
 })
 
 test('Should get total number of redemeed pEOS with callback', async () => {
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
   const peos = new pEOS(configs)
   const currentTotalRedeemed = await peos.getTotalRedeemed()
   const peosToRedeem = 1
@@ -232,12 +197,6 @@ test('Should get total number of redemeed pEOS with callback', async () => {
 })
 
 test('Should get total number of redemeed pEOS with promises', async () => {
-  const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
-  }
   const peos = new pEOS(configs)
   const currentTotalRedeemed = await peos.getTotalRedeemed()
   const peosToRedeem = 1
@@ -247,4 +206,34 @@ test('Should get total number of redemeed pEOS with promises', async () => {
   await peos.redeem(peosToRedeem, to)
   const totalRedeemed = await peos.getTotalRedeemed()
   expect(totalRedeemed).to.be.equal(expectedTotalRedeemed)
+})*/
+
+test('Should get total number of circulating pEOS with callback', async () => {
+  const peos = new pEOS(configs)
+  const currentCirculatingSupply = await peos.getCirculatingSupply()
+  const peosToRedeem = 1
+  const expectedCirculatingSupply = currentCirculatingSupply - peosToRedeem
+  const to = 'all3manfr4di'
+
+  await peos.redeem(peosToRedeem, to)
+  const check = () =>
+    new Promise(resolve => {
+      peos.getCirculatingSupply(circulatingSupply => {
+        expect(circulatingSupply).to.be.equal(expectedCirculatingSupply)
+        resolve()
+      })
+    })
+  await check()
+})
+
+test('Should get total number of circulating pEOS with promises', async () => {
+  const peos = new pEOS(configs)
+  const currentCirculatingSupply = await peos.getCirculatingSupply()
+  const peosToRedeem = 1
+  const expectedCirculatingSupply = currentCirculatingSupply - peosToRedeem
+  const to = 'all3manfr4di'
+
+  await peos.redeem(peosToRedeem, to)
+  const circulatingSupply = await peos.getCirculatingSupply()
+  expect(circulatingSupply).to.be.equal(expectedCirculatingSupply)
 })

@@ -224,6 +224,7 @@ class pEOS {
         let account = null
         if (this.isWeb3Injected)
           account = await _getEthAccount(this.web3)
+
         else
           account = this.web3.eth.defaultAccount
 
@@ -247,6 +248,7 @@ class pEOS {
         let account = null
         if (this.isWeb3Injected)
           account = await _getEthAccount(this.web3)
+
         else
           account = this.web3.eth.defaultAccount
 
@@ -254,6 +256,30 @@ class pEOS {
         const totalBurned = await contract.methods.totalBurned().call()
         const totalRedeemed = totalBurned / Math.pow(10, TOKEN_DECIMALS)
         cb ? cb(totalRedeemed, null) : resolve(totalRedeemed)
+      } catch (e) {
+        cb ? cb(null, e) : reject(e)
+      }
+    })
+  }
+
+  /**
+   *
+   * @param {Function=} null - cb
+   */
+  getCirculatingSupply (cb = null) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let account = null
+        if (this.isWeb3Injected)
+          account = await _getEthAccount(this.web3)
+
+        else
+          account = this.web3.eth.defaultAccount
+
+        const contract = _getEthContract(this.web3, account)
+        const totalSupply = await contract.methods.totalSupply().call()
+        const circulating = totalSupply / Math.pow(10, TOKEN_DECIMALS)
+        cb ? cb(circulating, null) : resolve(circulating)
       } catch (e) {
         cb ? cb(null, e) : reject(e)
       }
