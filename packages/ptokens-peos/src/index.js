@@ -35,6 +35,7 @@ class pEOS {
    *
    * @param {Integer} amount
    * @param {String} ethAddress
+   * @param {Function=} null - cb
    */
   issue (amount, ethAddress, cb) {
     if (amount < MININUM_NUMBER_OF_PEOS_MINTED) {
@@ -143,6 +144,7 @@ class pEOS {
    *
    * @param {Integer} amount
    * @param {String} eosAccount
+   * @param {Function=} null - cb
    */
   redeem (amount, eosAccount, cb) {
     if (amount === 0) {
