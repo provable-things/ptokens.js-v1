@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "link": "lerna link",
     "build": "lerna run build",
     "init": "npm i && lerna bootstrap",
     "lint": "lerna run lint",
+    "publish": "npm run bootstrap && lerna publish --skip-git",
     "test": "lerna run test"
   },
   "author": "alle.manfredi@gmail.com @Provable",
@@ -24,7 +26,6 @@
     "eslint": "^5.14.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-mocha": "^5.3.0",
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
