@@ -15,7 +15,9 @@ module.exports = {
     node: true
   },
   // ADD ANY GLOBALS HERE!
-  globals: {},
+  globals: {
+    'jest': true
+  },
   rules: {
     quotes: [2, 'single', { avoidEscape: true }],
     'prefer-promise-reject-errors': 1,
@@ -23,13 +25,11 @@ module.exports = {
     'no-extra-parens': [1, 'all'],
     'no-misleading-character-class': 1,
     'no-prototype-builtins': 1,
-    'no-async-promise-executor': 1,
     'no-await-in-loop': 0, // should probably be on for perf dependent application
     'require-atomic-updates': 1,
     // best practices
     'accessor-pairs': 1,
     'array-callback-return': 0, // this best practice calls out the use of map over forEach
-    'class-methods-use-this': 1,
     'complexity': [1, 5],
     'curly': [1, 'multi-or-nest', 'consistent'],
     'dot-location': [2, 'property'],
@@ -46,6 +46,7 @@ module.exports = {
     'no-new': 1,
     'no-new-func': 2,
     'no-new-wrappers': 1,
+    'new-cap': 0, //since token name start with 'p'
     'no-param-reassign': 2,
     'no-redeclare': [2, { 'builtinGlobals': true }],
     'no-shadow': [2, {
@@ -54,6 +55,8 @@ module.exports = {
         'done',
         'resolve',
         'reject',
+        'TextEncoder',
+        'TextDecoder',
         'cb', // x could potentially be added
       ]
     }],
@@ -79,7 +82,6 @@ module.exports = {
       terms: [
         'fixme',
         'todo',
-        'note'
       ],
       location: 'anywhere' // useful to highlight comments that need addressing
     }],
