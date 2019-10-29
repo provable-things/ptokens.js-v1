@@ -1,7 +1,7 @@
 import {
   makeApiGet,
   makeApiPost
-} from './utils'
+} from './utils/index'
 
 class Enclave {
   /**
