@@ -1,6 +1,9 @@
 import pEOS from '../src/index'
 import { expect } from 'chai'
 
+const sleep = ms =>
+  new Promise(resolve => setTimeout(() => resolve(), ms))
+
 const TOKEN_DECIMALS = 4
 
 const configs = {
@@ -150,6 +153,7 @@ test('Should redeem 1 pEOS with promises', async () => {
 
 test('Should get total number of issued pEOS with callback', async () => {
   const peos = new pEOS(configs)
+  await sleep(300)
   const currentTotalIssued = await peos.getTotalIssued()
   const peosToIssue = 1
   const expectedTotalIssue = currentTotalIssued + peosToIssue
@@ -168,6 +172,7 @@ test('Should get total number of issued pEOS with callback', async () => {
 
 test('Should get total number of issued pEOS with promises', async () => {
   const peos = new pEOS(configs)
+  await sleep(300)
   const currentTotalIssued = await peos.getTotalIssued()
   const peosToIssue = 1
   const expectedTotalIssue = currentTotalIssued + peosToIssue
@@ -178,8 +183,9 @@ test('Should get total number of issued pEOS with promises', async () => {
   expect(totalIssued).to.be.equal(expectedTotalIssue)
 })
 
-test('Should get total number of redemeed pEOS with callback', async () => {
+test('Should get total number of redeemed pEOS with callback', async () => {
   const peos = new pEOS(configs)
+  await sleep(300)
   const currentTotalRedeemed = await peos.getTotalRedeemed()
   const peosToRedeem = 1
   const expectedTotalRedeemed = currentTotalRedeemed + peosToRedeem
@@ -196,8 +202,9 @@ test('Should get total number of redemeed pEOS with callback', async () => {
   await check()
 })
 
-test('Should get total number of redemeed pEOS with promises', async () => {
+test('Should get total number of redeemed pEOS with promises', async () => {
   const peos = new pEOS(configs)
+  await sleep(300)
   const currentTotalRedeemed = await peos.getTotalRedeemed()
   const peosToRedeem = 1
   const expectedTotalRedeemed = currentTotalRedeemed + peosToRedeem
@@ -210,6 +217,7 @@ test('Should get total number of redemeed pEOS with promises', async () => {
 
 test('Should get total number of circulating pEOS with callback', async () => {
   const peos = new pEOS(configs)
+  await sleep(300)
   const currentCirculatingSupply = await peos.getCirculatingSupply()
   const peosToRedeem = 1
   const expectedCirculatingSupply = currentCirculatingSupply - peosToRedeem
@@ -228,6 +236,7 @@ test('Should get total number of circulating pEOS with callback', async () => {
 
 test('Should get total number of circulating pEOS with promises', async () => {
   const peos = new pEOS(configs)
+  await sleep(300)
   const currentCirculatingSupply = await peos.getCirculatingSupply()
   const peosToRedeem = 1
   const expectedCirculatingSupply = currentCirculatingSupply - peosToRedeem
