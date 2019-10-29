@@ -4,43 +4,48 @@ import Enclave from 'ptokens-enclave'
 import {
   _getEthAccount,
   _getEthContract,
-  _sendSignedTx
+  _sendSignedTx,
+  _getTotalOf
 } from './utils/eth'
 import {
   _getEosJsApi,
   _isValidEosAccount
 } from './utils/eos'
+import {
+  TOKEN_DECIMALS,
+  ETH_NODE_POLLING_TIME_INTERVAL,
+  ENCLAVE_POLLING_TIME,
+  EOS_NODE_POLLING_TIME_INTERVAL,
+  MININUM_NUMBER_OF_PEOS_MINTED
+} from './utils/constants'
 import polling from 'light-async-polling'
 
-const MININUM_NUMBER_OF_PEOS_MINTED = 1
-const TOKEN_DECIMALS = 4
-
 class pEOS {
-  constructor (options, web3 = null) {
-    this.eosjs = _getEosJsApi(options.eosPrivateKey, options.eosProvider)
+  constructor (_configs, _web3 = null) {
+    this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
     this.enclave = new Enclave()
-    if (web3 && web3 instanceof Web3) {
+    if (_web3 && _web3 instanceof Web3) {
       this.isWeb3Injected = true
-      this.web3 = web3
+      this.web3 = _web3
     } else {
-      this.web3 = new Web3(options.ethProvider)
-      const account = this.web3.eth.accounts.privateKeyToAccount(options.ethPrivateKey)
+      this.web3 = new Web3(_configs.ethProvider)
+      const account = this.web3.eth.accounts.privateKeyToAccount(_configs.ethPrivateKey)
       this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = options.ethPrivateKey
+      this.ethPrivateKey = _configs.ethPrivateKey
     }
   }
 
   /**
    *
-   * @param {Integer} amount
-   * @param {String} ethAddress
-   * @param {Function=} null - cb
+   * @param {Integer} _amount
+   * @param {String} _ethAddress
+   * @param {Function=} null - _callback
    */
-  issue (amount, ethAddress, cb) {
-    if (amount < MININUM_NUMBER_OF_PEOS_MINTED)
+  issue (_amount, _ethAddress, _callback) {
+    if (_amount < MININUM_NUMBER_OF_PEOS_MINTED)
       throw new Error('Amount to issue must be greater than 1 pEOS')
 
-    if (!this.web3.utils.isAddress(ethAddress))
+    if (!this.web3.utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
 
     const promiEvent = Web3PromiEvent()
@@ -50,7 +55,7 @@ class pEOS {
         const pubkeys = await this.eosjs.signatureProvider.getAvailableKeys()
         const accounts = await this.eosjs.rpc.history_get_key_accounts(pubkeys[0])
         const eosAccountName = accounts.account_names[0]
-        const accurateAmount = amount.toFixed(4)
+        const accurateAmount = _amount.toFixed(4)
         let r = await this.eosjs.transact({
           actions: [{
             account: 'eosio.token',
@@ -63,7 +68,7 @@ class pEOS {
               from: eosAccountName,
               to: 'provabletokn',
               quantity: accurateAmount + ' EOS',
-              memo: ethAddress
+              memo: _ethAddress
             }
           }]
         }, {
@@ -97,7 +102,7 @@ class pEOS {
               return false
             }
           }
-        }, 200)
+        }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
           r = await this.web3.eth.getTransactionReceipt(broadcastedTx)
@@ -112,32 +117,32 @@ class pEOS {
           } else {
             return false
           }
-        }, 3000)
+        }, ETH_NODE_POLLING_TIME_INTERVAL)
 
         const result = {
-          totalIssued: amount.toFixed(TOKEN_DECIMALS),
-          to: ethAddress
+          totalIssued: _amount.toFixed(TOKEN_DECIMALS),
+          to: _ethAddress
         }
-        cb ? cb(result, null) : promiEvent.resolve(result)
+        _callback ? _callback(result, null) : promiEvent.resolve(result)
       }
       start()
     } catch (e) {
-      cb ? cb(null, e) : promiEvent.reject(e)
+      _callback ? _callback(null, e) : promiEvent.reject(e)
     }
     return promiEvent.eventEmitter
   }
 
   /**
    *
-   * @param {Integer} amount
-   * @param {String} eosAccount
-   * @param {Function=} null - cb
+   * @param {Integer} _amount
+   * @param {String} _eosAccount
+   * @param {Function=} null - _callback
    */
-  redeem (amount, eosAccount, cb) {
-    if (amount === 0)
+  redeem (_amount, _eosAccount, _callback) {
+    if (_amount === 0)
       throw new Error('Impossible to burn 0 pEOS')
 
-    if (!_isValidEosAccount(eosAccount))
+    if (!_isValidEosAccount(_eosAccount))
       throw new Error('Invalid Eos account provided')
 
     const promiEvent = Web3PromiEvent()
@@ -145,7 +150,7 @@ class pEOS {
     try {
       const start = async () => {
         let r = null
-        const accurateAmount = amount * Math.pow(10, TOKEN_DECIMALS)
+        const accurateAmount = _amount * Math.pow(10, TOKEN_DECIMALS)
         if (!this.isWeb3Injected) {
           r = await _sendSignedTx(
             this.web3,
@@ -153,13 +158,13 @@ class pEOS {
             'burn',
             [
               accurateAmount,
-              eosAccount
+              _eosAccount
             ]
           )
         } else {
           const account = await _getEthAccount(this.web3)
           const contract = _getEthContract(this.web3, account)
-          r = await contract.methods.burn(amount, eosAccount).send({
+          r = await contract.methods.burn(_amount, _eosAccount).send({
             from: account
           })
         }
@@ -189,7 +194,7 @@ class pEOS {
               return false
             }
           }
-        }, 100)
+        }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
           r = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
@@ -199,91 +204,58 @@ class pEOS {
           } else {
             return false
           }
-        }, 300)
+        }, EOS_NODE_POLLING_TIME_INTERVAL)
 
         const result = {
-          totalRedeemed: amount.toFixed(TOKEN_DECIMALS),
-          to: eosAccount
+          totalRedeemed: _amount.toFixed(TOKEN_DECIMALS),
+          to: _eosAccount
         }
-        cb ? cb(result, null) : promiEvent.resolve(result)
+        _callback ? _callback(result, null) : promiEvent.resolve(result)
       }
       start()
     } catch (e) {
-      cb ? cb(null, e) : promiEvent.reject(e)
+      _callback ? _callback(null, e) : promiEvent.reject(e)
     }
     return promiEvent.eventEmitter
   }
 
   /**
    *
-   * @param {Function=} null - cb
+   * @param {Function=} null - _callback
    */
-  getTotalIssued (cb = null) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let account = null
-        if (this.isWeb3Injected)
-          account = await _getEthAccount(this.web3)
-
-        else
-          account = this.web3.eth.defaultAccount
-
-        const contract = _getEthContract(this.web3, account)
-        const totalMinted = await contract.methods.totalMinted().call()
-        const totalIssued = totalMinted / Math.pow(10, TOKEN_DECIMALS)
-        cb ? cb(totalIssued, null) : resolve(totalIssued)
-      } catch (e) {
-        cb ? cb(null, e) : reject(e)
-      }
-    })
+  getTotalIssued (_callback = null) {
+    return _getTotalOf(
+      this.web3,
+      'totalMinted',
+      this.isWeb3Injected,
+      _callback
+    )
   }
 
   /**
    *
-   * @param {Function=} null - cb
+   * @param {Function=} null - _callback
    */
-  getTotalRedeemed (cb = null) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let account = null
-        if (this.isWeb3Injected)
-          account = await _getEthAccount(this.web3)
-
-        else
-          account = this.web3.eth.defaultAccount
-
-        const contract = _getEthContract(this.web3, account)
-        const totalBurned = await contract.methods.totalBurned().call()
-        const totalRedeemed = totalBurned / Math.pow(10, TOKEN_DECIMALS)
-        cb ? cb(totalRedeemed, null) : resolve(totalRedeemed)
-      } catch (e) {
-        cb ? cb(null, e) : reject(e)
-      }
-    })
+  getTotalRedeemed (_callback = null) {
+    return _getTotalOf(
+      this.web3,
+      'totalBurned',
+      this.isWeb3Injected,
+      _callback
+    )
   }
 
   /**
    *
-   * @param {Function=} null - cb
+   * @param {Function=} null - _callback
    */
-  getCirculatingSupply (cb = null) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let account = null
-        if (this.isWeb3Injected)
-          account = await _getEthAccount(this.web3)
-
-        else
-          account = this.web3.eth.defaultAccount
-
-        const contract = _getEthContract(this.web3, account)
-        const totalSupply = await contract.methods.totalSupply().call()
-        const circulating = totalSupply / Math.pow(10, TOKEN_DECIMALS)
-        cb ? cb(circulating, null) : resolve(circulating)
-      } catch (e) {
-        cb ? cb(null, e) : reject(e)
-      }
-    })
+  getCirculatingSupply (_callback = null) {
+    return _getTotalOf(
+      this.web3,
+      'totalSupply',
+      this.isWeb3Injected,
+      _callback
+    )
   }
 }
 
