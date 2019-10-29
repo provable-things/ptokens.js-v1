@@ -1,163 +1,85 @@
-import { api } from './utils'
+import {
+  makeApiGet,
+  makeApiPost
+} from './utils'
 
 class Enclave {
   /**
    *
-   * @param {Function=} null - cb
+   * @param {Function=} null - _callback
    */
-  ping (cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get('/ping')
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  ping (_callback = null) {
+    return makeApiGet('ping', _callback)
   }
 
   /**
    *
-   * @param {Integer} limit
-   * @param {Function=} null - cb
+   * @param {Integer} _limit
+   * @param {Function=} null - _callback
    */
-  getEthReport (limit, cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get(`/eth-reports/limit/${limit}`)
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  getEthReport (_limit, _callback = null) {
+    return makeApiGet(`/eth-reports/limit/${_limit}`, _callback)
   }
 
   /**
    *
-   * @param {Integer} limit
-   * @param {Function=} null - cb
+   * @param {Integer} _limit
+   * @param {Function=} null - _callback
    */
-  getEosReport (limit, cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get(`/eos-reports/limit/${limit}`)
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  getEosReport (_limit, _callback = null) {
+    return makeApiGet(`/eos-reports/limit/${_limit}`, _callback)
   }
 
   /**
    *
-   * @param {Function=} null - cb
+   * @param {Function=} null - _callback
    */
-  getLastProcessedEthBlock (cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get('/last-processed-eth-block')
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  getLastProcessedEthBlock (_callback = null) {
+    return makeApiGet('/last-processed-eth-block', _callback)
   }
 
   /**
    *
-   * @param {Function=} null - cb
+   * @param {Function=} null - _callback
    */
-  getLastProcessedEosBlock (cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get('/last-processed-eos-block')
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  getLastProcessedEosBlock (_callback = null) {
+    return makeApiGet('/last-processed-eos-block', _callback)
   }
 
   /**
    *
-   * @param {String} hash
-   * @param {Function=} null - cb
+   * @param {String} _hash
+   * @param {Function=} null - _callback
    */
-  getIncomingTransactionStatus (hash, cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get(`/incoming-tx-hash/${hash}`)
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  getIncomingTransactionStatus (_hash, _callback = null) {
+    return makeApiGet(`/incoming-tx-hash/${_hash}`, _callback)
   }
 
   /**
    *
-   * @param {String} hash
-   * @param {Function=} null - cb
+   * @param {String} _hash
+   * @param {Function=} null - _callback
    */
-  getBroadcastTransactionStatus (hash, cb = null) {
-    return new Promise((resolve, reject) => {
-      api.get(`/broadcast-tx-hash/${hash}`)
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  getBroadcastTransactionStatus (_hash, _callback = null) {
+    return makeApiGet(`/broadcast-tx-hash/${_hash}`, _callback)
   }
 
   /**
    *
-   * @param {Object} block
-   * @param {Function=} cb
+   * @param {Object} _block
+   * @param {Function=} null - _callback
    */
-  submitEthBlock (block, cb = null) {
-    return new Promise((resolve, reject) => {
-      api.post('/submit-eth-block', block)
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  submitEthBlock (_block, _callback = null) {
+    return makeApiPost('/submit-eth-block', _block, _callback)
   }
 
   /**
    *
-   * @param {Object} block
-   * @param {Function=} cb
+   * @param {Object} _block
+   * @param {Function=} null - _callback
    */
-  submitEosBlock (block, cb = null) {
-    return new Promise((resolve, reject) => {
-      api.post('/submit-eos-block', block)
-        .then(r => cb
-          ? cb(r, null)
-          : resolve(r))
-        .catch(e => cb
-          ? cb(null, e)
-          : reject(e)
-        )
-    })
+  submitEosBlock (_block, _callback = null) {
+    return makeApiPost('/submit-eos-block', _block, _callback)
   }
 }
 
