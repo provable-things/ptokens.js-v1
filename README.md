@@ -76,6 +76,18 @@ Install and link dependencies:
 npm run init
 ```
 
+Build all packages
+
+```
+npm run build
+```
+
+Bootstrap all packages
+
+```
+npm run bootstrap
+```
+
 &nbsp;
 
 ***
@@ -88,14 +100,3 @@ npm run init
 npm run test
 ```
 
-&nbsp;
-
-***
-
-&nbsp;
-
-### :package: Build:
-
-```
-npm run build
-```
