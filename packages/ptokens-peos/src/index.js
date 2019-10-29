@@ -1,6 +1,6 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
-import { Enclave } from 'ptokens-enclave'
+import Enclave from 'ptokens-enclave'
 import {
   _getEthAccount,
   _getEthContract,
@@ -287,6 +287,4 @@ class pEOS {
   }
 }
 
-export {
-  pEOS
-}
+export default pEOS

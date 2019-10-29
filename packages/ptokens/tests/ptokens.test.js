@@ -1,6 +1,6 @@
 import pTokens from '../src/index'
-import { pEOS } from 'ptokens-peos'
-import { Enclave } from 'ptokens-enclave'
+import pEOS from 'ptokens-peos'
+import Enclave from 'ptokens-enclave'
 import { expect } from 'chai'
 
 test('Should init pTokens correctly', () => {

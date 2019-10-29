@@ -1,6 +1,8 @@
-import { Enclave } from '../src/index'
+import Enclave from '../src/index'
 import { ethBlock, eosBlock } from './utils'
 import { expect } from 'chai'
+
+jest.setTimeout(300000)
 
 test('Should ping the enclave with callback', () => {
   const expectedResult = 'Provable pong!'

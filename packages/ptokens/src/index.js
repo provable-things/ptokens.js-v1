@@ -1,5 +1,5 @@
-import { pEOS } from 'ptokens-peos'
-import { Enclave } from 'ptokens-enclave'
+import pEOS from 'ptokens-peos'
+import Enclave from 'ptokens-enclave'
 
 class pTokens {
   constructor (configs, web3 = null) {

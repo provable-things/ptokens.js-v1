@@ -161,6 +161,4 @@ class Enclave {
   }
 }
 
-export {
-  Enclave
-}
+export default Enclave

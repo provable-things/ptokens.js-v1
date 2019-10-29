@@ -1,4 +1,4 @@
-import { pEOS } from '../src/index'
+import pEOS from '../src/index'
 import { expect } from 'chai'
 
 const TOKEN_DECIMALS = 4
