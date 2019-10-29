@@ -1,10 +1,9 @@
 import pEOS from '../src/index'
 import { expect } from 'chai'
+import { TOKEN_DECIMALS } from '../src/utils/constants'
 
 const sleep = ms =>
   new Promise(resolve => setTimeout(() => resolve(), ms))
-
-const TOKEN_DECIMALS = 4
 
 const configs = {
   ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
@@ -153,7 +152,7 @@ test('Should redeem 1 pEOS with promises', async () => {
 
 test('Should get total number of issued pEOS with callback', async () => {
   const peos = new pEOS(configs)
-  
+
   const currentTotalIssued = await peos.getTotalIssued()
   const peosToIssue = 1
   const expectedTotalIssue = currentTotalIssued + peosToIssue
