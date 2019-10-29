@@ -8,7 +8,7 @@ class Enclave {
    *
    * @param {Function=} null - _callback
    */
-  ping (_callback = null) {
+  ping(_callback = null) {
     return makeApiGet('ping', _callback)
   }
 
@@ -17,7 +17,7 @@ class Enclave {
    * @param {Integer} _limit
    * @param {Function=} null - _callback
    */
-  getEthReport (_limit, _callback = null) {
+  getEthReport(_limit, _callback = null) {
     return makeApiGet(`/eth-reports/limit/${_limit}`, _callback)
   }
 
@@ -26,7 +26,7 @@ class Enclave {
    * @param {Integer} _limit
    * @param {Function=} null - _callback
    */
-  getEosReport (_limit, _callback = null) {
+  getEosReport(_limit, _callback = null) {
     return makeApiGet(`/eos-reports/limit/${_limit}`, _callback)
   }
 
@@ -34,7 +34,7 @@ class Enclave {
    *
    * @param {Function=} null - _callback
    */
-  getLastProcessedEthBlock (_callback = null) {
+  getLastProcessedEthBlock(_callback = null) {
     return makeApiGet('/last-processed-eth-block', _callback)
   }
 
@@ -42,7 +42,7 @@ class Enclave {
    *
    * @param {Function=} null - _callback
    */
-  getLastProcessedEosBlock (_callback = null) {
+  getLastProcessedEosBlock(_callback = null) {
     return makeApiGet('/last-processed-eos-block', _callback)
   }
 
@@ -51,7 +51,7 @@ class Enclave {
    * @param {String} _hash
    * @param {Function=} null - _callback
    */
-  getIncomingTransactionStatus (_hash, _callback = null) {
+  getIncomingTransactionStatus(_hash, _callback = null) {
     return makeApiGet(`/incoming-tx-hash/${_hash}`, _callback)
   }
 
@@ -60,7 +60,7 @@ class Enclave {
    * @param {String} _hash
    * @param {Function=} null - _callback
    */
-  getBroadcastTransactionStatus (_hash, _callback = null) {
+  getBroadcastTransactionStatus(_hash, _callback = null) {
     return makeApiGet(`/broadcast-tx-hash/${_hash}`, _callback)
   }
 
@@ -69,7 +69,7 @@ class Enclave {
    * @param {Object} _block
    * @param {Function=} null - _callback
    */
-  submitEthBlock (_block, _callback = null) {
+  submitEthBlock(_block, _callback = null) {
     return makeApiPost('/submit-eth-block', _block, _callback)
   }
 
@@ -78,7 +78,7 @@ class Enclave {
    * @param {Object} _block
    * @param {Function=} null - _callback
    */
-  submitEosBlock (_block, _callback = null) {
+  submitEosBlock(_block, _callback = null) {
     return makeApiPost('/submit-eos-block', _block, _callback)
   }
 }

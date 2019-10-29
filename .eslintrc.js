@@ -32,6 +32,9 @@ module.exports = {
     'array-callback-return': 0, // this best practice calls out the use of map over forEach
     'complexity': [1, 5],
     'curly': [1, 'multi-or-nest', 'consistent'],
+    'space-before-function-paren': ['error', {
+      'named': 'never',
+    }],
     'dot-location': [2, 'property'],
     'no-empty-function': 1,
     'no-eval': 2,
@@ -71,11 +74,11 @@ module.exports = {
     'no-useless-concat': 2,
     'no-useless-escape': 2,
     'no-useless-return': 0,
-    'no-console': ["error", {
+    'no-console': ['error', {
       allow: [
-        "warn",
-        "error",
-        "info",
+        'warn',
+        'error',
+        'info',
       ]
     }],
     'no-warning-comments': [1, {

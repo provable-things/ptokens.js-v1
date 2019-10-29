@@ -21,7 +21,7 @@ import {
 import polling from 'light-async-polling'
 
 class pEOS {
-  constructor (_configs, _web3 = null) {
+  constructor(_configs, _web3 = null) {
     this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
     this.enclave = new Enclave()
     if (_web3 && _web3 instanceof Web3) {
@@ -41,7 +41,7 @@ class pEOS {
    * @param {String} _ethAddress
    * @param {Function=} null - _callback
    */
-  issue (_amount, _ethAddress, _callback) {
+  issue(_amount, _ethAddress, _callback) {
     if (_amount < MININUM_NUMBER_OF_PEOS_MINTED)
       throw new Error('Amount to issue must be greater than 1 pEOS')
 
@@ -138,7 +138,7 @@ class pEOS {
    * @param {String} _eosAccount
    * @param {Function=} null - _callback
    */
-  redeem (_amount, _eosAccount, _callback) {
+  redeem(_amount, _eosAccount, _callback) {
     if (_amount === 0)
       throw new Error('Impossible to burn 0 pEOS')
 
@@ -223,7 +223,7 @@ class pEOS {
    *
    * @param {Function=} null - _callback
    */
-  getTotalIssued (_callback = null) {
+  getTotalIssued(_callback = null) {
     return _getTotalOf(
       this.web3,
       'totalMinted',
@@ -236,7 +236,7 @@ class pEOS {
    *
    * @param {Function=} null - _callback
    */
-  getTotalRedeemed (_callback = null) {
+  getTotalRedeemed(_callback = null) {
     return _getTotalOf(
       this.web3,
       'totalBurned',
@@ -249,7 +249,7 @@ class pEOS {
    *
    * @param {Function=} null - _callback
    */
-  getCirculatingSupply (_callback = null) {
+  getCirculatingSupply(_callback = null) {
     return _getTotalOf(
       this.web3,
       'totalSupply',
