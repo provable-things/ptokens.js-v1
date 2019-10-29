@@ -5,12 +5,12 @@ import { TextEncoder, TextDecoder } from 'util'
 
 /**
  *
- * @param {String} privateKey
- * @param {String} rpcAddress
+ * @param {String} _privateKey
+ * @param {String} _rpcAddress
  */
-const _getEosJsApi = (privateKey, rpcAddress) => {
-  const signatureProvider = new JsSignatureProvider([privateKey])
-  const rpc = new JsonRpc(rpcAddress, { fetch })
+const _getEosJsApi = (_privateKey, _rpcAddress) => {
+  const signatureProvider = new JsSignatureProvider([_privateKey])
+  const rpc = new JsonRpc(_rpcAddress, { fetch })
   const api = new Api({
     rpc,
     signatureProvider,
@@ -22,11 +22,11 @@ const _getEosJsApi = (privateKey, rpcAddress) => {
 
 /**
  *
- * @param {String} account
+ * @param {String} _account
  */
-const _isValidEosAccount = account => {
+const _isValidEosAccount = _account => {
   const regex = new RegExp('([a-z]|[1-5]){12}')
-  return regex.test(account)
+  return regex.test(_account)
 }
 
 export {
