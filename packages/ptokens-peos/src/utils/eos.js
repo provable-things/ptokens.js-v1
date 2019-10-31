@@ -1,7 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import fetch from 'node-fetch'
-import { TextEncoder, TextDecoder } from 'util'
+import encoding from 'text-encoding'
 
 /**
  * @param {String} _privateKey
@@ -13,8 +13,8 @@ const _getEosJsApi = (_privateKey, _rpcAddress) => {
   const api = new Api({
     rpc,
     signatureProvider,
-    textDecoder: new TextDecoder(),
-    textEncoder: new TextEncoder()
+    textDecoder: new encoding.TextDecoder(),
+    textEncoder: new encoding.TextEncoder()
   })
   return api
 }
