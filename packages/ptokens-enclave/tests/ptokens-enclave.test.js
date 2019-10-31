@@ -1,11 +1,17 @@
 import Enclave from '../src/index'
-import { ethBlock, eosBlock } from './utils'
+import { ETH_BLOCK, EOS_BLOCK } from './utils'
 import { expect } from 'chai'
 
 jest.setTimeout(300000)
 
+const PING_RETURN_VALUE = 'Provable pong!'
+const HASH_INCOMING_TX = 'c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3'
+const HASH_BROADCASTED_TX = '3aa61c0188e065a7a90234dc3d544e8791f76423b5eb34d63201531c61f24066'
+const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
+const EOS_BLOCK_SUBMITTED_RETURN_VALUE = 'Eos block submitted to the enclave!'
+
 test('Should ping the enclave with callback', () => {
-  const expectedResult = 'Provable pong!'
+  const expectedResult = PING_RETURN_VALUE
   const enclave = new Enclave()
   enclave.ping((r, e) => {
     expect(r.data)
@@ -14,7 +20,7 @@ test('Should ping the enclave with callback', () => {
 })
 
 test('Should ping the enclave with promise', async () => {
-  const expectedResult = 'Provable pong!'
+  const expectedResult = PING_RETURN_VALUE
   const enclave = new Enclave()
   const result = await enclave.ping()
   expect(result.data)
@@ -94,7 +100,7 @@ test('Should get last EOS processed block with promise', async () => {
 })
 
 test('Should get the status of an incoming tx with callback', () => {
-  const hash = 'c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3'
+  const hash = HASH_INCOMING_TX
   const enclave = new Enclave()
   enclave.getIncomingTransactionStatus(hash, (r, e) => {
     expect(r.data)
@@ -103,7 +109,7 @@ test('Should get the status of an incoming tx with callback', () => {
 })
 
 test('Should get the status of an incoming tx with promise', async () => {
-  const hash = 'c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3'
+  const hash = HASH_INCOMING_TX
   const enclave = new Enclave()
   const r = await enclave.getIncomingTransactionStatus(hash)
   expect(r.data)
@@ -111,7 +117,7 @@ test('Should get the status of an incoming tx with promise', async () => {
 })
 
 test('Should get the status of an brodcasted tx with callback', () => {
-  const hash = '3aa61c0188e065a7a90234dc3d544e8791f76423b5eb34d63201531c61f24066'
+  const hash = HASH_BROADCASTED_TX
   const enclave = new Enclave()
   enclave.getBroadcastTransactionStatus(hash, (r, e) => {
     expect(r.data)
@@ -120,7 +126,7 @@ test('Should get the status of an brodcasted tx with callback', () => {
 })
 
 test('Should get the status of an brodcasted tx with promise', async () => {
-  const hash = '3aa61c0188e065a7a90234dc3d544e8791f76423b5eb34d63201531c61f24066'
+  const hash = HASH_BROADCASTED_TX
   const enclave = new Enclave()
   const r = await enclave.getBroadcastTransactionStatus(hash)
   expect(r.data)
@@ -128,35 +134,35 @@ test('Should get the status of an brodcasted tx with promise', async () => {
 })
 
 test('Should submit an ETH block with callback', () => {
-  const expectedResult = 'Eth block submitted to the enclave!'
+  const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
-  enclave.submitEthBlock(ethBlock, (r, e) => {
+  enclave.submitEthBlock(ETH_BLOCK, (r, e) => {
     expect(r.data)
       .to.be.equal(expectedResult)
   })
 })
 
 test('Should submit an ETH block with promise', async () => {
-  const expectedResult = 'Eth block submitted to the enclave!'
+  const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
-  const r = await enclave.submitEthBlock(ethBlock)
+  const r = await enclave.submitEthBlock(ETH_BLOCK)
   expect(r.data)
     .to.be.equal(expectedResult)
 })
 
 test('Should submit an EOS block with callback', () => {
-  const expectedResult = 'Eos block submitted to the enclave!'
+  const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
-  enclave.submitEosBlock(eosBlock, (r, e) => {
+  enclave.submitEosBlock(EOS_BLOCK, (r, e) => {
     expect(r.data)
       .to.be.equal(expectedResult)
   })
 })
 
 test('Should submit an EOS block with promise', async () => {
-  const expectedResult = 'Eos block submitted to the enclave!'
+  const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
-  const r = await enclave.submitEosBlock(eosBlock)
+  const r = await enclave.submitEosBlock(EOS_BLOCK)
   expect(r.data)
     .to.be.equal(expectedResult)
 })

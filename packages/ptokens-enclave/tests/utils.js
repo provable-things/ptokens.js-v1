@@ -1,4 +1,4 @@
-const ethBlock = {
+const ETH_BLOCK = {
   'author': '0xa4df255ecf08bbf2c28055c65225c9a9847abd94',
   'difficulty': '3.40282366920938463463374607431768211454e+38',
   'extraData': '0xde830206048f5061726974792d457468657265756d86312e33362e30826c69',
@@ -30,7 +30,7 @@ const ethBlock = {
   ]
 }
 
-const eosBlock = {
+const EOS_BLOCK = {
   'timestamp': '2019-10-16T09:01:57.000',
   'producer': 'teamgreymass',
   'confirmed': 0,
@@ -101,6 +101,6 @@ const eosBlock = {
 }
 
 export {
-  ethBlock,
-  eosBlock
+  ETH_BLOCK,
+  EOS_BLOCK
 }
