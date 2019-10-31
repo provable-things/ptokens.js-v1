@@ -2,6 +2,7 @@
   "name": "ptokens",
   "description": "repo holding the code for interacting with ptokens",
   "private": true,
+  "main": "./packages/ptokens/src/index.js",
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "link": "lerna link",
