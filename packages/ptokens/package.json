@@ -1,7 +1,7 @@
 {
   "name": "ptokens",
   "version": "0.0.1",
-  "description": "ptokens main module",
+  "description": "ptokens main package",
   "main": "dist/ptokens.cjs.js",
   "module": "dist/ptokens.esm.js",
   "browser": "dist/ptokens.umd.js",
