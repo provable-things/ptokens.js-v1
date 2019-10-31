@@ -21,6 +21,10 @@ import {
 import polling from 'light-async-polling'
 
 class pEOS {
+  /**
+   * @param {Object} _configs 
+   * @param {Object=} null - _web3 
+   */
   constructor(_configs, _web3 = null) {
     this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
     this.enclave = new Enclave()
