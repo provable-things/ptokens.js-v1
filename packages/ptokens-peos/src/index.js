@@ -36,7 +36,6 @@ class pEOS {
   }
 
   /**
-   *
    * @param {Integer} _amount
    * @param {String} _ethAddress
    * @param {Function=} null - _callback
@@ -133,7 +132,6 @@ class pEOS {
   }
 
   /**
-   *
    * @param {Integer} _amount
    * @param {String} _eosAccount
    * @param {Function=} null - _callback
@@ -220,7 +218,6 @@ class pEOS {
   }
 
   /**
-   *
    * @param {Function=} null - _callback
    */
   getTotalIssued(_callback = null) {
@@ -233,7 +230,6 @@ class pEOS {
   }
 
   /**
-   *
    * @param {Function=} null - _callback
    */
   getTotalRedeemed(_callback = null) {
@@ -246,7 +242,6 @@ class pEOS {
   }
 
   /**
-   *
    * @param {Function=} null - _callback
    */
   getCirculatingSupply(_callback = null) {

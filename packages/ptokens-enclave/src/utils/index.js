@@ -12,7 +12,6 @@ const api = axios.create({
 })
 
 /**
- *
  * @param {String} _apiPath
  * @param {Function=} null - _callback
  */
@@ -24,7 +23,6 @@ const makeApiGet = (_apiPath, _callback) =>
       ))
 
 /**
- *
  * @param {String} _apiPath
  * @param {Object} _body
  * @param {Function=} null - _callback

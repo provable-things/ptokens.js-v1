@@ -25,7 +25,6 @@ const _getEthContract = (_web3, _account) => {
 }
 
 /**
- *
  * @param {Object} _web3
  * @param {String} _privateKey
  * @param {String} _method
@@ -62,7 +61,6 @@ const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
   })
 
 /**
- *
  * @param {Object} _web3
  * @param {String} _method
  * @param {Boolean} _isWeb3Injected

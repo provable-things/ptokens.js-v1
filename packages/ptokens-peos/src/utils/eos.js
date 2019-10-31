@@ -4,7 +4,6 @@ import fetch from 'node-fetch'
 import { TextEncoder, TextDecoder } from 'util'
 
 /**
- *
  * @param {String} _privateKey
  * @param {String} _rpcAddress
  */
@@ -21,7 +20,6 @@ const _getEosJsApi = (_privateKey, _rpcAddress) => {
 }
 
 /**
- *
  * @param {String} _account
  */
 const _isValidEosAccount = _account => {

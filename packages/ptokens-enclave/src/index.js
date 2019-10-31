@@ -5,7 +5,6 @@ import {
 
 class Enclave {
   /**
-   *
    * @param {Function=} null - _callback
    */
   ping(_callback = null) {
@@ -13,7 +12,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {Integer} _limit
    * @param {Function=} null - _callback
    */
@@ -22,7 +20,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {Integer} _limit
    * @param {Function=} null - _callback
    */
@@ -31,7 +28,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {Function=} null - _callback
    */
   getLastProcessedEthBlock(_callback = null) {
@@ -39,7 +35,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {Function=} null - _callback
    */
   getLastProcessedEosBlock(_callback = null) {
@@ -47,7 +42,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {String} _hash
    * @param {Function=} null - _callback
    */
@@ -56,7 +50,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {String} _hash
    * @param {Function=} null - _callback
    */
@@ -65,7 +58,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {Object} _block
    * @param {Function=} null - _callback
    */
@@ -74,7 +66,6 @@ class Enclave {
   }
 
   /**
-   *
    * @param {Object} _block
    * @param {Function=} null - _callback
    */
