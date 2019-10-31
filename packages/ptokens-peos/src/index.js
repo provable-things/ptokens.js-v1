@@ -24,7 +24,7 @@ class pEOS {
   constructor(_configs, _web3 = null) {
     this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
     this.enclave = new Enclave()
-    if (_web3 && _web3 instanceof Web3) {
+    if (_web3) {
       this.isWeb3Injected = true
       this.web3 = _web3
     } else {
