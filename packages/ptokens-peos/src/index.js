@@ -42,9 +42,8 @@ class pEOS {
   /**
    * @param {Integer} _amount
    * @param {String} _ethAddress
-   * @param {Function=} null - _callback
    */
-  issue(_amount, _ethAddress, _callback) {
+  issue(_amount, _ethAddress) {
     if (_amount < MININUM_NUMBER_OF_PEOS_MINTED)
       throw new Error('Amount to issue must be greater than 1 pEOS')
 
@@ -117,16 +116,15 @@ class pEOS {
           }
         }, ETH_NODE_POLLING_TIME_INTERVAL)
 
-        const result = {
+        promiEvent.resolve({
           totalIssued: _amount.toFixed(TOKEN_DECIMALS),
           to: _ethAddress,
           tx: broadcastedTx
-        }
-        _callback ? _callback(result, null) : promiEvent.resolve(result)
+        })
       }
       start()
     } catch (e) {
-      _callback ? _callback(null, e) : promiEvent.reject(e)
+      promiEvent.reject(e)
     }
     return promiEvent.eventEmitter
   }
@@ -134,7 +132,6 @@ class pEOS {
   /**
    * @param {Integer} _amount
    * @param {String} _eosAccount
-   * @param {Function=} null - _callback
    */
   redeem(_amount, _eosAccount, _callback) {
     if (_amount === 0)
@@ -199,53 +196,40 @@ class pEOS {
           }
         }, EOS_NODE_POLLING_TIME_INTERVAL)
 
-        const result = {
+        promiEvent.resolve({
           totalRedeemed: _amount.toFixed(TOKEN_DECIMALS),
           to: _eosAccount,
           tx: broadcastedTx
-        }
-        _callback ? _callback(result, null) : promiEvent.resolve(result)
+        })
       }
       start()
     } catch (e) {
-      _callback ? _callback(null, e) : promiEvent.reject(e)
+      promiEvent.reject(e)
     }
     return promiEvent.eventEmitter
   }
 
-  /**
-   * @param {Function=} null - _callback
-   */
-  getTotalIssued(_callback = null) {
+  getTotalIssued() {
     return _getTotalOf(
       this.web3,
       'totalMinted',
-      this.isWeb3Injected,
-      _callback
+      this.isWeb3Injected
     )
   }
 
-  /**
-   * @param {Function=} null - _callback
-   */
-  getTotalRedeemed(_callback = null) {
+  getTotalRedeemed() {
     return _getTotalOf(
       this.web3,
       'totalBurned',
-      this.isWeb3Injected,
-      _callback
+      this.isWeb3Injected
     )
   }
 
-  /**
-   * @param {Function=} null - _callback
-   */
-  getCirculatingSupply(_callback = null) {
+  getCirculatingSupply() {
     return _getTotalOf(
       this.web3,
       'totalSupply',
-      this.isWeb3Injected,
-      _callback
+      this.isWeb3Injected
     )
   }
 }

@@ -66,7 +66,7 @@ const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
  * @param {Boolean} _isWeb3Injected
  * @param {Function=} null - _callback
  */
-const _getTotalOf = (_web3, _method, _isWeb3Injected, _callback) =>
+const _getTotalOf = (_web3, _method, _isWeb3Injected) =>
   new Promise(async (resolve, reject) => {
     const account = _isWeb3Injected
       ? await _getEthAccount(_web3)
@@ -74,11 +74,8 @@ const _getTotalOf = (_web3, _method, _isWeb3Injected, _callback) =>
 
     const contract = _getEthContract(_web3, account)
     contract.methods[_method]().call()
-      .then(_total => {
-        const accurateTotal = _total / Math.pow(10, TOKEN_DECIMALS)
-        _callback ? _callback(accurateTotal, null) : resolve(accurateTotal)
-      })
-      .catch(_err => _callback ? _callback(null, _err) : reject(_err))
+      .then(_total => resolve(_total / Math.pow(10, TOKEN_DECIMALS)))
+      .catch(_err => reject(_err))
   })
 
 export {

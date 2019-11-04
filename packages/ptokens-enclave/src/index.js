@@ -3,73 +3,59 @@ import {
 } from './utils/index'
 
 class Enclave {
-  /**
-   * @param {Function=} null - _callback
-   */
-  ping(_callback = null) {
-    return makeApiCall('GET', 'ping', null, _callback)
+  ping() {
+    return makeApiCall('GET', 'ping', null)
   }
 
   /**
    * @param {Integer} _limit
-   * @param {Function=} null - _callback
    */
-  getEthReport(_limit, _callback = null) {
-    return makeApiCall('GET', `/eth-reports/limit/${_limit}`, null, _callback)
+  getEthReport(_limit) {
+    return makeApiCall('GET', `/eth-reports/limit/${_limit}`, null)
   }
 
   /**
    * @param {Integer} _limit
-   * @param {Function=} null - _callback
    */
-  getEosReport(_limit, _callback = null) {
-    return makeApiCall('GET', `/eos-reports/limit/${_limit}`, null, _callback)
+  getEosReport(_limit) {
+    return makeApiCall('GET', `/eos-reports/limit/${_limit}`, null)
   }
 
-  /**
-   * @param {Function=} null - _callback
-   */
-  getLastProcessedEthBlock(_callback = null) {
-    return makeApiCall('GET', '/last-processed-eth-block', null, _callback)
+  getLastProcessedEthBlock() {
+    return makeApiCall('GET', '/last-processed-eth-block', null)
   }
 
-  /**
-   * @param {Function=} null - _callback
-   */
-  getLastProcessedEosBlock(_callback = null) {
-    return makeApiCall('GET', '/last-processed-eos-block', null, _callback)
+  getLastProcessedEosBlock() {
+    return makeApiCall('GET', '/last-processed-eos-block', null)
   }
 
   /**
    * @param {String} _hash
-   * @param {Function=} null - _callback
    */
-  getIncomingTransactionStatus(_hash, _callback = null) {
-    return makeApiCall('GET', `/incoming-tx-hash/${_hash}`, null, _callback)
+  getIncomingTransactionStatus(_hash) {
+    return makeApiCall('GET', `/incoming-tx-hash/${_hash}`, null)
   }
 
   /**
    * @param {String} _hash
-   * @param {Function=} null - _callback
    */
-  getBroadcastTransactionStatus(_hash, _callback = null) {
-    return makeApiCall('GET', `/broadcast-tx-hash/${_hash}`, null, _callback)
+  getBroadcastTransactionStatus(_hash) {
+    return makeApiCall('GET', `/broadcast-tx-hash/${_hash}`, null)
+  }
+
+  /**
+   * @param {Object} _block
+   */
+  submitEthBlock(_block) {
+    return makeApiCall('POST', '/submit-eth-block', _block)
   }
 
   /**
    * @param {Object} _block
    * @param {Function=} null - _callback
    */
-  submitEthBlock(_block, _callback = null) {
-    return makeApiCall('POST', '/submit-eth-block', _block, _callback)
-  }
-
-  /**
-   * @param {Object} _block
-   * @param {Function=} null - _callback
-   */
-  submitEosBlock(_block, _callback = null) {
-    return makeApiCall('POST', '/submit-eos-block', _block, _callback)
+  submitEosBlock(_block) {
+    return makeApiCall('POST', '/submit-eos-block', _block)
   }
 }
 
