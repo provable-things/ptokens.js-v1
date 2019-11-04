@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'https://repsi.serveo.net',
+  baseURL: 'https://nuc-bridge.ptokens.io',
   timeout: 50000,
   headers: {
     'Access-Control-Allow-Origin': '*',
