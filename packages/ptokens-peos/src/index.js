@@ -59,7 +59,7 @@ class pEOS {
         const accounts = await this.eosjs.rpc.history_get_key_accounts(pubkeys[0])
         const eosAccountName = accounts.account_names[0]
         const accurateAmount = _amount.toFixed(4)
-        let r = await this.eosjs.transact({
+        let res = await this.eosjs.transact({
           actions: [{
             account: 'eosio.token',
             name: 'transfer',
@@ -78,40 +78,35 @@ class pEOS {
           blocksBehind: 3,
           expireSeconds: 30
         })
-        promiEvent.eventEmitter.emit('onEosTxConfirmed', r)
+        promiEvent.eventEmitter.emit('onEosTxConfirmed', res)
 
-        const polledTx = r.transaction_id
+        const polledTx = res.transaction_id
         let broadcastedTx = ''
         let isSeen = false
         await polling(async () => {
-          r = await this.enclave.getIncomingTransactionStatus(polledTx)
-          if (r.status !== 200) {
-            promiEvent.reject('Error during the comunication with the Enclave')
+          res = await this.enclave.getIncomingTransactionStatus(polledTx)
+          if (res.broadcast === false && !isSeen) {
+            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+            isSeen = true
+            return false
+          } else if (res.broadcast === true) {
+            // NOTE: could happen that eos tx is confirmed before enclave received it
+            if (!isSeen)
+              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+
+            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', res)
+            broadcastedTx = res.broadcast_transaction_hash
             return true
           } else {
-            if (r.data.broadcast === false && !isSeen) {
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
-              isSeen = true
-              return false
-            } else if (r.data.broadcast === true) {
-              // NOTE: could happen that eos tx is confirmed before enclave received it
-              if (!isSeen)
-                promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
-
-              promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', r.data)
-              broadcastedTx = r.data.broadcast_transaction_hash
-              return true
-            } else {
-              return false
-            }
+            return false
           }
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          r = await this.web3.eth.getTransactionReceipt(broadcastedTx)
-          if (r) {
-            if (r.status) {
-              promiEvent.eventEmitter.emit('onEthTxConfirmed', r)
+          res = await this.web3.eth.getTransactionReceipt(broadcastedTx)
+          if (res) {
+            if (res.status) {
+              promiEvent.eventEmitter.emit('onEthTxConfirmed', res)
 
               return true
             } else {
@@ -124,7 +119,8 @@ class pEOS {
 
         const result = {
           totalIssued: _amount.toFixed(TOKEN_DECIMALS),
-          to: _ethAddress
+          to: _ethAddress,
+          tx: broadcastedTx
         }
         _callback ? _callback(result, null) : promiEvent.resolve(result)
       }
@@ -151,10 +147,10 @@ class pEOS {
 
     try {
       const start = async () => {
-        let r = null
+        let res = null
         const accurateAmount = _amount * Math.pow(10, TOKEN_DECIMALS)
         if (!this.isWeb3Injected) {
-          r = await _sendSignedTx(
+          res = await _sendSignedTx(
             this.web3,
             this.ethPrivateKey,
             'burn',
@@ -166,42 +162,37 @@ class pEOS {
         } else {
           const account = await _getEthAccount(this.web3)
           const contract = _getEthContract(this.web3, account)
-          r = await contract.methods.burn(_amount, _eosAccount).send({
+          res = await contract.methods.burn(_amount, _eosAccount).send({
             from: account
           })
         }
-        promiEvent.eventEmitter.emit('onEthTxConfirmed', r)
+        promiEvent.eventEmitter.emit('onEthTxConfirmed', res)
 
-        const polledTx = r.transactionHash
+        const polledTx = res.transactionHash
         let broadcastedTx = ''
         let isSeen = false
         await polling(async () => {
-          r = await this.enclave.getIncomingTransactionStatus(polledTx)
-          if (r.status !== 200) {
-            promiEvent.reject('Error during the comunication with the Enclave')
+          res = await this.enclave.getIncomingTransactionStatus(polledTx)
+          if (res.broadcast === false && !isSeen) {
+            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+            isSeen = true
+            return false
+          } else if (res.broadcast === true) {
+            if (!isSeen)
+              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+
+            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', res)
+            broadcastedTx = res.broadcast_transaction_hash
             return true
           } else {
-            if (r.data.broadcast === false && !isSeen) {
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
-              isSeen = true
-              return false
-            } else if (r.data.broadcast === true) {
-              if (!isSeen)
-                promiEvent.eventEmitter.emit('onEnclaveReceivedTx', r.data)
-
-              promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', r.data)
-              broadcastedTx = r.data.broadcast_transaction_hash
-              return true
-            } else {
-              return false
-            }
+            return false
           }
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          r = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
-          if (r.trx.receipt.status === 'executed') {
-            promiEvent.eventEmitter.emit('onEosTxConfirmed', r.data)
+          res = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
+          if (res.trx.receipt.status === 'executed') {
+            promiEvent.eventEmitter.emit('onEosTxConfirmed', res.data)
             return true
           } else {
             return false
@@ -210,7 +201,8 @@ class pEOS {
 
         const result = {
           totalRedeemed: _amount.toFixed(TOKEN_DECIMALS),
-          to: _eosAccount
+          to: _eosAccount,
+          tx: broadcastedTx
         }
         _callback ? _callback(result, null) : promiEvent.resolve(result)
       }
