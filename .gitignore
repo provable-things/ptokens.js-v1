@@ -5,3 +5,6 @@ dist/
 npm-debug.log*
 package-lock.json
 coverage/
+
+#documentation build
+site/
