@@ -20,7 +20,7 @@ const makeApiCall = (_callType, _apiPath, _params) =>
   new Promise((resolve, reject) =>
     API[_callType.toLowerCase()](_apiPath)
       .then(_res => resolve(_res.data))
-      .catch(_err =>reject(_err)))
+      .catch(_err => reject(_err)))
 
 export {
   makeApiCall
