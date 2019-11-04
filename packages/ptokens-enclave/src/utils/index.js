@@ -20,7 +20,7 @@ const API = axios.create({
 const makeApiCall = (_callType, _apiPath, _params, _callback) =>
   new Promise((resolve, reject) =>
     API[_callType.toLowerCase()](_apiPath)
-      .then(_res => _callback ? _callback(_res, null) : resolve(_res))
+      .then(_res => _callback ? _callback(_res.data, null) : resolve(_res.data))
       .catch(_err => _callback ? _callback(null, _err) : reject(_err)
       ))
 
