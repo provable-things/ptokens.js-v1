@@ -100,3 +100,30 @@ npm run bootstrap
 npm run test
 ```
 
+&nbsp;
+
+***
+
+&nbsp;
+
+### :page_with_curl: Run and Build the documentation:
+
+Please be sure to have installed [__`mkdocs`__](https://www.mkdocs.org/), [__`python 2.7`__](https://www.python.org/) and __`pip`__.
+
+Switch into __`resources`__ folder:
+
+```
+cd resources
+```
+
+If you want to run the documentation locally:
+
+```
+mkdocs serve
+```
+
+If you want to build the documentation:
+
+```
+mkdocs build
+```
