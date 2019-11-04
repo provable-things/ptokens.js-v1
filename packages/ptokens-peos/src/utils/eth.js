@@ -37,10 +37,6 @@ const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
       const nonce = await _web3.eth.getTransactionCount(_web3.eth.defaultAccount, 'pending')
       const gasPrice = await _web3.eth.getGasPrice()
       const functionAbi = contract.methods[_method](..._params).encodeABI()
-      /* const estimatedGas = await web3.eth.estimateGas({
-          to: CONTRACT_ADDRESS,
-          data: functionAbi
-      }) */
 
       const rawData = {
         nonce,
