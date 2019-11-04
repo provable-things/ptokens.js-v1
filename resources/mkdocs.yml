@@ -1,0 +1,8 @@
+site_name: ptokens.js Documentation
+nav:
+    - Getting Started: index.md
+    - Modules:
+        - pTokens: ptokens.md
+        - ptokens-peos: ptokens-peos.md
+        - ptokens-enclave: ptokens-enclave.md
+theme: readthedocs
