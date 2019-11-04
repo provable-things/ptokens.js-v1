@@ -14,7 +14,7 @@ test('Should ping the enclave with callback', () => {
   const expectedResult = PING_RETURN_VALUE
   const enclave = new Enclave()
   enclave.ping((r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.equal(expectedResult)
   })
 })
@@ -23,7 +23,7 @@ test('Should ping the enclave with promise', async () => {
   const expectedResult = PING_RETURN_VALUE
   const enclave = new Enclave()
   const result = await enclave.ping()
-  expect(result.data)
+  expect(result)
     .to.be.equal(expectedResult)
 })
 
@@ -32,7 +32,7 @@ test('Should get ETH report with callback', () => {
   const limit = 10
   const enclave = new Enclave()
   enclave.getEthReport(limit, (r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.an.instanceof(Array)
       .to.have.lengthOf(expectedResultLength)
   })
@@ -43,7 +43,7 @@ test('Should get ETH report with promise', async () => {
   const limit = 10
   const enclave = new Enclave()
   const r = await enclave.getEthReport(limit)
-  expect(r.data)
+  expect(r)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
@@ -53,7 +53,7 @@ test('Should get EOS report with callback', () => {
   const limit = 10
   const enclave = new Enclave()
   enclave.getEosReport(limit, (r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.an.instanceof(Array)
       .to.have.lengthOf(expectedResultLength)
   })
@@ -64,7 +64,7 @@ test('Should get EOS report with promise', async () => {
   const limit = 10
   const enclave = new Enclave()
   const r = await enclave.getEosReport(limit)
-  expect(r.data)
+  expect(r)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
@@ -72,7 +72,7 @@ test('Should get EOS report with promise', async () => {
 test('Should get last ETH processed block with callback', () => {
   const enclave = new Enclave()
   enclave.getLastProcessedEthBlock((r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.an.instanceof(Object)
   })
 })
@@ -80,14 +80,14 @@ test('Should get last ETH processed block with callback', () => {
 test('Should get last ETH processed block with promise', async () => {
   const enclave = new Enclave()
   const r = await enclave.getLastProcessedEthBlock()
-  expect(r.data)
+  expect(r)
     .to.be.an.instanceof(Object)
 })
 
 test('Should get last EOS processed block with callback', () => {
   const enclave = new Enclave()
   enclave.getLastProcessedEosBlock((r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.an.instanceof(Object)
   })
 })
@@ -95,7 +95,7 @@ test('Should get last EOS processed block with callback', () => {
 test('Should get last EOS processed block with promise', async () => {
   const enclave = new Enclave()
   const r = await enclave.getLastProcessedEosBlock()
-  expect(r.data)
+  expect(r)
     .to.be.an.instanceof(Object)
 })
 
@@ -103,7 +103,7 @@ test('Should get the status of an incoming tx with callback', () => {
   const hash = HASH_INCOMING_TX
   const enclave = new Enclave()
   enclave.getIncomingTransactionStatus(hash, (r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.an.instanceof(Object)
   })
 })
@@ -112,7 +112,7 @@ test('Should get the status of an incoming tx with promise', async () => {
   const hash = HASH_INCOMING_TX
   const enclave = new Enclave()
   const r = await enclave.getIncomingTransactionStatus(hash)
-  expect(r.data)
+  expect(r)
     .to.be.an.instanceof(Object)
 })
 
@@ -120,7 +120,7 @@ test('Should get the status of an brodcasted tx with callback', () => {
   const hash = HASH_BROADCASTED_TX
   const enclave = new Enclave()
   enclave.getBroadcastTransactionStatus(hash, (r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.an.instanceof(Object)
   })
 })
@@ -129,7 +129,7 @@ test('Should get the status of an brodcasted tx with promise', async () => {
   const hash = HASH_BROADCASTED_TX
   const enclave = new Enclave()
   const r = await enclave.getBroadcastTransactionStatus(hash)
-  expect(r.data)
+  expect(r)
     .to.be.an.instanceof(Object)
 })
 
@@ -137,7 +137,7 @@ test('Should submit an ETH block with callback', () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
   enclave.submitEthBlock(ETH_BLOCK, (r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.equal(expectedResult)
   })
 })
@@ -146,7 +146,7 @@ test('Should submit an ETH block with promise', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
   const r = await enclave.submitEthBlock(ETH_BLOCK)
-  expect(r.data)
+  expect(r)
     .to.be.equal(expectedResult)
 })
 
@@ -154,7 +154,7 @@ test('Should submit an EOS block with callback', () => {
   const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
   enclave.submitEosBlock(EOS_BLOCK, (r, e) => {
-    expect(r.data)
+    expect(r)
       .to.be.equal(expectedResult)
   })
 })
@@ -163,6 +163,6 @@ test('Should submit an EOS block with promise', async () => {
   const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const enclave = new Enclave()
   const r = await enclave.submitEosBlock(EOS_BLOCK)
-  expect(r.data)
+  expect(r)
     .to.be.equal(expectedResult)
 })
