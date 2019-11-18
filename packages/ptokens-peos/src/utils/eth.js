@@ -1,4 +1,4 @@
-import abi from '../contract/pEOSToken.json'
+import abi from '../contractAbi/pEOSTokenETHContractAbi.json'
 import {
   CONTRACT_ADDRESS,
   ZERO_ETHER
