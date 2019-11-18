@@ -20,10 +20,10 @@ npm install ptokens
 
 &nbsp;
 
-### :zap: Usage:
+### :zap: Usage without injected web3
 
 ```js
-import pTokens from 'ptokens'
+const pTokens = require('ptokens')
 
 const configs = {
   ethPrivateKey: 'Eth private key',
@@ -34,11 +34,10 @@ const configs = {
 const ptokens = new pTokens(configs)
 ```
 
-You could also use it with injected web3 instance (eg: MetaMask).
+### :syringe: Usage with injected Web3
 
 ```js
-import pTokens from 'ptokens'
-import Web3 from 'web3'
+const pTokens = require('ptokens')
 
 if (window.web3) {
   const configs = {
@@ -47,6 +46,8 @@ if (window.web3) {
   }
   const web3 = new Web3(window.web3.currentProvider)
   const ptokens = new pTokens(configs, web3)
+} else {
+  console.log('No web3 detected')
 }
 ```
 
