@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'https://nuc-bridge.ptokens.io',
+  baseURL: 'https://nuc-bridge-1.ngrok.io/',
   timeout: 50000,
   headers: {
     'Access-Control-Allow-Origin': '*',
