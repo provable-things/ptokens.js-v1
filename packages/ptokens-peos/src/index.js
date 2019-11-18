@@ -4,19 +4,23 @@ import Enclave from 'ptokens-enclave'
 import {
   _getEthAccount,
   _getEthContract,
-  _sendSignedTx,
-  _getTotalOf
+  _makeContractCall,
+  _sendSignedBurnTx
 } from './utils/eth'
 import {
+  _eosTransactToProvabletokn,
+  _getEosAccountName,
+  _getEosAvailablePublicKeys,
   _getEosJsApi,
-  _isValidEosAccount
+  _isValidEosAccountName
 } from './utils/eos'
 import {
-  TOKEN_DECIMALS,
-  ETH_NODE_POLLING_TIME_INTERVAL,
-  ENCLAVE_POLLING_TIME,
   EOS_NODE_POLLING_TIME_INTERVAL,
-  MININUM_NUMBER_OF_PEOS_MINTED
+  EOS_TRANSACTION_EXECUTED,
+  ENCLAVE_POLLING_TIME,
+  ETH_NODE_POLLING_TIME_INTERVAL,
+  MINIMUM_MINTABLE_PEOS_AMOUNT,
+  TOKEN_DECIMALS
 } from './utils/constants'
 import polling from 'light-async-polling'
 
@@ -44,7 +48,7 @@ class pEOS {
    * @param {String} _ethAddress
    */
   issue(_amount, _ethAddress) {
-    if (_amount < MININUM_NUMBER_OF_PEOS_MINTED)
+    if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT)
       throw new Error('Amount to issue must be greater than 1 pEOS')
 
     if (!this.web3.utils.isAddress(_ethAddress))
@@ -54,47 +58,35 @@ class pEOS {
 
     try {
       const start = async () => {
-        const pubkeys = await this.eosjs.signatureProvider.getAvailableKeys()
-        const accounts = await this.eosjs.rpc.history_get_key_accounts(pubkeys[0])
-        const eosAccountName = accounts.account_names[0]
-        const accurateAmount = _amount.toFixed(4)
-        let res = await this.eosjs.transact({
-          actions: [{
-            account: 'eosio.token',
-            name: 'transfer',
-            authorization: [{
-              actor: eosAccountName,
-              permission: 'active'
-            }],
-            data: {
-              from: eosAccountName,
-              to: 'provabletokn',
-              quantity: accurateAmount + ' EOS',
-              memo: _ethAddress
-            }
-          }]
-        }, {
-          blocksBehind: 3,
-          expireSeconds: 30
-        })
-        promiEvent.eventEmitter.emit('onEosTxConfirmed', res)
+        const eosPublicKeys = await _getEosAvailablePublicKeys(this.eosjs)
+        const eosAccountName = await _getEosAccountName(this.eosjs, eosPublicKeys)
+        const eosTxReceipt = await _eosTransactToProvabletokn(
+          this.eosjs,
+          eosAccountName,
+          _amount,
+          _ethAddress
+        )
 
-        const polledTx = res.transaction_id
+        promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+
+        const polledTx = eosTxReceipt.transaction_id
         let broadcastedTx = ''
         let isSeen = false
+
         await polling(async () => {
-          res = await this.enclave.getIncomingTransactionStatus(polledTx)
-          if (res.broadcast === false && !isSeen) {
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(polledTx)
+
+          if (incomingTxStatus.broadcast === false && !isSeen) {
+            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
             isSeen = true
             return false
-          } else if (res.broadcast === true) {
+          } else if (incomingTxStatus.broadcast === true) {
             // NOTE: could happen that eos tx is confirmed before enclave received it
             if (!isSeen)
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
 
-            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', res)
-            broadcastedTx = res.broadcast_transaction_hash
+            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
+            broadcastedTx = incomingTxStatus.broadcast_transaction_hash
             return true
           } else {
             return false
@@ -102,15 +94,12 @@ class pEOS {
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          res = await this.web3.eth.getTransactionReceipt(broadcastedTx)
-          if (res) {
-            if (res.status) {
-              promiEvent.eventEmitter.emit('onEthTxConfirmed', res)
-
-              return true
-            } else {
-              return false
-            }
+          const ethTxReceipt = await this.web3.eth.getTransactionReceipt(broadcastedTx)
+          if (!ethTxReceipt) {
+            return false
+          } else if (ethTxReceipt.status) {
+            promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+            return true
           } else {
             return false
           }
@@ -131,55 +120,58 @@ class pEOS {
 
   /**
    * @param {Integer} _amount
-   * @param {String} _eosAccount
+   * @param {String} _eosAccountName
    */
-  redeem(_amount, _eosAccount, _callback) {
+  redeem(_amount, _eosAccountName) {
     if (_amount === 0)
       throw new Error('Impossible to burn 0 pEOS')
 
-    if (!_isValidEosAccount(_eosAccount))
+    if (!_isValidEosAccountName(_eosAccountName))
       throw new Error('Invalid Eos account provided')
 
     const promiEvent = Web3PromiEvent()
 
     try {
       const start = async () => {
-        let res = null
-        const accurateAmount = _amount * Math.pow(10, TOKEN_DECIMALS)
+        let ethTxReceipt = null
+        const amountInEthFormat = _amount * Math.pow(10, TOKEN_DECIMALS)
+
         if (!this.isWeb3Injected) {
-          res = await _sendSignedTx(
+          ethTxReceipt = await _sendSignedBurnTx(
             this.web3,
             this.ethPrivateKey,
-            'burn',
             [
-              accurateAmount,
-              _eosAccount
+              amountInEthFormat,
+              _eosAccountName
             ]
           )
         } else {
           const account = await _getEthAccount(this.web3)
           const contract = _getEthContract(this.web3, account)
-          res = await contract.methods.burn(_amount, _eosAccount).send({
+          ethTxReceipt = await contract.methods.burn(amountInEthFormat, _eosAccountName).send({
             from: account
           })
         }
-        promiEvent.eventEmitter.emit('onEthTxConfirmed', res)
 
-        const polledTx = res.transactionHash
-        let broadcastedTx = ''
+        promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+
+        const polledTx = ethTxReceipt.transactionHash
+        let broadcastedTx = null
         let isSeen = false
+
         await polling(async () => {
-          res = await this.enclave.getIncomingTransactionStatus(polledTx)
-          if (res.broadcast === false && !isSeen) {
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(polledTx)
+
+          if (incomingTxStatus.broadcast === false && !isSeen) {
+            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
             isSeen = true
             return false
-          } else if (res.broadcast === true) {
+          } else if (incomingTxStatus.broadcast === true) {
             if (!isSeen)
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', res)
+              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
 
-            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', res)
-            broadcastedTx = res.broadcast_transaction_hash
+            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
+            broadcastedTx = incomingTxStatus.broadcast_transaction_hash
             return true
           } else {
             return false
@@ -187,9 +179,10 @@ class pEOS {
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          res = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
-          if (res.trx.receipt.status === 'executed') {
-            promiEvent.eventEmitter.emit('onEosTxConfirmed', res.data)
+          const eosTxReceipt = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
+
+          if (eosTxReceipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) {
+            promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt.data)
             return true
           } else {
             return false
@@ -198,7 +191,7 @@ class pEOS {
 
         promiEvent.resolve({
           totalRedeemed: _amount.toFixed(TOKEN_DECIMALS),
-          to: _eosAccount,
+          to: _eosAccountName,
           tx: broadcastedTx
         })
       }
@@ -210,27 +203,39 @@ class pEOS {
   }
 
   getTotalIssued() {
-    return _getTotalOf(
-      this.web3,
-      'totalMinted',
-      this.isWeb3Injected
-    )
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'totalMinted',
+        this.isWeb3Injected
+      )
+        .then(totalIssued => resolve(totalIssued / Math.pow(10, TOKEN_DECIMALS)))
+        .catch(err => reject(err))
+    })
   }
 
   getTotalRedeemed() {
-    return _getTotalOf(
-      this.web3,
-      'totalBurned',
-      this.isWeb3Injected
-    )
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'totalBurned',
+        this.isWeb3Injected
+      )
+        .then(totalRedeemed => resolve(totalRedeemed / Math.pow(10, TOKEN_DECIMALS)))
+        .catch(err => reject(err))
+    })
   }
 
   getCirculatingSupply() {
-    return _getTotalOf(
-      this.web3,
-      'totalSupply',
-      this.isWeb3Injected
-    )
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'totalSupply',
+        this.isWeb3Injected
+      )
+        .then(totalSupply => resolve(totalSupply / Math.pow(10, TOKEN_DECIMALS)))
+        .catch(err => reject(err))
+    })
   }
 }
 
