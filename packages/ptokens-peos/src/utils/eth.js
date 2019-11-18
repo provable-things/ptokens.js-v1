@@ -1,11 +1,10 @@
 import abi from '../contract/pEOSToken.json'
 import {
   CONTRACT_ADDRESS,
-  TOKEN_DECIMALS
+  ZERO_ETHER
 } from './constants'
 
 /**
- *
  * @param {Object} _web3
  */
 const _getEthAccount = async _web3 => {
@@ -14,7 +13,6 @@ const _getEthAccount = async _web3 => {
 }
 
 /**
- *
  * @param {Object} _web3
  */
 const _getEthContract = (_web3, _account) => {
@@ -23,6 +21,41 @@ const _getEthContract = (_web3, _account) => {
   })
   return contract
 }
+
+/**
+ * @param {Object} _web3
+ */
+const _getEthGasLimit = _web3 =>
+  new Promise((resolve, reject) => {
+    _web3.eth.getBlock('latest')
+      .then(_block => resolve(_block.gasLimit))
+      .catch(_err => reject(_err))
+  })
+
+/**
+ * @param {Object} _web3
+ * @param {String} _method
+ * @param {Boolean} _isWeb3Injected
+ */
+const _makeContractCall = (_web3, _method, _isWeb3Injected) =>
+  new Promise(async (resolve, reject) => {
+    const account = _isWeb3Injected
+      ? await _getEthAccount(_web3)
+      : _web3.eth.defaultAccount
+
+    const contract = _getEthContract(_web3, account)
+    contract.methods[_method]().call()
+      .then(_res => resolve(_res))
+      .catch(_err => reject(_err))
+  })
+
+/**
+ * @param {Object} _web3
+ * @param {String} _privateKey
+ * @param {Array} _params
+ */
+const _sendSignedBurnTx = (_web3, _privateKey, _params) =>
+  _sendSignedTx(_web3, _privateKey, 'burn', _params)
 
 /**
  * @param {Object} _web3
@@ -37,13 +70,14 @@ const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
       const nonce = await _web3.eth.getTransactionCount(_web3.eth.defaultAccount, 'pending')
       const gasPrice = await _web3.eth.getGasPrice()
       const functionAbi = contract.methods[_method](..._params).encodeABI()
+      const gasLimit = await _getEthGasLimit(_web3)
 
       const rawData = {
         nonce,
         gasPrice,
-        gasLimit: 10000000,
+        gasLimit,
         to: CONTRACT_ADDRESS,
-        value: '0x00',
+        value: ZERO_ETHER,
         data: functionAbi
       }
       const signedTransaction = await _web3.eth.accounts.signTransaction(rawData, _privateKey)
@@ -56,27 +90,9 @@ const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
     }
   })
 
-/**
- * @param {Object} _web3
- * @param {String} _method
- * @param {Boolean} _isWeb3Injected
- * @param {Function=} null - _callback
- */
-const _getTotalOf = (_web3, _method, _isWeb3Injected) =>
-  new Promise(async (resolve, reject) => {
-    const account = _isWeb3Injected
-      ? await _getEthAccount(_web3)
-      : _web3.eth.defaultAccount
-
-    const contract = _getEthContract(_web3, account)
-    contract.methods[_method]().call()
-      .then(_total => resolve(_total / Math.pow(10, TOKEN_DECIMALS)))
-      .catch(_err => reject(_err))
-  })
-
 export {
   _getEthAccount,
   _getEthContract,
-  _sendSignedTx,
-  _getTotalOf
+  _makeContractCall,
+  _sendSignedBurnTx
 }
