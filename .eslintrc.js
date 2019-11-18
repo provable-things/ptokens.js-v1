@@ -95,7 +95,7 @@ module.exports = {
     'strict': [2, 'safe'],
     // variables
     'no-use-before-define': [2, {
-      variables: true,
+      variables: false, //in order to declare arrow functions in alphabetical order
       functions: true,
       classes: true
     }],
