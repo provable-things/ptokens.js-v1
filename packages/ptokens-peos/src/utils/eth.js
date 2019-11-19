@@ -8,7 +8,7 @@ import {
  * @param {Object} _web3
  * @param {Boolean=} false - _isWeb3Injected
  */
-const _getEthAccount = (_web3, _isWeb3Injected = false) => 
+const _getEthAccount = (_web3, _isWeb3Injected = false) =>
   new Promise((resolve, reject) => {
     if (_isWeb3Injected) {
       _web3.eth.getAccounts()

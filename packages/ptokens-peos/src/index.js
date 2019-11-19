@@ -29,7 +29,6 @@ class pEOS {
    * @param {Object} _configs
    */
   constructor(_configs) {
-
     const {
       web3,
       eosjs
@@ -48,11 +47,10 @@ class pEOS {
       this.isWeb3Injected = false
     }
 
-    if (eosjs) {
+    if (eosjs)
       this.eosjs = eosjs
-    } else {
+    else
       this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
-    }
   }
 
   /**
@@ -233,8 +231,8 @@ class pEOS {
         'totalBurned',
         this.isWeb3Injected
       )
-      .then(totalRedeemed => resolve(totalRedeemed / Math.pow(10, TOKEN_DECIMALS)))
-      .catch(err => reject(err))
+        .then(totalRedeemed => resolve(totalRedeemed / Math.pow(10, TOKEN_DECIMALS)))
+        .catch(err => reject(err))
     })
   }
 
@@ -245,13 +243,13 @@ class pEOS {
         'totalSupply',
         this.isWeb3Injected
       )
-      .then(totalSupply => resolve(totalSupply / Math.pow(10, TOKEN_DECIMALS)))
-      .catch(err => reject(err))
+        .then(totalSupply => resolve(totalSupply / Math.pow(10, TOKEN_DECIMALS)))
+        .catch(err => reject(err))
     })
   }
 
   /**
-   * @param {String} _ethAccount 
+   * @param {String} _ethAccount
    */
   getBalance(_ethAccount) {
     return new Promise((resolve, reject) => {
@@ -263,8 +261,8 @@ class pEOS {
           _ethAccount
         ]
       )
-      .then(balance => resolve(balance / Math.pow(10, TOKEN_DECIMALS)))
-      .catch(err => reject(err))
+        .then(balance => resolve(balance / Math.pow(10, TOKEN_DECIMALS)))
+        .catch(err => reject(err))
     })
   }
 }
