@@ -23,29 +23,31 @@ npm install ptokens-peos
 ### Usage without injected web3
 
 ```js
-const pTokens = require('ptokens')
+const pEOS = require('ptokens-peos')
 
-const configs = {
+const peos = new pEOS({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
   eosPrivateKey: 'EOS private key',
   eosProvider: 'EOS provider'
-}
-const ptokens = new pTokens(configs)
+})
 ```
 
-### Usage with injected Web3
+### Usage with injected Web3 and/or EosJs
 
 ```js
-const pTokens = require('ptokens')
+const pEOS = require('ptokens-peos')
+
+const eosjs = ScatterJS.eos(network, Api, { rpc }) //for instance the Scatter one
 
 if (window.web3) {
-  const configs = {
-    eosPrivateKey: 'EOS private key',
-    eosProvider: 'EOS provider'
-  }
+  
   const web3 = new Web3(window.web3.currentProvider)
-  const ptokens = new pTokens(configs, web3)
+
+  const peos = new pEOS({
+    web3,
+    eosjs
+  })
 } else {
   console.log('No web3 detected')
 }
