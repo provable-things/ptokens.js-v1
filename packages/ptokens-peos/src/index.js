@@ -27,19 +27,30 @@ import polling from 'light-async-polling'
 class pEOS {
   /**
    * @param {Object} _configs
-   * @param {Object=} null - _web3
    */
-  constructor(_configs, _web3 = null) {
-    this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
+  constructor(_configs) {
+
+    const {
+      web3,
+      eosjs
+    } = _configs
+
     this.enclave = new Enclave()
-    if (_web3) {
+
+    if (web3) {
       this.isWeb3Injected = true
-      this.web3 = _web3
+      this.web3 = web3
     } else {
       this.web3 = new Web3(_configs.ethProvider)
       const account = this.web3.eth.accounts.privateKeyToAccount(_configs.ethPrivateKey)
       this.web3.eth.defaultAccount = account.address
       this.ethPrivateKey = _configs.ethPrivateKey
+    }
+
+    if (eosjs) {
+      this.eosjs = eosjs
+    } else {
+      this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
     }
   }
 
