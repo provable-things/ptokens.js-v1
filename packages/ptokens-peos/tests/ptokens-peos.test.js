@@ -83,6 +83,18 @@ test('Should redeem 1 pEOS', async () => {
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
+test('Should get correct balance', async () => {
+  const peos = new pEOS(configs)
+  await sleep(500)
+  const ethAddress = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+  let currentBalance = await peos.getBalance(ethAddress)
+  const peosToIssue = 1
+  const expectedBalance = currentBalance + 1
+  await peos.issue(peosToIssue, ethAddress)
+  currentBalance = await peos.getBalance(ethAddress)
+  expect(currentBalance).to.be.equal(expectedBalance)
+})
+
 test('Should get total number of issued pEOS', async () => {
   const peos = new pEOS(configs)
   await sleep(500)

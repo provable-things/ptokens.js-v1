@@ -6,11 +6,18 @@ import {
 
 /**
  * @param {Object} _web3
+ * @param {Boolean=} false - _isWeb3Injected
  */
-const _getEthAccount = async _web3 => {
-  const accounts = await _web3.eth.getAccounts()
-  return accounts[0]
-}
+const _getEthAccount = (_web3, _isWeb3Injected = false) => 
+  new Promise((resolve, reject) => {
+    if (_isWeb3Injected) {
+      _web3.eth.getAccounts()
+        .then(accounts => resolve(accounts[0]))
+        .catch(err => reject(err))
+    } else {
+      resolve(_web3.eth.defaultAccount)
+    }
+  })
 
 /**
  * @param {Object} _web3
@@ -36,15 +43,13 @@ const _getEthGasLimit = _web3 =>
  * @param {Object} _web3
  * @param {String} _method
  * @param {Boolean} _isWeb3Injected
+ * @param {Array=} [] - _params
  */
-const _makeContractCall = (_web3, _method, _isWeb3Injected) =>
+const _makeContractCall = (_web3, _method, _isWeb3Injected, _params = []) =>
   new Promise(async (resolve, reject) => {
-    const account = _isWeb3Injected
-      ? await _getEthAccount(_web3)
-      : _web3.eth.defaultAccount
-
+    const account = await _getEthAccount(_web3, _isWeb3Injected)
     const contract = _getEthContract(_web3, account)
-    contract.methods[_method]().call()
+    contract.methods[_method](..._params).call()
       .then(_res => resolve(_res))
       .catch(_err => reject(_err))
   })

@@ -45,6 +45,7 @@ class pEOS {
       const account = this.web3.eth.accounts.privateKeyToAccount(_configs.ethPrivateKey)
       this.web3.eth.defaultAccount = account.address
       this.ethPrivateKey = _configs.ethPrivateKey
+      this.isWeb3Injected = false
     }
 
     if (eosjs) {
@@ -157,7 +158,7 @@ class pEOS {
             ]
           )
         } else {
-          const account = await _getEthAccount(this.web3)
+          const account = await _getEthAccount(this.web3, this.isWeb3Injected)
           const contract = _getEthContract(this.web3, account)
           ethTxReceipt = await contract.methods.burn(amountInEthFormat, _eosAccountName).send({
             from: account
@@ -232,8 +233,8 @@ class pEOS {
         'totalBurned',
         this.isWeb3Injected
       )
-        .then(totalRedeemed => resolve(totalRedeemed / Math.pow(10, TOKEN_DECIMALS)))
-        .catch(err => reject(err))
+      .then(totalRedeemed => resolve(totalRedeemed / Math.pow(10, TOKEN_DECIMALS)))
+      .catch(err => reject(err))
     })
   }
 
@@ -244,8 +245,26 @@ class pEOS {
         'totalSupply',
         this.isWeb3Injected
       )
-        .then(totalSupply => resolve(totalSupply / Math.pow(10, TOKEN_DECIMALS)))
-        .catch(err => reject(err))
+      .then(totalSupply => resolve(totalSupply / Math.pow(10, TOKEN_DECIMALS)))
+      .catch(err => reject(err))
+    })
+  }
+
+  /**
+   * @param {String} _ethAccount 
+   */
+  getBalance(_ethAccount) {
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'balanceOf',
+        this.isWeb3Injected,
+        [
+          _ethAccount
+        ]
+      )
+      .then(balance => resolve(balance / Math.pow(10, TOKEN_DECIMALS)))
+      .catch(err => reject(err))
     })
   }
 }
