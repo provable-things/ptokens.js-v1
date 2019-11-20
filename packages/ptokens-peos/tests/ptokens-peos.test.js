@@ -2,23 +2,22 @@ import pEOS from '../src/index'
 import { expect } from 'chai'
 import { TOKEN_DECIMALS } from '../src/utils/constants'
 
-const sleep = ms =>
-  new Promise(resolve => setTimeout(() => resolve(), ms))
-
 const configs = {
-  ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+  ethPrivateKey: '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
   ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
   eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
   eosProvider: 'https://ptoken-eos.provable.xyz:443'
 }
+// corresponsing eth address = 0xdf3B180694aB22C577f7114D822D28b92cadFd75
+// corresponding eos account = all3manfr4di
 
 jest.setTimeout(3000000)
 
 test('Should issue 1 pEOS', async () => {
   const peosToIssue = 1
   const expectedAmountIssued = peosToIssue.toFixed(TOKEN_DECIMALS)
-  const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
-  const expectedEthAccount = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+  const to = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+  const expectedEthAccount = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
   let eosTxIsConfirmed = false
   let enclaveHasReceivedTx = false
@@ -51,7 +50,7 @@ test('Should redeem 1 pEOS', async () => {
   const peosToRedeem = 1
   const peosToIssue = 1
   const expectedAmountRedeemed = peosToRedeem.toFixed(TOKEN_DECIMALS)
-  const ethAddress = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+  const ethAddress = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
   const to = 'all3manfr4di'
   const expectedEosAccount = 'all3manfr4di'
 
@@ -85,8 +84,7 @@ test('Should redeem 1 pEOS', async () => {
 
 test('Should get correct balance', async () => {
   const peos = new pEOS(configs)
-  await sleep(500)
-  const ethAddress = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+  const ethAddress = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
   let currentBalance = await peos.getBalance(ethAddress)
   const peosToIssue = 1
   const expectedBalance = currentBalance + 1
@@ -97,11 +95,10 @@ test('Should get correct balance', async () => {
 
 test('Should get total number of issued pEOS', async () => {
   const peos = new pEOS(configs)
-  await sleep(500)
   const currentTotalIssued = await peos.getTotalIssued()
   const peosToIssue = 1
   const expectedTotalIssue = currentTotalIssued + peosToIssue
-  const to = '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF'
+  const to = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
   await peos.issue(peosToIssue, to)
   const totalIssued = await peos.getTotalIssued()
@@ -110,7 +107,6 @@ test('Should get total number of issued pEOS', async () => {
 
 test('Should get total number of redeemed pEOS', async () => {
   const peos = new pEOS(configs)
-  await sleep(500)
   const currentTotalRedeemed = await peos.getTotalRedeemed()
   const peosToRedeem = 1
   const expectedTotalRedeemed = currentTotalRedeemed + peosToRedeem
@@ -123,7 +119,6 @@ test('Should get total number of redeemed pEOS', async () => {
 
 test('Should get total number of circulating pEOS', async () => {
   const peos = new pEOS(configs)
-  await sleep(500)
   const currentCirculatingSupply = await peos.getCirculatingSupply()
   const peosToRedeem = 1
   const expectedCirculatingSupply = currentCirculatingSupply - peosToRedeem
@@ -132,4 +127,35 @@ test('Should get total number of circulating pEOS', async () => {
   await peos.redeem(peosToRedeem, to)
   const circulatingSupply = await peos.getCirculatingSupply()
   expect(circulatingSupply).to.be.equal(expectedCirculatingSupply)
+})
+
+test('Should transfer 1 pEOS', async () => {
+  const peos = new pEOS(configs)
+  const owner = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+  const to = '0xaC248Dd1e6021b98556CDC4B463c34AeAaa1ed3A'
+
+  let currentBalance = await peos.getBalance(to)
+  const peosToTransfer = 1
+  const peosToIssue = 1
+  const expectedBalance = currentBalance + peosToTransfer
+
+  await peos.issue(peosToIssue, owner)
+  currentBalance = await peos.getBalance(owner)
+  await peos.transfer(to, peosToTransfer)
+  currentBalance = await peos.getBalance(to)
+  expect(currentBalance).to.be.equal(expectedBalance)
+})
+
+test('Should approve correctly 1 pEOS', async () => {
+  const peos = new pEOS(configs)
+  const owner = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+  const to = '0xaC248Dd1e6021b98556CDC4B463c34AeAaa1ed3A'
+  const expectedAllowance = 1
+  const peosToApprove = 1
+  const peosToIssue = 1
+
+  await peos.issue(peosToIssue, owner)
+  await peos.approve(to, peosToApprove)
+  const allowance = await peos.getAllowance(owner, to)
+  expect(allowance).to.be.equal(expectedAllowance)
 })

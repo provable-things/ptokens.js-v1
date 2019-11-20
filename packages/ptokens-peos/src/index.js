@@ -2,10 +2,10 @@ import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
 import Enclave from 'ptokens-enclave'
 import {
-  _getEthAccount,
-  _getEthContract,
-  _makeContractCall,
-  _sendSignedBurnTx
+  _alwaysWithPrefix,
+  _correctEthFormat,
+  _makeTransaction,
+  _makeContractCall
 } from './utils/eth'
 import {
   _eosTransactToProvabletokn,
@@ -31,7 +31,11 @@ class pEOS {
   constructor(_configs) {
     const {
       web3,
-      eosjs
+      eosjs,
+      ethPrivateKey,
+      ethProvider,
+      eosPrivateKey,
+      eosProvider
     } = _configs
 
     this.enclave = new Enclave()
@@ -39,22 +43,27 @@ class pEOS {
     if (web3) {
       this.isWeb3Injected = true
       this.web3 = web3
+      this.ethPrivateKey = null
     } else {
-      this.web3 = new Web3(_configs.ethProvider)
-      const account = this.web3.eth.accounts.privateKeyToAccount(_configs.ethPrivateKey)
+      this.web3 = new Web3(ethProvider)
+
+      const account = this.web3.eth.accounts.privateKeyToAccount(
+        _alwaysWithPrefix(ethPrivateKey)
+      )
+
       this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = _configs.ethPrivateKey
+      this.ethPrivateKey = _alwaysWithPrefix(ethPrivateKey)
       this.isWeb3Injected = false
     }
 
     if (eosjs)
       this.eosjs = eosjs
     else
-      this.eosjs = _getEosJsApi(_configs.eosPrivateKey, _configs.eosProvider)
+      this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider)
   }
 
   /**
-   * @param {Integer} _amount
+   * @param {Number} _amount
    * @param {String} _ethAddress
    */
   issue(_amount, _ethAddress) {
@@ -129,7 +138,7 @@ class pEOS {
   }
 
   /**
-   * @param {Integer} _amount
+   * @param {Number} _amount
    * @param {String} _eosAccountName
    */
   redeem(_amount, _eosAccountName) {
@@ -143,25 +152,20 @@ class pEOS {
 
     try {
       const start = async () => {
-        let ethTxReceipt = null
-        const amountInEthFormat = _amount * Math.pow(10, TOKEN_DECIMALS)
-
-        if (!this.isWeb3Injected) {
-          ethTxReceipt = await _sendSignedBurnTx(
-            this.web3,
-            this.ethPrivateKey,
-            [
-              amountInEthFormat,
-              _eosAccountName
-            ]
-          )
-        } else {
-          const account = await _getEthAccount(this.web3, this.isWeb3Injected)
-          const contract = _getEthContract(this.web3, account)
-          ethTxReceipt = await contract.methods.burn(amountInEthFormat, _eosAccountName).send({
-            from: account
-          })
-        }
+        const ethTxReceipt = await _makeTransaction(
+          this.web3,
+          'burn',
+          this.isWeb3Injected,
+          [
+            _correctEthFormat(
+              _amount,
+              TOKEN_DECIMALS,
+              '*'
+            ),
+            _eosAccountName
+          ],
+          this.ethPrivateKey
+        )
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
@@ -219,7 +223,13 @@ class pEOS {
         'totalMinted',
         this.isWeb3Injected
       )
-        .then(totalIssued => resolve(totalIssued / Math.pow(10, TOKEN_DECIMALS)))
+        .then(totalIssued => resolve(
+          _correctEthFormat(
+            parseInt(totalIssued),
+            TOKEN_DECIMALS,
+            '/'
+          )
+        ))
         .catch(err => reject(err))
     })
   }
@@ -231,7 +241,13 @@ class pEOS {
         'totalBurned',
         this.isWeb3Injected
       )
-        .then(totalRedeemed => resolve(totalRedeemed / Math.pow(10, TOKEN_DECIMALS)))
+        .then(totalRedeemed => resolve(
+          _correctEthFormat(
+            parseInt(totalRedeemed),
+            TOKEN_DECIMALS,
+            '/'
+          )
+        ))
         .catch(err => reject(err))
     })
   }
@@ -243,7 +259,13 @@ class pEOS {
         'totalSupply',
         this.isWeb3Injected
       )
-        .then(totalSupply => resolve(totalSupply / Math.pow(10, TOKEN_DECIMALS)))
+        .then(totalSupply => resolve(
+          _correctEthFormat(
+            parseInt(totalSupply),
+            TOKEN_DECIMALS,
+            '/'
+          )
+        ))
         .catch(err => reject(err))
     })
   }
@@ -261,7 +283,120 @@ class pEOS {
           _ethAccount
         ]
       )
-        .then(balance => resolve(balance / Math.pow(10, TOKEN_DECIMALS)))
+        .then(balance => resolve(
+          _correctEthFormat(
+            parseInt(balance),
+            TOKEN_DECIMALS,
+            '/'
+          )
+        ))
+        .catch(err => reject(err))
+    })
+  }
+
+  /**
+   * @param {String} _to
+   * @param {Number} _amount
+   */
+  transfer(_to, _amount) {
+    return _makeTransaction(
+      this.web3,
+      'transfer',
+      this.isWeb3Injected,
+      [
+        _to,
+        _correctEthFormat(
+          parseInt(_amount),
+          TOKEN_DECIMALS,
+          '*'
+        )
+      ],
+      this.ethPrivateKey
+    )
+  }
+
+  /**
+   * @param {String} _spender
+   * @param {Number} _amount
+   */
+  approve(_spender, _amount) {
+    return _makeTransaction(
+      this.web3,
+      'approve',
+      this.isWeb3Injected,
+      [
+        _spender,
+        _correctEthFormat(
+          parseInt(_amount),
+          TOKEN_DECIMALS,
+          '*'
+        )
+      ],
+      this.ethPrivateKey
+    )
+  }
+
+  /**
+   * @param {String} _from
+   * @param {String} _to
+   * @param {Number} _amount
+   */
+  transferFrom(_from, _to, _amount) {
+    return _makeTransaction(
+      this.web3,
+      'transferFrom',
+      this.isWeb3Injected,
+      [
+        _from,
+        _to,
+        _correctEthFormat(
+          parseInt(_amount),
+          TOKEN_DECIMALS,
+          '*'
+        )
+      ],
+      this.ethPrivateKey
+    )
+  }
+
+  getBurnNonce() {
+    return _makeContractCall(
+      this.web3,
+      'burnNonce',
+      this.isWeb3Injected
+    )
+  }
+
+  getMintNonce() {
+    return _makeContractCall(
+      this.web3,
+      'mintNonce',
+      this.isWeb3Injected
+    )
+  }
+
+  /**
+   * @param {String} _owner
+   * @param {Address} _spender
+   */
+  getAllowance(_owner, _spender) {
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'allowance',
+        this.isWeb3Injected,
+        [
+          _owner,
+          _spender
+        ]
+      )
+        .then(allowance => resolve(
+          _correctEthFormat(
+            parseInt(allowance),
+            TOKEN_DECIMALS,
+            '/'
+          )
+        ))
         .catch(err => reject(err))
     })
   }

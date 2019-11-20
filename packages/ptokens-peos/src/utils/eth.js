@@ -1,8 +1,28 @@
 import abi from '../contractAbi/pEOSTokenETHContractAbi.json'
 import {
   CONTRACT_ADDRESS,
+  PREFIX,
   ZERO_ETHER
 } from './constants'
+
+/**
+ * @param {String} _string
+ */
+const _alwaysWithPrefix = _string =>
+  _is0xPrefixed(_string)
+    ? _string
+    : PREFIX + _string
+
+/**
+ *
+ * @param {Number} _amount
+ * @param {Number} _decimals
+ * @param {String} _operation
+ */
+const _correctEthFormat = (_amount, _decimals, _operation) =>
+  _operation === '/'
+    ? _amount / Math.pow(10, _decimals)
+    : _amount * Math.pow(10, _decimals)
 
 /**
  * @param {Object} _web3
@@ -40,6 +60,12 @@ const _getEthGasLimit = _web3 =>
   })
 
 /**
+ * @param {String} _string
+ */
+const _is0xPrefixed = _string =>
+  _string.slice(0, 2) === PREFIX
+
+/**
  * @param {Object} _web3
  * @param {String} _method
  * @param {Boolean} _isWeb3Injected
@@ -56,11 +82,31 @@ const _makeContractCall = (_web3, _method, _isWeb3Injected, _params = []) =>
 
 /**
  * @param {Object} _web3
- * @param {String} _privateKey
+ * @param {String} _method
+ * @param {Boolean} _isWeb3Injected
  * @param {Array} _params
+ * @param {String=} null - _ethPrivateKey
  */
-const _sendSignedBurnTx = (_web3, _privateKey, _params) =>
-  _sendSignedTx(_web3, _privateKey, 'burn', _params)
+const _makeTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPrivateKey = null) =>
+  new Promise((resolve, reject) => {
+    _isWeb3Injected
+      ? _makeContractCall(
+        _web3,
+        _method,
+        _isWeb3Injected,
+        _params
+      )
+        .then(status => resolve(status))
+        .catch(err => reject(err))
+      : _sendSignedCallTx(
+        _web3,
+        _ethPrivateKey,
+        _method,
+        _params
+      )
+        .then(receipt => resolve(receipt))
+        .catch(err => reject(err))
+  })
 
 /**
  * @param {Object} _web3
@@ -68,7 +114,7 @@ const _sendSignedBurnTx = (_web3, _privateKey, _params) =>
  * @param {String} _method
  * @param {Array} _params
  */
-const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
+const _sendSignedCallTx = (_web3, _privateKey, _method, _params) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = _getEthContract(_web3, _web3.eth.defaultAccount)
@@ -96,8 +142,12 @@ const _sendSignedTx = (_web3, _privateKey, _method, _params) =>
   })
 
 export {
+  _alwaysWithPrefix,
+  _correctEthFormat,
   _getEthAccount,
   _getEthContract,
+  _is0xPrefixed,
   _makeContractCall,
-  _sendSignedBurnTx
+  _makeTransaction,
+  _sendSignedCallTx
 }
