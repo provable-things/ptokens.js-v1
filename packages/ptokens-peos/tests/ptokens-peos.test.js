@@ -159,3 +159,27 @@ test('Should approve correctly 1 pEOS', async () => {
   const allowance = await peos.getAllowance(owner, to)
   expect(allowance).to.be.equal(expectedAllowance)
 })
+
+test('Should get the correct number of issued pEOS', async () => {
+  const peos = new pEOS(configs)
+  const peosToIssue = 1
+  const owner = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+  const currentMintNonce = await peos.getMintNonce()
+  const expectedMintNonce = currentMintNonce + 1
+
+  await peos.issue(peosToIssue, owner)
+  const finalMintNonce = await peos.getMintNonce()
+  expect(finalMintNonce).to.be.equal(expectedMintNonce)
+})
+
+test('Should get the correct number of redeemed pEOS', async () => {
+  const peos = new pEOS(configs)
+  const peosToRedeem = 1
+  const to = 'all3manfr4di'
+  const currentBurnNonce = await peos.getBurnNonce()
+  const expectedBurnNonce = currentBurnNonce + 1
+
+  await peos.redeem(peosToRedeem, to)
+  const finalBurnNonce = await peos.getBurnNonce()
+  expect(finalBurnNonce).to.be.equal(expectedBurnNonce)
+})

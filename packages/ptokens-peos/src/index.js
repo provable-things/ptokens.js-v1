@@ -360,19 +360,31 @@ class pEOS {
   }
 
   getBurnNonce() {
-    return _makeContractCall(
-      this.web3,
-      'burnNonce',
-      this.isWeb3Injected
-    )
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'burnNonce',
+        this.isWeb3Injected
+      )
+        .then(burnNonce => resolve(
+          parseInt(burnNonce)
+        ))
+        .catch(err => reject(err))
+    })
   }
 
   getMintNonce() {
-    return _makeContractCall(
-      this.web3,
-      'mintNonce',
-      this.isWeb3Injected
-    )
+    return new Promise((resolve, reject) => {
+      _makeContractCall(
+        this.web3,
+        'mintNonce',
+        this.isWeb3Injected
+      )
+        .then(mintNonce => resolve(
+          parseInt(mintNonce)
+        ))
+        .catch(err => reject(err))
+    })
   }
 
   /**
