@@ -71,7 +71,7 @@ const _is0xPrefixed = _string =>
  * @param {Boolean} _isWeb3Injected
  * @param {Array=} [] - _params
  */
-const _makeContractCall = (_web3, _method, _isWeb3Injected, _params = []) =>
+const _makeEthContractCall = (_web3, _method, _isWeb3Injected, _params = []) =>
   new Promise(async (resolve, reject) => {
     const account = await _getEthAccount(_web3, _isWeb3Injected)
     const contract = _getEthContract(_web3, account)
@@ -87,10 +87,10 @@ const _makeContractCall = (_web3, _method, _isWeb3Injected, _params = []) =>
  * @param {Array} _params
  * @param {String=} null - _ethPrivateKey
  */
-const _makeTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPrivateKey = null) =>
+const _makeEthTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPrivateKey = null) =>
   new Promise((resolve, reject) => {
     _isWeb3Injected
-      ? _makeContractCall(
+      ? _makeEthContractCall(
         _web3,
         _method,
         _isWeb3Injected,
@@ -147,7 +147,7 @@ export {
   _getEthAccount,
   _getEthContract,
   _is0xPrefixed,
-  _makeContractCall,
-  _makeTransaction,
+  _makeEthContractCall,
+  _makeEthTransaction,
   _sendSignedCallTx
 }

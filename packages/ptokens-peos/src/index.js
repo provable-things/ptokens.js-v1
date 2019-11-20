@@ -4,8 +4,8 @@ import Enclave from 'ptokens-enclave'
 import {
   _alwaysWithPrefix,
   _correctEthFormat,
-  _makeTransaction,
-  _makeContractCall
+  _makeEthTransaction,
+  _makeEthContractCall
 } from './utils/eth'
 import {
   _eosTransactToProvabletokn,
@@ -35,7 +35,8 @@ class pEOS {
       ethPrivateKey,
       ethProvider,
       eosPrivateKey,
-      eosProvider
+      eosProvider,
+      eosAccountName
     } = _configs
 
     this.enclave = new Enclave()
@@ -56,10 +57,10 @@ class pEOS {
       this.isWeb3Injected = false
     }
 
-    if (eosjs)
+    if (eosjs) {
       this.eosjs = eosjs
-    else
-      this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider)
+      this.eosAccountName = eosAccountName
+    } else { this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider) }
   }
 
   /**
@@ -152,7 +153,7 @@ class pEOS {
 
     try {
       const start = async () => {
-        const ethTxReceipt = await _makeTransaction(
+        const ethTxReceipt = await _makeEthTransaction(
           this.web3,
           'burn',
           this.isWeb3Injected,
@@ -218,7 +219,7 @@ class pEOS {
 
   getTotalIssued() {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'totalMinted',
         this.isWeb3Injected
@@ -236,7 +237,7 @@ class pEOS {
 
   getTotalRedeemed() {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'totalBurned',
         this.isWeb3Injected
@@ -254,7 +255,7 @@ class pEOS {
 
   getCirculatingSupply() {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'totalSupply',
         this.isWeb3Injected
@@ -275,7 +276,7 @@ class pEOS {
    */
   getBalance(_ethAccount) {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'balanceOf',
         this.isWeb3Injected,
@@ -299,7 +300,7 @@ class pEOS {
    * @param {Number} _amount
    */
   transfer(_to, _amount) {
-    return _makeTransaction(
+    return _makeEthTransaction(
       this.web3,
       'transfer',
       this.isWeb3Injected,
@@ -320,7 +321,7 @@ class pEOS {
    * @param {Number} _amount
    */
   approve(_spender, _amount) {
-    return _makeTransaction(
+    return _makeEthTransaction(
       this.web3,
       'approve',
       this.isWeb3Injected,
@@ -342,7 +343,7 @@ class pEOS {
    * @param {Number} _amount
    */
   transferFrom(_from, _to, _amount) {
-    return _makeTransaction(
+    return _makeEthTransaction(
       this.web3,
       'transferFrom',
       this.isWeb3Injected,
@@ -361,7 +362,7 @@ class pEOS {
 
   getBurnNonce() {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'burnNonce',
         this.isWeb3Injected
@@ -375,7 +376,7 @@ class pEOS {
 
   getMintNonce() {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'mintNonce',
         this.isWeb3Injected
@@ -393,7 +394,7 @@ class pEOS {
    */
   getAllowance(_owner, _spender) {
     return new Promise((resolve, reject) => {
-      _makeContractCall(
+      _makeEthContractCall(
         this.web3,
         'allowance',
         this.isWeb3Injected,
