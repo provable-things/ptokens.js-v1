@@ -21,8 +21,9 @@ test('Should ping the enclave', async () => {
 test('Should get ETH report', async () => {
   const expectedResultLength = 10
   const limit = 10
+  const type = 'eth'
   const enclave = new Enclave()
-  const r = await enclave.getEthReport(limit)
+  const r = await enclave.getReport(limit, type)
   expect(r)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -31,23 +32,26 @@ test('Should get ETH report', async () => {
 test('Should get EOS report', async () => {
   const expectedResultLength = 10
   const limit = 10
+  const type = 'eos'
   const enclave = new Enclave()
-  const r = await enclave.getEosReport(limit)
+  const r = await enclave.getReport(limit, type)
   expect(r)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
 test('Should get last ETH processed block', async () => {
+  const type = 'eth'
   const enclave = new Enclave()
-  const r = await enclave.getLastProcessedEthBlock()
+  const r = await enclave.getLastProcessedBlock(type)
   expect(r)
     .to.be.an.instanceof(Object)
 })
 
 test('Should get last EOS processed block', async () => {
+  const type = 'eos'
   const enclave = new Enclave()
-  const r = await enclave.getLastProcessedEosBlock()
+  const r = await enclave.getLastProcessedBlock(type)
   expect(r)
     .to.be.an.instanceof(Object)
 })
@@ -70,16 +74,18 @@ test('Should get the status of an brodcasted tx', async () => {
 
 test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
+  const type = 'eth'
   const enclave = new Enclave()
-  const r = await enclave.submitEthBlock(ETH_BLOCK)
+  const r = await enclave.submitBlock(ETH_BLOCK, type)
   expect(r)
     .to.be.equal(expectedResult)
 })
 
 test('Should submit an EOS block', async () => {
   const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
+  const type = 'eos'
   const enclave = new Enclave()
-  const r = await enclave.submitEosBlock(EOS_BLOCK)
+  const r = await enclave.submitBlock(EOS_BLOCK, type)
   expect(r)
     .to.be.equal(expectedResult)
 })

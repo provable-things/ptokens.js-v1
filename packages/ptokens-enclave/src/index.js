@@ -9,24 +9,17 @@ class Enclave {
 
   /**
    * @param {Integer} _limit
+   * @param {String} _type
    */
-  getEthReport(_limit) {
-    return makeApiCall('GET', `/eth-reports/limit/${_limit}`, null)
+  getReport(_limit, _type) {
+    return makeApiCall('GET', `/${_type}-reports/limit/${_limit}`, null)
   }
 
   /**
-   * @param {Integer} _limit
+   * @param {String} _type
    */
-  getEosReport(_limit) {
-    return makeApiCall('GET', `/eos-reports/limit/${_limit}`, null)
-  }
-
-  getLastProcessedEthBlock() {
-    return makeApiCall('GET', '/last-processed-eth-block', null)
-  }
-
-  getLastProcessedEosBlock() {
-    return makeApiCall('GET', '/last-processed-eos-block', null)
+  getLastProcessedBlock(_type) {
+    return makeApiCall('GET', `/last-processed-${_type}-block`, null)
   }
 
   /**
@@ -45,17 +38,10 @@ class Enclave {
 
   /**
    * @param {Object} _block
+   * @param {String} _type
    */
-  submitEthBlock(_block) {
-    return makeApiCall('POST', '/submit-eth-block', _block)
-  }
-
-  /**
-   * @param {Object} _block
-   * @param {Function=} null - _callback
-   */
-  submitEosBlock(_block) {
-    return makeApiCall('POST', '/submit-eos-block', _block)
+  submitBlock(_block, _type) {
+    return makeApiCall('POST', `/submit-${_type}-block`, _block)
   }
 }
 

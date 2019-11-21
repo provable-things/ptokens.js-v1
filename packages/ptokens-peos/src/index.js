@@ -35,8 +35,7 @@ class pEOS {
       ethPrivateKey,
       ethProvider,
       eosPrivateKey,
-      eosProvider,
-      eosAccountName
+      eosProvider
     } = _configs
 
     this.enclave = new Enclave()
@@ -45,7 +44,10 @@ class pEOS {
       this.isWeb3Injected = true
       this.web3 = web3
       this.ethPrivateKey = null
-    } else {
+    } else if (
+      ethPrivateKey,
+      ethProvider
+    ) {
       this.web3 = new Web3(ethProvider)
 
       const account = this.web3.eth.accounts.privateKeyToAccount(
@@ -57,10 +59,12 @@ class pEOS {
       this.isWeb3Injected = false
     }
 
-    if (eosjs) {
+    if (eosjs)
       this.eosjs = eosjs
-      this.eosAccountName = eosAccountName
-    } else { this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider) }
+    else if (
+      eosPrivateKey &&
+      eosProvider
+    ) { this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider) }
   }
 
   /**
