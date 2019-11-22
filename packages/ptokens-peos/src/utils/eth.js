@@ -113,16 +113,16 @@ const _makeEthTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPriva
         _isWeb3Injected,
         _params
       )
-        .then(status => resolve(status))
-        .catch(err => reject(err))
+        .then(_status => resolve(_status))
+        .catch(_err => reject(_err))
       : _sendSignedMethodTx(
         _web3,
         _ethPrivateKey,
         _method,
         _params
       )
-        .then(receipt => resolve(receipt))
-        .catch(err => reject(err))
+        .then(_receipt => resolve(_receipt))
+        .catch(_err => reject(_err))
   })
 
 /**

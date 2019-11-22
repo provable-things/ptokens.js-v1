@@ -74,18 +74,18 @@ class pEOS {
   issue(_amount, _ethAddress) {
     const promiEvent = Web3PromiEvent()
 
-    try {
-      const start = async () => {
-        if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT) {
-          promiEvent.reject('Amount to issue must be greater than 1 pEOS')
-          return
-        }
+    const start = async () => {
+      if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT) {
+        promiEvent.reject('Amount to issue must be greater than 1 pEOS')
+        return
+      }
 
-        if (!this.web3.utils.isAddress(_ethAddress)) {
-          promiEvent.reject('Eth Address is not valid')
-          return
-        }
+      if (!this.web3.utils.isAddress(_ethAddress)) {
+        promiEvent.reject('Eth Address is not valid')
+        return
+      }
 
+      try {
         const eosPublicKeys = await _getEosAvailablePublicKeys(this.eosjs)
         const eosAccountName = await _getEosAccountName(this.eosjs, eosPublicKeys)
         const eosTxReceipt = await _eosTransactToProvabletokn(
@@ -138,11 +138,12 @@ class pEOS {
           to: _ethAddress,
           tx: broadcastedTx
         })
+      } catch (err) {
+        promiEvent.reject(err)
       }
-      start()
-    } catch (e) {
-      promiEvent.reject(e)
     }
+
+    start()
     return promiEvent.eventEmitter
   }
 
@@ -153,18 +154,18 @@ class pEOS {
   redeem(_amount, _eosAccountName) {
     const promiEvent = Web3PromiEvent()
 
-    try {
-      const start = async () => {
-        if (_amount === 0) {
-          promiEvent.reject('Impossible to burn 0 pEOS')
-          return
-        }
+    const start = async () => {
+      if (_amount === 0) {
+        promiEvent.reject('Impossible to burn 0 pEOS')
+        return
+      }
 
-        if (!_isValidEosAccountName(_eosAccountName)) {
-          promiEvent.reject('Eos Account is not valid')
-          return
-        }
+      if (!_isValidEosAccountName(_eosAccountName)) {
+        promiEvent.reject('Eos Account is not valid')
+        return
+      }
 
+      try {
         const ethTxReceipt = await _makeEthTransaction(
           this.web3,
           'burn',
@@ -221,11 +222,12 @@ class pEOS {
           to: _eosAccountName,
           tx: broadcastedTx
         })
+      } catch (err) {
+        promiEvent.reject(err)
       }
-      start()
-    } catch (e) {
-      promiEvent.reject(e)
     }
+
+    start()
     return promiEvent.eventEmitter
   }
 
