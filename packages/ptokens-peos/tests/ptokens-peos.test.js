@@ -33,7 +33,7 @@ test('Should issue 1 pEOS', async () => {
         .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
         .then(r => {
           expect(r).to.deep.include({
-            totalIssued: expectedAmountIssued,
+            amount: expectedAmountIssued,
             to: expectedEthAccount
           })
           resolve()
@@ -111,7 +111,7 @@ test('Should redeem 1 pEOS', async () => {
         .once('onEosTxConfirmed', () => { eosTxIsConfirmed = true })
         .then(r => {
           expect(r).to.deep.include({
-            totalRedeemed: expectedAmountRedeemed,
+            amount: expectedAmountRedeemed,
             to: expectedEosAccount
           })
           resolve()

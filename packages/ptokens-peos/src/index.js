@@ -134,7 +134,7 @@ class pEOS {
         }, ETH_NODE_POLLING_TIME_INTERVAL)
 
         promiEvent.resolve({
-          totalIssued: _amount.toFixed(TOKEN_DECIMALS),
+          amount: _amount.toFixed(TOKEN_DECIMALS),
           to: _ethAddress,
           tx: broadcastedTx
         })
@@ -217,7 +217,7 @@ class pEOS {
         }, EOS_NODE_POLLING_TIME_INTERVAL)
 
         promiEvent.resolve({
-          totalRedeemed: _amount.toFixed(TOKEN_DECIMALS),
+          amount: _amount.toFixed(TOKEN_DECIMALS),
           to: _eosAccountName,
           tx: broadcastedTx
         })
