@@ -22,7 +22,7 @@ const _alwaysWithPrefix = _string =>
 const _correctEthFormat = (_amount, _decimals, _operation) =>
   _operation === '/'
     ? _amount / Math.pow(10, _decimals)
-    : _amount * Math.pow(10, _decimals)
+    : parseInt(_amount * Math.pow(10, _decimals))
 
 /**
  * @param {Object} _web3
@@ -84,13 +84,30 @@ const _makeEthContractCall = (_web3, _method, _isWeb3Injected, _params = []) =>
  * @param {Object} _web3
  * @param {String} _method
  * @param {Boolean} _isWeb3Injected
+ * @param {Array=} [] - _params
+ */
+const _makeEthContractSend = (_web3, _method, _isWeb3Injected, _params = []) =>
+  new Promise(async (resolve, reject) => {
+    const account = await _getEthAccount(_web3, _isWeb3Injected)
+    const contract = _getEthContract(_web3, account)
+    contract.methods[_method](..._params).send({
+      from: account
+    })
+      .then(_res => resolve(_res))
+      .catch(_err => reject(_err))
+  })
+
+/**
+ * @param {Object} _web3
+ * @param {String} _method
+ * @param {Boolean} _isWeb3Injected
  * @param {Array} _params
  * @param {String=} null - _ethPrivateKey
  */
 const _makeEthTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPrivateKey = null) =>
   new Promise((resolve, reject) => {
     _isWeb3Injected
-      ? _makeEthContractCall(
+      ? _makeEthContractSend(
         _web3,
         _method,
         _isWeb3Injected,
@@ -98,7 +115,7 @@ const _makeEthTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPriva
       )
         .then(status => resolve(status))
         .catch(err => reject(err))
-      : _sendSignedCallTx(
+      : _sendSignedMethodTx(
         _web3,
         _ethPrivateKey,
         _method,
@@ -114,7 +131,7 @@ const _makeEthTransaction = (_web3, _method, _isWeb3Injected, _params, _ethPriva
  * @param {String} _method
  * @param {Array} _params
  */
-const _sendSignedCallTx = (_web3, _privateKey, _method, _params) =>
+const _sendSignedMethodTx = (_web3, _privateKey, _method, _params) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = _getEthContract(_web3, _web3.eth.defaultAccount)
@@ -149,5 +166,5 @@ export {
   _is0xPrefixed,
   _makeEthContractCall,
   _makeEthTransaction,
-  _sendSignedCallTx
+  _sendSignedMethodTx
 }
