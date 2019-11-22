@@ -45,7 +45,7 @@ class pEOS {
       this.web3 = web3
       this.ethPrivateKey = null
     } else if (
-      ethPrivateKey,
+      ethPrivateKey &&
       ethProvider
     ) {
       this.web3 = new Web3(ethProvider)
@@ -64,7 +64,7 @@ class pEOS {
     else if (
       eosPrivateKey &&
       eosProvider
-    ) { this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider) }
+    ) this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider)
   }
 
   /**
@@ -72,13 +72,11 @@ class pEOS {
    * @param {String} _ethAddress
    */
   issue(_amount, _ethAddress) {
-
     const promiEvent = Web3PromiEvent()
 
     try {
       const start = async () => {
-
-        if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT){
+        if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT) {
           promiEvent.reject('Amount to issue must be greater than 1 pEOS')
           return
         }
@@ -153,12 +151,10 @@ class pEOS {
    * @param {String} _eosAccountName
    */
   redeem(_amount, _eosAccountName) {
-
     const promiEvent = Web3PromiEvent()
 
     try {
       const start = async () => {
-
         if (_amount === 0) {
           promiEvent.reject('Impossible to burn 0 pEOS')
           return
