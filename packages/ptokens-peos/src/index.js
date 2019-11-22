@@ -72,16 +72,22 @@ class pEOS {
    * @param {String} _ethAddress
    */
   issue(_amount, _ethAddress) {
-    if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT)
-      throw new Error('Amount to issue must be greater than 1 pEOS')
-
-    if (!this.web3.utils.isAddress(_ethAddress))
-      throw new Error('Eth Address is not valid')
 
     const promiEvent = Web3PromiEvent()
 
     try {
       const start = async () => {
+
+        if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT){
+          promiEvent.reject('Amount to issue must be greater than 1 pEOS')
+          return
+        }
+
+        if (!this.web3.utils.isAddress(_ethAddress)) {
+          promiEvent.reject('Eth Address is not valid')
+          return
+        }
+
         const eosPublicKeys = await _getEosAvailablePublicKeys(this.eosjs)
         const eosAccountName = await _getEosAccountName(this.eosjs, eosPublicKeys)
         const eosTxReceipt = await _eosTransactToProvabletokn(
@@ -147,16 +153,22 @@ class pEOS {
    * @param {String} _eosAccountName
    */
   redeem(_amount, _eosAccountName) {
-    if (_amount === 0)
-      throw new Error('Impossible to burn 0 pEOS')
-
-    if (!_isValidEosAccountName(_eosAccountName))
-      throw new Error('Invalid Eos account provided')
 
     const promiEvent = Web3PromiEvent()
 
     try {
       const start = async () => {
+
+        if (_amount === 0) {
+          promiEvent.reject('Impossible to burn 0 pEOS')
+          return
+        }
+
+        if (!_isValidEosAccountName(_eosAccountName)) {
+          promiEvent.reject('Eos Account is not valid')
+          return
+        }
+
         const ethTxReceipt = await _makeEthTransaction(
           this.web3,
           'burn',

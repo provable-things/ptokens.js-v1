@@ -46,6 +46,48 @@ test('Should issue 1 pEOS', async () => {
   expect(ethTxIsConfirmed).to.equal(true)
 })
 
+test('Should generate an error since it is not possible to generate less than 1 pEOS', async () => {
+  const invalidAmountToIssue = 0.1
+  const to = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+
+  const expectedErrorMessage = 'Amount to issue must be greater than 1 pEOS'
+  let hasGeneratedError = false
+
+  const start = () =>
+    new Promise(resolve => {
+      const peos = new pEOS(configs)
+      peos.issue(invalidAmountToIssue, to)
+        .catch(err => {
+          hasGeneratedError = true
+          resolve(err)
+        })
+    })
+  const err = await start()
+  expect(hasGeneratedError).to.equal(true)
+  expect(err).to.equal(expectedErrorMessage)
+})
+
+test('Should generate an error since because of invalid ETH address', async () => {
+  const amountToIssue = 1
+  const to = 'invalid eth address'
+
+  const expectedErrorMessage = 'Eth Address is not valid'
+  let hasGeneratedError = false
+
+  const start = () =>
+    new Promise(resolve => {
+      const peos = new pEOS(configs)
+      peos.issue(amountToIssue, to)
+        .catch(err => {
+          hasGeneratedError = true
+          resolve(err)
+        })
+    })
+  const err = await start()
+  expect(hasGeneratedError).to.equal(true)
+  expect(err).to.equal(expectedErrorMessage)
+})
+
 test('Should redeem 1 pEOS', async () => {
   const peosToRedeem = 1
   const peosToIssue = 1
@@ -80,6 +122,48 @@ test('Should redeem 1 pEOS', async () => {
   expect(enclaveHasReceivedTx).to.equal(true)
   expect(enclaveHasBroadcastedTx).to.equal(true)
   expect(eosTxIsConfirmed).to.equal(true)
+})
+
+test('Should generate an error since it is not possible to burn 0 pEOS', async () => {
+  const invalidAmountToRedeem = 0
+  const to = 'all3manfr4di'
+
+  const expectedErrorMessage = 'Impossible to burn 0 pEOS'
+  let hasGeneratedError = false
+
+  const start = () =>
+    new Promise(resolve => {
+      const peos = new pEOS(configs)
+      peos.redeem(invalidAmountToRedeem, to)
+        .catch(err => {
+          hasGeneratedError = true
+          resolve(err)
+        })
+    })
+  const err = await start()
+  expect(hasGeneratedError).to.equal(true)
+  expect(err).to.equal(expectedErrorMessage)
+})
+
+test('Should generate an error since because of invalid EOS account', async () => {
+  const amountToRedeem = 1
+  const to = 'invalid eth address'
+
+  const expectedErrorMessage = 'Eos Account is not valid'
+  let hasGeneratedError = false
+
+  const start = () =>
+    new Promise(resolve => {
+      const peos = new pEOS(configs)
+      peos.redeem(amountToRedeem, to)
+        .catch(err => {
+          hasGeneratedError = true
+          resolve(err)
+        })
+    })
+  const err = await start()
+  expect(hasGeneratedError).to.equal(true)
+  expect(err).to.equal(expectedErrorMessage)
 })
 
 test('Should get correct balance', async () => {
