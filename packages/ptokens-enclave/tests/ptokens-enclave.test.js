@@ -23,7 +23,7 @@ test('Should get ETH report', async () => {
   const limit = 10
   const type = 'eth'
   const enclave = new Enclave()
-  const r = await enclave.getReport(limit, type)
+  const r = await enclave.getReport(type, limit)
   expect(r)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -34,7 +34,7 @@ test('Should get EOS report', async () => {
   const limit = 10
   const type = 'eos'
   const enclave = new Enclave()
-  const r = await enclave.getReport(limit, type)
+  const r = await enclave.getReport(type, limit)
   expect(r)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -76,7 +76,7 @@ test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eth'
   const enclave = new Enclave()
-  const r = await enclave.submitBlock(ETH_BLOCK, type)
+  const r = await enclave.submitBlock(type, ETH_BLOCK)
   expect(r)
     .to.be.equal(expectedResult)
 })
@@ -85,7 +85,7 @@ test('Should submit an EOS block', async () => {
   const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eos'
   const enclave = new Enclave()
-  const r = await enclave.submitBlock(EOS_BLOCK, type)
+  const r = await enclave.submitBlock(type, EOS_BLOCK)
   expect(r)
     .to.be.equal(expectedResult)
 })

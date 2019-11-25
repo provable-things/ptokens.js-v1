@@ -1,5 +1,6 @@
 import {
-  makeApiCall
+  makeApiCall,
+  REPORT_LIMIT
 } from './utils/index'
 
 class Enclave {
@@ -11,7 +12,7 @@ class Enclave {
    * @param {Integer} _limit
    * @param {String} _type
    */
-  getReport(_limit, _type) {
+  getReport(_type, _limit = REPORT_LIMIT) {
     return makeApiCall('GET', `/${_type}-reports/limit/${_limit}`, null)
   }
 
@@ -37,10 +38,10 @@ class Enclave {
   }
 
   /**
-   * @param {Object} _block
-   * @param {String} _type
+   * @param {Object} _type
+   * @param {String} _block
    */
-  submitBlock(_block, _type) {
+  submitBlock(_type, _block) {
     return makeApiCall('POST', `/submit-${_type}-block`, _block)
   }
 }

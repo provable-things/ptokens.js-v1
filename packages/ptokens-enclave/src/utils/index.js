@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const REPORT_LIMIT = 100
+
 const API = axios.create({
   baseURL: 'https://nuc-bridge-1.ngrok.io/',
   timeout: 50000,
@@ -23,5 +25,6 @@ const makeApiCall = (_callType, _apiPath, _params) =>
       .catch(_err => reject(_err)))
 
 export {
-  makeApiCall
+  makeApiCall,
+  REPORT_LIMIT
 }
