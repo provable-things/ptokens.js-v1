@@ -174,11 +174,11 @@ ptokens.peos.getAllowance(owner, spender)
 - __`String`__ - __`owner`__: Owner Ethereum account
 - __`String`__ - __`spender`__: Spender Ethereum account
 
-Get the remaining number of pEOS that `spender` can spend spend on behalf of `owner` through {transferFrom}
+Get the remaining number of pEOS that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Returns
 
-- __`Number`__ : number of pEOS that `spender` can spend spend on behalf of `owner` through {transferFrom}
+- __`Number`__ : number of pEOS that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Example
 ```js
