@@ -14,184 +14,66 @@ npm install ptokens-enclave
 
 ## Class Methods
 
-* __`ping`__
-* __`getEthReport`__
-* __`getEosReport`__
-* __`getLastProcessedEthBlock`__
-* __`getLastProcessedEosBlock`__
-* __`getIncomingTransactionStatus`__
 * __`getBroadcastTransactionStatus`__
-* __`submitEthBlock`__
-* __`submitEosBlock`__
+* __`getIncomingTransactionStatus`__
+* __`getLastProcessedBlock`__
+* __`getReport`__
+* __`ping`__
+* __`submitBlock`__
 
 ***
 
 
-## ping
+## getBroadcastTransactionStatus
 
 ```js
-ptokens.enclave.ping([_callback])
+ptokens.enclave.getBroadcastTransactionStatus(hash)
 ```
 
-Check that the Enclave is running.
-
-### Returns
-
-- __`String`__ : 'Provable Pong'
-
-### Example
-```js
-> ptokens.enclave.ping().then(res => console.log(res))
-> Provable pong!
-```
-
-&nbsp;
-
-## getEthReport
-
-```js
-ptokens.enclave.getEthReport(_limit, [_callback])
-```
-
-Gets a report of the transactions relating to the ETH signature nonce supplied.
+Gets the status of a broadcasted transaction by the Enclave.
 
 ### Parameters
 
-- __`Number`__ - __`_limit`__: maximum number of Ethereum reports to be received
+- __`String`__ - __`hash`__: transaction hash
 
 ### Returns
 
-- __`Object`__ : 
+- __`Object`__ : information about a broadcasted transaction by the Enclave
 
 ### Example
 ```js
-> ptokens.enclave.getEthReport(1).then(res => console.log(res))
-> [ 
-    { _id: 'ETH 522',
-      broadcast: true,
-      eos_sender: null,
-      peos_amount: null,
-      peos_recipient: null,
-      eos_latest_nonce: null,
-      broadcast_timestamp: 1572645875,
-      eos_latest_block_num: null,
-      eth_signed_transactions: null,
-      broadcast_transaction_hash:
-      '5ee8b6e2f9a646b2ceff5dd51cfbd1f071fab9bec60e4701f6f97ab87889cf1a',
-      eos_signed_transactions: [ [Object] ],
-      eth_latest_block_num: 14530159,
-      eos_amount: '0.1234 EOS',
-      peos_sender: '0x53c2048dad4fcfab44c3ef3d16e882b5178df42b',
-      witnessed_timestamp: 1572645874,
-      eth_latest_nonce: 522,
-      eos_recipient: 'provtestable',
-      incoming_transaction_hash:
-      '0x4c3fd580116393d9d209bc334b058573f8bcf58d5ed3a1046a3c016f82630897'
-    } 
-  ]
-```
-
-&nbsp;
-
-## getEosReport
-
-```js
-ptokens.enclave.getEosReport(_limit, [_callback])
-```
-
-Gets a report of the transactions relating to the ETH signature nonce supplied.
-
-### Parameters
-
-- __`Number`__ - __`_limit`__: maximum number of EOS reports to be received
-
-### Returns
-
-- __`Object`__ : report containing all informations
-
-### Example
-```js
-> ptokens.enclave.getEosReport(1).then(res => console.log(res))
-> [ 
-    { 
-      _id: 'EOS 677',
-      eos_amount: null,
-      broadcast: true,
-      peos_sender: null,
-      eos_recipient: null,
-      eth_latest_nonce: null,
-      broadcast_timestamp: 1572645663,
-      eth_latest_block_num: null,
-      eos_sender: 'provabletest',
-      peos_amount: '21337',
-      eos_signed_transactions: null,
-      broadcast_transaction_hash:
-      '0x6dff3a8c9cc225c83f20405c8df855b38297d5c6353299b67d7fb2e3efbf23b7',
-      eos_latest_nonce: 677,
-      eth_signed_transactions:
-      { sender: 'provabletest',
-        nonce: 677,
-        amount: '21337',
-        incomingTxId:
-          'f4a30100c3312456546e4fc7a2c74887e38e88ce83fc09659168cf450a4e172f',
-        recipient: '0x53C2048DAD4FCFAB44c3EF3d16e882B5178DF42b',
-        ethAccountNonce: 436,
-        transaction:
-          '0xf8ac8201b48504a817c800830493e0944aeafc6f72ed16665a70a45297500a0bd9d8c2f080b84440c10f1900000000000000000000000053c2048dad4fcfab44c3ef3d16e882b5178df42b000000000000000000000000000000000000000000000000000000000000535978a04c3df4a34e1a69f12d2d73a4a53649db0b6b0d1526e1168b9bee382490d40d2aa047b3ba930eb7b25a2b6b121194607760e6fecd8612950fd9e7a80c7d19d0df12' },
-      peos_recipient: '0x53C2048DAD4FCFAB44c3EF3d16e882B5178DF42b',
-      eos_latest_block_num: 57874559,
-      last_used_nonce_temp: 436,
-      incoming_transaction_hash:
-      'f4a30100c3312456546e4fc7a2c74887e38e88ce83fc09659168cf450a4e172f',
-      witnessed_timestamp: 1572645662 
-    } 
-  ]
-```
-
-&nbsp;
-
-## getLastProcessedEthBlock
-
-```js
-ptokens.enclave.getLastProcessedEthBlock([_callback])
-```
-
-Gets the last processed Ethereum block by the Enclave.
-
-
-### Returns
-
-- __`Object`__ : last processed Ethereum block by the Enclave
-
-### Example
-```js
-> ptokens.enclave.getLastProcessedEthBlock().then(res => console.log(res))
-> { 
-    _id: 'last-seen-eth-block',
-    latestBlockNum: 14585227 
-  }
-```
-
-&nbsp;
-
-## getLastProcessedEosBlock
-
-```js
-ptokens.enclave.getLastProcessedEosBlock([_callback])
-```
-
-Gets the last processed EOS block by the Enclave.
-
-### Returns
-
-- __`Object`__ : last processed EOS block by the Enclave
-
-### Example
-```js
-> ptokens.enclave.getLastProcessedEosBlock().then(res => console.log(res))
-> { 
-    _id: 'last-seen-eos-block',
-    latestBlockNum: 58319472 
+> ptokens.enclave.getBroadcastTransactionStatus('0x80b97c8d9676915a0c51c66468eeb1745a6fdd70063f2fb0412fd1e01b7cd083').then(status => console.log(status))
+> {
+    _id: 'EOS 718',
+    eos_amount: null,
+    broadcast: true,
+    peos_sender: null,
+    eos_recipient: null,
+    eth_latest_nonce: null,
+    broadcast_timestamp: 1572869766,
+    eth_latest_block_num: null,
+    eos_sender: 'all3manfr4di',
+    peos_amount: '10000',
+    eos_signed_transactions: null,
+    broadcast_transaction_hash:
+    '0x80b97c8d9676915a0c51c66468eeb1745a6fdd70063f2fb0412fd1e01b7cd083',
+    eos_latest_nonce: 718,
+    eth_signed_transactions:
+    { sender: 'all3manfr4di',
+      nonce: 718,
+      amount: '10000',
+      incomingTxId:
+        'e794eb61a04388c7bb011d3e95a818f5215eb6d7dd81528ed72a7667f5bc7e31',
+      recipient: '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF',
+      ethAccountNonce: 477,
+      transaction:
+        '0xf8ac8201dd8504a817c800830493e0944aeafc6f72ed16665a70a45297500a0bd9d8c2f080b84440c10f19000000000000000000000000612deb505e4a26729c0a2f49c622d036db3ad5bf000000000000000000000000000000000000000000000000000000000000271078a06692fb3b6326c05412491d582535b768949b804fd42e612920315f4fb8919d4fa04f16ef0772ba3b44e72479f84896a6db7f066f298b4dbdf9c89da09fdd526333' },
+    peos_recipient: '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF',
+    eos_latest_block_num: 58320875,
+    last_used_nonce_temp: 477,
+    incoming_transaction_hash:
+    'e794eb61a04388c7bb011d3e95a818f5215eb6d7dd81528ed72a7667f5bc7e31',
+    witnessed_timestamp: 1572869765 
   }
 ```
 
@@ -200,14 +82,14 @@ Gets the last processed EOS block by the Enclave.
 ## getIncomingTransactionStatus
 
 ```js
-ptokens.enclave.getIncomingTransactionStatus(_hash, [callback])
+ptokens.enclave.getIncomingTransactionStatus(hash)
 ```
 
 Gets the status of an incoming transaction to the Enclave.
 
 ### Parameters
 
-- __`String`__ - __`_hash`__: transaction hash
+- __`String`__ - __`hash`__: transaction hash
 
 ### Returns
 
@@ -215,7 +97,7 @@ Gets the status of an incoming transaction to the Enclave.
 
 ### Example
 ```js
-> ptokens.enclave.getIncomingTransactionStatus('c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3').then(res => console.log(res))
+> ptokens.enclave.getIncomingTransactionStatus('c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3').then(status => console.log(status))
 > { 
     _id: 'EOS 303',
     eos_amount: null,
@@ -253,76 +135,121 @@ Gets the status of an incoming transaction to the Enclave.
 &nbsp;
 
 
-## getBroadcastTransactionStatus
+
+## getLastProcessedBlock
 
 ```js
-ptokens.enclave.getBroadcastTransactionStatus(_hash, [callback])
+ptokens.enclave.getLastProcessedBlock(type)
 ```
 
-Gets the status of a broadcasted transaction by the Enclave.
+Gets the last processed block by the Enclave of a given type.
 
 ### Parameters
 
-- __`String`__ - __`_hash`__: transaction hash
+- __`String`__ - __`type`__: type of block
 
 ### Returns
 
-- __`Object`__ : information about a broadcasted transaction by the Enclave
+- __`Object`__ : last processed block by the Enclave given the type
 
 ### Example
 ```js
-> ptokens.enclave.getBroadcastTransactionStatus('0x80b97c8d9676915a0c51c66468eeb1745a6fdd70063f2fb0412fd1e01b7cd083').then(res => console.log(res))
-> {
-    _id: 'EOS 718',
-    eos_amount: null,
-    broadcast: true,
-    peos_sender: null,
-    eos_recipient: null,
-    eth_latest_nonce: null,
-    broadcast_timestamp: 1572869766,
-    eth_latest_block_num: null,
-    eos_sender: 'all3manfr4di',
-    peos_amount: '10000',
-    eos_signed_transactions: null,
-    broadcast_transaction_hash:
-    '0x80b97c8d9676915a0c51c66468eeb1745a6fdd70063f2fb0412fd1e01b7cd083',
-    eos_latest_nonce: 718,
-    eth_signed_transactions:
-    { sender: 'all3manfr4di',
-      nonce: 718,
-      amount: '10000',
-      incomingTxId:
-        'e794eb61a04388c7bb011d3e95a818f5215eb6d7dd81528ed72a7667f5bc7e31',
-      recipient: '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF',
-      ethAccountNonce: 477,
-      transaction:
-        '0xf8ac8201dd8504a817c800830493e0944aeafc6f72ed16665a70a45297500a0bd9d8c2f080b84440c10f19000000000000000000000000612deb505e4a26729c0a2f49c622d036db3ad5bf000000000000000000000000000000000000000000000000000000000000271078a06692fb3b6326c05412491d582535b768949b804fd42e612920315f4fb8919d4fa04f16ef0772ba3b44e72479f84896a6db7f066f298b4dbdf9c89da09fdd526333' },
-    peos_recipient: '0x612deB505E4A26729C0a2F49c622d036DB3ad5BF',
-    eos_latest_block_num: 58320875,
-    last_used_nonce_temp: 477,
-    incoming_transaction_hash:
-    'e794eb61a04388c7bb011d3e95a818f5215eb6d7dd81528ed72a7667f5bc7e31',
-    witnessed_timestamp: 1572869765 
+> ptokens.enclave.getLastProcessedBlock('eth').then(block => console.log(block))
+> { 
+    _id: 'last-seen-eth-block',
+    latestBlockNum: 14585227 
   }
 ```
 
 &nbsp;
 
-## submitEthBlock
+
+## getReport
 
 ```js
-ptokens.enclave.submitEthBlock(_block_, [callback])
+ptokens.enclave.getEthReport(type, limit)
 ```
 
-Submit a valid Ethereum block to the Enclave.
+Gets a report of the transactions relating to the `type` signature nonce supplied.
 
 ### Parameters
 
-- __`Object`__ - __`_block_`__: valid Ethereum block.
+- __`String`__ - __`type`__: type of report
+- __`Number`__ - __`limit`__: maximum number of reports to be received
 
 ### Returns
 
-- __`String`__ : 'Eth block submitted to the enclave!'
+- __`Object`__ : 
+
+### Example
+```js
+> ptokens.enclave.getEthReport('eth', 1).then(report => console.log(report))
+> [ 
+    { _id: 'ETH 522',
+      broadcast: true,
+      eos_sender: null,
+      peos_amount: null,
+      peos_recipient: null,
+      eos_latest_nonce: null,
+      broadcast_timestamp: 1572645875,
+      eos_latest_block_num: null,
+      eth_signed_transactions: null,
+      broadcast_transaction_hash:
+      '5ee8b6e2f9a646b2ceff5dd51cfbd1f071fab9bec60e4701f6f97ab87889cf1a',
+      eos_signed_transactions: [ [Object] ],
+      eth_latest_block_num: 14530159,
+      eos_amount: '0.1234 EOS',
+      peos_sender: '0x53c2048dad4fcfab44c3ef3d16e882b5178df42b',
+      witnessed_timestamp: 1572645874,
+      eth_latest_nonce: 522,
+      eos_recipient: 'provtestable',
+      incoming_transaction_hash:
+      '0x4c3fd580116393d9d209bc334b058573f8bcf58d5ed3a1046a3c016f82630897'
+    } 
+  ]
+```
+
+&nbsp;
+
+
+
+## ping
+
+```js
+ptokens.enclave.ping()
+```
+
+Check that the Enclave is running.
+
+### Returns
+
+- __`String`__ : 'Provable Pong'
+
+### Example
+```js
+> ptokens.enclave.ping().then(res => console.log(res))
+> Provable pong!
+```
+
+&nbsp;
+
+
+## submitBlock
+
+```js
+ptokens.enclave.submitBlock(type, block)
+```
+
+Submit a valid block to the Enclave specifying its type.
+
+### Parameters
+
+- __`Object`__ - __`type`__: block type
+- __`Object`__ - __`block`__: valid block
+
+### Returns
+
+- __`String`__ : string the specified if the submission succedeed
 
 ### Example
 ```js
@@ -354,7 +281,6 @@ Submit a valid Ethereum block to the Enclave.
 
 &nbsp;
 
-## submitEosBlock
 
 ```js
 ptokens.enclave.submitEosBlock(_block_, [callback])
