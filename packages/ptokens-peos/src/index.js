@@ -15,8 +15,11 @@ import {
   _isValidEosAccountName
 } from './utils/eos'
 import {
+  EOS_CONTRACT_ACCOUNT,
+  EOS_NATIVE_TOKEN,
   EOS_NODE_POLLING_TIME_INTERVAL,
   EOS_TRANSACTION_EXECUTED,
+  EOS_TOKEN_SYMBOL,
   ENCLAVE_POLLING_TIME,
   ETH_NODE_POLLING_TIME_INTERVAL,
   MINIMUM_MINTABLE_PEOS_AMOUNT,
@@ -280,6 +283,20 @@ class pEOS {
             TOKEN_DECIMALS,
             '/'
           )
+        ))
+        .catch(err => reject(err))
+    })
+  }
+
+  getCollateral() {
+    return new Promise((resolve, reject) => {
+      this.eosjs.rpc.get_currency_balance(
+        EOS_NATIVE_TOKEN,
+        EOS_CONTRACT_ACCOUNT,
+        EOS_TOKEN_SYMBOL
+      )
+        .then(deposited => resolve(
+          deposited
         ))
         .catch(err => reject(err))
     })

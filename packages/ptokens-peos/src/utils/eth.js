@@ -1,6 +1,6 @@
 import abi from '../contractAbi/pEOSTokenETHContractAbi.json'
 import {
-  CONTRACT_ADDRESS,
+  ETH_CONTRACT_ADDRESS,
   PREFIX,
   ZERO_ETHER
 } from './constants'
@@ -43,7 +43,7 @@ const _getEthAccount = (_web3, _isWeb3Injected = false) =>
  * @param {Object} _web3
  */
 const _getEthContract = (_web3, _account) => {
-  const contract = new _web3.eth.Contract(abi, CONTRACT_ADDRESS, {
+  const contract = new _web3.eth.Contract(abi, ETH_CONTRACT_ADDRESS, {
     defaultAccount: _account
   })
   return contract
@@ -144,7 +144,7 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _params) =>
         nonce,
         gasPrice,
         gasLimit,
-        to: CONTRACT_ADDRESS,
+        to: ETH_CONTRACT_ADDRESS,
         value: ZERO_ETHER,
         data: functionAbi
       }
