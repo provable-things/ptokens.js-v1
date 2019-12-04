@@ -316,9 +316,9 @@ class pEOS {
   }
 
   /**
-   * @param {String} _ethAccount
+   * @param {String} _ethAddress
    */
-  getBalance(_ethAccount) {
+  getBalance(_ethAddress) {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
         this.web3,
@@ -329,7 +329,7 @@ class pEOS {
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         },
         [
-          _ethAccount
+          _ethAddress
         ]
       )
         .then(balance => resolve(
