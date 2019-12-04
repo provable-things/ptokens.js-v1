@@ -122,10 +122,10 @@ ptokens.peos.approve(spender, amount)
 
 ### Parameters
 
-- __`String`__ - __`spender`__: Ethereum account
+- __`String`__ - __`spender`__: spender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Approve to spend the specified amount of pEOS to the provided Ethereum account by setting the allowance of spender account
+Approve to spend the specified amount of pEOS to the provided Ethereum address by setting the allowance of spender address
 
 ### Returns
 
@@ -141,23 +141,23 @@ ptokens.peos.approve('eth address', 1.3452).then(status => console.log(status))
 ## getBalance
 
 ```js
-ptokens.peos.getBalance(account)
+ptokens.peos.getBalance(address)
 ```
 
 ### Parameters
 
-- __`String`__ - __`account`__: Ethereum account
+- __`String`__ - __`address`__: Ethereum address
 
-Get the current pEOS balance of the provided account
+Get the current pEOS balance of the provided address
 
 
 ### Returns
 
-- __`Number`__ : current balance of the provided Ethereum account
+- __`Number`__ : current balance of the provided Ethereum address
 
 ### Example
 ```js
-ptokens.peos.getBalance(account).then(balance => console.log(balance))
+ptokens.peos.getBalance(address).then(balance => console.log(balance))
 ```
 
 &nbsp;
@@ -171,8 +171,8 @@ ptokens.peos.getAllowance(owner, spender)
 
 ### Parameters
 
-- __`String`__ - __`owner`__: Owner Ethereum account
-- __`String`__ - __`spender`__: Spender Ethereum account
+- __`String`__ - __`owner`__: Owner Ethereum address
+- __`String`__ - __`spender`__: Spender Ethereum address
 
 Get the remaining number of pEOS that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
@@ -380,10 +380,10 @@ ptokens.peos.transfer(to, amount)
 
 ### Parameters
 
-- __`String`__ - __`to`__: Ethereum account
+- __`String`__ - __`to`__: receiver Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Transfer a specified amount of pEOS to the provided Ethereum account
+Transfer a specified amount of pEOS to the provided Ethereum address
 
 ### Returns
 
@@ -405,7 +405,7 @@ ptokens.peos.transferFrom(from, to, amount)
 
 ### Parameters
 
-- __`String`__ - __`from`__: Ethereum account
+- __`String`__ - __`from`__: sender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
 Move the specified amount of pEOS from `from` to `to` using the allowance mechanism

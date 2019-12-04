@@ -46,7 +46,7 @@ Return a string always `0x` prefixed
 
 ### Example
 ```js
-> const res = utils.eth.alwaysWithPrefix('hello') //0xhello
+const res = utils.eth.alwaysWithPrefix('hello') //0xhello
 ```
 
 &nbsp;
@@ -71,7 +71,7 @@ Return a number equal to the `amount` divied/multiplied (`operation`) by `decima
 
 ### Example
 ```js
-> const res = utils.eth.correctFormat(1000, 4, '/') //0.1
+const res = utils.eth.correctFormat(1000, 4, '/') //0.1
 ```
 
 &nbsp;
@@ -82,7 +82,7 @@ Return a number equal to the `amount` divied/multiplied (`operation`) by `decima
 ptokens.utils.eth.getAccount(web3, isWeb3Injected)
 ```
 
-Return the current Ethereum account given an instance of Web3 and specifying if it's injected (ex: Web3 instance injected by Metamask)
+Return the current Ethereum address given an instance of Web3 and specifying if it's injected (ex: Web3 instance injected by Metamask)
 
 ### Parameters
 
@@ -96,7 +96,7 @@ Return the current Ethereum account given an instance of Web3 and specifying if 
 
 ### Example
 ```js
-> const account = await utils.eth.getAccount(web3, true)
+const account = await utils.eth.getAccount(web3, true)
 ```
 
 &nbsp;
@@ -121,7 +121,7 @@ Return a [Web3.eth.Contract](https://web3js.readthedocs.io/en/v1.2.0/Web3-eth-co
 
 ### Example
 ```js
-> const contract = utils.eth.getContract(web3, true)
+const contract = utils.eth.getContract(web3, true)
 ```
 
 &nbsp;
@@ -144,7 +144,7 @@ Return the gas limit of the latest Ethereum block.
 
 ### Example
 ```js
-> const gasLimit = await utils.eth.getGasLimit(web3)
+const gasLimit = await utils.eth.getGasLimit(web3)
 ```
 
 &nbsp;
@@ -167,7 +167,7 @@ Check if a given string (`text`) is `0x` prefixed
 
 ### Example
 ```js
-> const is0xPrefixed = await utils.eth.is0xPrefixed('0xhello') //true
+const is0xPrefixed = await utils.eth.is0xPrefixed('0xhello') //true
 ```
 
 &nbsp;
@@ -196,11 +196,11 @@ Perform a contract `call` given a Web3 instance and the Smart Contract details.
 
 ### Example
 ```js
-> const options = {
+const options = {
   abi,
   contractAddess: 'eth contract address',
 }
-> const value = await utils.eth.makeContractCall(web3, 'balanceOf', true, abi, '' , ['account']) //true
+const value = await utils.eth.makeContractCall(web3, 'balanceOf', true, abi, '' , ['eth address']) //true
 ```
 
 &nbsp;
@@ -231,7 +231,7 @@ Perform a contract `send` given a Web3 instance and the Smart Contract details.
 
 ### Example
 ```js
-> const receipt = await utils.eth.makeContractSend(web3, 'transfer', true, abi, 'eth contract address' , ['account']) //true
+const receipt = await utils.eth.makeContractSend(web3, 'transfer', true, abi, 'eth contract address' , ['eth address']) //true
 ```
 
 ***
@@ -268,7 +268,7 @@ Return an instance of `eosjs`
 
 ### Example
 ```js
-> const eosjs = utils.eos.getApi('private key', 'rpc url')
+const eosjs = utils.eos.getApi('private key', 'rpc url')
 ```
 
 &nbsp;
@@ -293,7 +293,7 @@ Return the current account name given an instance of `eosjs` and a list of publi
 
 ### Example
 ```js
-> const accountName = await utils.eos.getAccountName(eosjs, ['pubk1', 'pubk2'])
+const accountName = await utils.eos.getAccountName(eosjs, ['pubk1', 'pubk2'])
 ```
 
 &nbsp;
@@ -317,7 +317,7 @@ Return the available public keys given an instance of `eosjs`
 
 ### Example
 ```js
-> const publicKeys = await utils.eos.getAvailablePublicKeys(eosjs)
+const publicKeys = await utils.eos.getAvailablePublicKeys(eosjs)
 ```
 
 &nbsp;
@@ -341,7 +341,7 @@ Check if the provided EOS `accountName` is valid
 
 ### Example
 ```js
-> const isValid = utils.eos.isValidAccountName('all3manfr3di') //true
+const isValid = utils.eos.isValidAccountName('all3manfr3di') //true
 ```
 
 &nbsp;
@@ -372,7 +372,7 @@ Send an amount of EOS native token (`eosio.token`)
 
 ### Example
 ```js
-> const receipt = utils.eos.transferNativeToken(eosjs, 'eos account receiver', 'eos account sender', 100, 'memo', 3, 60)
+const receipt = utils.eos.transferNativeToken(eosjs, 'eos account receiver', 'eos account sender', 100, 'memo', 3, 60)
 ```
 
 &nbsp;
