@@ -1,6 +1,6 @@
 import pEOS from '../src/index'
 import { expect } from 'chai'
-import { TOKEN_DECIMALS } from '../src/utils/constants'
+import { PEOS_TOKEN_DECIMALS } from '../src/utils/constants'
 
 const configs = {
   ethPrivateKey: '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
@@ -15,7 +15,7 @@ jest.setTimeout(3000000)
 
 test('Should issue 1 pEOS', async () => {
   const peosToIssue = 1
-  const expectedAmountIssued = peosToIssue.toFixed(TOKEN_DECIMALS)
+  const expectedAmountIssued = peosToIssue.toFixed(PEOS_TOKEN_DECIMALS)
   const to = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
   const expectedEthAccount = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
@@ -67,7 +67,7 @@ test('Should generate an error since it is not possible to generate less than 1 
   expect(err).to.equal(expectedErrorMessage)
 })
 
-test('Should generate an error since because of invalid ETH address', async () => {
+test('Should generate an error because of invalid ETH address', async () => {
   const amountToIssue = 1
   const to = 'invalid eth address'
 
@@ -91,7 +91,7 @@ test('Should generate an error since because of invalid ETH address', async () =
 test('Should redeem 1 pEOS', async () => {
   const peosToRedeem = 1
   const peosToIssue = 1
-  const expectedAmountRedeemed = peosToRedeem.toFixed(TOKEN_DECIMALS)
+  const expectedAmountRedeemed = peosToRedeem.toFixed(PEOS_TOKEN_DECIMALS)
   const ethAddress = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
   const to = 'all3manfr4di'
   const expectedEosAccount = 'all3manfr4di'
@@ -145,9 +145,9 @@ test('Should generate an error since it is not possible to burn 0 pEOS', async (
   expect(err).to.equal(expectedErrorMessage)
 })
 
-test('Should generate an error since because of invalid EOS account', async () => {
+test('Should generate an error because of invalid EOS account', async () => {
   const amountToRedeem = 1
-  const to = 'invalid eth address'
+  const to = 'invalid eos address'
 
   const expectedErrorMessage = 'Eos Account is not valid'
   let hasGeneratedError = false
@@ -267,3 +267,10 @@ test('Should get the correct number of redeemed pEOS', async () => {
   const finalBurnNonce = await peos.getBurnNonce()
   expect(finalBurnNonce).to.be.equal(expectedBurnNonce)
 })
+
+/* test('pEOS circulating supply must be equal to EOS deposited collateral', async () => {
+  const peos = new pEOS(configs)
+  const circulatingSupply = await peos.getCirculatingSupply()
+  const collateral = await peos.getCollateral()
+  expect(circulatingSupply).to.be.equal(collateral)
+}) */

@@ -7,10 +7,10 @@
   "browser": "dist/ptokens-enclave.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "jest",
+    "test": "jest --verbose",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
-  "author": "alle.manfredi@gmail.com @Provable",
+  "author": "alle.manfredi@gmail.com @Provable Things",
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.3.1",

@@ -1,4 +1,6 @@
-# :fire: ptokens.js | pTokens Javascript API
+<img src="./resources/docs/img/ptokens-js.png" width="150" height="150">
+
+# ptokens.js | pTokens Javascript API
 
 Javascript module for interacting with pTokens.
 

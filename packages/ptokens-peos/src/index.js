@@ -1,21 +1,10 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
 import Enclave from 'ptokens-enclave'
+import utils from 'ptokens-utils'
 import {
-  _alwaysWithPrefix,
-  _correctEthFormat,
-  _makeEthTransaction,
-  _makeEthContractCall
-} from './utils/eth'
-import {
-  _eosTransactToProvabletokn,
-  _getEosAccountName,
-  _getEosAvailablePublicKeys,
-  _getEosJsApi,
-  _isValidEosAccountName
-} from './utils/eos'
-import {
-  EOS_CONTRACT_ACCOUNT,
+  EOS_BLOCKS_BEHIND,
+  EOS_EXPIRE_SECONDS,
   EOS_NATIVE_TOKEN,
   EOS_NODE_POLLING_TIME_INTERVAL,
   EOS_TRANSACTION_EXECUTED,
@@ -23,8 +12,11 @@ import {
   ENCLAVE_POLLING_TIME,
   ETH_NODE_POLLING_TIME_INTERVAL,
   MINIMUM_MINTABLE_PEOS_AMOUNT,
-  TOKEN_DECIMALS
+  PEOS_TOKEN_DECIMALS,
+  PEOS_EOS_CONTRACT_ACCOUNT,
+  PEOS_ETH_CONTRACT_ADDRESS
 } from './utils/constants'
+import peosAbi from './contractAbi/pEOSTokenETHContractAbi.json'
 import polling from 'light-async-polling'
 
 class pEOS {
@@ -54,11 +46,11 @@ class pEOS {
       this.web3 = new Web3(ethProvider)
 
       const account = this.web3.eth.accounts.privateKeyToAccount(
-        _alwaysWithPrefix(ethPrivateKey)
+        utils.eth.alwaysWithPrefix(ethPrivateKey)
       )
 
       this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = _alwaysWithPrefix(ethPrivateKey)
+      this.ethPrivateKey = utils.eth.alwaysWithPrefix(ethPrivateKey)
       this.isWeb3Injected = false
     }
 
@@ -67,7 +59,7 @@ class pEOS {
     else if (
       eosPrivateKey &&
       eosProvider
-    ) this.eosjs = _getEosJsApi(eosPrivateKey, eosProvider)
+    ) this.eosjs = utils.eos.getApi(eosPrivateKey, eosProvider)
   }
 
   /**
@@ -89,13 +81,16 @@ class pEOS {
       }
 
       try {
-        const eosPublicKeys = await _getEosAvailablePublicKeys(this.eosjs)
-        const eosAccountName = await _getEosAccountName(this.eosjs, eosPublicKeys)
-        const eosTxReceipt = await _eosTransactToProvabletokn(
+        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this.eosjs)
+        const eosAccountName = await utils.eos.getAccountName(this.eosjs, eosPublicKeys)
+        const eosTxReceipt = await utils.eos.transact(
           this.eosjs,
+          PEOS_EOS_CONTRACT_ACCOUNT,
           eosAccountName,
           _amount,
-          _ethAddress
+          _ethAddress,
+          EOS_BLOCKS_BEHIND,
+          EOS_EXPIRE_SECONDS
         )
 
         promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
@@ -137,7 +132,7 @@ class pEOS {
         }, ETH_NODE_POLLING_TIME_INTERVAL)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(TOKEN_DECIMALS),
+          amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
           to: _ethAddress,
           tx: broadcastedTx
         })
@@ -163,25 +158,29 @@ class pEOS {
         return
       }
 
-      if (!_isValidEosAccountName(_eosAccountName)) {
+      if (!utils.eos.isValidAccountName(_eosAccountName)) {
         promiEvent.reject('Eos Account is not valid')
         return
       }
 
       try {
-        const ethTxReceipt = await _makeEthTransaction(
+        const ethTxReceipt = await utils.eth.makeTransaction(
           this.web3,
           'burn',
           this.isWeb3Injected,
+          {
+            abi: peosAbi,
+            contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+            privateKey: this.ethPrivateKey
+          },
           [
-            _correctEthFormat(
+            utils.eth.correctFormat(
               _amount,
-              TOKEN_DECIMALS,
+              PEOS_TOKEN_DECIMALS,
               '*'
             ),
             _eosAccountName
-          ],
-          this.ethPrivateKey
+          ]
         )
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
@@ -221,7 +220,7 @@ class pEOS {
         }, EOS_NODE_POLLING_TIME_INTERVAL)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(TOKEN_DECIMALS),
+          amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
           to: _eosAccountName,
           tx: broadcastedTx
         })
@@ -236,15 +235,17 @@ class pEOS {
 
   getTotalIssued() {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'totalMinted',
-        this.isWeb3Injected
+        this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS
       )
         .then(totalIssued => resolve(
-          _correctEthFormat(
+          utils.eth.correctFormat(
             parseInt(totalIssued),
-            TOKEN_DECIMALS,
+            PEOS_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -254,15 +255,17 @@ class pEOS {
 
   getTotalRedeemed() {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'totalBurned',
-        this.isWeb3Injected
+        this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS
       )
         .then(totalRedeemed => resolve(
-          _correctEthFormat(
+          utils.eth.correctFormat(
             parseInt(totalRedeemed),
-            TOKEN_DECIMALS,
+            PEOS_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -272,15 +275,17 @@ class pEOS {
 
   getCirculatingSupply() {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'totalSupply',
-        this.isWeb3Injected
+        this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS
       )
         .then(totalSupply => resolve(
-          _correctEthFormat(
+          utils.eth.correctFormat(
             parseInt(totalSupply),
-            TOKEN_DECIMALS,
+            PEOS_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -292,7 +297,7 @@ class pEOS {
     return new Promise((resolve, reject) => {
       this.eosjs.rpc.get_currency_balance(
         EOS_NATIVE_TOKEN,
-        EOS_CONTRACT_ACCOUNT,
+        PEOS_EOS_CONTRACT_ACCOUNT,
         EOS_TOKEN_SYMBOL
       )
         .then(deposited => resolve(
@@ -307,18 +312,20 @@ class pEOS {
    */
   getBalance(_ethAccount) {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'balanceOf',
         this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS,
         [
           _ethAccount
         ]
       )
         .then(balance => resolve(
-          _correctEthFormat(
+          utils.eth.correctFormat(
             parseInt(balance),
-            TOKEN_DECIMALS,
+            PEOS_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -331,15 +338,20 @@ class pEOS {
    * @param {Number} _amount
    */
   transfer(_to, _amount) {
-    return _makeEthTransaction(
+    return utils.eth.makeTransaction(
       this.web3,
       'transfer',
       this.isWeb3Injected,
+      {
+        abi: peosAbi,
+        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        privateKey: this.ethPrivateKey
+      },
       [
         _to,
-        _correctEthFormat(
+        utils.eth.correctFormat(
           parseInt(_amount),
-          TOKEN_DECIMALS,
+          PEOS_TOKEN_DECIMALS,
           '*'
         )
       ],
@@ -352,15 +364,20 @@ class pEOS {
    * @param {Number} _amount
    */
   approve(_spender, _amount) {
-    return _makeEthTransaction(
+    return utils.eth.makeTransaction(
       this.web3,
       'approve',
       this.isWeb3Injected,
+      {
+        abi: peosAbi,
+        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        privateKey: this.ethPrivateKey
+      },
       [
         _spender,
-        _correctEthFormat(
+        utils.eth.correctFormat(
           parseInt(_amount),
-          TOKEN_DECIMALS,
+          PEOS_TOKEN_DECIMALS,
           '*'
         )
       ],
@@ -374,16 +391,21 @@ class pEOS {
    * @param {Number} _amount
    */
   transferFrom(_from, _to, _amount) {
-    return _makeEthTransaction(
+    return utils.eth.makeTransaction(
       this.web3,
       'transferFrom',
       this.isWeb3Injected,
+      {
+        abi: peosAbi,
+        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        privateKey: this.ethPrivateKey
+      },
       [
         _from,
         _to,
-        _correctEthFormat(
+        utils.eth.correctFormat(
           parseInt(_amount),
-          TOKEN_DECIMALS,
+          PEOS_TOKEN_DECIMALS,
           '*'
         )
       ],
@@ -393,10 +415,12 @@ class pEOS {
 
   getBurnNonce() {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'burnNonce',
-        this.isWeb3Injected
+        this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS
       )
         .then(burnNonce => resolve(
           parseInt(burnNonce)
@@ -407,10 +431,12 @@ class pEOS {
 
   getMintNonce() {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'mintNonce',
-        this.isWeb3Injected
+        this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS
       )
         .then(mintNonce => resolve(
           parseInt(mintNonce)
@@ -425,19 +451,21 @@ class pEOS {
    */
   getAllowance(_owner, _spender) {
     return new Promise((resolve, reject) => {
-      _makeEthContractCall(
+      utils.eth.makeContractCall(
         this.web3,
         'allowance',
         this.isWeb3Injected,
+        peosAbi,
+        PEOS_ETH_CONTRACT_ADDRESS,
         [
           _owner,
           _spender
         ]
       )
         .then(allowance => resolve(
-          _correctEthFormat(
+          utils.eth.correctFormat(
             parseInt(allowance),
-            TOKEN_DECIMALS,
+            PEOS_TOKEN_DECIMALS,
             '/'
           )
         ))

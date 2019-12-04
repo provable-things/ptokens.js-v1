@@ -1,0 +1,25 @@
+{
+  "name": "ptokens-utils",
+  "version": "0.0.1",
+  "description": "repo holding some utils needed by other packages",
+  "main": "dist/ptokens-utils.cjs.js",
+  "module": "dist/ptokens-utils.esm.js",
+  "browser": "dist/ptokens-utils.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    
+    "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
+  },
+  "author": "alle.manfredi@gmail.com @Provable Things",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.3.1",
+    "chai": "^4.2.0",
+    "eosjs": "^20.0.0",
+    "light-async-polling": "^1.0.2",
+    "text-encoding": "^0.7.0"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
