@@ -14,7 +14,8 @@ import {
   MINIMUM_MINTABLE_PEOS_AMOUNT,
   PEOS_TOKEN_DECIMALS,
   PEOS_EOS_CONTRACT_ACCOUNT,
-  PEOS_ETH_CONTRACT_ADDRESS
+  PEOS_ETH_CONTRACT_ADDRESS,
+  ZERO_ETHER
 } from './utils/constants'
 import peosAbi from './contractAbi/pEOSTokenETHContractAbi.json'
 import polling from 'light-async-polling'
@@ -83,7 +84,7 @@ class pEOS {
       try {
         const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this.eosjs)
         const eosAccountName = await utils.eos.getAccountName(this.eosjs, eosPublicKeys)
-        const eosTxReceipt = await utils.eos.transact(
+        const eosTxReceipt = await utils.eos.transferNativeToken(
           this.eosjs,
           PEOS_EOS_CONTRACT_ACCOUNT,
           eosAccountName,
@@ -164,14 +165,15 @@ class pEOS {
       }
 
       try {
-        const ethTxReceipt = await utils.eth.makeTransaction(
+        const ethTxReceipt = await utils.eth.makeContractSend(
           this.web3,
           'burn',
-          this.isWeb3Injected,
           {
+            isWeb3Injected: this.isWeb3Injected,
             abi: peosAbi,
             contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-            privateKey: this.ethPrivateKey
+            privateKey: this.ethPrivateKey,
+            value: ZERO_ETHER
           },
           [
             utils.eth.correctFormat(
@@ -238,9 +240,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'totalMinted',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        }
       )
         .then(totalIssued => resolve(
           utils.eth.correctFormat(
@@ -258,9 +262,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'totalBurned',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        }
       )
         .then(totalRedeemed => resolve(
           utils.eth.correctFormat(
@@ -278,9 +284,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'totalSupply',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        }
       )
         .then(totalSupply => resolve(
           utils.eth.correctFormat(
@@ -315,9 +323,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'balanceOf',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS,
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        },
         [
           _ethAccount
         ]
@@ -338,14 +348,15 @@ class pEOS {
    * @param {Number} _amount
    */
   transfer(_to, _amount) {
-    return utils.eth.makeTransaction(
+    return utils.eth.makeContractSend(
       this.web3,
       'transfer',
-      this.isWeb3Injected,
       {
+        isWeb3Injected: this.isWeb3Injected,
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey
+        privateKey: this.ethPrivateKey,
+        value: ZERO_ETHER
       },
       [
         _to,
@@ -354,8 +365,7 @@ class pEOS {
           PEOS_TOKEN_DECIMALS,
           '*'
         )
-      ],
-      this.ethPrivateKey
+      ]
     )
   }
 
@@ -364,14 +374,15 @@ class pEOS {
    * @param {Number} _amount
    */
   approve(_spender, _amount) {
-    return utils.eth.makeTransaction(
+    return utils.eth.makeContractSend(
       this.web3,
       'approve',
-      this.isWeb3Injected,
       {
+        isWeb3Injected: this.isWeb3Injected,
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey
+        privateKey: this.ethPrivateKey,
+        value: ZERO_ETHER
       },
       [
         _spender,
@@ -380,8 +391,7 @@ class pEOS {
           PEOS_TOKEN_DECIMALS,
           '*'
         )
-      ],
-      this.ethPrivateKey
+      ]
     )
   }
 
@@ -391,14 +401,15 @@ class pEOS {
    * @param {Number} _amount
    */
   transferFrom(_from, _to, _amount) {
-    return utils.eth.makeTransaction(
+    return utils.eth.makeContractSend(
       this.web3,
       'transferFrom',
-      this.isWeb3Injected,
       {
+        isWeb3Injected: this.isWeb3Injected,
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey
+        privateKey: this.ethPrivateKey,
+        value: ZERO_ETHER
       },
       [
         _from,
@@ -408,8 +419,7 @@ class pEOS {
           PEOS_TOKEN_DECIMALS,
           '*'
         )
-      ],
-      this.ethPrivateKey
+      ]
     )
   }
 
@@ -418,9 +428,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'burnNonce',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        }
       )
         .then(burnNonce => resolve(
           parseInt(burnNonce)
@@ -434,9 +446,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'mintNonce',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        }
       )
         .then(mintNonce => resolve(
           parseInt(mintNonce)
@@ -454,9 +468,11 @@ class pEOS {
       utils.eth.makeContractCall(
         this.web3,
         'allowance',
-        this.isWeb3Injected,
-        peosAbi,
-        PEOS_ETH_CONTRACT_ADDRESS,
+        {
+          isWeb3Injected: this.isWeb3Injected,
+          abi: peosAbi,
+          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+        },
         [
           _owner,
           _spender

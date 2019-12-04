@@ -4,6 +4,8 @@
 
 Javascript module for interacting with pTokens.
 
+The documentation is available [here](#).
+
 &nbsp;
 
 ***
@@ -22,7 +24,7 @@ npm install ptokens
 
 &nbsp;
 
-### :zap: Usage without injected web3
+### :zap: Usage without injected Web3 and Eosjs
 
 ```js
 const pTokens = require('ptokens')
@@ -40,15 +42,13 @@ const ptokens = new pTokens({
 ```js
 const pTokens = require('ptokens')
 
-const eosjs = ScatterJS.eos(network, Api, { rpc }) //for instance the Scatter one
-
 if (window.web3) {
   
   const web3 = new Web3(window.web3.currentProvider)
 
   const ptokens = new pTokens({
     web3,
-    eosjs
+    eosjs //already initialized eosjs instance
   })
 } else {
   console.log('No web3 detected')

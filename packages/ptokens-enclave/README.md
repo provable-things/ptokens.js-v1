@@ -1,6 +1,8 @@
 # ptokens-enclave
 
-Module for interacting with the Enclave
+Module for interacting with the Enclave.
+
+The documentation is available [here](#).
 
 &nbsp;
 
@@ -26,10 +28,4 @@ npm install ptokens-enclave
 import Enclave from 'ptokens-enclave'
 
 const enclave = new Enclave()
-```
-
-### Example of Usage:
-
-```js
-enclave.ping(r => console.log(r))
 ```

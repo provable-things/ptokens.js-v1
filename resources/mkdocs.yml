@@ -5,4 +5,5 @@ nav:
         - pTokens: ptokens.md
         - ptokens-peos: ptokens-peos.md
         - ptokens-enclave: ptokens-enclave.md
+        - ptokens-utils: ptokens-utils.md
 theme: readthedocs

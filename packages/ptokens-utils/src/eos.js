@@ -11,9 +11,9 @@ const EOS_ACCOUNT_LENGTH = 12
  * @param {String} _privateKey
  * @param {String} _rpcAddress
  */
-const getApi = (_privateKey, _rpcAddress) => {
+const getApi = (_privateKey, _rpc) => {
   const signatureProvider = new JsSignatureProvider([_privateKey])
-  const rpc = new JsonRpc(_rpcAddress, { fetch })
+  const rpc = new JsonRpc(_rpc, { fetch })
   const api = new Api({
     rpc,
     signatureProvider,
@@ -34,13 +34,6 @@ const getAccountName = (_eosjs, _pubkeys) =>
       .then(accounts => resolve(accounts.account_names[0]))
       .catch(err => reject(err))
   })
-
-/**
- * @param {Number} _amount
- */
-const getAmountInEosFormat = (_amount, _decimals = 4) => {
-  return _amount.toFixed(EOS_NATIVE_TOKEN_DECIMALS).toString() + ' EOS'
-}
 
 /**
  * @param {Object} _eosjs
@@ -69,20 +62,20 @@ const isValidAccountName = _accountName => {
  * @param {String} _blocksBehind
  * @param {String} _expireSeconds
  */
-const transact = (_eosjs, _to, _eosAccountName, _amount, _memo, _blocksBehind, _expireSeconds) =>
+const transferNativeToken = (_eosjs, _to, _accountName, _amount, _memo, _blocksBehind, _expireSeconds) =>
   new Promise((resolve, reject) => {
     _eosjs.transact({
       actions: [{
         account: EOS_NATIVE_TOKEN,
         name: 'transfer',
         authorization: [{
-          actor: _eosAccountName,
+          actor: _accountName,
           permission: 'active'
         }],
         data: {
-          from: _eosAccountName,
+          from: _accountName,
           to: _to,
-          quantity: getAmountInEosFormat(_amount),
+          quantity: _getAmountInEosFormat(_amount),
           memo: _memo
         }
       }]
@@ -94,11 +87,17 @@ const transact = (_eosjs, _to, _eosAccountName, _amount, _memo, _blocksBehind, _
       .catch(err => reject(err))
   })
 
+/**
+ * @param {Number} _amount
+ */
+const _getAmountInEosFormat = (_amount, _decimals = 4) => {
+  return _amount.toFixed(EOS_NATIVE_TOKEN_DECIMALS).toString() + ' EOS'
+}
+
 export {
   getApi,
   getAccountName,
-  getAmountInEosFormat,
   getAvailablePublicKeys,
   isValidAccountName,
-  transact
+  transferNativeToken
 }

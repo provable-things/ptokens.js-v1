@@ -7,7 +7,7 @@
   "browser": "dist/ptokens-enclave.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "jest --verbose",
+    "test": "jest",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
   "author": "alle.manfredi@gmail.com @Provable Things",

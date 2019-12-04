@@ -1,5 +1,4 @@
 const PREFIX = '0x'
-const ZERO_ETHER = '0x00'
 
 /**
  * @param {String} _string
@@ -67,18 +66,16 @@ const is0xPrefixed = _string =>
 /**
  * @param {Object} _web3
  * @param {String} _method
- * @param {Boolean} _isWeb3Injected
- * @param {Object} _abi
- * @param {String} _contractAddress
+ * @param {Object} _options
  * @param {Array=} [] - _params
  */
-const makeContractCall = (_web3, _method, _isWeb3Injected, _abi, _contractAddress, _params = []) =>
+const makeContractCall = (_web3, _method, _options, _params = []) =>
   new Promise(async (resolve, reject) => {
-    const account = await getAccount(_web3, _isWeb3Injected)
+    const account = await getAccount(_web3, _options.isWeb3Injected)
     const contract = getContract(
       _web3,
-      _abi,
-      _contractAddress,
+      _options.abi,
+      _options.contractAddress,
       account
     )
     contract.methods[_method](..._params).call()
@@ -89,14 +86,46 @@ const makeContractCall = (_web3, _method, _isWeb3Injected, _abi, _contractAddres
 /**
  * @param {Object} _web3
  * @param {String} _method
+ * @param {Object} _options
+ * @param {Array=} [] - _params
+ */
+const makeContractSend = (_web3, _method, _options, _params = []) =>
+  new Promise((resolve, reject) => {
+    _options.isWeb3Injected
+      ? _makeContractSend(
+        _web3,
+        _method,
+        _options.abi,
+        _options.contractAddress,
+        _options.value,
+        _params
+      )
+        .then(_status => resolve(_status))
+        .catch(_err => reject(_err))
+      : _sendSignedMethodTx(
+        _web3,
+        _options.privateKey,
+        _method,
+        _options.abi,
+        _options.contractAddress,
+        _options.value,
+        _params
+      )
+        .then(_receipt => resolve(_receipt))
+        .catch(_err => reject(_err))
+  })
+
+/**
+ * @param {Object} _web3
+ * @param {String} _method
  * @param {Boolean} _isWeb3Injected
  * @param {Object} _abi
  * @param {String} _contractAddress
  * @param {Array=} [] - _params
  */
-const makeContractSend = (_web3, _method, _isWeb3Injected, _abi, _contractAddress, _params = []) =>
+const _makeContractSend = (_web3, _method, _abi, _contractAddress, _value, _params = []) =>
   new Promise(async (resolve, reject) => {
-    const account = await getAccount(_web3, _isWeb3Injected)
+    const account = await getAccount(_web3, false)
     const contract = getContract(
       _web3,
       _abi,
@@ -104,42 +133,11 @@ const makeContractSend = (_web3, _method, _isWeb3Injected, _abi, _contractAddres
       account
     )
     contract.methods[_method](..._params).send({
-      from: account
+      from: account,
+      value: _value
     })
       .then(_res => resolve(_res))
       .catch(_err => reject(_err))
-  })
-
-/**
- * @param {Object} _web3
- * @param {String} _method
- * @param {Boolean} _isWeb3Injected
- * @param {Object} _options
- * @param {Array} _params
- */
-const makeTransaction = (_web3, _method, _isWeb3Injected, _options, _params) =>
-  new Promise((resolve, reject) => {
-    _isWeb3Injected
-      ? makeContractSend(
-        _web3,
-        _method,
-        _isWeb3Injected,
-        _options.abi,
-        _options.contractAddress,
-        _params
-      )
-        .then(_status => resolve(_status))
-        .catch(_err => reject(_err))
-      : sendSignedMethodTx(
-        _web3,
-        _options.privateKey,
-        _method,
-        _options.abi,
-        _options.contractAddress,
-        _params
-      )
-        .then(_receipt => resolve(_receipt))
-        .catch(_err => reject(_err))
   })
 
 /**
@@ -150,7 +148,7 @@ const makeTransaction = (_web3, _method, _isWeb3Injected, _options, _params) =>
  * @param {String} _contractAddress
  * @param {Array} _params
  */
-const sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress, _params) =>
+const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress, _value, _params) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = getContract(_web3, _abi, _web3.eth.defaultAccount)
@@ -164,7 +162,7 @@ const sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress,
         gasPrice,
         gasLimit,
         to: _contractAddress,
-        value: ZERO_ETHER,
+        value: _value,
         data: functionAbi
       }
       const signedTransaction = await _web3.eth.accounts.signTransaction(rawData, _privateKey)
@@ -184,6 +182,5 @@ export {
   getContract,
   is0xPrefixed,
   makeContractCall,
-  makeTransaction,
-  sendSignedMethodTx
+  makeContractSend
 }

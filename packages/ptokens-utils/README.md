@@ -1,6 +1,6 @@
-# ptokens-peos
+# ptokens-utils
 
-Module for interacting only with pEOS.
+This module allows to have access to some usefull utility used by other packages.
 
 &nbsp;
 
@@ -11,7 +11,7 @@ Module for interacting only with pEOS.
 ### Installation:
 
 ```
-npm install ptokens-peos
+npm install ptokens-utils
 ```
 
 &nbsp;
@@ -20,53 +20,14 @@ npm install ptokens-peos
 
 &nbsp;
 
-### Usage without injected web3
+### Usage
 
 ```js
-const pEOS = require('ptokens-peos')
+const utils = require('ptokens-utils')
 
-const peos = new pEOS({
-  ethPrivateKey: 'Eth private key',
-  ethProvider: 'Eth provider',
-  eosPrivateKey: 'EOS private key',
-  eosProvider: 'EOS provider'
-})
-```
-
-### Usage with injected Web3 and/or EosJs
-
-```js
-const pEOS = require('ptokens-peos')
-
-const eosjs = ScatterJS.eos(network, Api, { rpc }) //for instance the Scatter one
-
-if (window.web3) {
-  
-  const web3 = new Web3(window.web3.currentProvider)
-
-  const peos = new pEOS({
-    web3,
-    eosjs
-  })
-} else {
-  console.log('No web3 detected')
-}
-```
-
-### Example of Usage:
-
-```js
-peos.issue(1, 'eth address')
-  .once('onEosTxConfirmed', e => console.log(e))
-  .once('onEnclaveReceivedTx', e => console.log(e))
-  .once('onEnclaveBroadcastedTx', e => console.log(e))
-  .once('onEthTxConfirmed', e => console.log(e))
-  .then(r => console.log(r))
-
-peos.redeem(1, 'eos account')
-  .once('onEthTxConfirmed', e => console.log(e))
-  .once('onEnclaveReceivedTx', e => console.log(e))
-  .once('onEnclaveBroadcastedTx', e => console.log(e))
-  .once('onEosTxConfirmed', e => console.log(e))
-  .then(r => console.log(r))
+{ eth:
+   [Object: null prototype] {
+     alwaysWithPrefix: [Function: alwaysWithPrefix],
+     correctFormat: [Function: correctFormat],
+     ....
 ```

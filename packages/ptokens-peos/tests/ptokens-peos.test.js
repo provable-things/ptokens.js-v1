@@ -267,10 +267,3 @@ test('Should get the correct number of redeemed pEOS', async () => {
   const finalBurnNonce = await peos.getBurnNonce()
   expect(finalBurnNonce).to.be.equal(expectedBurnNonce)
 })
-
-/* test('pEOS circulating supply must be equal to EOS deposited collateral', async () => {
-  const peos = new pEOS(configs)
-  const circulatingSupply = await peos.getCirculatingSupply()
-  const collateral = await peos.getCollateral()
-  expect(circulatingSupply).to.be.equal(collateral)
-}) */
