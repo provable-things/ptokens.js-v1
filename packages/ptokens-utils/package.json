@@ -7,6 +7,7 @@
   "browser": "dist/ptokens-utils.umd.js",
   "scripts": {
     "build": "rollup -c",
+    "test": "jest",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
   "author": "alle.manfredi@gmail.com @Provable Things",
@@ -16,6 +17,7 @@
     "chai": "^4.2.0",
     "eosjs": "^20.0.0",
     "light-async-polling": "^1.0.2",
+    "web3": "^1.2.2",
     "text-encoding": "^0.7.0"
   },
   "devDependencies": {

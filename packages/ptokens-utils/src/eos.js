@@ -83,7 +83,7 @@ const transferNativeToken = (_eosjs, _to, _accountName, _amount, _memo, _blocksB
       blocksBehind: _blocksBehind,
       expireSeconds: _expireSeconds
     })
-      .then(eosTxReceipt => resolve(eosTxReceipt))
+      .then(receipt => resolve(receipt))
       .catch(err => reject(err))
   })
 

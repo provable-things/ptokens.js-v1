@@ -180,6 +180,7 @@ export {
   correctFormat,
   getAccount,
   getContract,
+  getGasLimit,
   is0xPrefixed,
   makeContractCall,
   makeContractSend
