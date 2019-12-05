@@ -174,14 +174,20 @@ test('Should not be a valid EOS account name', () => {
 
 test('Should transfer 1 eosio.token', async () => {
   const eosjs = utils.eos.getApi(eosPrivateKey, eosProvider)
+  const sender = 'all3manfr3di'
+  const receiver = 'all3manfr4di'
+  const amountToSend = 1
+  const memo = 'ptokens.js test'
+  const expireSeconds = 30
+  const blocksBehind = 3
   const receipt = await utils.eos.transferNativeToken(
     eosjs,
-    'all3manfr3di',
-    'all3manfr4di',
-    1,
-    'hello',
-    3,
-    30
+    sender,
+    receiver,
+    amountToSend,
+    memo,
+    blocksBehind,
+    expireSeconds
   )
   expect(receipt).to.be.an('object')
 })
