@@ -1,0 +1,47 @@
+{
+  "name": "ptokens",
+  "description": "repo holding the code for interacting with ptokens",
+  "private": true,
+  "main": "./packages/ptokens/src/index.js",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "link": "lerna link",
+    "build": "lerna run build",
+    "init": "npm i && lerna bootstrap",
+    "lint": "lerna run lint",
+    "publish": "npm run bootstrap && lerna publish --skip-git",
+    "test": "lerna run test"
+  },
+  "keywords": [
+    "pTokens",
+    "JavaScript",
+    "Ethereum",
+    "EOS"
+  ],
+  "author": "alle.manfredi@gmail.com @Provable",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/provable-things/ptokens.js.git"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "babel-jest": "^24.9.0",
+    "eslint": "^5.14.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.8.0",
+    "lerna": "^3.13.2",
+    "rollup": "^1.8.0",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-cleanup": "^3.1.1",
+    "rollup-plugin-json": "^4.0.0"
+  }
+}
