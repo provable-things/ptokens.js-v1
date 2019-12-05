@@ -1,13 +1,20 @@
 # pTokens
 
-This is the main class which contains all pTokens subclasses.
+This is the main package which contains all other packages.
 
 ### Structure
-- __`Object`__ - __`peos`__: Object for interacting with pEOS token. 
-- __`Object`__ - __`enclave`__: Object for interacting with the Enclave.
+- __`Object`__ - __`peos`__: class for interacting with pEOS token
+- __`Object`__ - __`enclave`__: class for interacting with the Enclave
+- __`Object`__ - __`utils`__: some usefull utilities
 
 ### Constructor parameters
-- __`Object`__ - __`configs`__: Object containing Ethereum Provider, EOS RPC address, Ethereum and EOS private keys or an already initialized instance of Web3 or eosjs. 
+- __`Object`__ - __`configs`__: options for initializing an pTokens instance
+    - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens
+    - __`String`__ - __`ethProvider`__: an Ethereum provider
+    - __`String`__ - __`eosPrivateKey`__: an Eos private key used for signing transactions for minting pTokens
+    - __`String`__ - __`eosProvider`__: an EOS provider
+    - __`Object`__ - __`web3`__: an already initialized web3 instance (don't use `ethPrivateKey` and `ethProvider` if this option is used)
+    - __`String`__ - __`eosjs`__: an already initialized eosjs instance (don't use `eosPrivateKey` and `eosProvider` if this option is used)
 
 &nbsp;
 
@@ -27,6 +34,7 @@ const ptokens = new pTokens(configs)
 
 
 ### Usage with an already initialized Web3 instance
+
 ```js
 const pTokens = require('ptokens')
 
