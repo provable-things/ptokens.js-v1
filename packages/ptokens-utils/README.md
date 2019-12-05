@@ -2,8 +2,6 @@
 
 This module allows to have access to some usefull utility used by other packages.
 
-The documentation is available [here](#).
-
 &nbsp;
 
 ***

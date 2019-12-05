@@ -26,7 +26,7 @@ const peos = new pPEOS(configs)
 ```
 
 
-### Usage with an already initialized Web3 instance
+### Usage with an already initialized Web3 instance (eg: injected by Metamask)
 ```js
 const peos = require('ptokens-peos')
 

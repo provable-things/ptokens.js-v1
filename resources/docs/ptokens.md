@@ -32,8 +32,9 @@ const configs = {
 const ptokens = new pTokens(configs)
 ```
 
+&nbsp;
 
-### Usage with an already initialized Web3 instance
+### Usage with an already initialized Web3 instance (eg: injected by Metamask)
 
 ```js
 const pTokens = require('ptokens')
@@ -51,7 +52,7 @@ if (window.web3) {
   console.log('No web3 detected')
 }
 ```
-
+&nbsp;
 
 ### Usage with an already initialized eosjs instance
 
@@ -74,7 +75,7 @@ const configs = {
   
 const ptokens = new pTokens(configs)
 ```
-
+&nbsp;
 
 ### Usage with Web3 and eosjs instances already initialized
 

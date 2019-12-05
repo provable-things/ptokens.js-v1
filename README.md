@@ -4,8 +4,6 @@
 
 Javascript module for interacting with pTokens.
 
-The documentation is available [here](#).
-
 &nbsp;
 
 ***

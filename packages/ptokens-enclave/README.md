@@ -2,8 +2,6 @@
 
 Module for interacting with the Enclave.
 
-The documentation is available [here](#).
-
 &nbsp;
 
 ***

@@ -2,8 +2,6 @@
 
 Module for interacting only with pEOS.
 
-The documentation is available [here](#).
-
 &nbsp;
 
 ***
