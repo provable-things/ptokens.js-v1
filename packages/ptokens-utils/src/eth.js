@@ -125,7 +125,7 @@ const makeContractSend = (_web3, _method, _options, _params = []) =>
  */
 const _makeContractSend = (_web3, _method, _abi, _contractAddress, _value, _params = []) =>
   new Promise(async (resolve, reject) => {
-    const account = await getAccount(_web3, false)
+    const account = await getAccount(_web3, true)
     const contract = getContract(
       _web3,
       _abi,
