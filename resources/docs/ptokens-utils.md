@@ -357,13 +357,13 @@ Send an amount of EOS native token (`eosio.token`)
 
 ### Parameters
 
-- __`String`__ - __`eosjs`__: initialized instance of `eosjs`
+- __`Object`__ - __`eosjs`__: initialized instance of `eosjs`
 - __`String`__ - __`to`__: EOS account to send EOS
 - __`String`__ - __`accountName`__: EOS sender account name
-- __`String`__ - __`amount`__: amount of EOS to send
+- __`Number`__ - __`amount`__: amount of EOS to send
 - __`String`__ - __`memo`__: EOS memo
-- __`String`__ - __`blocksBehind`__: how many blocks is behind the head block
-- __`String`__ - __`expireSeconds`__: time after which the transaction can never be included in a block
+- __`Number`__ - __`blocksBehind`__: how many blocks is behind the head block
+- __`Number`__ - __`expireSeconds`__: time after which the transaction can never be included in a block in seconds
 
 
 ### Returns

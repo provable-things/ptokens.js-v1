@@ -30,15 +30,15 @@ npm install ptokens-enclave
 ptokens.enclave.getBroadcastTransactionStatus(hash)
 ```
 
-Gets the status of a broadcasted transaction by the Enclave.
+Gets the status of a broadcasted transaction by the Enclave. It's possible to pass to the function both an Ethereum transaction hash and an EOS transaction id.
 
 ### Parameters
 
-- __`String`__ - __`hash`__: transaction hash
+- __`String`__ - __`hash`__: The transaction hash
 
 ### Returns
 
-- __`Object`__ : information about a broadcasted transaction by the Enclave
+- __`Promise`__ : when resolved, returns the information about a broadcasted transaction by the Enclave
 
 ### Example
 ```js
@@ -85,15 +85,15 @@ Gets the status of a broadcasted transaction by the Enclave.
 ptokens.enclave.getIncomingTransactionStatus(hash)
 ```
 
-Gets the status of an incoming transaction to the Enclave.
+Gets the status of an incoming transaction to the Enclave. It's possible to pass to the function both an Ethereum transaction hash and an EOS transaction id
 
 ### Parameters
 
-- __`String`__ - __`hash`__: transaction hash
+- __`String`__ - __`hash`__: the transaction hash
 
 ### Returns
 
-- __`Object`__ : information about an incoming transaction to the Enclave
+- __`Promise`__ : when resolved returns the information about an incoming transaction to the Enclave
 
 ### Example
 ```js
@@ -146,11 +146,11 @@ Gets the last processed block by the Enclave of a given type.
 
 ### Parameters
 
-- __`String`__ - __`type`__: type of block
+- __`String`__ - __`type`__: type of the block to get. Values can be: `eth` and `eos`
 
 ### Returns
 
-- __`Object`__ : last processed block by the Enclave given the type
+- __`Promise`__ : when resolved returns the last processed block by the Enclave given its type
 
 ### Example
 ```js
@@ -167,23 +167,23 @@ Gets the last processed block by the Enclave of a given type.
 ## getReport
 
 ```js
-ptokens.enclave.getEthReport(type, limit)
+ptokens.enclave.getReport(type, limit)
 ```
 
-Gets a report of the transactions relating to the `type` signature nonce supplied.
+Gets a report of the transactions relating to the `type` signature nonce supplied. A report is a list of the last `limit` minting/burning transactions. For example in case of `pEOS`, a report of `eth` type consists of a list of all burning transactions.
 
 ### Parameters
 
-- __`String`__ - __`type`__: type of report
-- __`Number`__ - __`limit`__: maximum number of reports to be received
+- __`String`__ - __`type`__: type of report to get: Values can be: `eth` and `eos`
+- __`Number`__ - __`limit`__: maximum number of reports to be received. The default value is set to `100`
 
 ### Returns
 
-- __`Object`__ : 
+- __`Promise`__ : when resolved returns the report
 
 ### Example
 ```js
-> ptokens.enclave.getEthReport('eth', 1).then(report => console.log(report))
+> ptokens.enclave.getReport('eth', 1).then(report => console.log(report))
 > [ 
     { _id: 'ETH 522',
       broadcast: true,
@@ -223,7 +223,7 @@ Check that the Enclave is running.
 
 ### Returns
 
-- __`String`__ : 'Provable Pong'
+- __`Promise`__ : when resolved return this sring: `Provable Pong`
 
 ### Example
 ```js
@@ -244,12 +244,12 @@ Submit a valid block to the Enclave specifying its type.
 
 ### Parameters
 
-- __`Object`__ - __`type`__: block type
+- __`Object`__ - __`type`__: type of the submitted block. Values can be: `eth` and `eos`
 - __`Object`__ - __`block`__: valid block
 
 ### Returns
 
-- __`String`__ : string the specified if the submission succedeed
+- __`Promise`__ : when resolved returs a string that specify if the submission succedeed
 
 ### Example
 ```js
@@ -275,91 +275,8 @@ Submit a valid block to the Enclave specifying its type.
     ],
     "uncles": []
   }
-> ptokens.enclave.submitEthBlock(block).then(res => console.log(res))
+> ptokens.enclave.submitBlock('eth', block).then(res => console.log(res))
 > Eth block submitted to the enclave!
 ```
 
 &nbsp;
-
-
-```js
-ptokens.enclave.submitEosBlock(_block_, [callback])
-```
-
-Submit a valid EOS block to the Enclave.
-
-### Parameters
-
-- __`Object`__ - __`_block_`__: valid EOS block.
-
-### Returns
-
-- __`String`__ : 'Eos block submitted to the enclave!'
-
-### Example
-```js
-> const block = {
-    'timestamp': '2019-10-16T09:01:57.000',
-    'producer': 'teamgreymass',
-    'confirmed': 0,
-    'previous': '0347c086212adacc319d08e4edf0abe6c8c3468ec5e79cb04de2984af59e3f14',
-    'transaction_mroot': 'a8b28d4413ae22a8fbaf52fc2feee876009ca3fe3679c0ec23dbbd0a05cc8bd9',
-    'action_mroot': '79e32e2b438849422cef5cc452c88970458419f30f679b0c7a414b1968c486f4',
-    'schedule_version': 282,
-    'new_producers': null,
-    'header_extensions': [],
-    'producer_signature': 'SIG_K1_KBxHqFmzpyeJzYyWZbUXXhVQPaQQwAEfudeuh6WmCcjhDyQMmdaGVbqc7qZBYeqm1UaBfP8ckFJqucdW939nqgh2NYFrwk',
-    'transactions': [
-      {
-        'status': 'executed',
-        'cpu_usage_us': 262,
-        'net_usage_words': 27,
-        'trx': {
-          'id': 'c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3',
-          'signatures': [
-            'SIG_K1_KhR7D8qXBzjNnsJQLe5ZY2MayhbKasiMTRjjk8VE58Bi7fzruSJ1UPcpTBxiW9nKHLJjfnyumzcVQ1GQKJzPUzrgoWF1GA'
-          ],
-          'compression': 'none',
-          'packed_context_free_data': '',
-          'context_free_data': [],
-          'packed_trx': '9edca65d7dc05c26c554000000000100a6823403ea3055000000572d3ccdcd01e0d2b86b1a39623400000000a8ed32324be0d2b86b1a3962343021cd2a1eb3e9adcf5600000000000004454f53000000002a30783032366443364134333536314441384136413737353533386231393241336539333663304632394200',
-          'transaction': {
-            'expiration': '2019-10-16T09:02:22',
-            'ref_block_num': 49277,
-            'ref_block_prefix': 1422206556,
-            'max_net_usage_words': 0,
-            'max_cpu_usage_ms': 0,
-            'delay_sec': 0,
-            'context_free_actions': [],
-            'actions': [
-              {
-                'account': 'eosio.token',
-                'name': 'transfer',
-                'authorization': [
-                  {
-                    'actor': 'all3manfr3di',
-                    'permission': 'active'
-                  }
-                ],
-                'data': {
-                  'from': 'all3manfr3di',
-                  'to': 'provabletokn',
-                  'quantity': '2.2223 EOS',
-                  'memo': '0x026dC6A43561DA8A6A775538b192A3e936c0F29B'
-                },
-                'hex_data': 'e0d2b86b1a3962343021cd2a1eb3e9adcf5600000000000004454f53000000002a307830323664433641343335363144413841364137373535333862313932413365393336633046323942'
-              }
-            ],
-            'transaction_extensions': []
-          }
-        }
-      }
-    ],
-    'block_extensions': [],
-    'id': '0347c087fe5065dd83c567bd4b4170c76c2b8f56b0399cd3ef19920418c00b96',
-    'block_num': 55033991,
-    'ref_block_prefix': 3177694595
-  }
-> ptokens.enclave.submitEosBlock(block).then(res => console.log(res))
-> Eos block submitted to the enclave!
-```
