@@ -1,6 +1,6 @@
 # ptokens-utils
 
-This module allows to have access to some usefull utility used by other packages.
+This module allows to have access to some useful utilities used by other packages.
 
 ### Installation
 
@@ -34,7 +34,7 @@ npm install ptokens-utils
 ptokens.utils.eth.alwaysWithPrefix(text)
 ```
 
-Return a string always `0x` prefixed
+Returns a string always `0x` prefixed
 
 ### Parameters
 
@@ -57,7 +57,7 @@ const res = utils.eth.alwaysWithPrefix('hello') //0xhello
 ptokens.utils.eth.alwaysWithPrefix(amount, decimals, operation)
 ```
 
-Return a number equal to the `amount` divied/multiplied (`operation`) by `decimals` (usefull for erc20 token).
+Returns a number equal to the `amount` divied/multiplied (`operation`) by `decimals` (useful for erc20 tokens).
 
 ### Parameters
 
@@ -67,7 +67,7 @@ Return a number equal to the `amount` divied/multiplied (`operation`) by `decima
 
 ### Returns
 
-- __`Number`__ : a formatted number correctly
+- __`Number`__ : a number formatted correctly
 
 ### Example
 ```js
@@ -82,7 +82,7 @@ const res = utils.eth.correctFormat(1000, 4, '/') //0.1
 ptokens.utils.eth.getAccount(web3, isWeb3Injected)
 ```
 
-Return the current Ethereum address given an instance of Web3 and specifying if it's injected (ex: Web3 instance injected by Metamask)
+Returns the current Ethereum address given an instance of Web3 and specifying if it's injected (i.e.: a Web3 instance injected by Metamask)
 
 ### Parameters
 
@@ -92,7 +92,7 @@ Return the current Ethereum address given an instance of Web3 and specifying if 
 
 ### Returns
 
-- __`Promise`__ : whene resolved returns the current Ethereum address
+- __`Promise`__ : when resolved it returns the current Ethereum address
 
 ### Example
 ```js
@@ -107,7 +107,7 @@ const account = await utils.eth.getAccount(web3, true)
 ptokens.utils.eth.getContract(web3, abi, contractAddress, account)
 ```
 
-Return a [Web3.eth.Contract](https://web3js.readthedocs.io/en/v1.2.0/Web3-eth-contract.html) instance given a Web3 one, the contract abi, its address (`contractAddress`) and the address (`account`) where transactions should be made from
+Returns a [Web3.eth.Contract](https://web3js.readthedocs.io/en/v1.2.0/Web3-eth-contract.html) instance given a Web3 one, the contract abi, its address (`contractAddress`) and the address (`account`) where transactions should be made from
 
 ### Parameters
 
@@ -132,7 +132,7 @@ const contract = utils.eth.getContract(web3, true)
 ptokens.utils.eth.getGasLimit(web3)
 ```
 
-Return the gas limit of the latest Ethereum block.
+Returns the gas limit of the latest Ethereum block.
 
 ### Parameters
 
@@ -163,7 +163,7 @@ Check if a given string (`text`) is `0x` prefixed
 
 ### Returns
 
-- __`Boolean`__ : `0x` prefix cheking result
+- __`Boolean`__ : true if the input has a `0x` prefix
 
 ### Example
 ```js
@@ -178,7 +178,7 @@ const is0xPrefixed = await utils.eth.is0xPrefixed('0xhello') //true
 ptokens.utils.eth.makeContractCall(web3, method, options, params = [])
 ```
 
-Perform a contract `call` given a Web3 instance and the Smart Contract details.
+Performs a contract `call` given a Web3 instance and the Smart Contract details.
 
 ### Parameters
 
@@ -192,7 +192,7 @@ Perform a contract `call` given a Web3 instance and the Smart Contract details.
 
 ### Returns
 
-- __`Promise`__ : when resolved returns the value returned by the Smart Contract
+- __`Promise`__ : when resolved it returns the value returned by the Smart Contract
 
 ### Example
 ```js
@@ -211,7 +211,7 @@ const value = await utils.eth.makeContractCall(web3, 'balanceOf', true, abi, '' 
 ptokens.utils.eth.makeContractSend(web3, method, options, params = [])
 ```
 
-Perform a contract `send` given a Web3 instance and the Smart Contract details.
+Performs a contract `send` given a Web3 instance and the Smart Contract details.
 
 ### Parameters
 
@@ -227,7 +227,7 @@ Perform a contract `send` given a Web3 instance and the Smart Contract details.
 
 ### Returns
 
-- __`Promise`__ : when resolved returns the receipt of the transaction performed
+- __`Promise`__ : when resolved it returns the receipt of the transaction performed
 
 ### Example
 ```js
@@ -254,7 +254,7 @@ const receipt = await utils.eth.makeContractSend(web3, 'transfer', true, abi, 'e
 ptokens.utils.eos.getApi(privateKey, rpc)
 ```
 
-Return an instance of `eosjs`
+Returns an instance of `eosjs`
 
 ### Parameters
 
@@ -279,7 +279,7 @@ const eosjs = utils.eos.getApi('private key', 'rpc url')
 ptokens.utils.eos.getAccountName(eosjs, pubkeys)
 ```
 
-Return the current account name given an instance of `eosjs` and a list of public keys
+Returns the current account name given an instance of `eosjs` and a list of public keys
 
 ### Parameters
 
@@ -304,7 +304,7 @@ const accountName = await utils.eos.getAccountName(eosjs, ['pubk1', 'pubk2'])
 ptokens.utils.eos.getAvailablePublicKeys(eosjs)
 ```
 
-Return the available public keys given an instance of `eosjs`
+Returns the available public keys given an instance of `eosjs`
 
 ### Parameters
 
@@ -313,7 +313,7 @@ Return the available public keys given an instance of `eosjs`
 
 ### Returns
 
-- __`Promise`__ : when resolved return a list of public keys
+- __`Promise`__ : when resolved it return a list of public keys
 
 ### Example
 ```js
@@ -353,22 +353,22 @@ const isValid = utils.eos.isValidAccountName('all3manfr3di') //true
 ptokens.utils.eos.transferNativeToken(eosjs, to, accountName, amount, memo, blocksBehind, expireSeconds)
 ```
 
-Send an amount of EOS native token (`eosio.token`)
+Sends an amount of EOS native token (`eosio.token`)
 
 ### Parameters
 
 - __`Object`__ - __`eosjs`__: initialized instance of `eosjs`
-- __`String`__ - __`to`__: EOS account to send EOS
+- __`String`__ - __`to`__: EOS account where to send EOS
 - __`String`__ - __`accountName`__: EOS sender account name
 - __`Number`__ - __`amount`__: amount of EOS to send
 - __`String`__ - __`memo`__: EOS memo
-- __`Number`__ - __`blocksBehind`__: how many blocks is behind the head block
-- __`Number`__ - __`expireSeconds`__: time after which the transaction can never be included in a block in seconds
+- __`Number`__ - __`blocksBehind`__: how many blocks the head block is behind 
+- __`Number`__ - __`expireSeconds`__: time after which the transaction can never be included in a block, in seconds
 
 
 ### Returns
 
-- __`Promise`__ : when resolved returns the EOS transaction receipt
+- __`Promise`__ : when resolved it returns the EOS transaction receipt
 
 ### Example
 ```js
