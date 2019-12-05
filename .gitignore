@@ -3,6 +3,7 @@ node_modules/
 dist/
 .DS_Store
 npm-debug.log*
+lerna-debug.log*
 package-lock.json
 coverage/
 
