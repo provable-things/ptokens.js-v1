@@ -346,15 +346,15 @@ ptokens.peos.issue(1, 'eth address')
 
 
 ```js
-ptokens.peos.redeem(_amount, _eosAccount)
+ptokens.peos.redeem(amount, eosAccount)
 ```
 
 Redeem a specified number of pEOS to the specified EOS account.
 
 ### Parameters
 
-- __`Number`__ - __`_amount`__: amount of pEOS to redeem
-- __`String`__ - __`_ethAddress`__: EOS account on which receive back the deposited EOS
+- __`Number`__ - __`amount`__: amount of pEOS to redeem
+- __`String`__ - __`ethAddress`__: EOS account on which receive back the deposited EOS
 
 ### Returns
 
