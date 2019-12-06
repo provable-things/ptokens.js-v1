@@ -21,5 +21,8 @@
     "jest": "^24.8.0"
   },
   "author": "alle.manfredi@gmail.com @Provable Things",
-  "license": "ISC"
+  "license": "ISC",
+  "files": [
+    "dist"
+  ]
 }
