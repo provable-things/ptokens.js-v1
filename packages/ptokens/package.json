@@ -20,7 +20,7 @@
   "devDependencies": {
     "jest": "^24.8.0"
   },
-  "author": "alle.manfredi@gmail.com @Provable Things",
+  "author": "alle.manfredi@gmail.com @provable-things",
   "license": "ISC",
   "files": [
     "dist"
