@@ -14,7 +14,6 @@
     "@babel/runtime": "^7.3.1",
     "chai": "^4.2.0",
     "ptokens-peos": "0.0.1",
-    "ptokens-enclave": "0.0.1",
     "ptokens-utils": "0.0.1"
   },
   "devDependencies": {

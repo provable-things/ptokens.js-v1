@@ -1,6 +1,5 @@
 import pTokens from '../src/index'
 import pEOS from 'ptokens-peos'
-import Enclave from 'ptokens-enclave'
 import { expect } from 'chai'
 
 test('Should init pTokens correctly', () => {
@@ -12,5 +11,4 @@ test('Should init pTokens correctly', () => {
   }
   const ptokens = new pTokens(configs)
   expect(ptokens.peos).to.be.an.instanceof(pEOS)
-  expect(ptokens.enclave).to.be.an.instanceof(Enclave)
 })
