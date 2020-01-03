@@ -49,11 +49,11 @@ class pEOS {
       this.web3 = new Web3(ethProvider)
 
       const account = this.web3.eth.accounts.privateKeyToAccount(
-        utils.eth.alwaysWithPrefix(ethPrivateKey)
+        utils.eth.addHexPrefix(ethPrivateKey)
       )
 
       this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = utils.eth.alwaysWithPrefix(ethPrivateKey)
+      this.ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
       this.isWeb3Injected = false
     }
 

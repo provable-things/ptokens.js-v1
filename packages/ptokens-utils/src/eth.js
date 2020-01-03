@@ -1,18 +1,18 @@
-const PREFIX = '0x'
+const HEX_PREFIX = '0x'
 
 /**
  * @param {String} _string
  */
-const alwaysWithPrefix = _string =>
-  is0xPrefixed(_string)
+const addHexPrefix = _string =>
+  isHexPrefixed(_string)
     ? _string
-    : PREFIX + _string
+    : HEX_PREFIX + _string
 
 /**
  * @param {String} _string
  */
-const alwaysWithoutPrefix = _string =>
-  is0xPrefixed(_string)
+const removeHexPrefix = _string =>
+  isHexPrefixed(_string)
     ? _string.substr(2)
     : _string
 
@@ -68,8 +68,8 @@ const getGasLimit = _web3 =>
 /**
  * @param {String} _string
  */
-const is0xPrefixed = _string =>
-  _string.slice(0, 2) === PREFIX
+const isHexPrefixed = _string =>
+  _string.slice(0, 2) === HEX_PREFIX
 
 /**
  * @param {Object} _web3
@@ -184,13 +184,13 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
   })
 
 export {
-  alwaysWithPrefix,
-  alwaysWithoutPrefix,
+  addHexPrefix,
+  removeHexPrefix,
   correctFormat,
   getAccount,
   getContract,
   getGasLimit,
-  is0xPrefixed,
+  isHexPrefixed,
   makeContractCall,
   makeContractSend
 }

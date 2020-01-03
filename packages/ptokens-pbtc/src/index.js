@@ -36,11 +36,11 @@ class pBTC {
       this.web3 = new Web3(ethProvider)
 
       const account = this.web3.eth.accounts.privateKeyToAccount(
-        utils.eth.alwaysWithPrefix(ethPrivateKey)
+        utils.eth.addHexPrefix(ethPrivateKey)
       )
 
       this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = utils.eth.alwaysWithPrefix(ethPrivateKey)
+      this.ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
       this.isWeb3Injected = false
     }
 
@@ -90,7 +90,7 @@ class pBTC {
       : bitcoin.networks.testnet
 
     const ethAddressBuf = Buffer.from(
-      utils.eth.alwaysWithoutPrefix(_ethAddress),
+      utils.eth.removeHexPrefix(_ethAddress),
       'hex'
     )
     const nonceBuf = utils.converters.encodeUint64le(_deposit.nonce)

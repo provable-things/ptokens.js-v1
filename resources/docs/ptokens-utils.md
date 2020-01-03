@@ -14,12 +14,12 @@ npm install ptokens-utils
 
 ## utils.eth
 
-* __`alwaysWithPrefix`__
+* __`addHexPrefix`__
 * __`correctFormat`__
 * __`getAccount`__
 * __`getContract`__
 * __`getGasLimit`__
-* __`is0xPrefixed`__
+* __`isHexPrefixed`__
 * __`makeContractCall`__
 * __`makeContractSend`__
 * __`makeTransaction`__
@@ -28,10 +28,10 @@ npm install ptokens-utils
 ***
 
 
-## eth.alwaysWithPrefix
+## eth.addHexPrefix
 
 ```js
-ptokens.utils.eth.alwaysWithPrefix(text)
+ptokens.utils.eth.addHexPrefix(text)
 ```
 
 Returns a string always `0x` prefixed
@@ -46,7 +46,7 @@ Returns a string always `0x` prefixed
 
 ### Example
 ```js
-const res = utils.eth.alwaysWithPrefix('hello') //0xhello
+const res = utils.eth.addHexPrefix('hello') //0xhello
 ```
 
 &nbsp;
@@ -54,7 +54,7 @@ const res = utils.eth.alwaysWithPrefix('hello') //0xhello
 ## eth.correctFormat
 
 ```js
-ptokens.utils.eth.alwaysWithPrefix(amount, decimals, operation)
+ptokens.utils.eth.addHexPrefix(amount, decimals, operation)
 ```
 
 Returns a number equal to the `amount` divied/multiplied (`operation`) by `decimals` (useful for erc20 tokens).
@@ -149,10 +149,10 @@ const gasLimit = await utils.eth.getGasLimit(web3)
 
 &nbsp;
 
-## eth.is0xPrefixed
+## eth.isHexPrefixed
 
 ```js
-ptokens.utils.eth.is0xPrefixed(text)
+ptokens.utils.eth.isHexPrefixed(text)
 ```
 
 Check if a given string (`text`) is `0x` prefixed
@@ -167,7 +167,7 @@ Check if a given string (`text`) is `0x` prefixed
 
 ### Example
 ```js
-const is0xPrefixed = await utils.eth.is0xPrefixed('0xhello') //true
+const isHexPrefixed = await utils.eth.isHexPrefixed('0xhello') //true
 ```
 
 &nbsp;
