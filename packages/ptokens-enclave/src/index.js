@@ -21,9 +21,6 @@ class Enclave {
     this.api = getApi(this.pToken)
   }
 
-  /**
-   * @param {String} _pToken
-   */
   ping() {
     return makeApiCall(
       this.api,
@@ -118,6 +115,20 @@ class Enclave {
       'POST',
       `/${this.pToken}/submit-${_type}-block`,
       _block
+    )
+  }
+
+  /**
+   * @param {String} _type
+   * @param {String} _path
+   * @param {Object} [_data = null]
+   */
+  generic(_type, _path, _data = null) {
+    return makeApiCall(
+      this.api,
+      _type,
+      `/${this.pToken}/${_path}`,
+      _data
     )
   }
 }
