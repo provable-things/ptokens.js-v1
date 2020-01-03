@@ -7,7 +7,7 @@ const alwaysWithPrefix = _string =>
   is0xPrefixed(_string)
     ? _string
     : PREFIX + _string
-  
+
 /**
  * @param {String} _string
  */
