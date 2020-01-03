@@ -25,7 +25,7 @@ const encodeUint64le = number => {
   return buffer
 }
 
-module.exports = {
+export {
   decodeUint64le,
   encodeUint64le
 }
