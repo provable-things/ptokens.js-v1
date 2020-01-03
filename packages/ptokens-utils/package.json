@@ -17,8 +17,8 @@
     "chai": "^4.2.0",
     "eosjs": "^20.0.0",
     "light-async-polling": "^1.0.2",
-    "web3": "^1.2.2",
-    "text-encoding": "^0.7.0"
+    "text-encoding": "^0.7.0",
+    "web3": "^1.2.2"
   },
   "devDependencies": {
     "jest": "^24.8.0"
