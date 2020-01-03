@@ -26,9 +26,7 @@ test('Should generate an error because of invalid pToken name', async () => {
   const expectedErrorMessage = 'Invalid pToken'
 
   try {
-    const enclave = new Enclave({
-      pToken: invalidpTokenName
-    })
+    new Enclave({ pToken: invalidpTokenName })
   } catch (err) {
     expect(err.message)
       .to.be.equal(expectedErrorMessage)
