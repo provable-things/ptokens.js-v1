@@ -19,7 +19,6 @@
     "light-async-polling": "^1.0.2",
     "ptokens-enclave": "0.0.1",
     "ptokens-utils": "0.0.1",
-    "text-encoding": "^0.7.0",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1",
     "web3-utils": "^1.2.4"
