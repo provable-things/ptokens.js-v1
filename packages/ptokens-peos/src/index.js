@@ -34,7 +34,9 @@ class pEOS {
       eosProvider
     } = _configs
 
-    this.enclave = new Enclave()
+    this.enclave = new Enclave({
+      pToken: 'peos'
+    })
 
     if (web3) {
       this.isWeb3Injected = true
