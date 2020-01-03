@@ -25,6 +25,14 @@ test('Should return the 0x prefixed string', () => {
     .to.be.equal(expectedString0xPrefixed)
 })
 
+test('Should remove the 0x prefix', () => {
+  const string0xPrefixed = '0xhello'
+  const expectedStringnnNot0xPrefixed = 'hello'
+  const result = utils.eth.alwaysWithoutPrefix(string0xPrefixed)
+  expect(result)
+    .to.be.equal(expectedStringnnNot0xPrefixed)
+})
+
 test('Should return the correct Ethereum offchain format', () => {
   const onChainAmount = 10000
   const decimals = 4

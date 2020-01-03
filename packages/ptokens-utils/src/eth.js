@@ -7,6 +7,14 @@ const alwaysWithPrefix = _string =>
   is0xPrefixed(_string)
     ? _string
     : PREFIX + _string
+  
+/**
+ * @param {String} _string
+ */
+const alwaysWithoutPrefix = _string =>
+  is0xPrefixed(_string)
+    ? _string.substr(2)
+    : _string
 
 /**
  *
@@ -177,6 +185,7 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
 
 export {
   alwaysWithPrefix,
+  alwaysWithoutPrefix,
   correctFormat,
   getAccount,
   getContract,
