@@ -45,9 +45,9 @@ const _getEndpoint = _pToken => {
  * @param {String} _apiPath
  * @param {Object} _params
  */
-const makeApiCall = (_api, _callType, _apiPath, _params) =>
+const makeApiCall = (_api, _callType, _apiPath, _params = null) =>
   new Promise((resolve, reject) =>
-    _api[_callType.toLowerCase()](_apiPath)
+    _api[_callType.toLowerCase()](_apiPath, _params)
       .then(_res => resolve(_res.data))
       .catch(_err => reject(_err)))
 

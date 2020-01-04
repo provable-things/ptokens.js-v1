@@ -25,8 +25,7 @@ class Enclave {
     return makeApiCall(
       this.api,
       'GET',
-      `/${this.pToken}/ping`,
-      null
+      `/${this.pToken}/ping`
     )
   }
 
@@ -37,8 +36,7 @@ class Enclave {
   getReports(_type, _limit = REPORT_LIMIT) {
     return makeApiCall(
       this.api,
-      'GET', `/${this.pToken}/${_type}-reports/limit/${_limit}`,
-      null
+      'GET', `/${this.pToken}/${_type}-reports/limit/${_limit}`
     )
   }
 
@@ -51,8 +49,7 @@ class Enclave {
     return makeApiCall(
       this.api,
       'GET',
-      `${this.pToken}/${_type}-address/${_address}/limit/${_limit}`,
-      null
+      `${this.pToken}/${_type}-address/${_address}/limit/${_limit}`
     )
   }
 
@@ -64,8 +61,7 @@ class Enclave {
     return makeApiCall(
       this.api,
       'GET',
-      `/${this.pToken}/report/${_type}/nonce/${_nonce}`,
-      null
+      `/${this.pToken}/report/${_type}/nonce/${_nonce}`
     )
   }
 
@@ -76,8 +72,7 @@ class Enclave {
     return makeApiCall(
       this.api,
       'GET',
-      `${this.pToken}/last-processed-${_type}-block`,
-      null
+      `${this.pToken}/last-processed-${_type}-block`
     )
   }
 
@@ -88,8 +83,7 @@ class Enclave {
     return makeApiCall(
       this.api,
       'GET',
-      `${this.pToken}/incoming-tx-hash/${_hash}`,
-      null
+      `${this.pToken}/incoming-tx-hash/${_hash}`
     )
   }
 
@@ -100,8 +94,7 @@ class Enclave {
     return makeApiCall(
       this.api,
       'GET',
-      `${this.pToken}/broadcast-tx-hash/${_hash}`,
-      null
+      `${this.pToken}/broadcast-tx-hash/${_hash}`
     )
   }
 
