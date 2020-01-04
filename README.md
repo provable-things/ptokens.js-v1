@@ -53,7 +53,7 @@ if (window.web3) {
   const ptokens = new pTokens({
     peos: {
       web3,
-      eosjs //for instance
+      eosjs
     },
     pbtc: {
       web3,
