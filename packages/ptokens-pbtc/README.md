@@ -20,7 +20,7 @@ npm install ptokens-pbtc
 
 &nbsp;
 
-### Usage without injected Web3
+### Usage 
 
 ```js
 const pBTC = require('ptokens-pbtc')
@@ -32,7 +32,7 @@ const pbtc = new pBTC({
 })
 ```
 
-### Usage with injected Web3
+Instead of using __`ethPrivateKey`__ and __`ethProvider` it is possible to pass as a parameter an instance of web3 eosjs (eg. the Web3 instance injected by Metamask).
 
 ```js
 const pBTC = require('ptokens-pbtc')
