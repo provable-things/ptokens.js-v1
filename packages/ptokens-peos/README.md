@@ -20,7 +20,7 @@ npm install ptokens-peos
 
 &nbsp;
 
-### Usage without injected Web3 and Eosjs
+### Usage
 
 ```js
 const pEOS = require('ptokens-peos')
@@ -33,7 +33,7 @@ const peos = new pEOS({
 })
 ```
 
-### Usage with injected Web3 and/or EosJs
+Instead of using __`ethPrivateKey`__ and __`ethProvider`__ and/or __`eosPrivateKey`__ and __`eosProvider`__ it is possible to pass as a parameter an instance of web3 and/or eosjs (eg. the Web3 instance injected by Metamask).
 
 ```js
 const pEOS = require('ptokens-peos')
@@ -44,7 +44,7 @@ if (window.web3) {
 
   const peos = new pEOS({
     web3,
-    eosjs //already initialized eosjs instance
+    eosjs
   })
 } else {
   console.log('No web3 detected')
