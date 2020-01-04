@@ -20,7 +20,7 @@ npm install ptokens-peos
 
 &nbsp;
 
-### Usage
+### Usage:
 
 ```js
 const pEOS = require('ptokens-peos')

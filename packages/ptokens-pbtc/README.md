@@ -20,7 +20,7 @@ npm install ptokens-pbtc
 
 &nbsp;
 
-### Usage 
+### Usage:
 
 ```js
 const pBTC = require('ptokens-pbtc')

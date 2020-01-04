@@ -22,7 +22,7 @@ npm install ptokens
 
 &nbsp;
 
-### :zap: Usage  
+### :zap: Usage : 
 
 ```js
 const pTokens = require('ptokens')
