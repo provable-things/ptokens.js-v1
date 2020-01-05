@@ -32,7 +32,7 @@ const pbtc = new pBTC({
 })
 ```
 
-Instead of using __`ethPrivateKey`__ and __`ethProvider` it is possible to pass as a parameter an instance of web3 eosjs (eg. the Web3 instance injected by Metamask).
+Instead of using __`ethPrivateKey`__ and __`ethProvider`__ it is possible to pass as a parameter an instance of web3 eosjs (eg. the Web3 instance injected by Metamask).
 
 ```js
 const pBTC = require('ptokens-pbtc')

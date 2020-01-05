@@ -4,14 +4,15 @@ import Enclave from 'ptokens-enclave'
 import utils from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import * as bitcoin from 'bitcoinjs-lib'
+import Esplora from './utils/esplora'
+import polling from 'light-async-polling'
 import {
-  PBTC_MAINNET,
-  PBTC_TESTNET
+  ESPLORA_POLLING_TIME
 } from './utils/constants'
 
 class pBTC {
   /**
-   * @param {Object} _configs 
+   * @param {Object} _configs
    */
   constructor(_configs) {
     const {
@@ -44,30 +45,24 @@ class pBTC {
       this.isWeb3Injected = false
     }
 
-    switch (btcNetwork) {
-      case PBTC_MAINNET: {
-        this.btcNetwork = PBTC_MAINNET
-        break
-      }
-      case PBTC_TESTNET: {
-        this.btcNetwork = PBTC_TESTNET
-        break
-      }
-      default: {
-        this.btcNetwork = PBTC_TESTNET
-        break
-      }
-    }
+    if (
+      btcNetwork === 'bitcoin' ||
+      btcNetwork === 'testnet'
+    )
+      this.btcNetwork = btcNetwork
+    else
+      this.btcNetwork = 'testnet'
+
+    this.esplora = new Esplora(this.btcNetwork)
   }
 
   /**
-   * @param {String} _ethAddress 
+   * @param {String} _ethAddress
    */
   async getDepositAddress(_ethAddress) {
-    if (!Web3Utils.isAddress(_ethAddress)) {
+    if (!Web3Utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
-    }
-    
+
     const deposit = await this.enclave.generic(
       'GET',
       `get-btc-deposit-address/${this.btcNetwork}/${_ethAddress}`
@@ -80,12 +75,11 @@ class pBTC {
   }
 
   /**
-   * @param {Number} _deposit 
+   * @param {Number} _deposit
    * @param {String} _ethAdress
    */
   verifyDepositAddress(_deposit, _ethAddress) {
-
-    const network = this.btcNetwork === PBTC_MAINNET
+    const network = this.btcNetwork === bitcoin
       ? bitcoin.networks.mainnet
       : bitcoin.networks.testnet
 
@@ -95,18 +89,18 @@ class pBTC {
     )
     const nonceBuf = utils.converters.encodeUint64le(_deposit.nonce)
     const enclavePublicKeyBuf = Buffer.from(_deposit.enclavePublicKey, 'hex')
-      
+
     const ethAddressAndNonceHashBuf = bitcoin.crypto.hash256(
       Buffer.concat([ethAddressBuf, nonceBuf])
     )
 
-    const output = bitcoin.script.compile([].concat( 
+    const output = bitcoin.script.compile([].concat(
       ethAddressAndNonceHashBuf,
       bitcoin.opcodes.OP_DROP,
       enclavePublicKeyBuf,
       bitcoin.opcodes.OP_CHECKSIG
     ))
-      
+
     const p2sh = bitcoin.payments.p2sh(
       {
         redeem: {
@@ -116,8 +110,55 @@ class pBTC {
         network
       }
     )
-    
+
     return p2sh.address === _deposit.btcDepositAddress
+  }
+
+  /**
+   * @param {String} _depositAddress
+   */
+  monitorIssueByDepositAddress(_depositAddress) {
+    const promiEvent = Web3PromiEvent()
+
+    const start = async () => {
+      let isBroadcasted = false
+      await polling(async () => {
+        const txs = await this.esplora.makeApiCall(
+          'GET',
+          `/address/${_depositAddress}/txs/mempool`
+        )
+
+        if (txs.length > 0) {
+          isBroadcasted = true
+          promiEvent.eventEmitter.emit('onBtcTxBroadcasted', txs[0].txid)
+          return false
+        }
+
+        const utxos = await this.esplora.makeApiCall(
+          'GET',
+          `/address/${_depositAddress}/utxo`
+        )
+
+        // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
+
+        if (utxos.length > 0) {
+          if (!isBroadcasted)
+            promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0].txid)
+
+          promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0].txid)
+          return true
+        } else {
+          return false
+        }
+      }, ESPLORA_POLLING_TIME)
+
+      // TODO: check the enclave issuing status
+
+      promiEvent.resolve() // TODO: choose params to return
+    }
+
+    start()
+    return promiEvent.eventEmitter
   }
 }
 
