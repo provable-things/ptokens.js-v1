@@ -62,7 +62,7 @@ test('Should monitor an issuing of pBTC', async () => {
   const amountToSend = 1
   const minerFee = 1000
 
-  // get utxo with the max value
+  // get utxo with the min value
   let min = Math.pow(2, 32)
   let utxoToSpend = null
   for (let utxo of utxos) {
