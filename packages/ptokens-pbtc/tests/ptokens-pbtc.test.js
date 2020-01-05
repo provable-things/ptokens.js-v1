@@ -11,8 +11,8 @@ import Esplora from '../src/utils/esplora'
 
 const ETH_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
-const privateKey = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
-const btcAddress = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
+const BTC_PRIVATE_KEY = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+const BTC_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
 jest.setTimeout(3000000)
 
@@ -50,13 +50,13 @@ test('Should monitor an issuing of pBTC', async () => {
   const depositAddress = await pbtc.getDepositAddress(ETH_ADDRESS)
 
   const key = bitcoin.ECPair.fromPrivateKey(
-    Buffer.from(privateKey, 'hex'),
+    Buffer.from(BTC_PRIVATE_KEY, 'hex'),
     bitcoin.networks.testnet
   )
 
   const utxos = await esplora.makeApiCall(
     'GET',
-    `/address/${btcAddress}/utxo`
+    `/address/${BTC_ADDRESS}/utxo`
   )
 
   const amountToSend = 1
@@ -94,7 +94,7 @@ test('Should monitor an issuing of pBTC', async () => {
 
   // NOTE: address reuse for facilitating tests
   psbt.addOutput({
-    address: btcAddress,
+    address: BTC_ADDRESS,
     value: utxoToSpend.value - minerFee - amountToSend
   })
 
