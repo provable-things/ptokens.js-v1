@@ -183,6 +183,8 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
     }
   })
 
+const zeroEther = '0x00'
+
 export {
   addHexPrefix,
   removeHexPrefix,
@@ -192,5 +194,6 @@ export {
   getGasLimit,
   isHexPrefixed,
   makeContractCall,
-  makeContractSend
+  makeContractSend,
+  zeroEther
 }
