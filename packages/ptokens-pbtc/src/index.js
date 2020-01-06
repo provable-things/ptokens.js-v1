@@ -78,7 +78,7 @@ class pBTC {
       enclavePublicKey: deposit.enclavePublicKey,
       value: deposit.btcDepositAddress,
       btcNetwork: this.btcNetwork,
-      esplora: this.esplora,
+      esplora: this.esplora
     })
 
     if (!depositAddress.verify())
@@ -153,7 +153,7 @@ class pBTC {
 
         await polling(async () => {
 
-          //TODO: check bitcoin tx status
+          // TODO: check bitcoin tx status
         }, ESPLORA_POLLING_TIME)
 
         promiEvent.resolve({
@@ -169,7 +169,6 @@ class pBTC {
     start()
     return promiEvent.eventEmitter
   }
-
 }
 
 export default pBTC

@@ -8,10 +8,9 @@ import {
 
 class DepositAddress {
   /**
-   * @param {Object} _params 
+   * @param {Object} _params
    */
   constructor(_params) {
-
     const {
       ethAddress,
       nonce,
@@ -73,9 +72,8 @@ class DepositAddress {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
-
       if (!this._value)
-      promiEvent.reject('Please provide a deposit address')
+        promiEvent.reject('Please provide a deposit address')
 
       let isBroadcasted = false
       await polling(async () => {
