@@ -14,8 +14,7 @@ import {
   MINIMUM_MINTABLE_PEOS_AMOUNT,
   PEOS_TOKEN_DECIMALS,
   PEOS_EOS_CONTRACT_ACCOUNT,
-  PEOS_ETH_CONTRACT_ADDRESS,
-  ZERO_ETHER
+  PEOS_ETH_CONTRACT_ADDRESS
 } from './utils/constants'
 import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
 import polling from 'light-async-polling'
@@ -124,7 +123,6 @@ class pEOS {
 
         await polling(async () => {
           const ethTxReceipt = await this.web3.eth.getTransactionReceipt(broadcastedTx)
-          console.log(ethTxReceipt)
           if (!ethTxReceipt) {
             return false
           } else if (ethTxReceipt.status) {
@@ -176,7 +174,7 @@ class pEOS {
             abi: peosAbi,
             contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
             privateKey: this.ethPrivateKey,
-            value: ZERO_ETHER
+            value: utils.eth.zeroEther
           },
           [
             utils.eth.correctFormat(
@@ -359,7 +357,7 @@ class pEOS {
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
         privateKey: this.ethPrivateKey,
-        value: ZERO_ETHER
+        value: utils.eth.zeroEther
       },
       [
         _to,
@@ -385,7 +383,7 @@ class pEOS {
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
         privateKey: this.ethPrivateKey,
-        value: ZERO_ETHER
+        value: utils.eth.zeroEther
       },
       [
         _spender,
@@ -412,7 +410,7 @@ class pEOS {
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
         privateKey: this.ethPrivateKey,
-        value: ZERO_ETHER
+        value: utils.eth.zeroEther
       },
       [
         _from,
