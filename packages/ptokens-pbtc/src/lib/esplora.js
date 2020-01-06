@@ -1,7 +1,4 @@
 import axios from 'axios'
-import {
-  PBTC_MAINNET
-} from './constants'
 
 const BLOCKSTREAM_BASE_TESTNET_ENDPOINT = 'https://blockstream.info/testnet/api/'
 const BLOCKSTREAM_BASE_MAINNET_ENDPOINT = 'https://blockstream.info/api/'
@@ -11,7 +8,7 @@ class Esplora {
    * @param {String} _network
    */
   constructor(_network) {
-    const endpoint = _network === PBTC_MAINNET
+    const endpoint = _network === 'bitcoin'
       ? BLOCKSTREAM_BASE_MAINNET_ENDPOINT
       : BLOCKSTREAM_BASE_TESTNET_ENDPOINT
 
