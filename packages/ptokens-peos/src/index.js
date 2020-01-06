@@ -17,7 +17,7 @@ import {
   PEOS_ETH_CONTRACT_ADDRESS,
   ZERO_ETHER
 } from './utils/constants'
-import peosAbi from './contractAbi/pEOSTokenETHContractAbi.json'
+import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
 import polling from 'light-async-polling'
 
 class pEOS {
@@ -124,6 +124,7 @@ class pEOS {
 
         await polling(async () => {
           const ethTxReceipt = await this.web3.eth.getTransactionReceipt(broadcastedTx)
+          console.log(ethTxReceipt)
           if (!ethTxReceipt) {
             return false
           } else if (ethTxReceipt.status) {
