@@ -33,7 +33,7 @@ const peos = new pEOS({
 })
 ```
 
-Instead of using __`ethPrivateKey`__ and __`ethProvider`__ and/or __`eosPrivateKey`__ and __`eosProvider`__ it is possible to pass as a parameter an instance of web3 and/or eosjs (eg. the Web3 instance injected by Metamask).
+Instead of using __`ethPrivateKey`__ and __`ethProvider`__ and/or __`eosPrivateKey`__ and __`eosProvider`__ it is possible to pass as a parameter an instance of __`Web3`__ and/or __`eosjs`__, for example an initialized instance of __`Web3`__ having as provider the one injected by Metamask (__`window.web3.currentProvider`__).
 
 ```js
 const pEOS = require('ptokens-peos')
