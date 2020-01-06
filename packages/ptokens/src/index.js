@@ -7,7 +7,6 @@ class pTokens {
    * @param {Object} _configs
    */
   constructor(_configs) {
-
     const {
       peos,
       pbtc
@@ -15,7 +14,7 @@ class pTokens {
 
     if (peos)
       this.peos = new pEOS(peos)
-    
+
     if (pbtc)
       this.pbtc = new pBTC(pbtc)
 
