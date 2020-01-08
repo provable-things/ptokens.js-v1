@@ -31,10 +31,10 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
     btcNetwork: 'testnet'
   })
 
-  const invalidETH_TESTING_ADDRESS = 'Invalid Eth Address'
+  const invalidEthAddress = 'Invalid Eth Address'
 
   try {
-    await pbtc.getDepositAddress(invalidETH_TESTING_ADDRESS)
+    await pbtc.getDepositAddress(invalidEthAddress)
   } catch (err) {
     expect(err.message).to.be.equal('Eth Address is not valid')
   }
