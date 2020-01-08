@@ -79,7 +79,8 @@ class pBTC {
       enclavePublicKey: deposit.enclavePublicKey,
       value: deposit.btcDepositAddress,
       btcNetwork: this.btcNetwork,
-      esplora: this.esplora
+      esplora: this.esplora,
+      enclave: this.enclave
     })
 
     if (!depositAddress.verify())
