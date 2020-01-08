@@ -16,11 +16,10 @@ class Esplora {
       baseURL: endpoint,
       timeout: 50000,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Content-Type': 'application/json'
+        'Content-Type': 'text/plain'
       }
     })
+
   }
 
   /**

@@ -3,7 +3,9 @@ import * as bitcoin from 'bitcoinjs-lib'
 import polling from 'light-async-polling'
 import utils from 'ptokens-utils'
 import {
-  ESPLORA_POLLING_TIME
+  ESPLORA_POLLING_TIME,
+  ENCLAVE_POLLING_TIME,
+  ETH_NODE_POLLING_TIME_INTERVAL
 } from '../utils/constants'
 
 class DepositAddress {
@@ -17,7 +19,8 @@ class DepositAddress {
       enclavePublicKey,
       value,
       btcNetwork,
-      esplora
+      esplora,
+      enclave
     } = _params
 
     this.ethAddress = ethAddress
@@ -26,6 +29,7 @@ class DepositAddress {
     this._value = value
     this._btcNetwork = btcNetwork
     this._esplora = esplora
+    this._enclave = enclave
   }
 
   toString() {
@@ -76,6 +80,7 @@ class DepositAddress {
         promiEvent.reject('Please provide a deposit address')
 
       let isBroadcasted = false
+      let polledUtxo = null
       await polling(async () => {
         const txs = await this._esplora.makeApiCall(
           'GET',
@@ -100,13 +105,47 @@ class DepositAddress {
             promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0].txid)
 
           promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0].txid)
+          polledUtxo = utxos[0].txid
           return true
         } else {
           return false
         }
       }, ESPLORA_POLLING_TIME)
 
-      // TODO: check the enclave issuing status
+      let broadcastedEthTx = null
+      let isSeen = false
+      await polling(async () => {
+        const incomingTxStatus = await this._enclave.getIncomingTransactionStatus(polledUtxo)
+
+        if (incomingTxStatus.broadcast === false && !isSeen) {
+          promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+          isSeen = true
+          return false
+        } else if (incomingTxStatus.broadcast === true) {
+          if (!isSeen)
+            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+
+          promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
+          broadcastedEthTx = incomingTxStatus.eth_tx_hash
+          return true
+        } else {
+          return false
+        }
+      }, ENCLAVE_POLLING_TIME)
+
+      
+      await polling(async () => {
+        const ethTxReceipt = await this.web3.eth.getTransactionReceipt(broadcastedEthTx)
+
+        if (!ethTxReceipt) {
+          return false
+        } else if (ethTxReceipt.status) {
+          promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+          return true
+        } else {
+          return false
+        }
+      }, ETH_NODE_POLLING_TIME_INTERVAL)
 
       promiEvent.resolve() // TODO: choose params to return
     }
