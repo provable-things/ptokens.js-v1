@@ -1,11 +1,10 @@
 import pBTC from '../src/index'
 import { expect } from 'chai'
-import * as bitcoin from 'bitcoinjs-lib'
 import { sendBitcoin } from './utils'
 
 const configs = {
   ethPrivateKey: '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
-  ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+  ethProvider: 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6',
   btcNetwork: 'testnet'
 }
 // corresponsing eth address = 0xdf3B180694aB22C577f7114D822D28b92cadFd75
@@ -32,10 +31,10 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
     btcNetwork: 'testnet'
   })
 
-  const invalidEthAddress = 'Invalid Eth Address'
+  const invalidETH_TESTING_ADDRESS = 'Invalid Eth Address'
 
   try {
-    await pbtc.getDepositAddress(invalidEthAddress)
+    await pbtc.getDepositAddress(invalidETH_TESTING_ADDRESS)
   } catch (err) {
     expect(err.message).to.be.equal('Eth Address is not valid')
   }
@@ -46,7 +45,7 @@ test('Should monitor an issuing of 1 pBTC', async () => {
     btcNetwork: 'testnet'
   })
 
-  const amountToIssue = 1
+  const amountToIssue = 500
   const minerFees = 1000
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -77,7 +76,8 @@ test('Should monitor an issuing of 1 pBTC', async () => {
 test('Should redeem 1 pBTC', async () => {
   const pbtc = new pBTC(configs)
 
-  const amountToRedeem = 1
+  // minimum amount to redeem = 100 sats (0.000001 * 10^8)
+  const amountToRedeem = 0.000001
 
   let ethTxIsConfirmed = false
   let enclaveHasReceivedTx = false
