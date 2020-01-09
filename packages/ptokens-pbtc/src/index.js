@@ -80,7 +80,8 @@ class pBTC {
       value: deposit.btcDepositAddress,
       btcNetwork: this.btcNetwork,
       esplora: this.esplora,
-      enclave: this.enclave
+      enclave: this.enclave,
+      web3: this.web3
     })
 
     if (!depositAddress.verify())

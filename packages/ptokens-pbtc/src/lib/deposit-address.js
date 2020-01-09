@@ -20,7 +20,8 @@ class DepositAddress {
       value,
       btcNetwork,
       esplora,
-      enclave
+      enclave,
+      web3
     } = _params
 
     this.ethAddress = ethAddress
@@ -30,6 +31,7 @@ class DepositAddress {
     this._btcNetwork = btcNetwork
     this._esplora = esplora
     this._enclave = enclave
+    this._web3 = web3
   }
 
   toString() {
@@ -89,7 +91,7 @@ class DepositAddress {
 
         if (txs.length > 0) {
           isBroadcasted = true
-          promiEvent.eventEmitter.emit('onBtcTxBroadcasted', txs[0].txid)
+          promiEvent.eventEmitter.emit('onBtcTxBroadcasted', txs[0])
           return false
         }
 
@@ -102,10 +104,10 @@ class DepositAddress {
 
         if (utxos.length > 0) {
           if (!isBroadcasted)
-            promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0].txid)
+            promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
 
-          promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0].txid)
-          polledUtxo = utxos[0].txid
+          promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0])
+          polledUtxo = utxos[0]
           return true
         } else {
           return false
@@ -135,7 +137,7 @@ class DepositAddress {
 
       
       await polling(async () => {
-        const ethTxReceipt = await this.web3.eth.getTransactionReceipt(broadcastedEthTx)
+        const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedEthTx)
 
         if (!ethTxReceipt) {
           return false

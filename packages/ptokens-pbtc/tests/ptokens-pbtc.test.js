@@ -41,9 +41,7 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
 })
 
 test('Should monitor an issuing of 1 pBTC', async () => {
-  const pbtc = new pBTC({
-    btcNetwork: 'testnet'
-  })
+  const pbtc = new pBTC(configs)
 
   const amountToIssue = 500
   const minerFees = 1000
@@ -60,17 +58,26 @@ test('Should monitor an issuing of 1 pBTC', async () => {
 
   let btcTxIsBroadcasted = false
   let btcTxIsConfirmed = false
+  let enclaveHasReceivedTx = false
+  let enclaveHasBroadcastedTx = false
+  let ethTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
       depositAddress.waitForDeposit()
         .once('onBtcTxBroadcasted', () => { btcTxIsBroadcasted = true })
         .once('onBtcTxConfirmed', () => { btcTxIsConfirmed = true })
+        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
+        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
+        .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
         .then(() => resolve())
     })
   await start()
 
   expect(btcTxIsBroadcasted).to.equal(true)
   expect(btcTxIsConfirmed).to.equal(true)
+  expect(enclaveHasReceivedTx).to.equal(true)
+  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(ethTxIsConfirmed).to.equal(true)
 })
 
 test('Should redeem 1 pBTC', async () => {
