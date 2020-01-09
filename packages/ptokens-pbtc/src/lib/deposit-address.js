@@ -149,7 +149,10 @@ class DepositAddress {
         }
       }, ETH_NODE_POLLING_TIME_INTERVAL)
 
-      promiEvent.resolve() // TODO: choose params to return
+      promiEvent.resolve({
+        to: this._ethAddress,
+        tx: broadcastedEthTx
+      })
     }
 
     start()
