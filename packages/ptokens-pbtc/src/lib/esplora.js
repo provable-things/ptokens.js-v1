@@ -19,7 +19,6 @@ class Esplora {
         'Content-Type': 'text/plain'
       }
     })
-
   }
 
   /**

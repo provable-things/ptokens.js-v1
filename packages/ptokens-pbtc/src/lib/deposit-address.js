@@ -135,7 +135,6 @@ class DepositAddress {
         }
       }, ENCLAVE_POLLING_TIME)
 
-      
       await polling(async () => {
         const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedEthTx)
 
