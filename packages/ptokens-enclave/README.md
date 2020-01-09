@@ -25,5 +25,7 @@ npm install ptokens-enclave
 ```js
 import Enclave from 'ptokens-enclave'
 
-const enclave = new Enclave()
+const enclave = new Enclave({
+  pToken 'pToken type' // pEOS or pBTC (for now)
+})
 ```
