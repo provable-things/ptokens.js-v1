@@ -25,25 +25,23 @@ npm install ptokens-pbtc
 ```js
 const pBTC = require('ptokens-pbtc')
 
-const pbtc = new pBTC({
+const pbtc = new pEOS({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
-  btcNetwork: 'testnet' // 'testnet' or 'bitcoin', default 'testnet'
+  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
 })
 ```
-
-Instead of using __`ethPrivateKey`__ and __`ethProvider`__ it is possible to pass as a parameter an instance of web3 eosjs (eg. the Web3 instance injected by Metamask).
+It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
+into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
 const pBTC = require('ptokens-pbtc')
 
 if (window.web3) {
   
-  const web3 = new Web3(window.web3.currentProvider)
-
   const pbtc = new pBTC({
-    web3,
-    btcNetwork: 'testnet' // 'testnet' or 'bitcoin', default 'testnet'
+    ethProvider: window.web3.currentProvider,
+    btcNetwork: 'testnet'
   })
 } else {
   console.log('No web3 detected')
