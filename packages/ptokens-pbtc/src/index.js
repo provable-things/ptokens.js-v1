@@ -30,31 +30,31 @@ class pBTC {
       pToken: 'pbtc'
     })
 
-    this.web3 = new Web3(ethProvider)
+    this._web3 = new Web3(ethProvider)
 
     if (ethPrivateKey) {
-      this.isWeb3Injected = false
-      const account = this.web3.eth.accounts.privateKeyToAccount(
+      this._isWeb3Injected = false
+      const account = this._web3.eth.accounts.privateKeyToAccount(
         utils.eth.addHexPrefix(ethPrivateKey)
       )
 
-      this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
-      this.isWeb3Injected = false
+      this._web3.eth.defaultAccount = account.address
+      this._ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
+      this._isWeb3Injected = false
     } else {
-      this.isWeb3Injected = true
-      this.ethPrivateKey = null
+      this._isWeb3Injected = true
+      this._ethPrivateKey = null
     }
 
     if (
       btcNetwork === 'bitcoin' ||
       btcNetwork === 'testnet'
     )
-      this.btcNetwork = btcNetwork
+      this._btcNetwork = btcNetwork
     else
-      this.btcNetwork = 'testnet'
+      this._btcNetwork = 'testnet'
 
-    this.esplora = new Esplora(this.btcNetwork)
+    this._esplora = new Esplora(this._btcNetwork)
   }
 
   /**
@@ -66,7 +66,7 @@ class pBTC {
 
     const deposit = await this.enclave.generic(
       'GET',
-      `get-btc-deposit-address/${this.btcNetwork}/${_ethAddress}`
+      `get-btc-deposit-address/${this._btcNetwork}/${_ethAddress}`
     )
 
     const depositAddress = new DepositAddress({
@@ -74,10 +74,10 @@ class pBTC {
       nonce: deposit.nonce,
       enclavePublicKey: deposit.enclavePublicKey,
       value: deposit.btcDepositAddress,
-      btcNetwork: this.btcNetwork,
-      esplora: this.esplora,
+      btcNetwork: this._btcNetwork,
+      esplora: this._esplora,
       enclave: this.enclave,
-      web3: this.web3
+      web3: this._web3
     })
 
     if (!depositAddress.verify())
@@ -106,13 +106,13 @@ class pBTC {
 
       try {
         const ethTxReceipt = await utils.eth.makeContractSend(
-          this.web3,
+          this._web3,
           'burn',
           {
-            isWeb3Injected: this.isWeb3Injected,
+            isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
             contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
-            privateKey: this.ethPrivateKey,
+            privateKey: this._ethPrivateKey,
             value: utils.eth.zeroEther
           },
           [
@@ -124,15 +124,14 @@ class pBTC {
             _btcAddress
           ]
         )
-
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const polledTx = ethTxReceipt.transactionHash
+        const txToPoll = ethTxReceipt.transactionHash
         let broadcastedBtcTx = null
         let isSeen = false
 
         await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(polledTx)
+          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
 
           if (incomingTxStatus.broadcast === false && !isSeen) {
             promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
@@ -151,7 +150,7 @@ class pBTC {
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          const status = await this.esplora.makeApiCall(
+          const status = await this._esplora.makeApiCall(
             'GET',
             `/tx/${broadcastedBtcTx}/status`
           )
@@ -181,10 +180,10 @@ class pBTC {
   getTotalIssued() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'totalMinted',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         }
@@ -203,10 +202,10 @@ class pBTC {
   getTotalRedeemed() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'totalBurned',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         }
@@ -225,10 +224,10 @@ class pBTC {
   getCirculatingSupply() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'totalSupply',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         }
@@ -250,10 +249,10 @@ class pBTC {
   getBalance(_ethAddress) {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'balanceOf',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         },
@@ -278,13 +277,13 @@ class pBTC {
    */
   transfer(_to, _amount) {
     return utils.eth.makeContractSend(
-      this.web3,
+      this._web3,
       'transfer',
       {
-        isWeb3Injected: this.isWeb3Injected,
+        isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
         contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey,
+        privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
@@ -304,13 +303,13 @@ class pBTC {
    */
   approve(_spender, _amount) {
     return utils.eth.makeContractSend(
-      this.web3,
+      this._web3,
       'approve',
       {
-        isWeb3Injected: this.isWeb3Injected,
+        isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
         contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey,
+        privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
@@ -331,13 +330,13 @@ class pBTC {
    */
   transferFrom(_from, _to, _amount) {
     return utils.eth.makeContractSend(
-      this.web3,
+      this._web3,
       'transferFrom',
       {
-        isWeb3Injected: this.isWeb3Injected,
+        isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
         contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey,
+        privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
@@ -355,10 +354,10 @@ class pBTC {
   getBurnNonce() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'burnNonce',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         }
@@ -373,10 +372,10 @@ class pBTC {
   getMintNonce() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'mintNonce',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         }
@@ -395,10 +394,10 @@ class pBTC {
   getAllowance(_owner, _spender) {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'allowance',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
           contractAddress: PBTC_ETH_CONTRACT_ADDRESS
         },
