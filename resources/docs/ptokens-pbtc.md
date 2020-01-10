@@ -16,7 +16,7 @@ npm install ptokens-pbtc
 ```js
 const pBTC = require('ptokens-pbtc')
 
-const pbtc = new pEOS({
+const pbtc = new pBTC({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
   btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
@@ -61,7 +61,7 @@ if (window.web3) {
 ## approve
 
 ```js
-ptokens.peos.approve(spender, amount)
+ptokens.pbtc.approve(spender, amount)
 ```
 
 ### Parameters
@@ -69,7 +69,7 @@ ptokens.peos.approve(spender, amount)
 - __`String`__ - __`spender`__: spender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Approve to spend the specified amount of pEOS to the provided Ethereum address by setting the allowance of spender address
+Approve to spend the specified amount of pBTC to the provided Ethereum address by setting the allowance of spender address
 
 ### Returns
 
@@ -77,7 +77,7 @@ Approve to spend the specified amount of pEOS to the provided Ethereum address b
 
 ### Example
 ```js
-ptokens.peos.approve('eth address', 1.3452).then(status => console.log(status))
+ptokens.pbtc.approve('eth address', 1.3452).then(status => console.log(status))
 ```
 
 &nbsp;
@@ -85,7 +85,7 @@ ptokens.peos.approve('eth address', 1.3452).then(status => console.log(status))
 ## getAllowance
 
 ```js
-ptokens.peos.getAllowance(owner, spender)
+ptokens.pbtc.getAllowance(owner, spender)
 ```
 
 ### Parameters
@@ -93,15 +93,15 @@ ptokens.peos.getAllowance(owner, spender)
 - __`String`__ - __`owner`__: Owner Ethereum address
 - __`String`__ - __`spender`__: Spender Ethereum address
 
-Get the remaining number of pEOS that `spender` can spend spend on behalf of `owner` through `transferFrom`
+Get the remaining number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Returns
 
-- __`Number`__ : number of pEOS that `spender` can spend spend on behalf of `owner` through `transferFrom`
+- __`Number`__ : number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Example
 ```js
-ptokens.peos.getAllowance('owner eth address', 'spender eth address').then(allowance => console.log(status))
+ptokens.pbtc.getAllowance('owner eth address', 'spender eth address').then(allowance => console.log(status))
 ```
 
 &nbsp;
@@ -109,14 +109,14 @@ ptokens.peos.getAllowance('owner eth address', 'spender eth address').then(allow
 ## getBalance
 
 ```js
-ptokens.peos.getBalance(address)
+ptokens.pbtc.getBalance(address)
 ```
 
 ### Parameters
 
 - __`String`__ - __`address`__: Ethereum address
 
-Get the current pEOS balance of the provided address
+Get the current pBTC balance of the provided address
 
 
 ### Returns
@@ -125,7 +125,7 @@ Get the current pEOS balance of the provided address
 
 ### Example
 ```js
-ptokens.peos.getBalance(address).then(balance => console.log(balance))
+ptokens.pbtc.getBalance(address).then(balance => console.log(balance))
 ```
 
 &nbsp;
@@ -134,7 +134,7 @@ ptokens.peos.getBalance(address).then(balance => console.log(balance))
 ## getBurnNonce
 
 ```js
-ptokens.peos.getBurnNonce()
+ptokens.pbtc.getBurnNonce()
 ```
 
 ### Parameters
@@ -148,7 +148,7 @@ Get the total number of Burn events
 
 ### Example
 ```js
-ptokens.peos.getBurnNonce().then(burnNonce => console.log(burnNonce))
+ptokens.pbtc.getBurnNonce().then(burnNonce => console.log(burnNonce))
 ```
 
 &nbsp;
@@ -161,7 +161,7 @@ ptokens.peos.getBurnNonce().then(burnNonce => console.log(burnNonce))
 ## getDepositAddress
 
 ```js
-ptokens.peos.getDepositAddress(ethAddress)
+ptokens.pbtc.getDepositAddress(ethAddress)
 ```
 Generate a BTC Deposit Address
 
@@ -195,19 +195,19 @@ ptokens.pbtc.getDepositAddress(ethAddress).then(depositAddress => {
 ## getCirculatingSupply
 
 ```js
-ptokens.peos.getCirculatingSupply()
+ptokens.pbtc.getCirculatingSupply()
 ```
 
-Get the current pEOS circulating supply
+Get the current pBTC circulating supply
 
 
 ### Returns
 
-- __`Number`__ : current pEOS circulating supply 
+- __`Number`__ : current pBTC circulating supply 
 
 ### Example
 ```js
-ptokens.peos.getCirculatingSupply().then(circulatingSupply => console.log(circulatingSupply))
+ptokens.pbtc.getCirculatingSupply().then(circulatingSupply => console.log(circulatingSupply))
 ```
 
 &nbsp;
@@ -216,7 +216,7 @@ ptokens.peos.getCirculatingSupply().then(circulatingSupply => console.log(circul
 ## getMintNonce
 
 ```js
-ptokens.peos.getMintNonce()
+ptokens.pbtc.getMintNonce()
 ```
 
 ### Parameters
@@ -230,7 +230,7 @@ Get the total number of Mint events
 
 ### Example
 ```js
-ptokens.peos.getMintNonce().then(mintNonce => console.log(mintNonce))
+ptokens.pbtc.getMintNonce().then(mintNonce => console.log(mintNonce))
 ```
 
 &nbsp;
@@ -238,19 +238,19 @@ ptokens.peos.getMintNonce().then(mintNonce => console.log(mintNonce))
 ## getTotalIssued
 
 ```js
-ptokens.peos.getTotalIssued()
+ptokens.pbtc.getTotalIssued()
 ```
 
-Get the total number of total issued pEOS.
+Get the total number of total issued pBTC.
 
 
 ### Returns
 
-- __`Number`__ : total number of issued pEOS
+- __`Number`__ : total number of issued pBTC
 
 ### Example
 ```js
-ptokens.peos.getTotalIssued().then(totalIssued => console.log(totalIssued))
+ptokens.pbtc.getTotalIssued().then(totalIssued => console.log(totalIssued))
 ```
 
 &nbsp;
@@ -258,19 +258,19 @@ ptokens.peos.getTotalIssued().then(totalIssued => console.log(totalIssued))
 ## getTotalRedeemed
 
 ```js
-ptokens.peos.getTotalRedeemed()
+ptokens.pbtc.getTotalRedeemed()
 ```
 
-Get the total number of total redeemed pEOS.
+Get the total number of total redeemed pBTC.
 
 
 ### Returns
 
-- __`Number`__ : total number of redeemed pEOS
+- __`Number`__ : total number of redeemed pBTC
 
 ### Example
 ```js
-ptokens.peos.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed))
+ptokens.pbtc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed))
 ```
 
 &nbsp;
@@ -280,23 +280,23 @@ ptokens.peos.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ## redeem
 
 ```js
-ptokens.peos.redeem(amount, eosAccount)
+ptokens.pbtc.redeem(amount, eosAccount)
 ```
 
-Redeem a specified number of pEOS to the specified EOS account.
+Redeem a specified number of pBTC to the specified BTC account.
 
 ### Parameters
 
-- __`Number`__ - __`amount`__: amount of pEOS to redeem
-- __`String`__ - __`ethAddress`__: EOS account on which receive back the deposited EOS
+- __`Number`__ - __`amount`__: amount of pBTC to redeem
+- __`String`__ - __`ethAddress`__: BTC account on which receive back the deposited BTC
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pEOS
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pBTC
 
 ### Example
 ```js
-ptokens.peos.redeem(1, 'eos account')
+ptokens.pbtc.redeem(1, 'eos account')
   .once('onEthTxConfirmed', e => { console.log(e) })  //eth tx receipt
   .once('onEnclaveReceivedTx', e => { console.log(e) }) //enclave.getIncomingTransactionStatus with response.broadcast = false
   .once('onEnclaveBroadcastedTx', e => { console.log(e) }) //enclave.getIncomingTransactionStatus with response.broadcast = true
@@ -309,7 +309,7 @@ ptokens.peos.redeem(1, 'eos account')
 ## transfer
 
 ```js
-ptokens.peos.transfer(to, amount)
+ptokens.pbtc.transfer(to, amount)
 ```
 
 ### Parameters
@@ -317,7 +317,7 @@ ptokens.peos.transfer(to, amount)
 - __`String`__ - __`to`__: receiver Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Transfer a specified amount of pEOS to the provided Ethereum address
+Transfer a specified amount of pBTC to the provided Ethereum address
 
 ### Returns
 
@@ -325,7 +325,7 @@ Transfer a specified amount of pEOS to the provided Ethereum address
 
 ### Example
 ```js
-ptokens.peos.transfer('eth address', 1.3452).then(status => console.log(status))
+ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
 ```
 
 &nbsp;
@@ -334,7 +334,7 @@ ptokens.peos.transfer('eth address', 1.3452).then(status => console.log(status))
 ## transferFrom
 
 ```js
-ptokens.peos.transferFrom(from, to, amount)
+ptokens.pbtc.transferFrom(from, to, amount)
 ```
 
 ### Parameters
@@ -342,7 +342,7 @@ ptokens.peos.transferFrom(from, to, amount)
 - __`String`__ - __`from`__: sender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Move the specified amount of pEOS from `from` to `to` using the allowance mechanism
+Move the specified amount of pBTC from `from` to `to` using the allowance mechanism
 
 ### Returns
 
@@ -350,5 +350,5 @@ Move the specified amount of pEOS from `from` to `to` using the allowance mechan
 
 ### Example
 ```js
-ptokens.peos.transfer('eth address', 1.3452).then(status => console.log(status))
+ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
 ```
