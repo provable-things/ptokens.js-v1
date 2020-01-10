@@ -32,37 +32,57 @@ const ptokens = new pTokens({
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
     eosPrivateKey: 'EOS private key',
-    eosProvider: 'EOS provider'
+    eosRpc: 'EOS RPC Address'
+    eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
   },
   pbtc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
-    btcNetwork: 'testnet'  // 'testnet' or 'bitcoin', default 'testnet'
+    btcNetwork: 'testnet'  //'testnet' or 'bitcoin', default 'testnet'
   }
 })
 ```
-Instead of using __`ethPrivateKey`__ and __`ethProvider`__ and/or __`eosPrivateKey`__ and __`eosProvider`__ it is possible to pass as a parameter an instance of __`Web3`__ and/or __`eosjs`__, for example an initialized instance of __`Web3`__ having as provider the one injected by Metamask (__`window.web3.currentProvider`__).
+It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
+into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
 const pTokens = require('ptokens')
 
 if (window.web3) {
   
-  const web3 = new Web3(window.web3.currentProvider)
-
   const ptokens = new pTokens({
     peos: {
-      web3,
-      eosjs
+      ethProvider: window.web3.currentProvider,
+      ....
     },
     pbtc: {
-      web3,
+      ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'
     }
   })
 } else {
   console.log('No web3 detected')
 }
+```
+
+### Example of generating a pBTC Deposit Address
+
+```js
+ptokens.pbtc.getDepositAddress(ethAddress)
+  .then(depositAddress => {
+    console.log(depositAddress.toString())
+    
+    //fund the BTC address just generated (not ptokens.js stuff)
+
+    depositAddress.waitForDeposit()
+      .once('onBtcTxBroadcasted', tx => ... )
+      .once('onBtcTxConfirmed', tx => ...)
+      .once('onEnclaveReceivedTx', tx => ...)
+      .once('onEnclaveBroadcastedTx', tx => ...)
+      .once('onEthTxConfirmed', tx => ...)
+      .then(res => ...))
+  })
+  .catch(err => ...)
 ```
 
 &nbsp;
