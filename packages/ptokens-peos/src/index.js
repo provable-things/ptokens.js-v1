@@ -94,12 +94,12 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
 
-        const polledTx = eosTxReceipt.transaction_id
+        const txToPoll = eosTxReceipt.transaction_id
         let broadcastedTx = ''
         let isSeen = false
 
         await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(polledTx)
+          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
 
           if (incomingTxStatus.broadcast === false && !isSeen) {
             promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
@@ -185,12 +185,12 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const polledTx = ethTxReceipt.transactionHash
+        const txToPoll = ethTxReceipt.transactionHash
         let broadcastedTx = null
         let isSeen = false
 
         await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(polledTx)
+          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
 
           if (incomingTxStatus.broadcast === false && !isSeen) {
             promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
