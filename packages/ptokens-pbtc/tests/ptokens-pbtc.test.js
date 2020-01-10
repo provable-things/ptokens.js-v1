@@ -16,7 +16,7 @@ const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
 jest.setTimeout(3000000)
 
-test('Should get a BTC deposit address', async () => {
+/*test('Should get a BTC deposit address', async () => {
   const pbtc = new pBTC({
     btcNetwork: 'testnet'
   })
@@ -38,7 +38,7 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
   } catch (err) {
     expect(err.message).to.be.equal('Eth Address is not valid')
   }
-})
+})*/
 
 test('Should monitor an issuing of 1 pBTC', async () => {
   const pbtc = new pBTC(configs)
@@ -53,7 +53,7 @@ test('Should monitor an issuing of 1 pBTC', async () => {
     BTC_TESTING_ADDRESS,
     amountToIssue,
     minerFees,
-    depositAddress.toString()
+    '2NFmBRVgEgWWe1K94NPMJQCjLAhqUH3cE88'
   )
 
   let btcTxIsBroadcasted = false
@@ -80,7 +80,7 @@ test('Should monitor an issuing of 1 pBTC', async () => {
   expect(ethTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 1 pBTC', async () => {
+/*test('Should redeem 1 pBTC', async () => {
   const pbtc = new pBTC(configs)
 
   // minimum amount to redeem = 100 sats (0.000001 * 10^8)
@@ -106,3 +106,4 @@ test('Should redeem 1 pBTC', async () => {
   expect(enclaveHasBroadcastedTx).to.equal(true)
   expect(btcTxIsConfirmed).to.equal(true)
 })
+*/

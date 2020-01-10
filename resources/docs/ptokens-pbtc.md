@@ -1,39 +1,38 @@
-# ptokens-peos
+# ptokens-btc
 
-This module allows to interact with pEOS token.
+This module allows to interact with pBTC token.
 
 ### Installation
 
 It is possible to install individually this package without installing the main one (__`ptokens`__).
 
 ```
-npm install ptokens-peos
+npm install ptokens-pbtc
 ```
 
 
 ### Usage:
 
 ```js
-const pEOS = require('ptokens-peos')
+const pBTC = require('ptokens-pbtc')
 
-const peos = new pEOS({
+const pbtc = new pEOS({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
-  eosPrivateKey: 'EOS private key',
-  eosRpc: 'EOS RPC Address'
-  eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
+  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
 })
 ```
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pEOS = require('ptokens-peos')
+const pBTC = require('ptokens-pbtc')
 
 if (window.web3) {
   
-  const peos = new pEOS({
+  const pbtc = new pBTC({
     ethProvider: window.web3.currentProvider,
+    btcNetwork: 'testnet'
   })
 } else {
   console.log('No web3 detected')
@@ -48,12 +47,11 @@ if (window.web3) {
 * __`getAllowance`__
 * __`getBalance`__
 * __`getBurnNonce`__
+* __`getDepositAddress`__
 * __`getCirculatingSupply`__
-* __`getCollateral`__
 * __`getMintNonce`__
 * __`getTotalIssued`__
 * __`getTotalRedeemed`__
-* __`issue`__
 * __`redeem`__
 * __`transfer`__
 * __`transferFrom`__
@@ -83,7 +81,6 @@ ptokens.peos.approve('eth address', 1.3452).then(status => console.log(status))
 ```
 
 &nbsp;
-
 
 ## getAllowance
 
@@ -156,6 +153,45 @@ ptokens.peos.getBurnNonce().then(burnNonce => console.log(burnNonce))
 
 &nbsp;
 
+
+
+
+
+
+## getDepositAddress
+
+```js
+ptokens.peos.getDepositAddress(ethAddress)
+```
+Generate a BTC Deposit Address
+
+### Parameters
+- __`String`__ - __`ethAddress`__: Ethereum address
+
+
+### Returns
+
+- __`DepositAddress`__ : a deposit Address
+
+### Example
+```js
+ptokens.pbtc.getDepositAddress(ethAddress).then(depositAddress => {
+  console.log(depositAddress.toString())
+
+  console.log(depositAddress.verify()) //true if address has been generated succesfully
+
+  depositAddress.waitForDeposit()
+    .once('onBtcTxBroadcasted', tx => ... )
+    .once('onBtcTxConfirmed', tx => ...)
+    .once('onEnclaveReceivedTx', tx => ...)
+    .once('onEnclaveBroadcastedTx', tx => ...)
+    .once('onEthTxConfirmed', tx => ...)
+    .then(res => ...))
+})
+```
+
+&nbsp;
+
 ## getCirculatingSupply
 
 ```js
@@ -172,26 +208,6 @@ Get the current pEOS circulating supply
 ### Example
 ```js
 ptokens.peos.getCirculatingSupply().then(circulatingSupply => console.log(circulatingSupply))
-```
-
-&nbsp;
-
-## getCollateral
-
-```js
-ptokens.peos.getCollateral()
-```
-
-Get the current deposited EOS as collateral
-
-
-### Returns
-
-- __`Number`__ : current collateral
-
-### Example
-```js
-ptokens.peos.getCollateral().then(collateral => console.log(collateral))
 ```
 
 &nbsp;
@@ -260,37 +276,8 @@ ptokens.peos.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 &nbsp;
 
 
-## issue
-
-```js
-ptokens.peos.issue(_amount, _ethAddress)
-```
-
-Issue a number of pEOS token to the specified Ethereum address.
-
-### Parameters
-
-- __`Number`__ - __`_amount`__: amount of pEOS to issue
-- __`String`__ - __`_ethAddress`__: Ethereum address on which receive pEOS minted by the Enclave
-
-### Returns
-
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave mints the specified amount of pEOS
-
-### Example
-```js
-ptokens.peos.issue(1, 'eth address')
-  .once('onEosTxConfirmed', e => { console.log(e) })  //eos tx receipt
-  .once('onEnclaveReceivedTx', e => { console.log(e) }) //enclave.getIncomingTransactionStatus with response.broadcast = false
-  .once('onEnclaveBroadcastedTx', e => { console.log(e) }) //enclave.getIncomingTransactionStatus with response.broadcast = true
-  .once('onEthTxConfirmed', e => { console.log(e) }) //eth tx receipt
-  .then(res => { console.log(res) })
-```
-
-&nbsp;
 
 ## redeem
-
 
 ```js
 ptokens.peos.redeem(amount, eosAccount)

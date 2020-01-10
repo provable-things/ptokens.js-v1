@@ -3,6 +3,7 @@ nav:
     - Getting Started: index.md
     - Modules:
         - pTokens: ptokens.md
+        - ptokens-pbtc: ptokens-pbtc.md
         - ptokens-peos: ptokens-peos.md
         - ptokens-enclave: ptokens-enclave.md
         - ptokens-utils: ptokens-utils.md
