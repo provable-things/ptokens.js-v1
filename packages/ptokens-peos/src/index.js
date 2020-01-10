@@ -25,28 +25,21 @@ class pEOS {
    */
   constructor(_configs) {
     const {
-      web3,
-      eosjs,
       ethPrivateKey,
       ethProvider,
       eosPrivateKey,
-      eosProvider
+      eosRpc,
+      eosSignatureProvider
     } = _configs
 
     this.enclave = new Enclave({
       pToken: 'peos'
     })
 
-    if (web3) {
-      this.isWeb3Injected = true
-      this.web3 = web3
-      this.ethPrivateKey = null
-    } else if (
-      ethPrivateKey &&
-      ethProvider
-    ) {
-      this.web3 = new Web3(ethProvider)
+    this.web3 = new Web3(ethProvider)
 
+    if (ethPrivateKey) {
+      this.isWeb3Injected = false
       const account = this.web3.eth.accounts.privateKeyToAccount(
         utils.eth.addHexPrefix(ethPrivateKey)
       )
@@ -54,14 +47,17 @@ class pEOS {
       this.web3.eth.defaultAccount = account.address
       this.ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
       this.isWeb3Injected = false
+    } else {
+      this.isWeb3Injected = true
+      this.ethPrivateKey = null
     }
 
-    if (eosjs)
-      this.eosjs = eosjs
+    if (eosSignatureProvider)
+      this.eosjs = utils.eos.getApi(null, eosRpc, eosSignatureProvider)
     else if (
       eosPrivateKey &&
-      eosProvider
-    ) this.eosjs = utils.eos.getApi(eosPrivateKey, eosProvider)
+      eosRpc
+    ) this.eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
   }
 
   /**

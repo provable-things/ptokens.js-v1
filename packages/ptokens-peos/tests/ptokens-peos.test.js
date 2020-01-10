@@ -6,7 +6,7 @@ const configs = {
   ethPrivateKey: '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
   ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
   eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-  eosProvider: 'https://ptoken-eos.provable.xyz:443'
+  eosRpc: 'https://ptoken-eos.provable.xyz:443'
 }
 // corresponsing eth address = 0xdf3B180694aB22C577f7114D822D28b92cadFd75
 // corresponding eos account = all3manfr4di
