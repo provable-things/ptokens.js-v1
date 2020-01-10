@@ -82,7 +82,7 @@ class DepositAddress {
         promiEvent.reject('Please provide a deposit address')
 
       let isBroadcasted = false
-      let polledUtxo = null
+      let utxoToPoll = null
       await polling(async () => {
         const txs = await this._esplora.makeApiCall(
           'GET',
@@ -107,7 +107,7 @@ class DepositAddress {
             promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
 
           promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0])
-          polledUtxo = utxos[0]
+          utxoToPoll = utxos[0].txid
           return true
         } else {
           return false
@@ -117,7 +117,7 @@ class DepositAddress {
       let broadcastedEthTx = null
       let isSeen = false
       await polling(async () => {
-        const incomingTxStatus = await this._enclave.getIncomingTransactionStatus(polledUtxo)
+        const incomingTxStatus = await this._enclave.getIncomingTransactionStatus(utxoToPoll)
 
         if (incomingTxStatus.broadcast === false && !isSeen) {
           promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
