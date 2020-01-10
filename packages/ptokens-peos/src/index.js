@@ -58,6 +58,7 @@ class pEOS {
       eosPrivateKey &&
       eosRpc
     ) this.eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
+    else this.eosjs = utils.eos.getApi(null, eosRpc, null)
   }
 
   /**
