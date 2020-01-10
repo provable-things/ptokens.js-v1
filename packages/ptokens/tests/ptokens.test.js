@@ -9,7 +9,7 @@ test('Should init pTokens correctly with pEOS and pBTC', () => {
       ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
       ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
       eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-      eosProvider: 'https://ptoken-eos.provable.xyz:443'
+      eosRpc: 'https://ptoken-eos.provable.xyz:443'
     },
     pbtc: {
       ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
