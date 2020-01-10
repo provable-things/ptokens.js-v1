@@ -86,8 +86,7 @@ class DepositAddress {
       let txs = []
       let utxos = []
       await polling(async () => {
-        
-        if (txs.length === 0){
+        if (txs.length === 0) {
           txs = await this._esplora.makeApiCall(
             'GET',
             `/address/${this._value}/txs/mempool`
@@ -111,7 +110,7 @@ class DepositAddress {
           if (utxos.length > 0) {
             if (!isBroadcasted)
               promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
-  
+
             promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0])
             utxoToPoll = utxos[0].txid
             return true
