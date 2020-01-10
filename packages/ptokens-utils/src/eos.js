@@ -13,16 +13,27 @@ const EOS_ACCOUNT_LENGTH = 12
  * @param {String} null - _signatureProvider
  */
 const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
+
+  if (_rpc && !_privateKey && !_signatureProvider) {
+    const rpc = new JsonRpc(_rpc, { fetch })
+
+    return new Api({
+      rpc,
+      textDecoder: new encoding.TextDecoder(),
+      textEncoder: new encoding.TextEncoder()
+    })
+  }
+
   const signatureProvider = _signatureProvider || new JsSignatureProvider([_privateKey])
 
   const rpc = new JsonRpc(_rpc, { fetch })
-  const api = new Api({
+
+  return new Api({
     rpc,
     signatureProvider,
     textDecoder: new encoding.TextDecoder(),
     textEncoder: new encoding.TextEncoder()
   })
-  return api
 }
 
 /**
