@@ -53,7 +53,7 @@ test('Should monitor an issuing of 1 pBTC', async () => {
     BTC_TESTING_ADDRESS,
     amountToIssue,
     minerFees,
-    '2NFmBRVgEgWWe1K94NPMJQCjLAhqUH3cE88'
+    depositAddress.toString()
   )
 
   let btcTxIsBroadcasted = false
