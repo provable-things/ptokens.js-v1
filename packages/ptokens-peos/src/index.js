@@ -36,29 +36,29 @@ class pEOS {
       pToken: 'peos'
     })
 
-    this.web3 = new Web3(ethProvider)
+    this._web3 = new Web3(ethProvider)
 
     if (ethPrivateKey) {
-      this.isWeb3Injected = false
-      const account = this.web3.eth.accounts.privateKeyToAccount(
+      this._isWeb3Injected = false
+      const account = this._web3.eth.accounts.privateKeyToAccount(
         utils.eth.addHexPrefix(ethPrivateKey)
       )
 
-      this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
-      this.isWeb3Injected = false
+      this._web3.eth.defaultAccount = account.address
+      this._ethPrivateKey = utils.eth.addHexPrefix(ethPrivateKey)
+      this._isWeb3Injected = false
     } else {
-      this.isWeb3Injected = true
-      this.ethPrivateKey = null
+      this._isWeb3Injected = true
+      this._ethPrivateKey = null
     }
 
     if (eosSignatureProvider)
-      this.eosjs = utils.eos.getApi(null, eosRpc, eosSignatureProvider)
+      this._eosjs = utils.eos.getApi(null, eosRpc, eosSignatureProvider)
     else if (
       eosPrivateKey &&
       eosRpc
-    ) this.eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
-    else this.eosjs = utils.eos.getApi(null, eosRpc, null)
+    ) this._eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
+    else this._eosjs = utils.eos.getApi(null, eosRpc, null)
   }
 
   /**
@@ -74,16 +74,16 @@ class pEOS {
         return
       }
 
-      if (!this.web3.utils.isAddress(_ethAddress)) {
+      if (!this._web3.utils.isAddress(_ethAddress)) {
         promiEvent.reject('Eth Address is not valid')
         return
       }
 
       try {
-        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this.eosjs)
-        const eosAccountName = await utils.eos.getAccountName(this.eosjs, eosPublicKeys)
+        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this._eosjs)
+        const eosAccountName = await utils.eos.getAccountName(this._eosjs, eosPublicKeys)
         const eosTxReceipt = await utils.eos.transferNativeToken(
-          this.eosjs,
+          this._eosjs,
           PEOS_EOS_CONTRACT_ACCOUNT,
           eosAccountName,
           _amount,
@@ -119,7 +119,7 @@ class pEOS {
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          const ethTxReceipt = await this.web3.eth.getTransactionReceipt(broadcastedTx)
+          const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedTx)
           if (!ethTxReceipt) {
             return false
           } else if (ethTxReceipt.status) {
@@ -164,13 +164,13 @@ class pEOS {
 
       try {
         const ethTxReceipt = await utils.eth.makeContractSend(
-          this.web3,
+          this._web3,
           'burn',
           {
-            isWeb3Injected: this.isWeb3Injected,
+            isWeb3Injected: this._isWeb3Injected,
             abi: peosAbi,
             contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-            privateKey: this.ethPrivateKey,
+            privateKey: this._ethPrivateKey,
             value: utils.eth.zeroEther
           },
           [
@@ -209,7 +209,7 @@ class pEOS {
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          const eosTxReceipt = await this.eosjs.rpc.history_get_transaction(broadcastedTx)
+          const eosTxReceipt = await this._eosjs.rpc.history_get_transaction(broadcastedTx)
 
           if (eosTxReceipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) {
             promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt.data)
@@ -236,10 +236,10 @@ class pEOS {
   getTotalIssued() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'totalMinted',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         }
@@ -258,10 +258,10 @@ class pEOS {
   getTotalRedeemed() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'totalBurned',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         }
@@ -280,10 +280,10 @@ class pEOS {
   getCirculatingSupply() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'totalSupply',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         }
@@ -301,7 +301,7 @@ class pEOS {
 
   getCollateral() {
     return new Promise((resolve, reject) => {
-      this.eosjs.rpc.get_currency_balance(
+      this._eosjs.rpc.get_currency_balance(
         EOS_NATIVE_TOKEN,
         PEOS_EOS_CONTRACT_ACCOUNT,
         EOS_TOKEN_SYMBOL
@@ -319,10 +319,10 @@ class pEOS {
   getBalance(_ethAddress) {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'balanceOf',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         },
@@ -347,13 +347,13 @@ class pEOS {
    */
   transfer(_to, _amount) {
     return utils.eth.makeContractSend(
-      this.web3,
+      this._web3,
       'transfer',
       {
-        isWeb3Injected: this.isWeb3Injected,
+        isWeb3Injected: this._isWeb3Injected,
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey,
+        privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
@@ -373,13 +373,13 @@ class pEOS {
    */
   approve(_spender, _amount) {
     return utils.eth.makeContractSend(
-      this.web3,
+      this._web3,
       'approve',
       {
-        isWeb3Injected: this.isWeb3Injected,
+        isWeb3Injected: this._isWeb3Injected,
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey,
+        privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
@@ -400,13 +400,13 @@ class pEOS {
    */
   transferFrom(_from, _to, _amount) {
     return utils.eth.makeContractSend(
-      this.web3,
+      this._web3,
       'transferFrom',
       {
-        isWeb3Injected: this.isWeb3Injected,
+        isWeb3Injected: this._isWeb3Injected,
         abi: peosAbi,
         contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
-        privateKey: this.ethPrivateKey,
+        privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
@@ -424,10 +424,10 @@ class pEOS {
   getBurnNonce() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'burnNonce',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         }
@@ -442,10 +442,10 @@ class pEOS {
   getMintNonce() {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'mintNonce',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         }
@@ -464,10 +464,10 @@ class pEOS {
   getAllowance(_owner, _spender) {
     return new Promise((resolve, reject) => {
       utils.eth.makeContractCall(
-        this.web3,
+        this._web3,
         'allowance',
         {
-          isWeb3Injected: this.isWeb3Injected,
+          isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
         },
