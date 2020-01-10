@@ -18,12 +18,12 @@ class Enclave {
       throw new Error('Invalid pToken')
 
     this.pToken = utils.helpers.pTokenNameNormalized(pToken)
-    this.api = getApi(this.pToken)
+    this._api = getApi(this.pToken)
   }
 
   ping() {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET',
       `/${this.pToken}/ping`
     )
@@ -35,7 +35,7 @@ class Enclave {
    */
   getReports(_type, _limit = REPORT_LIMIT) {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET', `/${this.pToken}/${_type}-reports/limit/${_limit}`
     )
   }
@@ -47,7 +47,7 @@ class Enclave {
    */
   getReportsByAddress(_type, _address, _limit = REPORT_LIMIT) {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET',
       `${this.pToken}/${_type}-address/${_address}/limit/${_limit}`
     )
@@ -59,7 +59,7 @@ class Enclave {
    */
   getReportByNonce(_type, _nonce) {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET',
       `/${this.pToken}/report/${_type}/nonce/${_nonce}`
     )
@@ -70,7 +70,7 @@ class Enclave {
    */
   getLastProcessedBlock(_type) {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET',
       `${this.pToken}/last-processed-${_type}-block`
     )
@@ -81,7 +81,7 @@ class Enclave {
    */
   getIncomingTransactionStatus(_hash) {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET',
       `${this.pToken}/incoming-tx-hash/${_hash}`
     )
@@ -92,7 +92,7 @@ class Enclave {
    */
   getBroadcastTransactionStatus(_hash) {
     return makeApiCall(
-      this.api,
+      this._api,
       'GET',
       `${this.pToken}/broadcast-tx-hash/${_hash}`
     )
@@ -104,7 +104,7 @@ class Enclave {
    */
   submitBlock(_type, _block) {
     return makeApiCall(
-      this.api,
+      this._api,
       'POST',
       `/${this.pToken}/submit-${_type}-block`,
       _block
@@ -118,7 +118,7 @@ class Enclave {
    */
   generic(_type, _path, _data = null) {
     return makeApiCall(
-      this.api,
+      this._api,
       _type,
       `/${this.pToken}/${_path}`,
       _data
