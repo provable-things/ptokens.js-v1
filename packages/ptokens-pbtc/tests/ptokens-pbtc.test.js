@@ -21,8 +21,8 @@ test('Should get a BTC deposit address', async () => {
     btcNetwork: 'testnet'
   })
 
-  const address = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
-  expect(address)
+  const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
+  expect(depositAddress.toString())
     .to.be.a('string')
 })
 
