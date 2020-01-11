@@ -83,33 +83,28 @@ class DepositAddress {
 
       let isBroadcasted = false
       let utxoToPoll = null
-      let txs = []
       let utxos = []
       await polling(async () => {
-
         // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
 
         utxos = await this._esplora.makeApiCall(
           'GET',
           `/address/${this._value}/utxo`
         )
-        
-        if (utxos.length > 0) {
-          
-          if (utxos[0].status.confirmed) {
 
+        if (utxos.length > 0) {
+          if (utxos[0].status.confirmed) {
             if (!isBroadcasted)
               promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
 
             promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0])
             utxoToPoll = utxos[0].txid
             return true
-          } else if (!isBroadcasted){
+          } else if (!isBroadcasted) {
             isBroadcasted = true
             promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
             return false
           }
-
         } else {
           return false
         }
