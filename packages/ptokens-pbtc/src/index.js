@@ -11,7 +11,6 @@ import {
   ESPLORA_POLLING_TIME,
   ENCLAVE_POLLING_TIME,
   PBTC_TOKEN_DECIMALS,
-  PBTC_ETH_CONTRACT_ADDRESS,
   MINIMUN_SATS_REDEEMABLE
 } from './utils/constants'
 
@@ -26,11 +25,11 @@ class pBTC {
       btcNetwork
     } = _configs
 
+    this._web3 = new Web3(ethProvider)
+
     this.enclave = new Enclave({
       pToken: 'pbtc'
     })
-
-    this._web3 = new Web3(ethProvider)
 
     if (ethPrivateKey) {
       this._isWeb3Injected = false
@@ -111,7 +110,7 @@ class pBTC {
           {
             isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
-            contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
+            contractAddress: this._pbtcSmartContractAddress(),
             privateKey: this._ethPrivateKey,
             value: utils.eth.zeroEther
           },
@@ -185,7 +184,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(totalIssued => resolve(
@@ -207,7 +206,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(totalRedeemed => resolve(
@@ -229,7 +228,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(totalSupply => resolve(
@@ -254,7 +253,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         },
         [
           _ethAddress
@@ -282,7 +281,7 @@ class pBTC {
       {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
+        contractAddress: this._pbtcSmartContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -308,7 +307,7 @@ class pBTC {
       {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
+        contractAddress: this._pbtcSmartContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -335,7 +334,7 @@ class pBTC {
       {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: PBTC_ETH_CONTRACT_ADDRESS,
+        contractAddress: this._pbtcSmartContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -359,7 +358,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(burnNonce => resolve(
@@ -377,7 +376,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(mintNonce => resolve(
@@ -399,7 +398,7 @@ class pBTC {
         {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: PBTC_ETH_CONTRACT_ADDRESS
+          contractAddress: this._pbtcSmartContractAddress()
         },
         [
           _owner,
@@ -415,6 +414,16 @@ class pBTC {
         ))
         .catch(err => reject(err))
     })
+  }
+
+  async _pbtcSmartContractAddress() {
+    const ethNetwork = await this._web3.eth.net.getNetworkType()
+    const info = await this.enclave.getInfo(
+      this._btcNetwork,
+      ethNetwork
+    )
+
+    return info['pbtc-smart-contract-address']
   }
 }
 
