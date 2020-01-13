@@ -41,14 +41,17 @@ class DepositAddress {
   verify() {
     const network = this._btcNetwork === 'bitcoin'
       ? bitcoin.networks.bitcoin
-      : bitcoin.networks.testnet
+      : bitcoin.networks.testnet    
 
     const ethAddressBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.ethAddress),
       'hex'
     )
     const nonceBuf = utils.converters.encodeUint64le(this.nonce)
-    const enclavePublicKeyBuf = Buffer.from(this.enclavePublicKey, 'hex')
+    const enclavePublicKeyBuf = Buffer.from(
+      utils.eth.removeHexPrefix(this.enclavePublicKey),
+      'hex'
+    )
 
     const ethAddressAndNonceHashBuf = bitcoin.crypto.hash256(
       Buffer.concat([ethAddressBuf, nonceBuf])
@@ -70,7 +73,8 @@ class DepositAddress {
         network
       }
     )
-
+    
+    console.log(p2sh.address, this._value)
     return p2sh.address === this._value
   }
 
