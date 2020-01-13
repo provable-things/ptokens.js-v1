@@ -56,6 +56,16 @@ const getContract = (_web3, _abi, _contractAddress, _account) => {
 }
 
 /**
+ * @param {String || Promise} _contractAddress
+ */
+const _getContractAddress = async _contractAddress =>
+  new Promise(resolve =>
+    _contractAddress.then
+      ? _contractAddress.then(_address => resolve(_address))
+      : resolve(_contractAddress)
+  )
+
+/**
  * @param {Object} _web3
  */
 const getGasLimit = _web3 =>
@@ -80,10 +90,12 @@ const isHexPrefixed = _string =>
 const makeContractCall = (_web3, _method, _options, _params = []) =>
   new Promise(async (resolve, reject) => {
     const account = await getAccount(_web3, _options.isWeb3Injected)
+    const contractAddress = await _getContractAddress(_options.contractAddress)
+
     const contract = getContract(
       _web3,
       _options.abi,
-      _options.contractAddress,
+      contractAddress,
       account
     )
     contract.methods[_method](..._params).call()
@@ -134,10 +146,12 @@ const makeContractSend = (_web3, _method, _options, _params = []) =>
 const _makeContractSend = (_web3, _method, _abi, _contractAddress, _value, _params = []) =>
   new Promise(async (resolve, reject) => {
     const account = await getAccount(_web3, true)
+    const contractAddress = await _getContractAddress(_contractAddress)
+
     const contract = getContract(
       _web3,
       _abi,
-      _contractAddress,
+      contractAddress,
       account
     )
     contract.methods[_method](..._params).send({
@@ -164,12 +178,13 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
       const gasPrice = await _web3.eth.getGasPrice()
       const functionAbi = contract.methods[_method](..._params).encodeABI()
       const gasLimit = await getGasLimit(_web3)
+      const contractAddress = await _getContractAddress(_contractAddress)
 
       const rawData = {
         nonce,
         gasPrice,
         gasLimit,
-        to: _contractAddress,
+        to: contractAddress,
         value: _value,
         data: functionAbi
       }
