@@ -58,7 +58,7 @@ const getContract = (_web3, _abi, _contractAddress, _account) => {
 /**
  * @param {String | Promise} _contractAddress
  */
-const _getContractAddress = async _contractAddress =>
+const _getContractAddress = _contractAddress =>
   new Promise(resolve =>
     _contractAddress.then
       ? _contractAddress.then(_address => resolve(_address))
