@@ -74,7 +74,6 @@ class DepositAddress {
       }
     )
     
-    console.log(p2sh.address, this._value)
     return p2sh.address === this._value
   }
 
