@@ -23,6 +23,7 @@ class Enclave {
     this._issueFromNetwork = issueFromNetwork
     this._redeemFromNetwork = redeemFromNetwork
     this._api = getApi(this.pToken)
+    this._info = null
   }
 
   ping() {
@@ -33,11 +34,20 @@ class Enclave {
     )
   }
 
-  getInfo(_) {
-    return makeApiCall(
-      this._api,
-      'GET', `/${this.pToken}/get-info/${this._issueFromNetwork}/${this._redeemFromNetwork}`
-    )
+  /**
+   *
+   * @param {String} _issueFromNetwork
+   * @param {String} _redeemFromNetwork
+   */
+  async getInfo(_issueFromNetwork, _redeemFromNetwork) {
+    if (!this._info) {
+      const info = await makeApiCall(
+        this._api,
+        'GET', `/${this.pToken}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
+      )
+      this._info = info
+    }
+    return this._info
   }
 
   /**

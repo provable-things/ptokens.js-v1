@@ -29,12 +29,10 @@ test('Should ping the enclave', async () => {
 
 test('Should get the Enclave Info', async () => {
   const enclave = new Enclave({
-    pToken: 'pbtc',
-    issueFromNetwork: 'testnet',
-    redeemFromNetwork: 'ropsten'
+    pToken: 'pbtc'
   })
 
-  const info = await enclave.getInfo()
+  const info = await enclave.getInfo('testnet', 'ropsten')
   expect(info).to.have.property('pbtc-public-key')
   expect(info).to.have.property('pbtc-smart-contract-address')
 })
