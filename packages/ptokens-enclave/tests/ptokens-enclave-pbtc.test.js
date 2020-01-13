@@ -27,6 +27,18 @@ test('Should ping the enclave', async () => {
     .to.be.equal(expectedResult)
 })
 
+test('Should get the Enclave Info', async () => {
+  const enclave = new Enclave({
+    pToken: 'pbtc',
+    issueFromNetwork: 'testnet',
+    redeemFromNetwork: 'ropsten'
+  })
+
+  const info = await enclave.getInfo()
+  expect(info).to.have.property('pbtc-public-key')
+  expect(info).to.have.property('pbtc-smart-contract-address')
+})
+
 test('Should get one ETH report', async () => {
   const expectedResultLength = 1
   const limit = 1
