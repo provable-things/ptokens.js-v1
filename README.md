@@ -68,21 +68,19 @@ if (window.web3) {
 ### Example of generating a pBTC Deposit Address
 
 ```js
-ptokens.pbtc.getDepositAddress(ethAddress)
-  .then(depositAddress => {
-    console.log(depositAddress.toString())
-    
-    //fund the BTC address just generated (not ptokens.js stuff)
+const depositAddress = await ptokens.pbtc.getDepositAddress(ethAddress)
 
-    depositAddress.waitForDeposit()
-      .once('onBtcTxBroadcasted', tx => ... )
-      .once('onBtcTxConfirmed', tx => ...)
-      .once('onEnclaveReceivedTx', tx => ...)
-      .once('onEnclaveBroadcastedTx', tx => ...)
-      .once('onEthTxConfirmed', tx => ...)
-      .then(res => ...))
-  })
-  .catch(err => ...)
+console.log(depositAddress.toString())
+    
+//fund the BTC address just generated (not ptokens.js stuff)
+
+depositAddress.waitForDeposit()
+  .once('onBtcTxBroadcasted', tx => ... )
+  .once('onBtcTxConfirmed', tx => ...)
+  .once('onEnclaveReceivedTx', tx => ...)
+  .once('onEnclaveBroadcastedTx', tx => ...)
+  .once('onEthTxConfirmed', tx => ...)
+  .then(res => ...))
 ```
 
 &nbsp;
