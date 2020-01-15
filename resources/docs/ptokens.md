@@ -1,6 +1,7 @@
 # pTokens
 
-This is the main package which contains all other packages.
+
+This is the main module that allows you to instantiate an instance of all available pTokens.
 
 ### Structure
 - __`Object`__ - __`pbtc`__: class for interacting with pEOS token
@@ -10,15 +11,15 @@ This is the main package which contains all other packages.
 ### Constructor parameters
 - __`Object`__ - __`configs`__: options for initializing a pTokens instance
     - __`Object`__ - __`pbtc`__: options for initializing pBTC
-          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens
-          - __`String`__ - __`ethProvider`__: an Ethereum provider
+          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens (this can be null if you pass an already initialized instance of __`ethProvider`__)
+          - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
           - __`String`__ - __`btcNetwork`__: Can be `bitcoin` or `testnet`
     - __`Object`__ - __`peos`__: options for initializing pEOS
         - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens
         - __`String`__ - __`ethProvider`__: an Ethereum provider
         - __`String`__ - __`eosPrivateKey`__: an Eos private key used for signing transactions for minting pTokens
         - __`String`__ - __`eosRpc`__: an EOS provider
-        - __`String`__ - __`eosSignatureProvider`__: an instance of an already initialized EOS Signature Provider
+        - __`Object`__ - __`eosSignatureProvider`__: an instance of an already initialized EOS Signature Provider (Optional)
 
 &nbsp;
 

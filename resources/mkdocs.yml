@@ -1,10 +1,26 @@
 site_name: ptokens.js Documentation
+
+site_name: doc.ptokens.js
+site_url: ''
+site_description: ptokens.js documentation
+site_author: Provable Things
+
+repo_url: https://github.com/provable-things/ptokens.js/
+edit_uri: https://github.com/provable-things/ptokens.js/tree/master/resources/docs
+
 nav:
     - Getting Started: index.md
     - Modules:
-        - pTokens: ptokens.md
+        - ptokens: ptokens.md
         - ptokens-pbtc: ptokens-pbtc.md
         - ptokens-peos: ptokens-peos.md
         - ptokens-enclave: ptokens-enclave.md
         - ptokens-utils: ptokens-utils.md
-theme: readthedocs
+theme: 
+    name: readthedocs
+    highlightjs: true
+    
+copyright: Copyright &copy; 2020 Provable Things - <a href="https://twitter.com/pTokens_io">pTokens</a>.
+
+plugins:
+    - search

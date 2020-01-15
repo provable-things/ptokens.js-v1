@@ -11,7 +11,7 @@ npm install ptokens-pbtc
 ```
 
 
-### Usage:
+### Usage
 
 ```js
 const pBTC = require('ptokens-pbtc')
@@ -175,19 +175,17 @@ Generate a BTC Deposit Address
 
 ### Example
 ```js
-ptokens.pbtc.getDepositAddress(ethAddress).then(depositAddress => {
-  console.log(depositAddress.toString())
+const depositAddress= await ptokens.pbtc.getDepositAddress(ethAddress)
 
-  console.log(depositAddress.verify()) //true if address has been generated succesfully
+console.log(depositAddress.toString())
 
-  depositAddress.waitForDeposit()
-    .once('onBtcTxBroadcasted', tx => ... )
-    .once('onBtcTxConfirmed', tx => ...)
-    .once('onEnclaveReceivedTx', tx => ...)
-    .once('onEnclaveBroadcastedTx', tx => ...)
-    .once('onEthTxConfirmed', tx => ...)
-    .then(res => ...))
-})
+depositAddress.waitForDeposit()
+  .once('onBtcTxBroadcasted', tx => ... )
+  .once('onBtcTxConfirmed', tx => ...)
+  .once('onEnclaveReceivedTx', tx => ...)
+  .once('onEnclaveBroadcastedTx', tx => ...)
+  .once('onEthTxConfirmed', tx => ...)
+  .then(res => ...))
 ```
 
 &nbsp;
