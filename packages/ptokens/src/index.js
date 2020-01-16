@@ -1,5 +1,5 @@
 import pEOS from 'ptokens-peos'
-import Enclave from 'ptokens-enclave'
+import pBTC from 'ptokens-pbtc'
 import utils from 'ptokens-utils'
 
 class pTokens {
@@ -7,8 +7,17 @@ class pTokens {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    this.peos = new pEOS(_configs)
-    this.enclave = new Enclave()
+    const {
+      peos,
+      pbtc
+    } = _configs
+
+    if (peos)
+      this.peos = new pEOS(peos)
+
+    if (pbtc)
+      this.pbtc = new pBTC(pbtc)
+
     this.utils = utils
   }
 }

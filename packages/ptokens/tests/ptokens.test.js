@@ -1,16 +1,23 @@
 import pTokens from '../src/index'
 import pEOS from 'ptokens-peos'
-import Enclave from 'ptokens-enclave'
+import pBTC from 'ptokens-pbtc'
 import { expect } from 'chai'
 
-test('Should init pTokens correctly', () => {
+test('Should init pTokens correctly with pEOS and pBTC', () => {
   const configs = {
-    ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
-    ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-    eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-    eosProvider: 'https://ptoken-eos.provable.xyz:443'
+    peos: {
+      ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+      ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+      eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
+      eosRpc: 'https://ptoken-eos.provable.xyz:443'
+    },
+    pbtc: {
+      ethPrivateKey: '0x10f41f6e85e1a96acd10d39d391fbaa2653eb52354daef129b4f0e247bf06bd0',
+      ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
+      btcNetwork: 'bitcoin'
+    }
   }
   const ptokens = new pTokens(configs)
   expect(ptokens.peos).to.be.an.instanceof(pEOS)
-  expect(ptokens.enclave).to.be.an.instanceof(Enclave)
+  expect(ptokens.pbtc).to.be.an.instanceof(pBTC)
 })

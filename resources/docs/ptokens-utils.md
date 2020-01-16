@@ -12,14 +12,157 @@ npm install ptokens-utils
 
 ***
 
+## utils.btc
+
+* __`isValidAddress`__
+
+***
+
+## btc.isValidAddress
+
+```js
+ptokens.utils.btc.isValidAddress(address)
+```
+
+Returns a boolean indicating the address validity
+
+### Parameters
+
+- __`String`__ - __`address`__: address
+
+### Returns
+
+- __`Boolean`__ : the address validity
+
+### Example
+```js
+utils.btc.isValidAddress('mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP') //true
+```
+
+&nbsp;
+
+***
+
+## utils.converters
+
+* __`decodeUint64le`__
+
+***
+
+## converters.decodeUint64le
+
+```js
+ptokens.utils.converters.decodeUint64le(buffer)
+```
+
+Returns an Unsigned 64 bit Integer from a Buffer representing an Unsigned 64 bit Integer in Little Endian format
+
+### Parameters
+
+- __`Buffer`__ - __`buffer`__: Buffer representing an Unsigned 64 bit Integer in Little Endian format
+
+### Returns
+
+- __`Integer`__ : an Unsigned 64 bit Integer
+
+### Example
+```js
+utils.converters.decodeUint64le(new Buffer('0x456'))
+```
+
+&nbsp;
+
+## converters.encodeUint64le
+
+```js
+ptokens.utils.converters.encodeUint64le(value)
+```
+
+Returns an Unsigned 64 bit Integer decoded in Little Endian format represented by a Buffer
+
+### Parameters
+
+- __`Number`__ - __`value`__: encoded Unsigned 64 bit Integer in Little Endian format
+
+### Returns
+
+- __`Buffer`__ : an Unsigned 64 bit Integer decoded in Little Endian format represented by a Buffer
+
+### Example
+```js
+utils.converters.encodeUint64le(0x05)
+```
+
+&nbsp;
+
+***
+
+# utils.helpers
+
+* __`pTokenNameIsValid`__
+* __`pTokenNameNormalized`__
+
+***
+
+
+## helpers.pTokenNameIsValid
+
+```js
+ptokens.utils.helpers.pTokenNameIsValid(pTokenName)
+```
+
+Returns a boolean indicating the pToken name correctness
+
+### Parameters
+
+- __`String`__ - __`pTokenName`__: pToken name
+
+### Returns
+
+- __`Boolean`__ : pToken name correctness
+
+### Example
+```js
+utils.helpers.pTokenNameIsValid('peos') //true
+utils.helpers.pTokenNameIsValid('pEOS') //true
+utils.helpers.pTokenNameIsValid('pEdOS') //false
+```
+
+&nbsp;
+
+## helpers.pTokenNameNormalized
+
+```js
+ptokens.utils.helpers.pTokenNameNormalized(pTokenName)
+```
+
+Returns a pToken name normalized (lower case)
+
+### Parameters
+
+- __`String`__ - __`pTokenName`__: pToken name
+
+### Returns
+
+- __`Boolean`__ : pToken name normalized
+
+### Example
+```js
+utils.helpers.pTokenNameNormalized('pEOS') //peos
+```
+
+&nbsp;
+
+***
+
 ## utils.eth
 
-* __`alwaysWithPrefix`__
+* __`addHexPrefix`__
 * __`correctFormat`__
 * __`getAccount`__
 * __`getContract`__
 * __`getGasLimit`__
-* __`is0xPrefixed`__
+* __`isHexPrefixed`__
 * __`makeContractCall`__
 * __`makeContractSend`__
 * __`makeTransaction`__
@@ -28,10 +171,10 @@ npm install ptokens-utils
 ***
 
 
-## eth.alwaysWithPrefix
+## eth.addHexPrefix
 
 ```js
-ptokens.utils.eth.alwaysWithPrefix(text)
+ptokens.utils.eth.addHexPrefix(text)
 ```
 
 Returns a string always `0x` prefixed
@@ -46,7 +189,7 @@ Returns a string always `0x` prefixed
 
 ### Example
 ```js
-const res = utils.eth.alwaysWithPrefix('hello') //0xhello
+const res = utils.eth.addHexPrefix('hello') //0xhello
 ```
 
 &nbsp;
@@ -54,7 +197,7 @@ const res = utils.eth.alwaysWithPrefix('hello') //0xhello
 ## eth.correctFormat
 
 ```js
-ptokens.utils.eth.alwaysWithPrefix(amount, decimals, operation)
+ptokens.utils.eth.addHexPrefix(amount, decimals, operation)
 ```
 
 Returns a number equal to the `amount` divied/multiplied (`operation`) by `decimals` (useful for erc20 tokens).
@@ -149,10 +292,10 @@ const gasLimit = await utils.eth.getGasLimit(web3)
 
 &nbsp;
 
-## eth.is0xPrefixed
+## eth.isHexPrefixed
 
 ```js
-ptokens.utils.eth.is0xPrefixed(text)
+ptokens.utils.eth.isHexPrefixed(text)
 ```
 
 Check if a given string (`text`) is `0x` prefixed
@@ -167,7 +310,7 @@ Check if a given string (`text`) is `0x` prefixed
 
 ### Example
 ```js
-const is0xPrefixed = await utils.eth.is0xPrefixed('0xhello') //true
+const isHexPrefixed = await utils.eth.isHexPrefixed('0xhello') //true
 ```
 
 &nbsp;
@@ -260,7 +403,7 @@ Returns an instance of `eosjs`
 
 - __`String`__ - __`privateKey`__: EOS account private key
 - __`String`__ - __`rpc`__: EOS provider rpc
-
+- __`String`__ - __`signatureProvider`__: EOS Signature Provider (can be null if `privateKey` is used)
 
 ### Returns
 
@@ -268,7 +411,7 @@ Returns an instance of `eosjs`
 
 ### Example
 ```js
-const eosjs = utils.eos.getApi('private key', 'rpc url')
+const eosjs = utils.eos.getApi('private key', 'rpc url', signatureProvider = null)
 ```
 
 &nbsp;

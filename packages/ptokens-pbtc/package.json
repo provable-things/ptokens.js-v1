@@ -1,27 +1,28 @@
 {
-  "name": "ptokens-peos",
+  "name": "ptokens-pbtc",
   "version": "0.0.1",
-  "description": "repo holding the code for interacting with pEOS",
-  "main": "dist/ptokens-peos.cjs.js",
-  "module": "dist/ptokens-peos.esm.js",
-  "browser": "dist/ptokens-peos.umd.js",
+  "description": "repo holding the code for interacting with pBTC",
+  "main": "dist/ptokens-pbtc.cjs.js",
+  "module": "dist/ptokens-pbtc.esm.js",
+  "browser": "dist/ptokens-pbtc.umd.js",
   "scripts": {
     "build": "rollup -c",
     "test": "jest --ci --forceExit --detectOpenHandles",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
-  "author": "alle.manfredi@gmail.com @provable-things",
+  "author": "alle.manfredi@gmail.com @provable-thing",
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
+    "axios": "^0.19.0",
+    "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
-    "eosjs": "^20.0.0",
     "light-async-polling": "^1.0.2",
     "ptokens-enclave": "0.0.1",
     "ptokens-utils": "0.0.1",
-    "text-encoding": "^0.7.0",
     "web3": "^1.2.2",
-    "web3-core-promievent": "^1.2.1"
+    "web3-core-promievent": "^1.2.1",
+    "web3-utils": "^1.2.4"
   },
   "devDependencies": {
     "jest": "^24.8.0"

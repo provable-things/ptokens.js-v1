@@ -1,12 +1,20 @@
-const PREFIX = '0x'
+const HEX_PREFIX = '0x'
 
 /**
  * @param {String} _string
  */
-const alwaysWithPrefix = _string =>
-  is0xPrefixed(_string)
+const addHexPrefix = _string =>
+  isHexPrefixed(_string)
     ? _string
-    : PREFIX + _string
+    : HEX_PREFIX + _string
+
+/**
+ * @param {String} _string
+ */
+const removeHexPrefix = _string =>
+  isHexPrefixed(_string)
+    ? _string.substr(2)
+    : _string
 
 /**
  *
@@ -48,6 +56,16 @@ const getContract = (_web3, _abi, _contractAddress, _account) => {
 }
 
 /**
+ * @param {String | Promise} _contractAddress
+ */
+const _getContractAddress = _contractAddress =>
+  new Promise(resolve =>
+    _contractAddress.then
+      ? _contractAddress.then(_address => resolve(_address))
+      : resolve(_contractAddress)
+  )
+
+/**
  * @param {Object} _web3
  */
 const getGasLimit = _web3 =>
@@ -60,8 +78,8 @@ const getGasLimit = _web3 =>
 /**
  * @param {String} _string
  */
-const is0xPrefixed = _string =>
-  _string.slice(0, 2) === PREFIX
+const isHexPrefixed = _string =>
+  _string.slice(0, 2) === HEX_PREFIX
 
 /**
  * @param {Object} _web3
@@ -72,10 +90,12 @@ const is0xPrefixed = _string =>
 const makeContractCall = (_web3, _method, _options, _params = []) =>
   new Promise(async (resolve, reject) => {
     const account = await getAccount(_web3, _options.isWeb3Injected)
+    const contractAddress = await _getContractAddress(_options.contractAddress)
+
     const contract = getContract(
       _web3,
       _options.abi,
-      _options.contractAddress,
+      contractAddress,
       account
     )
     contract.methods[_method](..._params).call()
@@ -126,10 +146,12 @@ const makeContractSend = (_web3, _method, _options, _params = []) =>
 const _makeContractSend = (_web3, _method, _abi, _contractAddress, _value, _params = []) =>
   new Promise(async (resolve, reject) => {
     const account = await getAccount(_web3, true)
+    const contractAddress = await _getContractAddress(_contractAddress)
+
     const contract = getContract(
       _web3,
       _abi,
-      _contractAddress,
+      contractAddress,
       account
     )
     contract.methods[_method](..._params).send({
@@ -156,12 +178,13 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
       const gasPrice = await _web3.eth.getGasPrice()
       const functionAbi = contract.methods[_method](..._params).encodeABI()
       const gasLimit = await getGasLimit(_web3)
+      const contractAddress = await _getContractAddress(_contractAddress)
 
       const rawData = {
         nonce,
         gasPrice,
         gasLimit,
-        to: _contractAddress,
+        to: contractAddress,
         value: _value,
         data: functionAbi
       }
@@ -175,13 +198,17 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
     }
   })
 
+const zeroEther = '0x00'
+
 export {
-  alwaysWithPrefix,
+  addHexPrefix,
+  removeHexPrefix,
   correctFormat,
   getAccount,
   getContract,
   getGasLimit,
-  is0xPrefixed,
+  isHexPrefixed,
   makeContractCall,
-  makeContractSend
+  makeContractSend,
+  zeroEther
 }

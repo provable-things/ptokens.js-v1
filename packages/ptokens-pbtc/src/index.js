@@ -1,25 +1,20 @@
-import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
+import Web3PromiEvent from 'web3-core-promievent'
 import Enclave from 'ptokens-enclave'
 import utils from 'ptokens-utils'
-import {
-  EOS_BLOCKS_BEHIND,
-  EOS_EXPIRE_SECONDS,
-  EOS_NATIVE_TOKEN,
-  EOS_NODE_POLLING_TIME_INTERVAL,
-  EOS_TRANSACTION_EXECUTED,
-  EOS_TOKEN_SYMBOL,
-  ENCLAVE_POLLING_TIME,
-  ETH_NODE_POLLING_TIME_INTERVAL,
-  MINIMUM_MINTABLE_PEOS_AMOUNT,
-  PEOS_TOKEN_DECIMALS,
-  PEOS_EOS_CONTRACT_ACCOUNT,
-  PEOS_ETH_CONTRACT_ADDRESS
-} from './utils/constants'
-import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
+import Web3Utils from 'web3-utils'
+import Esplora from './lib/esplora'
+import DepositAddress from './lib/deposit-address'
 import polling from 'light-async-polling'
+import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
+import {
+  ESPLORA_POLLING_TIME,
+  ENCLAVE_POLLING_TIME,
+  PBTC_TOKEN_DECIMALS,
+  MINIMUN_SATS_REDEEMABLE
+} from './utils/constants'
 
-class pEOS {
+class pBTC {
   /**
    * @param {Object} _configs
    */
@@ -27,16 +22,14 @@ class pEOS {
     const {
       ethPrivateKey,
       ethProvider,
-      eosPrivateKey,
-      eosRpc,
-      eosSignatureProvider
+      btcNetwork
     } = _configs
 
-    this.enclave = new Enclave({
-      pToken: 'peos'
-    })
-
     this._web3 = new Web3(ethProvider)
+
+    this.enclave = new Enclave({
+      pToken: 'pbtc'
+    })
 
     if (ethPrivateKey) {
       this._isWeb3Injected = false
@@ -52,113 +45,61 @@ class pEOS {
       this._ethPrivateKey = null
     }
 
-    if (eosSignatureProvider)
-      this._eosjs = utils.eos.getApi(null, eosRpc, eosSignatureProvider)
-    else if (
-      eosPrivateKey &&
-      eosRpc
-    ) this._eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
-    else this._eosjs = utils.eos.getApi(null, eosRpc, null)
+    if (
+      btcNetwork === 'bitcoin' ||
+      btcNetwork === 'testnet'
+    )
+      this._btcNetwork = btcNetwork
+    else
+      this._btcNetwork = 'testnet'
+
+    this._esplora = new Esplora(this._btcNetwork)
   }
 
   /**
-   * @param {Number} _amount
    * @param {String} _ethAddress
    */
-  issue(_amount, _ethAddress) {
-    const promiEvent = Web3PromiEvent()
+  async getDepositAddress(_ethAddress) {
+    if (!Web3Utils.isAddress(_ethAddress))
+      throw new Error('Eth Address is not valid')
 
-    const start = async () => {
-      if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT) {
-        promiEvent.reject('Amount to issue must be greater than 1 pEOS')
-        return
-      }
+    const deposit = await this.enclave.generic(
+      'GET',
+      `get-btc-deposit-address/${this._btcNetwork}/${_ethAddress}`
+    )
 
-      if (!this._web3.utils.isAddress(_ethAddress)) {
-        promiEvent.reject('Eth Address is not valid')
-        return
-      }
+    const depositAddress = new DepositAddress({
+      ethAddress: _ethAddress,
+      nonce: deposit.nonce,
+      enclavePublicKey: deposit.enclavePublicKey,
+      value: deposit.btcDepositAddress,
+      btcNetwork: this._btcNetwork,
+      esplora: this._esplora,
+      enclave: this.enclave,
+      web3: this._web3
+    })
 
-      try {
-        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this._eosjs)
-        const eosAccountName = await utils.eos.getAccountName(this._eosjs, eosPublicKeys)
-        const eosTxReceipt = await utils.eos.transferNativeToken(
-          this._eosjs,
-          PEOS_EOS_CONTRACT_ACCOUNT,
-          eosAccountName,
-          _amount,
-          _ethAddress,
-          EOS_BLOCKS_BEHIND,
-          EOS_EXPIRE_SECONDS
-        )
+    if (!depositAddress.verify())
+      throw new Error('Enclave deposit address does not match expected address')
 
-        promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
-
-        const txToPoll = eosTxReceipt.transaction_id
-        let broadcastedTx = ''
-        let isSeen = false
-
-        await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
-
-          if (incomingTxStatus.broadcast === false && !isSeen) {
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-            isSeen = true
-            return false
-          } else if (incomingTxStatus.broadcast === true) {
-            // NOTE: could happen that eos tx is confirmed before enclave received it
-            if (!isSeen)
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-
-            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
-            broadcastedTx = incomingTxStatus.broadcast_transaction_hash
-            return true
-          } else {
-            return false
-          }
-        }, ENCLAVE_POLLING_TIME)
-
-        await polling(async () => {
-          const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedTx)
-          if (!ethTxReceipt) {
-            return false
-          } else if (ethTxReceipt.status) {
-            promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
-            return true
-          } else {
-            return false
-          }
-        }, ETH_NODE_POLLING_TIME_INTERVAL)
-
-        promiEvent.resolve({
-          amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
-          to: _ethAddress,
-          tx: broadcastedTx
-        })
-      } catch (err) {
-        promiEvent.reject(err)
-      }
-    }
-
-    start()
-    return promiEvent.eventEmitter
+    return depositAddress
   }
 
   /**
    * @param {Number} _amount
    * @param {String} _eosAccountName
    */
-  redeem(_amount, _eosAccountName) {
+  redeem(_amount, _btcAddress) {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
-      if (_amount === 0) {
-        promiEvent.reject('Impossible to burn 0 pEOS')
+      if (_amount < MINIMUN_SATS_REDEEMABLE) {
+        promiEvent.reject(`Impossible to burn less than ${MINIMUN_SATS_REDEEMABLE} pBTC`)
         return
       }
 
-      if (!utils.eos.isValidAccountName(_eosAccountName)) {
-        promiEvent.reject('Eos Account is not valid')
+      if (!utils.btc.isValidAddress(_btcAddress)) {
+        promiEvent.reject('Btc Address is not valid')
         return
       }
 
@@ -168,25 +109,24 @@ class pEOS {
           'burn',
           {
             isWeb3Injected: this._isWeb3Injected,
-            abi: peosAbi,
-            contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+            abi: pbtcAbi,
+            contractAddress: this._pbtcSmartContractAddress(),
             privateKey: this._ethPrivateKey,
             value: utils.eth.zeroEther
           },
           [
             utils.eth.correctFormat(
               _amount,
-              PEOS_TOKEN_DECIMALS,
+              PBTC_TOKEN_DECIMALS,
               '*'
             ),
-            _eosAccountName
+            _btcAddress
           ]
         )
-
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
         const txToPoll = ethTxReceipt.transactionHash
-        let broadcastedTx = null
+        let broadcastedBtcTx = null
         let isSeen = false
 
         await polling(async () => {
@@ -201,7 +141,7 @@ class pEOS {
               promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
 
             promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
-            broadcastedTx = incomingTxStatus.broadcast_transaction_hash
+            broadcastedBtcTx = incomingTxStatus.btc_tx_hash
             return true
           } else {
             return false
@@ -209,20 +149,23 @@ class pEOS {
         }, ENCLAVE_POLLING_TIME)
 
         await polling(async () => {
-          const eosTxReceipt = await this._eosjs.rpc.history_get_transaction(broadcastedTx)
+          const status = await this._esplora.makeApiCall(
+            'GET',
+            `/tx/${broadcastedBtcTx}/status`
+          )
 
-          if (eosTxReceipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) {
-            promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt.data)
+          if (status.confirmed) {
+            promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTx)
             return true
           } else {
             return false
           }
-        }, EOS_NODE_POLLING_TIME_INTERVAL)
+        }, ESPLORA_POLLING_TIME)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
-          to: _eosAccountName,
-          tx: broadcastedTx
+          amount: _amount.toFixed(PBTC_TOKEN_DECIMALS),
+          to: _btcAddress,
+          tx: broadcastedBtcTx
         })
       } catch (err) {
         promiEvent.reject(err)
@@ -240,14 +183,14 @@ class pEOS {
         'totalMinted',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(totalIssued => resolve(
           utils.eth.correctFormat(
             parseInt(totalIssued),
-            PEOS_TOKEN_DECIMALS,
+            PBTC_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -262,14 +205,14 @@ class pEOS {
         'totalBurned',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(totalRedeemed => resolve(
           utils.eth.correctFormat(
             parseInt(totalRedeemed),
-            PEOS_TOKEN_DECIMALS,
+            PBTC_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -284,30 +227,16 @@ class pEOS {
         'totalSupply',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(totalSupply => resolve(
           utils.eth.correctFormat(
             parseInt(totalSupply),
-            PEOS_TOKEN_DECIMALS,
+            PBTC_TOKEN_DECIMALS,
             '/'
           )
-        ))
-        .catch(err => reject(err))
-    })
-  }
-
-  getCollateral() {
-    return new Promise((resolve, reject) => {
-      this._eosjs.rpc.get_currency_balance(
-        EOS_NATIVE_TOKEN,
-        PEOS_EOS_CONTRACT_ACCOUNT,
-        EOS_TOKEN_SYMBOL
-      )
-        .then(deposited => resolve(
-          deposited
         ))
         .catch(err => reject(err))
     })
@@ -323,8 +252,8 @@ class pEOS {
         'balanceOf',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         },
         [
           _ethAddress
@@ -333,7 +262,7 @@ class pEOS {
         .then(balance => resolve(
           utils.eth.correctFormat(
             parseInt(balance),
-            PEOS_TOKEN_DECIMALS,
+            PBTC_TOKEN_DECIMALS,
             '/'
           )
         ))
@@ -351,8 +280,8 @@ class pEOS {
       'transfer',
       {
         isWeb3Injected: this._isWeb3Injected,
-        abi: peosAbi,
-        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        abi: pbtcAbi,
+        contractAddress: this._pbtcSmartContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -360,7 +289,7 @@ class pEOS {
         _to,
         utils.eth.correctFormat(
           parseInt(_amount),
-          PEOS_TOKEN_DECIMALS,
+          PBTC_TOKEN_DECIMALS,
           '*'
         )
       ]
@@ -377,8 +306,8 @@ class pEOS {
       'approve',
       {
         isWeb3Injected: this._isWeb3Injected,
-        abi: peosAbi,
-        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        abi: pbtcAbi,
+        contractAddress: this._pbtcSmartContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -386,7 +315,7 @@ class pEOS {
         _spender,
         utils.eth.correctFormat(
           parseInt(_amount),
-          PEOS_TOKEN_DECIMALS,
+          PBTC_TOKEN_DECIMALS,
           '*'
         )
       ]
@@ -404,8 +333,8 @@ class pEOS {
       'transferFrom',
       {
         isWeb3Injected: this._isWeb3Injected,
-        abi: peosAbi,
-        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        abi: pbtcAbi,
+        contractAddress: this._pbtcSmartContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -414,7 +343,7 @@ class pEOS {
         _to,
         utils.eth.correctFormat(
           parseInt(_amount),
-          PEOS_TOKEN_DECIMALS,
+          PBTC_TOKEN_DECIMALS,
           '*'
         )
       ]
@@ -428,8 +357,8 @@ class pEOS {
         'burnNonce',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(burnNonce => resolve(
@@ -446,8 +375,8 @@ class pEOS {
         'mintNonce',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         }
       )
         .then(mintNonce => resolve(
@@ -468,8 +397,8 @@ class pEOS {
         'allowance',
         {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pbtcAbi,
+          contractAddress: this._pbtcSmartContractAddress()
         },
         [
           _owner,
@@ -479,13 +408,23 @@ class pEOS {
         .then(allowance => resolve(
           utils.eth.correctFormat(
             parseInt(allowance),
-            PEOS_TOKEN_DECIMALS,
+            PBTC_TOKEN_DECIMALS,
             '/'
           )
         ))
         .catch(err => reject(err))
     })
   }
+
+  async _pbtcSmartContractAddress() {
+    const ethNetwork = await this._web3.eth.net.getNetworkType()
+    const info = await this.enclave.getInfo(
+      this._btcNetwork,
+      ethNetwork
+    )
+
+    return info['pbtc-smart-contract-address']
+  }
 }
 
-export default pEOS
+export default pBTC

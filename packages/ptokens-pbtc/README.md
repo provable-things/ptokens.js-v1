@@ -1,6 +1,6 @@
-# ptokens-peos
+# ptokens-pbtc
 
-Module for interacting only with pEOS.
+Module for interacting only with pBTC.
 
 &nbsp;
 
@@ -11,7 +11,7 @@ Module for interacting only with pEOS.
 ### Installation:
 
 ```
-npm install ptokens-peos
+npm install ptokens-pbtc
 ```
 
 &nbsp;
@@ -23,26 +23,25 @@ npm install ptokens-peos
 ### Usage:
 
 ```js
-const pEOS = require('ptokens-peos')
+const pBTC = require('ptokens-pbtc')
 
-const peos = new pEOS({
+const pbtc = new pEOS({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
-  eosPrivateKey: 'EOS private key',
-  eosRpc: 'EOS RPC Address'
-  eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
+  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
 })
 ```
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pEOS = require('ptokens-peos')
+const pBTC = require('ptokens-pbtc')
 
 if (window.web3) {
   
-  const peos = new pEOS({
+  const pbtc = new pBTC({
     ethProvider: window.web3.currentProvider,
+    btcNetwork: 'testnet'
   })
 } else {
   console.log('No web3 detected')

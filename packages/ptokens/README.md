@@ -20,31 +20,43 @@ npm install ptokens
 
 &nbsp;
 
-### Usage without injected Web3 and Eosjs
+### Usage: 
 
 ```js
 const pTokens = require('ptokens')
 
 const ptokens = new pTokens({
-  ethPrivateKey: 'Eth private key',
-  ethProvider: 'Eth provider',
-  eosPrivateKey: 'EOS private key',
-  eosProvider: 'EOS provider'
+  peos: {
+    ethPrivateKey: 'Eth private key',
+    ethProvider: 'Eth provider',
+    eosPrivateKey: 'EOS private key',
+    eosRpc: 'EOS RPC Address'
+    eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
+  },
+  pbtc: {
+    ethPrivateKey: 'Eth private key',
+    ethProvider: 'Eth provider',
+    btcNetwork: 'testnet'  // 'testnet' or 'bitcoin', default 'testnet'
+  }
 })
 ```
-
-### :syringe: Usage with injected Web3 and/or EosJs
+It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
+into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
 const pTokens = require('ptokens')
 
 if (window.web3) {
   
-  const web3 = new Web3(window.web3.currentProvider)
-
   const ptokens = new pTokens({
-    web3,
-    eosjs //already initialized eosjs instance
+    peos: {
+      ethProvider: window.web3.currentProvider,
+      ....
+    },
+    pbtc: {
+      ethProvider: window.web3.currentProvider,
+      btcNetwork: 'bitcoin'
+    }
   })
 } else {
   console.log('No web3 detected')

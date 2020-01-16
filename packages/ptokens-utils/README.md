@@ -27,7 +27,7 @@ const utils = require('ptokens-utils')
 
 { eth:
    [Object: null prototype] {
-     alwaysWithPrefix: [Function: alwaysWithPrefix],
+     addHexPrefix: [Function: addHexPrefix],
      correctFormat: [Function: correctFormat],
      ....
 ```

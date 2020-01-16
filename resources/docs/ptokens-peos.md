@@ -11,84 +11,30 @@ npm install ptokens-peos
 ```
 
 
-### Usage without an already initialized Web3 and eosjs instance
+### Usage:
 
 ```js
-const peos = require('ptokens-peos')
+const pEOS = require('ptokens-peos')
 
-const configs = {
+const peos = new pEOS({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
   eosPrivateKey: 'EOS private key',
-  eosProvider: 'EOS provider'
-}
-const peos = new pPEOS(configs)
-```
-
-
-### Usage with an already initialized Web3 instance (eg: injected by Metamask)
-```js
-const peos = require('ptokens-peos')
-
-if (window.web3) {
-  const web3 = new Web3(window.web3.currentProvider)
-  const configs = {
-    eosPrivateKey: 'EOS private key',
-    eosProvider: 'EOS provider'
-    web3
-  }
-  
-  const peos = new pPEOS(configs)
-} else {
-  console.log('No web3 detected')
-}
-```
-
-
-### Usage with an already initialized eosjs instance
-
-```js
-const peos = require('ptokens-peos')
-
-const eosjs = new Api({
-  rpc,
-  signatureProvider,
-  textDecoder: new TextDecoder(), 
-  textEncoder: new TextEncoder() 
+  eosRpc: 'EOS RPC Address'
+  eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
 })
-
-const web3 = new Web3(window.web3.currentProvider)
-const configs = {
-  eosjs
-  ethPrivateKey: 'Eth private key',
-  ethProvider: 'Eth provider',
-}
-  
-const peos = new pPEOS(configs)
 ```
-
-
-### Usage with Web3 and eosjs instances already initialized
+It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
+into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const peos = require('ptokens-peos')
+const pEOS = require('ptokens-peos')
 
 if (window.web3) {
   
-  const eosjs = new Api({
-    rpc,
-    signatureProvider,
-    textDecoder: new TextDecoder(), 
-    textEncoder: new TextEncoder() 
+  const peos = new pEOS({
+    ethProvider: window.web3.currentProvider,
   })
-
-  const web3 = new Web3(window.web3.currentProvider)
-  const configs = {
-    eosjs
-    web3
-  }
-  
-  const peos = new pPEOS(configs)
 } else {
   console.log('No web3 detected')
 }
@@ -99,8 +45,8 @@ if (window.web3) {
 ## Class Methods
 
 * __`approve`__
-* __`getBalance`__
 * __`getAllowance`__
+* __`getBalance`__
 * __`getBurnNonce`__
 * __`getCirculatingSupply`__
 * __`getCollateral`__
@@ -138,30 +84,6 @@ ptokens.peos.approve('eth address', 1.3452).then(status => console.log(status))
 
 &nbsp;
 
-## getBalance
-
-```js
-ptokens.peos.getBalance(address)
-```
-
-### Parameters
-
-- __`String`__ - __`address`__: Ethereum address
-
-Get the current pEOS balance of the provided address
-
-
-### Returns
-
-- __`Number`__ : current balance of the provided Ethereum address
-
-### Example
-```js
-ptokens.peos.getBalance(address).then(balance => console.log(balance))
-```
-
-&nbsp;
-
 
 ## getAllowance
 
@@ -186,6 +108,31 @@ ptokens.peos.getAllowance('owner eth address', 'spender eth address').then(allow
 ```
 
 &nbsp;
+
+## getBalance
+
+```js
+ptokens.peos.getBalance(address)
+```
+
+### Parameters
+
+- __`String`__ - __`address`__: Ethereum address
+
+Get the current pEOS balance of the provided address
+
+
+### Returns
+
+- __`Number`__ : current balance of the provided Ethereum address
+
+### Example
+```js
+ptokens.peos.getBalance(address).then(balance => console.log(balance))
+```
+
+&nbsp;
+
 
 ## getBurnNonce
 
