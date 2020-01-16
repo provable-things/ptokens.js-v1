@@ -12,16 +12,12 @@ class Enclave {
   constructor(configs) {
     const {
       pToken,
-      issueFromNetwork,
-      redeemFromNetwork
     } = configs
 
     if (!utils.helpers.pTokenNameIsValid(pToken))
       throw new Error('Invalid pToken')
 
     this.pToken = utils.helpers.pTokenNameNormalized(pToken)
-    this._issueFromNetwork = issueFromNetwork
-    this._redeemFromNetwork = redeemFromNetwork
     this._api = getApi(this.pToken)
     this._info = null
   }

@@ -25,7 +25,7 @@ npm install ptokens-pbtc
 ```js
 const pBTC = require('ptokens-pbtc')
 
-const pbtc = new pEOS({
+const pbtc = new pBTC({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
   btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
