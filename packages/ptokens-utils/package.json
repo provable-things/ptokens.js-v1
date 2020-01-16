@@ -1,6 +1,6 @@
 {
   "name": "ptokens-utils",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "repo holding some utils needed by other packages",
   "main": "dist/ptokens-utils.cjs.js",
   "module": "dist/ptokens-utils.esm.js",
