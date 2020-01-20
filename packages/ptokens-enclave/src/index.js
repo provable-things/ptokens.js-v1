@@ -4,6 +4,20 @@ import {
   REPORT_LIMIT
 } from './utils/index'
 import utils from 'ptokens-utils'
+import polling from 'light-async-polling'
+
+const ENCLAVE_POLLING_TIME = 200
+
+const mapIncomingTxParamValue = {
+  pbtc: {
+    redeem: 'btc_tx_hash',
+    issue: 'eth_tx_hash'
+  },
+  peos: {
+    redeem: 'broadcast_transaction_hash',
+    issue: 'broadcast_transaction_hash'
+  }
+}
 
 class Enclave {
   /**
@@ -11,7 +25,7 @@ class Enclave {
    */
   constructor(configs) {
     const {
-      pToken,
+      pToken
     } = configs
 
     if (!utils.helpers.pTokenNameIsValid(pToken))
@@ -140,6 +154,34 @@ class Enclave {
       `/${this.pToken}/${_path}`,
       _data
     )
+  }
+
+  /**
+   * @param {String} _transaction
+   * @param {String} __type
+   * @param {Object} _eventEmitter
+   */
+  async monitorIncomingTransaction(_transaction, _type, _eventEmitter) {
+    let broadcastedTx = null
+    let isSeen = false
+    await polling(async () => {
+      const incomingTxStatus = await this.getIncomingTransactionStatus(_transaction)
+      if (incomingTxStatus.broadcast === false && !isSeen) {
+        _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+        isSeen = true
+        return false
+      } else if (incomingTxStatus.broadcast === true) {
+        if (!isSeen)
+          _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+
+        broadcastedTx = incomingTxStatus[mapIncomingTxParamValue[this.pToken][_type]]
+        _eventEmitter.emit('onEnclaveBroadcastedTx', broadcastedTx)
+        return true
+      } else {
+        return false
+      }
+    }, ENCLAVE_POLLING_TIME)
+    return broadcastedTx
   }
 }
 

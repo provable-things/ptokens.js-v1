@@ -16,7 +16,9 @@
     "@babel/runtime": "^7.3.1",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
-    "ptokens-utils": "0.1.0"
+    "light-async-polling": "^1.0.2",
+    "ptokens-utils": "0.1.0",
+    "web3-core-promievent": "^1.2.5-rc.0"
   },
   "devDependencies": {
     "jest": "^24.8.0"

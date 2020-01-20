@@ -24,7 +24,7 @@ test('Should ping the enclave', async () => {
     .to.be.equal(expectedResult)
 })
 
-test('Should generate an error because of invalid pToken name', async () => {
+test('Should generate an error because of invalid pToken name', () => {
   const invalidpTokenName = 'invalid'
   const expectedErrorMessage = 'Invalid pToken'
 
@@ -188,4 +188,27 @@ test('Should submit an EOS block', async () => {
   const res = await enclave.submitBlock(type, EOS_PEOS_BLOCK)
   expect(res)
     .to.be.equal(expectedResult)
+})
+
+test('Should monitor an incoming transaction', async () => {
+  const enclave = new Enclave({
+    pToken: 'peos'
+  })
+
+  let enclaveHasReceivedTx = false
+  let enclaveHasBroadcastedTx = false
+
+  const start = () =>
+    new Promise(resolve => {
+      enclave.monitorIncomingTransaction(HASH_INCOMING_TX, 'issue')
+        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
+        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
+        .then(tx => {
+          expect(tx).to.be.a('string')
+          resolve()
+        })
+    })
+  await start()
+  expect(enclaveHasReceivedTx).to.be.equal(true)
+  expect(enclaveHasBroadcastedTx).to.be.equal(true)
 })

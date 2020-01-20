@@ -10,8 +10,8 @@ jest.setTimeout(300000)
 const PING_RETURN_VALUE = 'pBTC pong!'
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const BTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Btc block submitted to the enclave!'
-const HASH_INCOMING_TX = '0x14253114dad94e408b10abb37a85adf7f6bf70fef4e527080ba8a9aef4a55fa0'
-const HASH_BROADCASTED_TX = '0xcf42e7961691d55618f9f93a9178f778a0ce6538b158eec2218b0df1dbac0fa4'
+const HASH_INCOMING_TX = 'a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
+const HASH_BROADCASTED_TX = '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
 
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
@@ -189,4 +189,27 @@ test('Should submit a BTC block', async () => {
   const res = await enclave.submitBlock(type, BTC_PBTC_BLOCK)
   expect(res)
     .to.be.equal(expectedResult)
+})
+
+test('Should monitor an incoming transaction', async () => {
+  const enclave = new Enclave({
+    pToken: 'pbtc'
+  })
+
+  let enclaveHasReceivedTx = false
+  let enclaveHasBroadcastedTx = false
+
+  const start = () =>
+    new Promise(resolve => {
+      enclave.monitorIncomingTransaction(HASH_INCOMING_TX, 'issue')
+        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
+        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
+        .then(tx => {
+          expect(tx).to.be.a('string')
+          resolve()
+        })
+    })
+  await start()
+  expect(enclaveHasReceivedTx).to.be.equal(true)
+  expect(enclaveHasBroadcastedTx).to.be.equal(true)
 })
