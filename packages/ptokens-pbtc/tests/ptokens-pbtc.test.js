@@ -83,8 +83,8 @@ test('Should monitor an issuing of 1 pBTC', async () => {
 test('Should redeem 1 pBTC', async () => {
   const pbtc = new pBTC(configs)
 
-  // minimum amount to redeem = 100 sats (0.000001 * 10^8)
-  const amountToRedeem = 0.000001
+  // minimum amount to redeem = 1000 sats (0.00001 * 10^8)
+  const amountToRedeem = 0.00001
 
   let ethTxIsConfirmed = false
   let enclaveHasReceivedTx = false

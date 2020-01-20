@@ -41,7 +41,7 @@ class DepositAddress {
   verify() {
     const network = this._btcNetwork === 'bitcoin'
       ? bitcoin.networks.bitcoin
-      : bitcoin.networks.testnet    
+      : bitcoin.networks.testnet
 
     const ethAddressBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.ethAddress),
@@ -73,7 +73,7 @@ class DepositAddress {
         network
       }
     )
-    
+
     return p2sh.address === this._value
   }
 
@@ -85,7 +85,7 @@ class DepositAddress {
         promiEvent.reject('Please provide a deposit address')
 
       let isBroadcasted = false
-      let utxoToPoll = null
+      let utxoToMonitor = null
       let utxos = []
       await polling(async () => {
         // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
@@ -101,7 +101,7 @@ class DepositAddress {
               promiEvent.eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
 
             promiEvent.eventEmitter.emit('onBtcTxConfirmed', utxos[0])
-            utxoToPoll = utxos[0].txid
+            utxoToMonitor = utxos[0].txid
             return true
           } else if (!isBroadcasted) {
             isBroadcasted = true
@@ -113,26 +113,13 @@ class DepositAddress {
         }
       }, ESPLORA_POLLING_TIME)
 
-      let broadcastedEthTx = null
-      let isSeen = false
-      await polling(async () => {
-        const incomingTxStatus = await this._enclave.getIncomingTransactionStatus(utxoToPoll)
+      const broadcastedEthTx = await this._enclave.monitorIncomingTransaction(
+        utxoToMonitor,
+        'issue',
+        promiEvent.eventEmitter
+      )
 
-        if (incomingTxStatus.broadcast === false && !isSeen) {
-          promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-          isSeen = true
-          return false
-        } else if (incomingTxStatus.broadcast === true) {
-          if (!isSeen)
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-
-          promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
-          broadcastedEthTx = incomingTxStatus.eth_tx_hash
-          return true
-        } else {
-          return false
-        }
-      }, ENCLAVE_POLLING_TIME)
+      console.log(broadcastedEthTx)
 
       await polling(async () => {
         const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedEthTx)

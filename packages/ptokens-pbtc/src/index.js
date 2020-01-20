@@ -125,28 +125,11 @@ class pBTC {
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const txToPoll = ethTxReceipt.transactionHash
-        let broadcastedBtcTx = null
-        let isSeen = false
-
-        await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
-
-          if (incomingTxStatus.broadcast === false && !isSeen) {
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-            isSeen = true
-            return false
-          } else if (incomingTxStatus.broadcast === true) {
-            if (!isSeen)
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-
-            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
-            broadcastedBtcTx = incomingTxStatus.btc_tx_hash
-            return true
-          } else {
-            return false
-          }
-        }, ENCLAVE_POLLING_TIME)
+        const broadcastedBtcTx = await this.enclave.monitorIncomingTransaction(
+          ethTxReceipt.transactionHash,
+          'redeem',
+          promiEvent.eventEmitter
+        )
 
         await polling(async () => {
           const status = await this._esplora.makeApiCall(
