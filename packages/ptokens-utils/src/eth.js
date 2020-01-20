@@ -1,4 +1,7 @@
+import polling from 'light-async-polling'
+
 const HEX_PREFIX = '0x'
+const ETH_NODE_POLLING_TIME_INTERVAL = '3000'
 
 /**
  * @param {String} _string
@@ -87,8 +90,8 @@ const isHexPrefixed = _string =>
  * @param {Object} _options
  * @param {Array=} [] - _params
  */
-const makeContractCall = (_web3, _method, _options, _params = []) =>
-  new Promise(async (resolve, reject) => {
+const makeContractCall = async (_web3, _method, _options, _params = []) => {
+  try {
     const account = await getAccount(_web3, _options.isWeb3Injected)
     const contractAddress = await _getContractAddress(_options.contractAddress)
 
@@ -98,10 +101,12 @@ const makeContractCall = (_web3, _method, _options, _params = []) =>
       contractAddress,
       account
     )
-    contract.methods[_method](..._params).call()
-      .then(_res => resolve(_res))
-      .catch(_err => reject(_err))
-  })
+    const res = await contract.methods[_method](..._params).call()
+    return res
+  } catch(err) {
+    throw new Error(err.message)
+  }
+}
 
 /**
  * @param {Object} _web3
@@ -143,24 +148,26 @@ const makeContractSend = (_web3, _method, _options, _params = []) =>
  * @param {String} _contractAddress
  * @param {Array=} [] - _params
  */
-const _makeContractSend = (_web3, _method, _abi, _contractAddress, _value, _params = []) =>
-  new Promise(async (resolve, reject) => {
+const _makeContractSend = async (_web3, _method, _abi, _contractAddress, _value, _params = []) => {
+  try {
     const account = await getAccount(_web3, true)
     const contractAddress = await _getContractAddress(_contractAddress)
-
+  
     const contract = getContract(
       _web3,
       _abi,
       contractAddress,
       account
     )
-    contract.methods[_method](..._params).send({
+    const res = await contract.methods[_method](..._params).send({
       from: account,
       value: _value
     })
-      .then(_res => resolve(_res))
-      .catch(_err => reject(_err))
-  })
+    return res
+  } catch (err) {
+    throw new Error(err.message)
+  }
+}
 
 /**
  * @param {Object} _web3
@@ -198,6 +205,26 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
     }
   })
 
+/**
+ * @param {Object} _web3 
+ * @param {String} _tx 
+ */
+const waitForTransactionConfirmation = async (_web3, _tx) => {
+  let receipt = null
+  await polling(async () => {
+    receipt = await _web3.eth.getTransactionReceipt(_tx)
+
+    if (!receipt) {
+      return false
+    } else if (receipt.status) {
+      return true
+    } else {
+      return false
+    }
+  }, ETH_NODE_POLLING_TIME_INTERVAL)
+  return receipt
+}
+
 const zeroEther = '0x00'
 
 export {
@@ -210,5 +237,6 @@ export {
   isHexPrefixed,
   makeContractCall,
   makeContractSend,
+  waitForTransactionConfirmation,
   zeroEther
 }
