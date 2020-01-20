@@ -54,7 +54,7 @@ class pBTC {
 
     this._esplora = new Esplora(this._btcNetwork)
   }
-
+  
   /**
    * @param {String} _ethAddress
    */
