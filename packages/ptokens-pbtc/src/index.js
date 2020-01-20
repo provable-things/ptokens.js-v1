@@ -9,7 +9,6 @@ import polling from 'light-async-polling'
 import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 import {
   ESPLORA_POLLING_TIME,
-  ENCLAVE_POLLING_TIME,
   PBTC_TOKEN_DECIMALS,
   MINIMUN_SATS_REDEEMABLE
 } from './utils/constants'

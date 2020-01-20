@@ -4,7 +4,6 @@ import polling from 'light-async-polling'
 import utils from 'ptokens-utils'
 import {
   ESPLORA_POLLING_TIME,
-  ENCLAVE_POLLING_TIME,
   ETH_NODE_POLLING_TIME_INTERVAL
 } from '../utils/constants'
 
