@@ -159,7 +159,7 @@ class Enclave {
   /**
    * @param {String} _transaction
    * @param {String} __type
-   * @param {Object} _eventEmitter
+   * @param {EventEmitter} _eventEmitter
    */
   async monitorIncomingTransaction(_transaction, _type, _eventEmitter) {
     let broadcastedTx = null
