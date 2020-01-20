@@ -5,10 +5,8 @@ import utils from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import Esplora from './lib/esplora'
 import DepositAddress from './lib/deposit-address'
-import polling from 'light-async-polling'
 import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 import {
-  ESPLORA_POLLING_TIME,
   PBTC_TOKEN_DECIMALS,
   MINIMUN_SATS_REDEEMABLE
 } from './utils/constants'
@@ -54,7 +52,7 @@ class pBTC {
 
     this._esplora = new Esplora(this._btcNetwork)
   }
-  
+
   /**
    * @param {String} _ethAddress
    */
@@ -130,19 +128,10 @@ class pBTC {
           promiEvent.eventEmitter
         )
 
-        await polling(async () => {
-          const status = await this._esplora.makeApiCall(
-            'GET',
-            `/tx/${broadcastedBtcTx}/status`
-          )
-
-          if (status.confirmed) {
-            promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTx)
-            return true
-          } else {
-            return false
-          }
-        }, ESPLORA_POLLING_TIME)
+        await this._esplora.monitorTransactionConfirmation(
+          broadcastedBtcTx,
+          promiEvent.eventEmitter
+        )
 
         promiEvent.resolve({
           amount: _amount.toFixed(PBTC_TOKEN_DECIMALS),

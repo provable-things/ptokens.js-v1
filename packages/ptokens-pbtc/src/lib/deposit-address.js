@@ -1,10 +1,6 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import * as bitcoin from 'bitcoinjs-lib'
-import polling from 'light-async-polling'
 import utils from 'ptokens-utils'
-import {
-  ETH_NODE_POLLING_TIME_INTERVAL
-} from '../utils/constants'
 
 class DepositAddress {
   /**
@@ -93,19 +89,12 @@ class DepositAddress {
         promiEvent.eventEmitter
       )
 
-      await polling(async () => {
-        const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedEthTx)
+      const ethTxReceipt = await utils.eth.waitForTransactionConfirmation(
+        this._web3,
+        broadcastedEthTx
+      )
 
-        if (!ethTxReceipt) {
-          return false
-        } else if (ethTxReceipt.status) {
-          promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
-          return true
-        } else {
-          return false
-        }
-      }, ETH_NODE_POLLING_TIME_INTERVAL)
-
+      promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
       promiEvent.resolve({
         to: this._ethAddress,
         tx: broadcastedEthTx

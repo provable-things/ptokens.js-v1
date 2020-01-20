@@ -70,6 +70,22 @@ class Esplora {
     }, ESPLORA_POLLING_TIME)
     return utxo
   }
+
+  monitorTransactionConfirmation (_tx, _eventEmitter) {
+    return polling(async () => {
+      const status = await this.makeApiCall(
+        'GET',
+        `/tx/${_tx}/status`
+      )
+
+      if (status.confirmed) {
+        _eventEmitter.emit('onBtcTxConfirmed', _tx)
+        return true
+      } else {
+        return false
+      }
+    }, ESPLORA_POLLING_TIME)
+  }
 }
 
 export default Esplora
