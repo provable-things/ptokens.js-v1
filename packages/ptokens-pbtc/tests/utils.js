@@ -65,7 +65,7 @@ const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to)
   const txHexToBroadcast = psbt.extractTransaction().toHex()
 
   // broadcast tx
-  return await esplora.makeApiCall('POST', 'tx', txHexToBroadcast)
+  return esplora.makeApiCall('POST', 'tx', txHexToBroadcast)
 }
 
 export {
