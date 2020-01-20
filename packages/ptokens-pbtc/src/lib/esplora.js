@@ -39,7 +39,7 @@ class Esplora {
    * @param {String} _address
    * @param {EventEmitter} _eventEmitter
    */
-  async monitorUtxoByAddress (_address, _eventEmitter) {
+  async monitorUtxoByAddress(_address, _eventEmitter) {
     let isBroadcasted = false
     let utxo = null
     let utxos = []
@@ -71,7 +71,7 @@ class Esplora {
     return utxo
   }
 
-  monitorTransactionConfirmation (_tx, _eventEmitter) {
+  monitorTransactionConfirmation(_tx, _eventEmitter) {
     return polling(async () => {
       const status = await this.makeApiCall(
         'GET',
