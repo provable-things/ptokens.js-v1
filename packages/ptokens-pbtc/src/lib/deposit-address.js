@@ -119,8 +119,6 @@ class DepositAddress {
         promiEvent.eventEmitter
       )
 
-      console.log(broadcastedEthTx)
-
       await polling(async () => {
         const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedEthTx)
 
