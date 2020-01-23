@@ -10,7 +10,7 @@
     "test": "jest --ci --forceExit --detectOpenHandles",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
-  "author": "alle.manfredi@gmail.com @provable-thing",
+  "author": "alle.manfredi@gmail.com @provable-things",
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
