@@ -103,7 +103,7 @@ const makeContractCall = async (_web3, _method, _options, _params = []) => {
     )
     const res = await contract.methods[_method](..._params).call()
     return res
-  } catch(err) {
+  } catch (err) {
     throw new Error(err.message)
   }
 }
@@ -152,7 +152,7 @@ const _makeContractSend = async (_web3, _method, _abi, _contractAddress, _value,
   try {
     const account = await getAccount(_web3, true)
     const contractAddress = await _getContractAddress(_contractAddress)
-  
+
     const contract = getContract(
       _web3,
       _abi,
@@ -206,21 +206,20 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
   })
 
 /**
- * @param {Object} _web3 
- * @param {String} _tx 
+ * @param {Object} _web3
+ * @param {String} _tx
  */
 const waitForTransactionConfirmation = async (_web3, _tx) => {
   let receipt = null
   await polling(async () => {
     receipt = await _web3.eth.getTransactionReceipt(_tx)
 
-    if (!receipt) {
+    if (!receipt)
       return false
-    } else if (receipt.status) {
+    else if (receipt.status)
       return true
-    } else {
+    else
       return false
-    }
   }, ETH_NODE_POLLING_TIME_INTERVAL)
   return receipt
 }
