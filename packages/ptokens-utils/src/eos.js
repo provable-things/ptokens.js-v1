@@ -2,10 +2,13 @@ import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import fetch from 'node-fetch'
 import encoding from 'text-encoding'
+import polling from 'light-async-polling'
 
 const EOS_NATIVE_TOKEN = 'eosio.token'
 const EOS_NATIVE_TOKEN_DECIMALS = 4
 const EOS_ACCOUNT_LENGTH = 12
+const EOS_TRANSACTION_EXECUTED = 'executed'
+const EOS_NODE_POLLING_TIME_INTERVAL = 300
 
 /**
  * @param {String} _privateKey
@@ -106,10 +109,28 @@ const _getAmountInEosFormat = (_amount, _decimals = 4) => {
   return _amount.toFixed(EOS_NATIVE_TOKEN_DECIMALS).toString() + ' EOS'
 }
 
+/**
+ * @param {Object} _eosjs
+ * @param {String} _tx
+ */
+const waitForTransactionConfirmation = async (_eosjs, _tx) => {
+  let receipt = null
+  await polling(async () => {
+    receipt = await _eosjs.rpc.history_get_transaction(_tx)
+
+    if (receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED)
+      return true
+    else
+      return false
+  }, EOS_NODE_POLLING_TIME_INTERVAL)
+  return receipt
+}
+
 export {
   getApi,
   getAccountName,
   getAvailablePublicKeys,
   isValidAccountName,
-  transferNativeToken
+  transferNativeToken,
+  waitForTransactionConfirmation
 }
