@@ -6,18 +6,13 @@ import {
   EOS_BLOCKS_BEHIND,
   EOS_EXPIRE_SECONDS,
   EOS_NATIVE_TOKEN,
-  EOS_NODE_POLLING_TIME_INTERVAL,
-  EOS_TRANSACTION_EXECUTED,
   EOS_TOKEN_SYMBOL,
-  ENCLAVE_POLLING_TIME,
-  ETH_NODE_POLLING_TIME_INTERVAL,
   MINIMUM_MINTABLE_PEOS_AMOUNT,
   PEOS_TOKEN_DECIMALS,
   PEOS_EOS_CONTRACT_ACCOUNT,
   PEOS_ETH_CONTRACT_ADDRESS
 } from './utils/constants'
 import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
-import polling from 'light-async-polling'
 
 class pEOS {
   /**
@@ -82,6 +77,7 @@ class pEOS {
       try {
         const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this._eosjs)
         const eosAccountName = await utils.eos.getAccountName(this._eosjs, eosPublicKeys)
+
         const eosTxReceipt = await utils.eos.transferNativeToken(
           this._eosjs,
           PEOS_EOS_CONTRACT_ACCOUNT,
@@ -94,46 +90,23 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
 
-        const txToPoll = eosTxReceipt.transaction_id
-        let broadcastedTx = ''
-        let isSeen = false
+        const broadcastedEthTx = await this.enclave.monitorIncomingTransaction(
+          eosTxReceipt.transaction_id,
+          'issue',
+          promiEvent.eventEmitter
+        )
 
-        await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
+        const ethTxReceipt = await utils.eth.waitForTransactionConfirmation(
+          this._web3,
+          broadcastedEthTx
+        )
 
-          if (incomingTxStatus.broadcast === false && !isSeen) {
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-            isSeen = true
-            return false
-          } else if (incomingTxStatus.broadcast === true) {
-            // NOTE: could happen that eos tx is confirmed before enclave received it
-            if (!isSeen)
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-
-            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
-            broadcastedTx = incomingTxStatus.broadcast_transaction_hash
-            return true
-          } else {
-            return false
-          }
-        }, ENCLAVE_POLLING_TIME)
-
-        await polling(async () => {
-          const ethTxReceipt = await this._web3.eth.getTransactionReceipt(broadcastedTx)
-          if (!ethTxReceipt) {
-            return false
-          } else if (ethTxReceipt.status) {
-            promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
-            return true
-          } else {
-            return false
-          }
-        }, ETH_NODE_POLLING_TIME_INTERVAL)
+        promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
         promiEvent.resolve({
           amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
           to: _ethAddress,
-          tx: broadcastedTx
+          tx: broadcastedEthTx
         })
       } catch (err) {
         promiEvent.reject(err)
@@ -185,44 +158,22 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const txToPoll = ethTxReceipt.transactionHash
-        let broadcastedTx = null
-        let isSeen = false
+        const broadcastedEosTx = await this.enclave.monitorIncomingTransaction(
+          ethTxReceipt.transactionHash,
+          'redeem',
+          promiEvent.eventEmitter
+        )
 
-        await polling(async () => {
-          const incomingTxStatus = await this.enclave.getIncomingTransactionStatus(txToPoll)
-
-          if (incomingTxStatus.broadcast === false && !isSeen) {
-            promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-            isSeen = true
-            return false
-          } else if (incomingTxStatus.broadcast === true) {
-            if (!isSeen)
-              promiEvent.eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
-
-            promiEvent.eventEmitter.emit('onEnclaveBroadcastedTx', incomingTxStatus)
-            broadcastedTx = incomingTxStatus.broadcast_transaction_hash
-            return true
-          } else {
-            return false
-          }
-        }, ENCLAVE_POLLING_TIME)
-
-        await polling(async () => {
-          const eosTxReceipt = await this._eosjs.rpc.history_get_transaction(broadcastedTx)
-
-          if (eosTxReceipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) {
-            promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt.data)
-            return true
-          } else {
-            return false
-          }
-        }, EOS_NODE_POLLING_TIME_INTERVAL)
+        const eosTxReceipt = await utils.eos.waitForTransactionConfirmation(
+          this._eosjs,
+          broadcastedEosTx
+        )
+        promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt.data)
 
         promiEvent.resolve({
           amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
           to: _eosAccountName,
-          tx: broadcastedTx
+          tx: broadcastedEosTx
         })
       } catch (err) {
         promiEvent.reject(err)
