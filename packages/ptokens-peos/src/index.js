@@ -7,10 +7,11 @@ import {
   EOS_EXPIRE_SECONDS,
   EOS_NATIVE_TOKEN,
   EOS_TOKEN_SYMBOL,
+  ETH_NODE_POLLING_TIME_INTERVAL,
   MINIMUM_MINTABLE_PEOS_AMOUNT,
   PEOS_TOKEN_DECIMALS,
   PEOS_EOS_CONTRACT_ACCOUNT,
-  PEOS_ETH_CONTRACT_ADDRESS
+  PEOS_ETH_CONTRACT_ADDRESS,
 } from './utils/constants'
 import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
 
@@ -98,7 +99,8 @@ class pEOS {
 
         const ethTxReceipt = await utils.eth.waitForTransactionConfirmation(
           this._web3,
-          broadcastedEthTx
+          broadcastedEthTx,
+          ETH_NODE_POLLING_TIME_INTERVAL
         )
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
