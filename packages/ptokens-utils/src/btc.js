@@ -24,6 +24,18 @@ const _makeEsploraApiCall = (_network, _callType, _apiPath, _params) =>
   })
 
 /**
+ * 
+ * @param {String} _network 
+ * @param {String} _address 
+ */
+const getUtxoByAddress = (_network, _address) =>
+  _makeEsploraApiCall(
+    _network,
+    'GET',
+    `/address/${_address}/utxo`
+  )
+
+/**
  * @param {String} _address
  * @param {String} _network
  */
@@ -92,6 +104,7 @@ const monitorTransactionConfirmation = (_network, _tx, _eventEmitter, _pollingTi
 
 export {
   isValidAddress,
+  getUtxoByAddress,
   monitorUtxoByAddress,
   monitorTransactionConfirmation
 }

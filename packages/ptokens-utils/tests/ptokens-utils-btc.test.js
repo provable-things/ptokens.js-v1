@@ -71,3 +71,12 @@ test('Should monitor a transaction confirmation', async () => {
 
   expect(isBtcTxConfirmed).to.be.equal(true)
 })
+
+test('Should get all utxo given an address', async () => {
+  const network = 'testnet'
+  const utxos = await utils.btc.getUtxoByAddress(
+    network,
+    BTC_TESTING_ADDRESS
+  )
+  expect(utxos).to.be.an('Array')
+})
