@@ -12,11 +12,77 @@ npm install ptokens-utils
 
 ***
 
-## utils.btc
+## btc.broadcastTransaction
 
-* __`isValidAddress`__
+```js
+ptokens.utils.btc.broadcastTransaction(network, transaction)
+```
 
-***
+Broadcast a Bitcoin transaction using Blockstream Esplora API
+
+### Parameters
+
+- __`String`__ - __`address`__: can be __bitcoin__ or __testnet__
+- __`String`__ - __`transaction`__: transaction in Hex format
+
+### Returns
+
+- __`Promise`__ : when resolved returns if the transaction has been broadcasted succesfully
+
+### Example
+```js
+const isBroadcasted = await utils.btc.broadcastTransaction('testnet', 'tx hex')
+```
+
+&nbsp;
+
+## btc.getUtxoByAddress
+
+```js
+ptokens.utils.btc.getUtxoByAddress(network, address)
+```
+
+Return all UTXOs belonging to a Bitcoin address 
+
+### Parameters
+
+- __`String`__ - __`network`__: can be __bitcoin__ or __testnet__
+- __`String`__ - __`address`__: Bitcoin address
+
+### Returns
+
+- __`Promise`__ : when resolved returns all UTXOs belonging to a Bitcoin address 
+
+### Example
+```js
+const utxos = await utils.btc.getUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP')
+```
+
+&nbsp;
+
+## btc.getTransactionHexById
+
+```js
+ptokens.utils.btc.getTransactionHexById(network, transactionId)
+```
+
+Return a transaction in hex format
+
+### Parameters
+
+- __`String`__ - __`address`__: can be __bitcoin__ or __testnet__
+- __`String`__ - __`transactionId`__: Bitcoin transaction id
+
+### Returns
+
+- __`Promise`__ : when resolved returns a transaction in hex format 
+
+### Example
+```js
+const txHex = await utils.btc.getTransactionHexById('testnet', '3eccff684a63d7643a93936e703c28ab0cd7677093fcf008e194f33ae0393cd3')
+```
+
+&nbsp;
 
 ## btc.isValidAddress
 
@@ -37,6 +103,61 @@ Returns a boolean indicating the address validity
 ### Example
 ```js
 utils.btc.isValidAddress('mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP') //true
+```
+
+&nbsp;
+
+## btc.monitorUtxoByAddress
+
+```js
+ptokens.utils.btc.monitorUtxoByAddress(network, address, eventEmitter, pollingTime)
+```
+
+Allow to monitor if an address is receving a transaction
+
+### Parameters
+
+- __`String`__ - __`network`__: can be __bitcoin__ or __testnet__
+- __`String`__ - __`address`__: Bitcoin address
+- __`EventEmitter`__ - __`eventEmitter`__: event emitter used to emit __onBtcTxBroadcasted__ and __onBtcTxConfirmed__ events
+- __`Number`__ - __`pollingTime`__: time interval to call BlockStream Esplora API
+
+### Returns
+
+- __`Promise`__ : when resolved returns the utxo just confirmed
+
+### Example
+```js
+const eventEmitter = new EventEmitter()
+
+eventEmitter.once('onBtcTxBroadcasted', tx => ...)
+eventEmitter.once('onBtcTxConfirmed', tx => ...)
+const utxo = await utils.btc.monitorUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP', eventEmitter, 2000)
+```
+
+&nbsp;
+
+## btc.waitForTransactionConfirmation
+
+```js
+ptokens.utils.btc.waitForTransactionConfirmation(network, transaction, pollingTime)
+```
+
+Allow to wait for a BTC transaction confirmation
+
+### Parameters
+
+- __`String`__ - __`network`__: can be __bitcoin__ or __testnet__
+- __`String`__ - __`transaction`__: Bitcoin address
+- __`Number`__ - __`pollingTime`__: time interval to call BlockStream Esplora API
+
+### Returns
+
+- __`Promise`__ : when resolved returns the confirmed transaction
+
+### Example
+```js
+const isConfirmed = await utils.btc.waitForTransactionConfirmation('testnet', '3eccff684a63d7643a93936e703c28ab0cd7677093fcf008e194f33ae0393cd3', 2000)
 ```
 
 &nbsp;
@@ -376,6 +497,33 @@ Performs a contract `send` given a Web3 instance and the Smart Contract details.
 ```js
 const receipt = await utils.eth.makeContractSend(web3, 'transfer', true, abi, 'eth contract address' , ['eth address']) //true
 ```
+
+&nbsp;
+
+## eth.waitForTransactionConfirmation
+
+```js
+ptokens.utils.eth.waitForTransactionConfirmation(web3, transaction, pollingTime)
+```
+
+Allow to wait for a ETH transaction confirmation
+
+### Parameters
+
+- __`Object`__ - __`web3`__: an initialized instance of __Web3__
+- __`String`__ - __`transaction`__: Ethereum transaction hash
+- __`Number`__ - __`pollingTime`__: time interval to call __web3.eth.getTransactionReceipt__
+
+### Returns
+
+- __`Promise`__ : when resolved returns the confirmed transaction
+
+### Example
+```js
+const isConfirmed = await utils.eth.waitForTransactionConfirmation(web3, '0x8cc2e8f07ac6ae2fab2fbcdb6f8b985383eec42f9ecb589377bdbe60d85bcae1', 2000)
+```
+
+&nbsp;
 
 ***
 
