@@ -1,6 +1,10 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import * as bitcoin from 'bitcoinjs-lib'
 import utils from 'ptokens-utils'
+import {
+  BTC_ESPLORA_POLLING_TIME,
+  ETH_NODE_POLLING_TIME_INTERVAL
+} from '../utils/constants'
 
 class DepositAddress {
   /**
@@ -13,7 +17,6 @@ class DepositAddress {
       enclavePublicKey,
       value,
       btcNetwork,
-      esplora,
       enclave,
       web3
     } = _params
@@ -23,7 +26,6 @@ class DepositAddress {
     this.enclavePublicKey = enclavePublicKey
     this._value = value
     this._btcNetwork = btcNetwork
-    this._esplora = esplora
     this._enclave = enclave
     this._web3 = web3
   }
@@ -78,9 +80,11 @@ class DepositAddress {
       if (!this._value)
         promiEvent.reject('Please provide a deposit address')
 
-      const utxoToMonitor = await this._esplora.monitorUtxoByAddress(
+      const utxoToMonitor = await utils.btc.monitorUtxoByAddress(
+        this._btcNetwork,
         this._value,
-        promiEvent.eventEmitter
+        promiEvent.eventEmitter,
+        BTC_ESPLORA_POLLING_TIME
       )
 
       const broadcastedEthTx = await this._enclave.monitorIncomingTransaction(
@@ -91,7 +95,8 @@ class DepositAddress {
 
       const ethTxReceipt = await utils.eth.waitForTransactionConfirmation(
         this._web3,
-        broadcastedEthTx
+        broadcastedEthTx,
+        ETH_NODE_POLLING_TIME_INTERVAL
       )
 
       promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)

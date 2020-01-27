@@ -3,12 +3,12 @@ import Web3PromiEvent from 'web3-core-promievent'
 import Enclave from 'ptokens-enclave'
 import utils from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
-import Esplora from './lib/esplora'
 import DepositAddress from './lib/deposit-address'
 import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 import {
   PBTC_TOKEN_DECIMALS,
-  MINIMUN_SATS_REDEEMABLE
+  MINIMUN_SATS_REDEEMABLE,
+  BTC_ESPLORA_POLLING_TIME
 } from './utils/constants'
 
 class pBTC {
@@ -49,8 +49,6 @@ class pBTC {
       this._btcNetwork = btcNetwork
     else
       this._btcNetwork = 'testnet'
-
-    this._esplora = new Esplora(this._btcNetwork)
   }
 
   /**
@@ -71,7 +69,6 @@ class pBTC {
       enclavePublicKey: deposit.enclavePublicKey,
       value: deposit.btcDepositAddress,
       btcNetwork: this._btcNetwork,
-      esplora: this._esplora,
       enclave: this.enclave,
       web3: this._web3
     })
@@ -128,10 +125,12 @@ class pBTC {
           promiEvent.eventEmitter
         )
 
-        await this._esplora.monitorTransactionConfirmation(
+        await utils.btc.waitForTransactionConfirmation(
+          this._btcNetwork,
           broadcastedBtcTx,
-          promiEvent.eventEmitter
+          BTC_ESPLORA_POLLING_TIME
         )
+        promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTx)
 
         promiEvent.resolve({
           amount: _amount.toFixed(PBTC_TOKEN_DECIMALS),

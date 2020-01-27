@@ -1,7 +1,5 @@
-import Esplora from '../src/lib/esplora'
 import * as bitcoin from 'bitcoinjs-lib'
-
-const esplora = new Esplora('testnet')
+import utils from 'ptokens-utils'
 
 /**
  *
@@ -17,9 +15,9 @@ const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to)
     bitcoin.networks.testnet
   )
 
-  const utxos = await esplora.makeApiCall(
-    'GET',
-    `/address/${_btcAddress}/utxo`
+  const utxos = await utils.btc.getUtxoByAddress(
+    'testnet',
+    _btcAddress
   )
 
   // get utxo with the min value
@@ -32,9 +30,9 @@ const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to)
     }
   }
 
-  const utxoToSpendHex = await esplora.makeApiCall(
-    'GET',
-    `tx/${utxoToSpend.txid}/hex`
+  const utxoToSpendHex = await utils.btc.getTransactionHexById(
+    'testnet',
+    utxoToSpend.txid
   )
 
   const psbt = new bitcoin.Psbt({ network: bitcoin.networks.testnet })
@@ -64,8 +62,10 @@ const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to)
 
   const txHexToBroadcast = psbt.extractTransaction().toHex()
 
-  // broadcast tx
-  return esplora.makeApiCall('POST', 'tx', txHexToBroadcast)
+  return utils.btc.broadcastTransaction(
+    'testnet',
+    txHexToBroadcast
+  )
 }
 
 export {
