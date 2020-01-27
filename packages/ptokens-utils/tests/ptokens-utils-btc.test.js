@@ -49,27 +49,16 @@ test('Should monitor an utxo given an address', async () => {
 })
 
 test('Should monitor a transaction confirmation', async () => {
-  const eventEmitter = new EventEmitter()
   const pollingTime = 200
   const network = 'testnet'
 
-  let isBtcTxConfirmed = false
-  const start = () =>
-    new Promise(resolve => {
-      eventEmitter.once('onBtcTxConfirmed', () => { isBtcTxConfirmed = true })
+  const hasBeenConfirmed = await utils.btc.waitForTransactionConfirmation(
+    network,
+    UTXO,
+    pollingTime
+  )
 
-      utils.btc.monitorTransactionConfirmation(
-        network,
-        UTXO,
-        eventEmitter,
-        pollingTime
-      )
-        .then(() => resolve())
-    })
-
-  await start()
-
-  expect(isBtcTxConfirmed).to.be.equal(true)
+  expect(hasBeenConfirmed).to.be.equal(true)
 })
 
 test('Should get all utxo given an address', async () => {
@@ -79,4 +68,13 @@ test('Should get all utxo given an address', async () => {
     BTC_TESTING_ADDRESS
   )
   expect(utxos).to.be.an('Array')
+})
+
+test('Should get a tx in hex format', async () => {
+  const network = 'testnet'
+  const hex = await utils.btc.getTransactionHexById(
+    network,
+    UTXO
+  )
+  expect(hex).to.be.a('String')
 })

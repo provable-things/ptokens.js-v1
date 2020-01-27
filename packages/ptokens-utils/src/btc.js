@@ -26,6 +26,19 @@ const _makeEsploraApiCall = (_network, _callType, _apiPath, _params) =>
 /**
  * 
  * @param {String} _network 
+ * @param {String} _tx
+ */
+const broadcastTransaction = (_network, _tx) =>
+  _makeEsploraApiCall(
+    _network,
+    'POST',
+    '/tx',
+    _tx
+  )
+
+/**
+ * 
+ * @param {String} _network 
  * @param {String} _address 
  */
 const getUtxoByAddress = (_network, _address) =>
@@ -33,6 +46,19 @@ const getUtxoByAddress = (_network, _address) =>
     _network,
     'GET',
     `/address/${_address}/utxo`
+  )
+
+
+/**
+ * 
+ * @param {String} _network 
+ * @param {String} _txId 
+ */
+const getTransactionHexById = (_network, _txId) =>
+  _makeEsploraApiCall(
+    _network,
+    'GET',
+    `/tx/${_txId}/hex`
   )
 
 /**
@@ -83,11 +109,10 @@ const monitorUtxoByAddress = async (_network, _address, _eventEmitter, _pollingT
 /**
  * @param {String} _network
  * @param {String} _tx
- * @param {EventEmitter} _eventEmitter
  * @param {Number} _pollingTime
  */
-const monitorTransactionConfirmation = (_network, _tx, _eventEmitter, _pollingTime) =>
-  polling(async () => {
+const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
+  await polling(async () => {
     const status = await _makeEsploraApiCall(
       _network,
       'GET',
@@ -95,16 +120,20 @@ const monitorTransactionConfirmation = (_network, _tx, _eventEmitter, _pollingTi
     )
 
     if (status.confirmed) {
-      _eventEmitter.emit('onBtcTxConfirmed', _tx)
       return true
     } else {
       return false
     }
   }, _pollingTime)
+  return true
+}
+  
 
 export {
+  broadcastTransaction,
   isValidAddress,
   getUtxoByAddress,
+  getTransactionHexById,
   monitorUtxoByAddress,
-  monitorTransactionConfirmation
+  waitForTransactionConfirmation
 }
