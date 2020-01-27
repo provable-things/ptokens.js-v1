@@ -1,7 +1,6 @@
 import polling from 'light-async-polling'
 
 const HEX_PREFIX = '0x'
-const ETH_NODE_POLLING_TIME_INTERVAL = '3000'
 
 /**
  * @param {String} _string
@@ -208,8 +207,9 @@ const _sendSignedMethodTx = (_web3, _privateKey, _method, _abi, _contractAddress
 /**
  * @param {Object} _web3
  * @param {String} _tx
+ * @param {Number} _pollingTime
  */
-const waitForTransactionConfirmation = async (_web3, _tx) => {
+const waitForTransactionConfirmation = async (_web3, _tx, _pollingTime) => {
   let receipt = null
   await polling(async () => {
     receipt = await _web3.eth.getTransactionReceipt(_tx)
@@ -220,7 +220,7 @@ const waitForTransactionConfirmation = async (_web3, _tx) => {
       return true
     else
       return false
-  }, ETH_NODE_POLLING_TIME_INTERVAL)
+  }, _pollingTime)
   return receipt
 }
 

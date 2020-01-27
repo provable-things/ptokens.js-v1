@@ -14,9 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
+    "axios": "^0.19.2",
     "bitcoin-address-validation": "^1.0.0",
     "chai": "^4.2.0",
     "eosjs": "^20.0.0",
+    "eventemitter3": "^4.0.0",
     "light-async-polling": "^1.0.2",
     "text-encoding": "^0.7.0",
     "web3": "^1.2.2"
