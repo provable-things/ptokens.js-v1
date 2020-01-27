@@ -157,7 +157,8 @@ test('Should wait for an ETH transaction confirmation', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
   const receipt = await utils.eth.waitForTransactionConfirmation(
     web3,
-    ETH_TESTING_TX
+    ETH_TESTING_TX,
+    3000
   )
   expect(receipt)
     .to.be.an('Object')
