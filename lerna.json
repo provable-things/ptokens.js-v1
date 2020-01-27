@@ -2,5 +2,14 @@
   "packages": [
     "packages/*"
   ],
+  "command": {
+    "init": {
+      "exact": true
+    },
+    "publish": {
+      "exact": true,
+      "skipGit": true
+    }
+  },
   "version": "0.1.0"
 }

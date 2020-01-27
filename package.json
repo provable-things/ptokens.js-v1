@@ -9,7 +9,7 @@
     "build": "lerna run build",
     "init": "npm i && lerna bootstrap",
     "lint": "lerna run lint",
-    "publish": "npm run bootstrap && lerna publish --skip-git",
+    "publish": "npm run bootstrap && lerna publish --dist-tag next --skip-git",
     "test": "lerna run test"
   },
   "keywords": [
