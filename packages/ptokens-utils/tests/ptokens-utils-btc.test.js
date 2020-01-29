@@ -10,15 +10,13 @@ const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 test('Should be a VALID BTC address', () => {
   const validBtcAddress = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
   const result = utils.btc.isValidAddress(validBtcAddress)
-  expect(result.address)
-    .to.be.equal(validBtcAddress)
+  expect(result.address).to.be.equal(validBtcAddress)
 })
 
 test('Should be an INVALID BTC address', () => {
   const validBtcAddress = 'invalid'
   const result = utils.btc.isValidAddress(validBtcAddress)
-  expect(result)
-    .to.be.equal(false)
+  expect(result).to.be.equal(false)
 })
 
 test('Should monitor an utxo given an address', async () => {
@@ -30,15 +28,20 @@ test('Should monitor an utxo given an address', async () => {
   let isBtcTxConfirmed = false
   const start = () =>
     new Promise(resolve => {
-      eventEmitter.once('onBtcTxBroadcasted', () => { isBtcTxBroadcasted = true })
-      eventEmitter.once('onBtcTxConfirmed', () => { isBtcTxConfirmed = true })
+      eventEmitter.once('onBtcTxBroadcasted', () => {
+        isBtcTxBroadcasted = true
+      })
+      eventEmitter.once('onBtcTxConfirmed', () => {
+        isBtcTxConfirmed = true
+      })
 
-      utils.btc.monitorUtxoByAddress(
-        network,
-        BTC_TESTING_ADDRESS,
-        eventEmitter,
-        pollingTime
-      )
+      utils.btc
+        .monitorUtxoByAddress(
+          network,
+          BTC_TESTING_ADDRESS,
+          eventEmitter,
+          pollingTime
+        )
         .then(() => resolve())
     })
 
@@ -63,18 +66,12 @@ test('Should monitor a transaction confirmation', async () => {
 
 test('Should get all utxo given an address', async () => {
   const network = 'testnet'
-  const utxos = await utils.btc.getUtxoByAddress(
-    network,
-    BTC_TESTING_ADDRESS
-  )
+  const utxos = await utils.btc.getUtxoByAddress(network, BTC_TESTING_ADDRESS)
   expect(utxos).to.be.an('Array')
 })
 
 test('Should get a tx in hex format', async () => {
   const network = 'testnet'
-  const hex = await utils.btc.getTransactionHexById(
-    network,
-    UTXO
-  )
+  const hex = await utils.btc.getTransactionHexById(network, UTXO)
   expect(hex).to.be.a('String')
 })

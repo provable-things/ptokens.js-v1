@@ -11,7 +11,7 @@ import {
   MINIMUM_MINTABLE_PEOS_AMOUNT,
   PEOS_TOKEN_DECIMALS,
   PEOS_EOS_CONTRACT_ACCOUNT,
-  PEOS_ETH_CONTRACT_ADDRESS,
+  PEOS_ETH_CONTRACT_ADDRESS
 } from './utils/constants'
 import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
 
@@ -50,10 +50,8 @@ class pEOS {
 
     if (eosSignatureProvider)
       this._eosjs = utils.eos.getApi(null, eosRpc, eosSignatureProvider)
-    else if (
-      eosPrivateKey &&
-      eosRpc
-    ) this._eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
+    else if (eosPrivateKey && eosRpc)
+      this._eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
     else this._eosjs = utils.eos.getApi(null, eosRpc, null)
   }
 
@@ -76,8 +74,13 @@ class pEOS {
       }
 
       try {
-        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(this._eosjs)
-        const eosAccountName = await utils.eos.getAccountName(this._eosjs, eosPublicKeys)
+        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(
+          this._eosjs
+        )
+        const eosAccountName = await utils.eos.getAccountName(
+          this._eosjs,
+          eosPublicKeys
+        )
 
         const eosTxReceipt = await utils.eos.transferNativeToken(
           this._eosjs,
@@ -149,11 +152,7 @@ class pEOS {
             value: utils.eth.zeroEther
           },
           [
-            utils.eth.correctFormat(
-              _amount,
-              PEOS_TOKEN_DECIMALS,
-              '*'
-            ),
+            utils.eth.correctFormat(_amount, PEOS_TOKEN_DECIMALS, '*'),
             _eosAccountName
           ]
         )
@@ -188,80 +187,76 @@ class pEOS {
 
   getTotalIssued() {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'totalMinted',
-        {
+      utils.eth
+        .makeContractCall(this._web3, 'totalMinted', {
           isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        }
-      )
-        .then(totalIssued => resolve(
-          utils.eth.correctFormat(
-            parseInt(totalIssued),
-            PEOS_TOKEN_DECIMALS,
-            '/'
+        })
+        .then(totalIssued =>
+          resolve(
+            utils.eth.correctFormat(
+              parseInt(totalIssued),
+              PEOS_TOKEN_DECIMALS,
+              '/'
+            )
           )
-        ))
+        )
         .catch(err => reject(err))
     })
   }
 
   getTotalRedeemed() {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'totalBurned',
-        {
+      utils.eth
+        .makeContractCall(this._web3, 'totalBurned', {
           isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        }
-      )
-        .then(totalRedeemed => resolve(
-          utils.eth.correctFormat(
-            parseInt(totalRedeemed),
-            PEOS_TOKEN_DECIMALS,
-            '/'
+        })
+        .then(totalRedeemed =>
+          resolve(
+            utils.eth.correctFormat(
+              parseInt(totalRedeemed),
+              PEOS_TOKEN_DECIMALS,
+              '/'
+            )
           )
-        ))
+        )
         .catch(err => reject(err))
     })
   }
 
   getCirculatingSupply() {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'totalSupply',
-        {
+      utils.eth
+        .makeContractCall(this._web3, 'totalSupply', {
           isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        }
-      )
-        .then(totalSupply => resolve(
-          utils.eth.correctFormat(
-            parseInt(totalSupply),
-            PEOS_TOKEN_DECIMALS,
-            '/'
+        })
+        .then(totalSupply =>
+          resolve(
+            utils.eth.correctFormat(
+              parseInt(totalSupply),
+              PEOS_TOKEN_DECIMALS,
+              '/'
+            )
           )
-        ))
+        )
         .catch(err => reject(err))
     })
   }
 
   getCollateral() {
     return new Promise((resolve, reject) => {
-      this._eosjs.rpc.get_currency_balance(
-        EOS_NATIVE_TOKEN,
-        PEOS_EOS_CONTRACT_ACCOUNT,
-        EOS_TOKEN_SYMBOL
-      )
-        .then(deposited => resolve(
-          deposited
-        ))
+      this._eosjs.rpc
+        .get_currency_balance(
+          EOS_NATIVE_TOKEN,
+          PEOS_EOS_CONTRACT_ACCOUNT,
+          EOS_TOKEN_SYMBOL
+        )
+        .then(deposited => resolve(deposited))
         .catch(err => reject(err))
     })
   }
@@ -271,25 +266,22 @@ class pEOS {
    */
   getBalance(_ethAddress) {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'balanceOf',
-        {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        },
-        [
-          _ethAddress
-        ]
-      )
-        .then(balance => resolve(
-          utils.eth.correctFormat(
-            parseInt(balance),
-            PEOS_TOKEN_DECIMALS,
-            '/'
+      utils.eth
+        .makeContractCall(
+          this._web3,
+          'balanceOf',
+          {
+            isWeb3Injected: this._isWeb3Injected,
+            abi: peosAbi,
+            contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          },
+          [_ethAddress]
+        )
+        .then(balance =>
+          resolve(
+            utils.eth.correctFormat(parseInt(balance), PEOS_TOKEN_DECIMALS, '/')
           )
-        ))
+        )
         .catch(err => reject(err))
     })
   }
@@ -311,11 +303,7 @@ class pEOS {
       },
       [
         _to,
-        utils.eth.correctFormat(
-          parseInt(_amount),
-          PEOS_TOKEN_DECIMALS,
-          '*'
-        )
+        utils.eth.correctFormat(parseInt(_amount), PEOS_TOKEN_DECIMALS, '*')
       ]
     )
   }
@@ -337,11 +325,7 @@ class pEOS {
       },
       [
         _spender,
-        utils.eth.correctFormat(
-          parseInt(_amount),
-          PEOS_TOKEN_DECIMALS,
-          '*'
-        )
+        utils.eth.correctFormat(parseInt(_amount), PEOS_TOKEN_DECIMALS, '*')
       ]
     )
   }
@@ -365,47 +349,33 @@ class pEOS {
       [
         _from,
         _to,
-        utils.eth.correctFormat(
-          parseInt(_amount),
-          PEOS_TOKEN_DECIMALS,
-          '*'
-        )
+        utils.eth.correctFormat(parseInt(_amount), PEOS_TOKEN_DECIMALS, '*')
       ]
     )
   }
 
   getBurnNonce() {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'burnNonce',
-        {
+      utils.eth
+        .makeContractCall(this._web3, 'burnNonce', {
           isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        }
-      )
-        .then(burnNonce => resolve(
-          parseInt(burnNonce)
-        ))
+        })
+        .then(burnNonce => resolve(parseInt(burnNonce)))
         .catch(err => reject(err))
     })
   }
 
   getMintNonce() {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'mintNonce',
-        {
+      utils.eth
+        .makeContractCall(this._web3, 'mintNonce', {
           isWeb3Injected: this._isWeb3Injected,
           abi: peosAbi,
           contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        }
-      )
-        .then(mintNonce => resolve(
-          parseInt(mintNonce)
-        ))
+        })
+        .then(mintNonce => resolve(parseInt(mintNonce)))
         .catch(err => reject(err))
     })
   }
@@ -416,26 +386,26 @@ class pEOS {
    */
   getAllowance(_owner, _spender) {
     return new Promise((resolve, reject) => {
-      utils.eth.makeContractCall(
-        this._web3,
-        'allowance',
-        {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
-        },
-        [
-          _owner,
-          _spender
-        ]
-      )
-        .then(allowance => resolve(
-          utils.eth.correctFormat(
-            parseInt(allowance),
-            PEOS_TOKEN_DECIMALS,
-            '/'
+      utils.eth
+        .makeContractCall(
+          this._web3,
+          'allowance',
+          {
+            isWeb3Injected: this._isWeb3Injected,
+            abi: peosAbi,
+            contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          },
+          [_owner, _spender]
+        )
+        .then(allowance =>
+          resolve(
+            utils.eth.correctFormat(
+              parseInt(allowance),
+              PEOS_TOKEN_DECIMALS,
+              '/'
+            )
           )
-        ))
+        )
         .catch(err => reject(err))
     })
   }

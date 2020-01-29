@@ -1,17 +1,16 @@
 import Enclave from '../src/index'
 import { expect } from 'chai'
-import {
-  ETH_PBTC_BLOCK,
-  BTC_PBTC_BLOCK
-} from './utils'
+import { ETH_PBTC_BLOCK, BTC_PBTC_BLOCK } from './utils'
 
 jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pBTC pong!'
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const BTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Btc block submitted to the enclave!'
-const HASH_INCOMING_TX = 'a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
-const HASH_BROADCASTED_TX = '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
+const HASH_INCOMING_TX =
+  'a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
+const HASH_BROADCASTED_TX =
+  '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
 
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
@@ -23,8 +22,7 @@ test('Should ping the enclave', async () => {
   })
 
   const res = await enclave.ping()
-  expect(res)
-    .to.be.equal(expectedResult)
+  expect(res).to.be.equal(expectedResult)
 })
 
 test('Should get the Enclave Info', async () => {
@@ -103,10 +101,8 @@ test('Should get ETH reports by nonce', async () => {
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
-  expect(res)
-    .to.be.an.instanceof(Object)
-  expect(res._id)
-    .to.be.equal(`pBTC_ETH ${nonce}`)
+  expect(res).to.be.an.instanceof(Object)
+  expect(res._id).to.be.equal(`pBTC_ETH ${nonce}`)
 })
 
 test('Should get BTC reports by nonce', async () => {
@@ -117,10 +113,8 @@ test('Should get BTC reports by nonce', async () => {
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
-  expect(res)
-    .to.be.an.instanceof(Object)
-  expect(res._id)
-    .to.be.equal(`pBTC_BTC ${nonce}`)
+  expect(res).to.be.an.instanceof(Object)
+  expect(res._id).to.be.equal(`pBTC_BTC ${nonce}`)
 })
 
 test('Should get last ETH processed block', async () => {
@@ -130,8 +124,7 @@ test('Should get last ETH processed block', async () => {
   })
 
   const res = await enclave.getLastProcessedBlock(type)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get last BTC processed block', async () => {
@@ -141,8 +134,7 @@ test('Should get last BTC processed block', async () => {
   })
 
   const res = await enclave.getLastProcessedBlock(type)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get the status of an incoming tx', async () => {
@@ -152,8 +144,7 @@ test('Should get the status of an incoming tx', async () => {
   })
 
   const res = await enclave.getIncomingTransactionStatus(hash)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get the status of an brodcasted tx', async () => {
@@ -163,8 +154,7 @@ test('Should get the status of an brodcasted tx', async () => {
   })
 
   const res = await enclave.getBroadcastTransactionStatus(hash)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should submit an ETH block', async () => {
@@ -175,8 +165,7 @@ test('Should submit an ETH block', async () => {
   })
 
   const res = await enclave.submitBlock(type, ETH_PBTC_BLOCK)
-  expect(res)
-    .to.be.equal(expectedResult)
+  expect(res).to.be.equal(expectedResult)
 })
 
 test('Should submit a BTC block', async () => {
@@ -187,8 +176,7 @@ test('Should submit a BTC block', async () => {
   })
 
   const res = await enclave.submitBlock(type, BTC_PBTC_BLOCK)
-  expect(res)
-    .to.be.equal(expectedResult)
+  expect(res).to.be.equal(expectedResult)
 })
 
 test('Should monitor an incoming transaction', async () => {
@@ -201,9 +189,14 @@ test('Should monitor an incoming transaction', async () => {
 
   const start = () =>
     new Promise(resolve => {
-      enclave.monitorIncomingTransaction(HASH_INCOMING_TX, 'issue')
-        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
-        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
+      enclave
+        .monitorIncomingTransaction(HASH_INCOMING_TX, 'issue')
+        .once('onEnclaveReceivedTx', () => {
+          enclaveHasReceivedTx = true
+        })
+        .once('onEnclaveBroadcastedTx', () => {
+          enclaveHasBroadcastedTx = true
+        })
         .then(tx => {
           expect(tx).to.be.a('string')
           resolve()

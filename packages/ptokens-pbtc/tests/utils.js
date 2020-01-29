@@ -9,16 +9,19 @@ import utils from 'ptokens-utils'
  * @param {Number} _minerFees
  * @param {String} _to
  */
-const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to) => {
+const sendBitcoin = async (
+  _btcPrivateKey,
+  _btcAddress,
+  _value,
+  _minerFees,
+  _to
+) => {
   const key = bitcoin.ECPair.fromPrivateKey(
     Buffer.from(_btcPrivateKey, 'hex'),
     bitcoin.networks.testnet
   )
 
-  const utxos = await utils.btc.getUtxoByAddress(
-    'testnet',
-    _btcAddress
-  )
+  const utxos = await utils.btc.getUtxoByAddress('testnet', _btcAddress)
 
   // get utxo with the min value
   let min = Math.pow(2, 32)
@@ -39,10 +42,7 @@ const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to)
   psbt.addInput({
     index: utxoToSpend.vout,
     hash: utxoToSpend.txid,
-    nonWitnessUtxo: Buffer.from(
-      utxoToSpendHex,
-      'hex'
-    )
+    nonWitnessUtxo: Buffer.from(utxoToSpendHex, 'hex')
   })
 
   psbt.addOutput({
@@ -62,12 +62,7 @@ const sendBitcoin = async (_btcPrivateKey, _btcAddress, _value, _minerFees, _to)
 
   const txHexToBroadcast = psbt.extractTransaction().toHex()
 
-  return utils.btc.broadcastTransaction(
-    'testnet',
-    txHexToBroadcast
-  )
+  return utils.btc.broadcastTransaction('testnet', txHexToBroadcast)
 }
 
-export {
-  sendBitcoin
-}
+export { sendBitcoin }

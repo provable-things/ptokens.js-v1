@@ -1,8 +1,4 @@
-import {
-  getApi,
-  makeApiCall,
-  REPORT_LIMIT
-} from './utils/index'
+import { getApi, makeApiCall, REPORT_LIMIT } from './utils/index'
 import utils from 'ptokens-utils'
 import polling from 'light-async-polling'
 
@@ -24,9 +20,7 @@ class Enclave {
    * @param {Object} configs
    */
   constructor(configs) {
-    const {
-      pToken
-    } = configs
+    const { pToken } = configs
 
     if (!utils.helpers.pTokenNameIsValid(pToken))
       throw new Error('Invalid pToken')
@@ -37,11 +31,7 @@ class Enclave {
   }
 
   ping() {
-    return makeApiCall(
-      this._api,
-      'GET',
-      `/${this.pToken}/ping`
-    )
+    return makeApiCall(this._api, 'GET', `/${this.pToken}/ping`)
   }
 
   /**
@@ -53,7 +43,8 @@ class Enclave {
     if (!this._info) {
       const info = await makeApiCall(
         this._api,
-        'GET', `/${this.pToken}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
+        'GET',
+        `/${this.pToken}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
       )
       this._info = info
     }
@@ -67,7 +58,8 @@ class Enclave {
   getReports(_type, _limit = REPORT_LIMIT) {
     return makeApiCall(
       this._api,
-      'GET', `/${this.pToken}/${_type}-reports/limit/${_limit}`
+      'GET',
+      `/${this.pToken}/${_type}-reports/limit/${_limit}`
     )
   }
 
@@ -148,12 +140,7 @@ class Enclave {
    * @param {Object} [_data = null]
    */
   generic(_type, _path, _data = null) {
-    return makeApiCall(
-      this._api,
-      _type,
-      `/${this.pToken}/${_path}`,
-      _data
-    )
+    return makeApiCall(this._api, _type, `/${this.pToken}/${_path}`, _data)
   }
 
   /**
@@ -165,16 +152,18 @@ class Enclave {
     let broadcastedTx = null
     let isSeen = false
     await polling(async () => {
-      const incomingTxStatus = await this.getIncomingTransactionStatus(_transaction)
+      const incomingTxStatus = await this.getIncomingTransactionStatus(
+        _transaction
+      )
       if (incomingTxStatus.broadcast === false && !isSeen) {
         _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
         isSeen = true
         return false
       } else if (incomingTxStatus.broadcast === true) {
-        if (!isSeen)
-          _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+        if (!isSeen) _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
 
-        broadcastedTx = incomingTxStatus[mapIncomingTxParamValue[this.pToken][_type]]
+        broadcastedTx =
+          incomingTxStatus[mapIncomingTxParamValue[this.pToken][_type]]
         _eventEmitter.emit('onEnclaveBroadcastedTx', broadcastedTx)
         return true
       } else {

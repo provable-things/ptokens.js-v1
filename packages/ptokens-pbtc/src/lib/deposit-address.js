@@ -35,9 +35,10 @@ class DepositAddress {
   }
 
   verify() {
-    const network = this._btcNetwork === 'bitcoin'
-      ? bitcoin.networks.bitcoin
-      : bitcoin.networks.testnet
+    const network =
+      this._btcNetwork === 'bitcoin'
+        ? bitcoin.networks.bitcoin
+        : bitcoin.networks.testnet
 
     const ethAddressBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.ethAddress),
@@ -53,22 +54,22 @@ class DepositAddress {
       Buffer.concat([ethAddressBuf, nonceBuf])
     )
 
-    const output = bitcoin.script.compile([].concat(
-      ethAddressAndNonceHashBuf,
-      bitcoin.opcodes.OP_DROP,
-      enclavePublicKeyBuf,
-      bitcoin.opcodes.OP_CHECKSIG
-    ))
-
-    const p2sh = bitcoin.payments.p2sh(
-      {
-        redeem: {
-          output,
-          network
-        },
-        network
-      }
+    const output = bitcoin.script.compile(
+      [].concat(
+        ethAddressAndNonceHashBuf,
+        bitcoin.opcodes.OP_DROP,
+        enclavePublicKeyBuf,
+        bitcoin.opcodes.OP_CHECKSIG
+      )
     )
+
+    const p2sh = bitcoin.payments.p2sh({
+      redeem: {
+        output,
+        network
+      },
+      network
+    })
 
     return p2sh.address === this._value
   }
@@ -77,8 +78,7 @@ class DepositAddress {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
-      if (!this._value)
-        promiEvent.reject('Please provide a deposit address')
+      if (!this._value) promiEvent.reject('Please provide a deposit address')
 
       const utxoToMonitor = await utils.btc.monitorUtxoByAddress(
         this._btcNetwork,

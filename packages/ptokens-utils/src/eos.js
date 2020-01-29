@@ -26,7 +26,8 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
     })
   }
 
-  const signatureProvider = _signatureProvider || new JsSignatureProvider([_privateKey])
+  const signatureProvider =
+    _signatureProvider || new JsSignatureProvider([_privateKey])
 
   const rpc = new JsonRpc(_rpc, { fetch })
 
@@ -45,7 +46,8 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
 const getAccountName = (_eosjs, _pubkeys) =>
   new Promise((resolve, reject) => {
     const currentPublicKey = _pubkeys[0]
-    _eosjs.rpc.history_get_key_accounts(currentPublicKey)
+    _eosjs.rpc
+      .history_get_key_accounts(currentPublicKey)
       .then(accounts => resolve(accounts.account_names[0]))
       .catch(err => reject(err))
   })
@@ -55,7 +57,8 @@ const getAccountName = (_eosjs, _pubkeys) =>
  */
 const getAvailablePublicKeys = _eosjs =>
   new Promise((resolve, reject) => {
-    _eosjs.signatureProvider.getAvailableKeys()
+    _eosjs.signatureProvider
+      .getAvailableKeys()
       .then(publicKeys => resolve(publicKeys))
       .catch(err => reject(err))
   })
@@ -77,27 +80,43 @@ const isValidAccountName = _accountName => {
  * @param {String} _blocksBehind
  * @param {String} _expireSeconds
  */
-const transferNativeToken = (_eosjs, _to, _accountName, _amount, _memo, _blocksBehind, _expireSeconds) =>
+const transferNativeToken = (
+  _eosjs,
+  _to,
+  _accountName,
+  _amount,
+  _memo,
+  _blocksBehind,
+  _expireSeconds
+) =>
   new Promise((resolve, reject) => {
-    _eosjs.transact({
-      actions: [{
-        account: EOS_NATIVE_TOKEN,
-        name: 'transfer',
-        authorization: [{
-          actor: _accountName,
-          permission: 'active'
-        }],
-        data: {
-          from: _accountName,
-          to: _to,
-          quantity: _getAmountInEosFormat(_amount),
-          memo: _memo
+    _eosjs
+      .transact(
+        {
+          actions: [
+            {
+              account: EOS_NATIVE_TOKEN,
+              name: 'transfer',
+              authorization: [
+                {
+                  actor: _accountName,
+                  permission: 'active'
+                }
+              ],
+              data: {
+                from: _accountName,
+                to: _to,
+                quantity: _getAmountInEosFormat(_amount),
+                memo: _memo
+              }
+            }
+          ]
+        },
+        {
+          blocksBehind: _blocksBehind,
+          expireSeconds: _expireSeconds
         }
-      }]
-    }, {
-      blocksBehind: _blocksBehind,
-      expireSeconds: _expireSeconds
-    })
+      )
       .then(receipt => resolve(receipt))
       .catch(err => reject(err))
   })
@@ -118,10 +137,8 @@ const waitForTransactionConfirmation = async (_eosjs, _tx) => {
   await polling(async () => {
     receipt = await _eosjs.rpc.history_get_transaction(_tx)
 
-    if (receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED)
-      return true
-    else
-      return false
+    if (receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
+    else return false
   }, EOS_NODE_POLLING_TIME_INTERVAL)
   return receipt
 }

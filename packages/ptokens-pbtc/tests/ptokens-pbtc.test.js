@@ -3,7 +3,8 @@ import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 
 const configs = {
-  ethPrivateKey: '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
+  ethPrivateKey:
+    '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
   ethProvider: 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6',
   btcNetwork: 'testnet'
 }
@@ -11,7 +12,8 @@ const configs = {
 
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
-const BTC_TESTING_PRIVATE_KEY = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+const BTC_TESTING_PRIVATE_KEY =
+  '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
 jest.setTimeout(3000000)
@@ -22,8 +24,7 @@ test('Should get a BTC deposit address', async () => {
   })
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
-  expect(depositAddress.toString())
-    .to.be.a('string')
+  expect(depositAddress.toString()).to.be.a('string')
 })
 
 test('Should not get a BTC deposit address because of invalid Eth address', async () => {
@@ -63,12 +64,23 @@ test('Should monitor an issuing of 1 pBTC', async () => {
   let ethTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
-      depositAddress.waitForDeposit()
-        .once('onBtcTxBroadcasted', () => { btcTxIsBroadcasted = true })
-        .once('onBtcTxConfirmed', () => { btcTxIsConfirmed = true })
-        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
-        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
-        .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
+      depositAddress
+        .waitForDeposit()
+        .once('onBtcTxBroadcasted', () => {
+          btcTxIsBroadcasted = true
+        })
+        .once('onBtcTxConfirmed', () => {
+          btcTxIsConfirmed = true
+        })
+        .once('onEnclaveReceivedTx', () => {
+          enclaveHasReceivedTx = true
+        })
+        .once('onEnclaveBroadcastedTx', () => {
+          enclaveHasBroadcastedTx = true
+        })
+        .once('onEthTxConfirmed', () => {
+          ethTxIsConfirmed = true
+        })
         .then(() => resolve())
     })
   await start()
@@ -92,11 +104,20 @@ test('Should redeem 1 pBTC', async () => {
   let btcTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
-      pbtc.redeem(amountToRedeem, BTC_TESTING_ADDRESS)
-        .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
-        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
-        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
-        .once('onBtcTxConfirmed', () => { btcTxIsConfirmed = true })
+      pbtc
+        .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
+        .once('onEthTxConfirmed', () => {
+          ethTxIsConfirmed = true
+        })
+        .once('onEnclaveReceivedTx', () => {
+          enclaveHasReceivedTx = true
+        })
+        .once('onEnclaveBroadcastedTx', () => {
+          enclaveHasBroadcastedTx = true
+        })
+        .once('onBtcTxConfirmed', () => {
+          btcTxIsConfirmed = true
+        })
         .then(() => resolve())
     })
   await start()
