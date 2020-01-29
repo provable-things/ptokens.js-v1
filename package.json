@@ -10,7 +10,7 @@
     "init": "npm i && lerna bootstrap",
     "lint": "lerna run lint",
     "publish": "npm run bootstrap && lerna publish --dist-tag next --skip-git",
-    "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json|)\"",
+    "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\"",
     "update-version": "lerna publish --skip-git --skip-npm --force-publish '*'",
     "test": "lerna run test"
   },
