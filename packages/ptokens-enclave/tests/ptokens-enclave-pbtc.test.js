@@ -1,6 +1,7 @@
 import Enclave from '../src/index'
 import { expect } from 'chai'
 import { ETH_PBTC_BLOCK, BTC_PBTC_BLOCK } from './utils'
+import EventEmitter from 'eventemitter3'
 
 jest.setTimeout(300000)
 
@@ -187,16 +188,18 @@ test('Should monitor an incoming transaction', async () => {
   let enclaveHasReceivedTx = false
   let enclaveHasBroadcastedTx = false
 
+  const eventEmitter = new EventEmitter()
+
   const start = () =>
     new Promise(resolve => {
+      eventEmitter.once('onEnclaveReceivedTx', () => {
+        enclaveHasReceivedTx = true
+      })
+      eventEmitter.once('onEnclaveBroadcastedTx', () => {
+        enclaveHasBroadcastedTx = true
+      })
       enclave
-        .monitorIncomingTransaction(HASH_INCOMING_TX, 'issue')
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
-        })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
-        })
+        .monitorIncomingTransaction(HASH_INCOMING_TX, 'issue', eventEmitter)
         .then(tx => {
           expect(tx).to.be.a('string')
           resolve()
