@@ -2,7 +2,6 @@ import * as bitcoin from 'bitcoinjs-lib'
 import utils from 'ptokens-utils'
 
 /**
- *
  * @param {String} _btcPrivateKey
  * @param {String} _btcAddress
  * @param {Number} _value
