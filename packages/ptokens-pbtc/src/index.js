@@ -73,7 +73,7 @@ class pBTC {
 
   /**
    * @param {Number} _amount
-   * @param {String} _eosAccountName
+   * @param {String} _btcAddress
    */
   redeem(_amount, _btcAddress) {
     const promiEvent = Web3PromiEvent()
