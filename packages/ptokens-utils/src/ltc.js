@@ -32,9 +32,14 @@ const _makeInsightLiteApiCall = (_network, _callType, _apiPath, _params) =>
  * @param {String} _tx
  */
 const broadcastTransaction = (_network, _tx) =>
-  _makeInsightLiteApiCall(_network, 'POST', '/tx/send', {
-    rawtx: _tx
-  })
+  _makeInsightLiteApiCall(
+    _network,
+    'POST',
+    '/tx/send',
+    JSON.stringify({
+      rawtx: _tx
+    })
+  )
 
 /**
  *
@@ -58,9 +63,7 @@ const getTransactionHexById = (_network, _txId) =>
  */
 const isValidAddress = (_network, _address) => {
   if (_network === 'testnet') {
-    return validate(_address)
-      ? true
-      : false
+    return validate(_address) ? true : false
   } else {
     const res = _address.match(/[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
     if (!res) return false

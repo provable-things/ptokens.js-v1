@@ -54,10 +54,7 @@ const getTransactionHexById = (_network, _txId) =>
  * @param {String} _address
  * @param {String} _network
  */
-const isValidAddress = _address =>
-  validate(_address)
-    ? true
-    : false
+const isValidAddress = _address => (validate(_address) ? true : false)
 
 /**
  * @param {String} _address
