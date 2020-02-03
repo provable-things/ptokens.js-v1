@@ -3,7 +3,7 @@ import Web3PromiEvent from 'web3-core-promievent'
 import Enclave from 'ptokens-enclave'
 import utils from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
-import DepositAddress from './lib/deposit-address'
+import BtcDepositAddress from './lib/btc-deposit-address'
 import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 import {
   PBTC_TOKEN_DECIMALS,
@@ -55,7 +55,7 @@ class pBTC {
       `get-btc-deposit-address/${this._btcNetwork}/${_ethAddress}`
     )
 
-    const depositAddress = new DepositAddress({
+    const depositAddress = new BtcDepositAddress({
       ethAddress: _ethAddress,
       nonce: deposit.nonce,
       enclavePublicKey: deposit.enclavePublicKey,

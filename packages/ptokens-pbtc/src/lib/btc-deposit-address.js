@@ -6,7 +6,7 @@ import {
   ETH_NODE_POLLING_TIME_INTERVAL
 } from '../utils/constants'
 
-class DepositAddress {
+class BtcDepositAddress {
   /**
    * @param {Object} _params
    */
@@ -111,4 +111,4 @@ class DepositAddress {
   }
 }
 
-export default DepositAddress
+export default BtcDepositAddress
