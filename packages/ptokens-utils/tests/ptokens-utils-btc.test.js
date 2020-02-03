@@ -10,7 +10,7 @@ const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 test('Should be a VALID BTC address', () => {
   const validBtcAddress = BTC_TESTING_ADDRESS
   const result = utils.btc.isValidAddress(validBtcAddress)
-  expect(result.address).to.be.equal(validBtcAddress)
+  expect(result).to.be.equal(true)
 })
 
 test('Should be an INVALID BTC address', () => {

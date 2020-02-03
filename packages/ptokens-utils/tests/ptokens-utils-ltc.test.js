@@ -7,15 +7,21 @@ jest.setTimeout(30000)
 const UTXO = '6ccb55376f6615ddbc9dca91187f2e3fe9fcd4a3aa2a8a88ca0c5ccb30b891f6'
 const LTC_TESTING_ADDRESS = 'n1qkF2NzY1v5Jj41zSJZRVJE1rJDRyoFzs'
 
-test('Should be a VALID LTC address', () => {
-  const validLtcAddress = LTC_TESTING_ADDRESS
-  const result = utils.ltc.isValidAddress(validLtcAddress)
+test('Should be a VALID LTC testnet address', () => {
+  const validLtcTestnetAddress = LTC_TESTING_ADDRESS
+  const result = utils.ltc.isValidAddress('testnet', validLtcTestnetAddress)
+  expect(result).to.be.equal(true)
+})
+
+test('Should be a VALID LTC mainnet address', () => {
+  const validLtcMainnetAddress = 'MTvnA4CN73ry7c65wEuTSaKzb2pNKHB4n1'
+  const result = utils.ltc.isValidAddress('mainnet', validLtcMainnetAddress)
   expect(result).to.be.equal(true)
 })
 
 test('Should be an INVALID LTC address', () => {
   const invalidLtcAddress = 'invalid'
-  const result = utils.ltc.isValidAddress(invalidLtcAddress)
+  const result = utils.ltc.isValidAddress('testnet', invalidLtcAddress)
   expect(result).to.be.equal(false)
 })
 

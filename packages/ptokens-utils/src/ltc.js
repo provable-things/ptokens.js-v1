@@ -1,5 +1,6 @@
 import axios from 'axios'
 import polling from 'light-async-polling'
+import validate from 'bitcoin-address-validation'
 
 const LTC_PTOKENS_NODE_TESTNET_API =
   'http://ltcnode.ptokens.io/insight-lite-api'
@@ -55,10 +56,16 @@ const getTransactionHexById = (_network, _txId) =>
  * @param {String} _address
  * @param {String} _network
  */
-const isValidAddress = _address => {
-  const res = _address.match(/[LnM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
-  if (!res) return false
-  return res[0] === _address ? true : false
+const isValidAddress = (_network, _address) => {
+  if (_network === 'testnet') {
+    return validate(_address)
+      ? true
+      : false
+  } else {
+    const res = _address.match(/[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
+    if (!res) return false
+    return res[0] === _address ? true : false
+  }
 }
 
 /**
