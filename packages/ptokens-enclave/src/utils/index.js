@@ -1,10 +1,9 @@
 import axios from 'axios'
 
 const REPORT_LIMIT = 100
-const PEOS = 'peos'
 const PEOS_ENDPOINT = 'https://nuc-bridge-1.ngrok.io/'
-const PBTC = 'pbtc'
 const PBTC_ENDPOINT = 'https://nuc-bridge-2.ngrok.io/'
+const PLTC_ENDPOINT = 'https://nuc-bridge-3.ngrok.io/'
 
 /**
  * @param {String} _pToken
@@ -28,11 +27,14 @@ const getApi = _pToken => {
  */
 const _getEndpoint = _pToken => {
   switch (_pToken) {
-    case PEOS: {
+    case 'peos': {
       return PEOS_ENDPOINT
     }
-    case PBTC: {
+    case 'pbtc': {
       return PBTC_ENDPOINT
+    }
+    case 'pltc': {
+      return PLTC_ENDPOINT
     }
     default:
       return null
