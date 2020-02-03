@@ -8,18 +8,18 @@ const UTXO = '02aa5b687d4ea0d5d2bce9801d525692322e0e4ed073a82001f2e3f8b6fb1a05'
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
 test('Should be a VALID BTC address', () => {
-  const validBtcAddress = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
+  const validBtcAddress = BTC_TESTING_ADDRESS
   const result = utils.btc.isValidAddress(validBtcAddress)
   expect(result.address).to.be.equal(validBtcAddress)
 })
 
 test('Should be an INVALID BTC address', () => {
-  const validBtcAddress = 'invalid'
-  const result = utils.btc.isValidAddress(validBtcAddress)
+  const invalidBtcAddress = 'invalid'
+  const result = utils.btc.isValidAddress(invalidBtcAddress)
   expect(result).to.be.equal(false)
 })
 
-test('Should monitor an utxo given an address', async () => {
+test('Should monitor a BTC utxo given an address', async () => {
   const eventEmitter = new EventEmitter()
   const pollingTime = 200
   const network = 'testnet'
@@ -51,7 +51,7 @@ test('Should monitor an utxo given an address', async () => {
   expect(isBtcTxConfirmed).to.be.equal(true)
 })
 
-test('Should monitor a transaction confirmation', async () => {
+test('Should monitor a BTC transaction confirmation', async () => {
   const pollingTime = 200
   const network = 'testnet'
 
@@ -64,13 +64,13 @@ test('Should monitor a transaction confirmation', async () => {
   expect(hasBeenConfirmed).to.be.equal(true)
 })
 
-test('Should get all utxo given an address', async () => {
+test('Should get all BTC utxo given an address', async () => {
   const network = 'testnet'
   const utxos = await utils.btc.getUtxoByAddress(network, BTC_TESTING_ADDRESS)
   expect(utxos).to.be.an('Array')
 })
 
-test('Should get a tx in hex format', async () => {
+test('Should get a BTC tx in hex format', async () => {
   const network = 'testnet'
   const hex = await utils.btc.getTransactionHexById(network, UTXO)
   expect(hex).to.be.a('String')
