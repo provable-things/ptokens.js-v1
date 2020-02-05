@@ -9,6 +9,10 @@ const mapIncomingTxParamValue = {
     redeem: 'btc_tx_hash',
     issue: 'eth_tx_hash'
   },
+  pltc: {
+    redeem: 'btc_tx_hash',
+    issue: 'eth_tx_hash'
+  },
   peos: {
     redeem: 'broadcast_transaction_hash',
     issue: 'broadcast_transaction_hash'

@@ -41,6 +41,8 @@ class pBTC {
     if (btcNetwork === 'bitcoin' || btcNetwork === 'testnet')
       this._btcNetwork = btcNetwork
     else this._btcNetwork = 'testnet'
+
+    this._contractAddress = null
   }
 
   /**
@@ -98,7 +100,7 @@ class pBTC {
           {
             isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
-            contractAddress: this._pbtcSmartContractAddress(),
+            contractAddress: this._getContractAddress(),
             privateKey: this._ethPrivateKey,
             value: utils.eth.zeroEther
           },
@@ -142,7 +144,7 @@ class pBTC {
         .makeContractCall(this._web3, 'totalMinted', {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: this._pbtcSmartContractAddress()
+          contractAddress: this._getContractAddress()
         })
         .then(totalIssued =>
           resolve(
@@ -163,7 +165,7 @@ class pBTC {
         .makeContractCall(this._web3, 'totalBurned', {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: this._pbtcSmartContractAddress()
+          contractAddress: this._getContractAddress()
         })
         .then(totalRedeemed =>
           resolve(
@@ -184,7 +186,7 @@ class pBTC {
         .makeContractCall(this._web3, 'totalSupply', {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: this._pbtcSmartContractAddress()
+          contractAddress: this._getContractAddress()
         })
         .then(totalSupply =>
           resolve(
@@ -211,7 +213,7 @@ class pBTC {
           {
             isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
-            contractAddress: this._pbtcSmartContractAddress()
+            contractAddress: this._getContractAddress()
           },
           [_ethAddress]
         )
@@ -235,7 +237,7 @@ class pBTC {
       {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: this._pbtcSmartContractAddress(),
+        contractAddress: this._getContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -257,7 +259,7 @@ class pBTC {
       {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: this._pbtcSmartContractAddress(),
+        contractAddress: this._getContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -280,7 +282,7 @@ class pBTC {
       {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: this._pbtcSmartContractAddress(),
+        contractAddress: this._getContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
@@ -298,7 +300,7 @@ class pBTC {
         .makeContractCall(this._web3, 'burnNonce', {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: this._pbtcSmartContractAddress()
+          contractAddress: this._getContractAddress()
         })
         .then(burnNonce => resolve(parseInt(burnNonce)))
         .catch(err => reject(err))
@@ -311,7 +313,7 @@ class pBTC {
         .makeContractCall(this._web3, 'mintNonce', {
           isWeb3Injected: this._isWeb3Injected,
           abi: pbtcAbi,
-          contractAddress: this._pbtcSmartContractAddress()
+          contractAddress: this._getContractAddress()
         })
         .then(mintNonce => resolve(parseInt(mintNonce)))
         .catch(err => reject(err))
@@ -331,7 +333,7 @@ class pBTC {
           {
             isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
-            contractAddress: this._pbtcSmartContractAddress()
+            contractAddress: this._getContractAddress()
           },
           [_owner, _spender]
         )
@@ -348,11 +350,14 @@ class pBTC {
     })
   }
 
-  async _pbtcSmartContractAddress() {
-    const ethNetwork = await this._web3.eth.net.getNetworkType()
-    const info = await this.enclave.getInfo(this._btcNetwork, ethNetwork)
+  async _getContractAddress() {
+    if (!this._contractAddress) {
+      const ethNetwork = await this._web3.eth.net.getNetworkType()
+      const info = await this.enclave.getInfo(this._btcNetwork, ethNetwork)
+      this._contractAddress = info['pbtc-smart-contract-address']
+    }
 
-    return info['pbtc-smart-contract-address']
+    return this._contractAddress
   }
 }
 
