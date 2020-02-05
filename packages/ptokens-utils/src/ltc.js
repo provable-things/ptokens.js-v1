@@ -23,7 +23,10 @@ const _makeInsightLiteApiCall = (_network, _callType, _apiPath, _params) =>
     _getInsightLiteApi(_network)
       [_callType.toLowerCase()](_apiPath, _params)
       .then(_res => resolve(_res.data))
-      .catch(_err => reject(_err))
+      .catch(_err => {
+        console.log(_err)
+        reject(_err)
+      })
   })
 
 /**
@@ -32,14 +35,9 @@ const _makeInsightLiteApiCall = (_network, _callType, _apiPath, _params) =>
  * @param {String} _tx
  */
 const broadcastTransaction = (_network, _tx) =>
-  _makeInsightLiteApiCall(
-    _network,
-    'POST',
-    '/tx/send',
-    JSON.stringify({
-      rawtx: _tx
-    })
-  )
+  _makeInsightLiteApiCall(_network, 'POST', '/tx/send', {
+    rawtx: _tx
+  })
 
 /**
  *
@@ -65,7 +63,7 @@ const isValidAddress = (_network, _address) => {
   if (_network === 'testnet') {
     return validate(_address) ? true : false
   } else {
-    const res = _address.match(/[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
+    const res = _address.match(/[LQM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
     if (!res) return false
     return res[0] === _address ? true : false
   }
