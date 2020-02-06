@@ -6,7 +6,6 @@ import {
   ETH_NODE_POLLING_TIME_INTERVAL
 } from '../utils/constants'
 
-
 class LtcDepositAddress {
   /**
    * @param {Object} _params
@@ -72,11 +71,10 @@ class LtcDepositAddress {
       network
     })
 
-    //NOTE: make compatible litecoin testnet p2sh with bitcoinjs
+    // NOTE: make compatible litecoin testnet p2sh with bitcoinjs
     const decoded = bitcoin.address.fromBase58Check(p2sh.address)
-    if (decoded.version === 0xc4) {
+    if (decoded.version === 0xc4)
       p2sh.address = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
-    }
 
     return p2sh.address === this._value
   }

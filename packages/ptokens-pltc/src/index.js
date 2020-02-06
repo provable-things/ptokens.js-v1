@@ -5,7 +5,7 @@ import utils from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import LtcDepositAddress from './lib/ltc-deposit-address'
 import pltcAbi from './utils/contractAbi/pLTCTokenETHContractAbi.json'
-import * as bitcoin from 'bitcoinjs-lib' 
+import * as bitcoin from 'bitcoinjs-lib'
 import {
   PLTC_TOKEN_DECIMALS,
   MINIMUN_SATS_REDEEMABLE,
@@ -89,12 +89,11 @@ class pLTC {
         return
       }
 
-      //NOTE: add support for p2sh testnet address (Q...)
+      // NOTE: add support for p2sh testnet address (Q...)
       let ltcAddressToCheck = _ltcAddress
       const decoded = bitcoin.address.fromBase58Check(_ltcAddress)
-      if (decoded.version === 0xc4) {
+      if (decoded.version === 0xc4)
         ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
-      }
 
       if (!utils.ltc.isValidAddress(this._ltcNetwork, ltcAddressToCheck)) {
         promiEvent.reject('Ltc Address is not valid')
@@ -134,7 +133,7 @@ class pLTC {
 
         promiEvent.resolve({
           amount: _amount.toFixed(PLTC_TOKEN_DECIMALS),
-          to: _btcAddress,
+          to: _ltcAddress,
           tx: broadcastedBtcTx
         })
       } catch (err) {
@@ -364,7 +363,7 @@ class pLTC {
       const info = await this.enclave.getInfo(this._ltcNetwork, ethNetwork)
       this._contractAddress = info['pbtc-smart-contract-address']
     }
-    
+
     return this._contractAddress
   }
 }
