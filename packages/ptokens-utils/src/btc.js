@@ -54,7 +54,7 @@ const getTransactionHexById = (_network, _txId) =>
  * @param {String} _address
  * @param {String} _network
  */
-const isValidAddress = _address => (validate(_address) ? true : false)
+const isValidAddress = _address => Boolean(validate(_address))
 
 /**
  * @param {String} _address
@@ -110,11 +110,8 @@ const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
       `/tx/${_tx}/status`
     )
 
-    if (status.confirmed) {
-      return true
-    } else {
-      return false
-    }
+    if (status.confirmed) return true
+    else return false
   }, _pollingTime)
   return true
 }

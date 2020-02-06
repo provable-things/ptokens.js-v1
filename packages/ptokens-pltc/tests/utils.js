@@ -46,9 +46,8 @@ const sendLitecoin = async (
 
   let receiver = _to
   const decoded = bitcoin.address.fromBase58Check(receiver)
-  if (decoded.version === 0x3a) {
+  if (decoded.version === 0x3a)
     receiver = bitcoin.address.toBase58Check(decoded.hash, 0xc4)
-  }
 
   psbt.addOutput({
     address: receiver,

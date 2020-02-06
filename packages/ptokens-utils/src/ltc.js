@@ -24,10 +24,7 @@ const _makeInsightLiteApiCall = (_network, _callType, _apiPath, _params) =>
     _getInsightLiteApi(_network)
       [_callType.toLowerCase()](_apiPath, _params)
       .then(_res => resolve(_res.data))
-      .catch(_err => {
-        console.log(_err)
-        reject(_err)
-      })
+      .catch(_err => reject(_err))
   })
 
 /**
@@ -62,21 +59,19 @@ const getTransactionHexById = (_network, _txId) =>
  */
 const isValidAddress = (_network, _address) => {
   if (_network === 'testnet') {
-
     let address = _address
     try {
       const decoded = bitcoin.address.fromBase58Check(address)
-      if (decoded.version === 0xc4) {
+      if (decoded.version === 0xc4)
         address = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
-      }
-    } catch(err) {
+    } catch (err) {
       return false
     }
-    return validate(address) ? true : false
+    return Boolean(validate(address))
   } else {
     const res = _address.match(/[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
     if (!res) return false
-    return res[0] === _address ? true : false
+    return res[0] === _address
   }
 }
 
@@ -134,11 +129,8 @@ const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
       `/tx/${_tx}/`
     )
 
-    if (transaction.confirmations > 0) {
-      return true
-    } else {
-      return false
-    }
+    if (transaction.confirmations > 0) return true
+    else return false
   }, _pollingTime)
   return true
 }

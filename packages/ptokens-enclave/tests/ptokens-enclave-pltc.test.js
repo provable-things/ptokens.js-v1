@@ -1,13 +1,12 @@
 import Enclave from '../src/index'
 import { expect } from 'chai'
-import { ETH_PBTC_BLOCK, BTC_PBTC_BLOCK } from './utils'
 import EventEmitter from 'eventemitter3'
 
 jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pLTC pong!'
-const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
-const BTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Ltc block submitted to the enclave!'
+// const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
+// const LTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Ltc block submitted to the enclave!'
 const HASH_INCOMING_TX =
   'a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
 const HASH_BROADCASTED_TX =
@@ -36,7 +35,7 @@ test('Should get the Enclave Info', async () => {
   expect(info).to.have.property('pbtc-smart-contract-address')
 })
 
-/*test('Should get one ETH report', async () => {
+test('Should get one ETH report', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'eth'
@@ -158,7 +157,7 @@ test('Should get the status of an brodcasted tx', async () => {
   expect(res).to.be.an.instanceof(Object)
 })
 
-test('Should submit an ETH block', async () => {
+/* test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eth'
   const enclave = new Enclave({
@@ -170,7 +169,7 @@ test('Should submit an ETH block', async () => {
 })
 
 test('Should submit a LTC block', async () => {
-  const expectedResult = BTC_BLOCK_SUBMITTED_RETURN_VALUE
+  const expectedResult = LTC_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'ltc'
   const enclave = new Enclave({
     pToken: 'pltc'
@@ -178,7 +177,7 @@ test('Should submit a LTC block', async () => {
 
   const res = await enclave.submitBlock(type, BTC_PBTC_BLOCK)
   expect(res).to.be.equal(expectedResult)
-})
+}) */
 
 test('Should monitor an incoming transaction', async () => {
   const enclave = new Enclave({
@@ -208,4 +207,4 @@ test('Should monitor an incoming transaction', async () => {
   await start()
   expect(enclaveHasReceivedTx).to.be.equal(true)
   expect(enclaveHasBroadcastedTx).to.be.equal(true)
-})*/
+})

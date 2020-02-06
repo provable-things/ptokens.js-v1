@@ -69,6 +69,7 @@ module.exports = {
     'no-sequences': 1,
     'no-throw-literal': 2,
     'no-unmodified-loop-condition': 1,
+    'no-unexpected-multiline': 0,
     'no-useless-call': 1,
     'no-useless-catch': 1,
     'no-useless-concat': 2,
