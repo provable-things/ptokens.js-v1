@@ -63,15 +63,16 @@ const getTransactionHexById = (_network, _txId) =>
 const isValidAddress = (_network, _address) => {
   if (_network === 'testnet') {
 
+    let address = _address
     try {
-      const decoded = bitcoin.address.fromBase58Check(_address)
+      const decoded = bitcoin.address.fromBase58Check(address)
       if (decoded.version === 0xc4) {
-        p2sh.address = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
+        address = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
       }
     } catch(err) {
       return false
     }
-    return validate(_address) ? true : false
+    return validate(address) ? true : false
   } else {
     const res = _address.match(/[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
     if (!res) return false
