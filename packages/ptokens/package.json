@@ -15,6 +15,7 @@
     "chai": "^4.2.0",
     "ptokens-pbtc": "0.1.0",
     "ptokens-peos": "0.1.0",
+    "ptokens-pltc": "0.1.0",
     "ptokens-utils": "0.1.0"
   },
   "devDependencies": {
