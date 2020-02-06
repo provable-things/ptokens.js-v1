@@ -118,23 +118,23 @@ class pLTC {
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedBtcTx = await this.enclave.monitorIncomingTransaction(
+        const broadcastedLtcTx = await this.enclave.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           'redeem',
           promiEvent.eventEmitter
         )
 
-        await utils.btc.waitForTransactionConfirmation(
+        await utils.ltc.waitForTransactionConfirmation(
           this._ltcNetwork,
-          broadcastedBtcTx,
+          broadcastedLtcTx,
           LTC_NODE_POLLING_TIME
         )
-        promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedBtcTx)
+        promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedLtcTx)
 
         promiEvent.resolve({
           amount: _amount.toFixed(PLTC_TOKEN_DECIMALS),
           to: _ltcAddress,
-          tx: broadcastedBtcTx
+          tx: broadcastedLtcTx
         })
       } catch (err) {
         promiEvent.reject(err)
