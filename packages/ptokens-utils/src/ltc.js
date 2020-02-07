@@ -4,7 +4,7 @@ import validate from 'bitcoin-address-validation'
 import * as bitcoin from 'bitcoinjs-lib'
 
 const LTC_PTOKENS_NODE_TESTNET_API =
-  'http://ltcnode.ptokens.io/insight-lite-api'
+  'https://ltcnode.ptokens.io/insight-lite-api'
 const LTC_PTOKENS_NODE_MAINNET_API = 'Not available yet'
 
 const _getInsightLiteApi = _network =>
