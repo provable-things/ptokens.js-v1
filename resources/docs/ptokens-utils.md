@@ -12,6 +12,8 @@ npm install ptokens-utils
 
 ***
 
+## utils.btc
+
 ## btc.broadcastTransaction
 
 ```js
@@ -157,7 +159,7 @@ Allow to wait for a BTC transaction confirmation
 
 ### Example
 ```js
-const isConfirmed = await utils.btc.waitForTransactionConfirmation('testnet', '3eccff684a63d7643a93936e703c28ab0cd7677093fcf008e194f33ae0393cd3', 2000)
+const tx = await utils.btc.waitForTransactionConfirmation('testnet', '3eccff684a63d7643a93936e703c28ab0cd7677093fcf008e194f33ae0393cd3', 2000)
 ```
 
 &nbsp;
@@ -520,7 +522,7 @@ Allow to wait for a ETH transaction confirmation
 
 ### Example
 ```js
-const isConfirmed = await utils.eth.waitForTransactionConfirmation(web3, '0x8cc2e8f07ac6ae2fab2fbcdb6f8b985383eec42f9ecb589377bdbe60d85bcae1', 2000)
+const tx = await utils.eth.waitForTransactionConfirmation(web3, '0x8cc2e8f07ac6ae2fab2fbcdb6f8b985383eec42f9ecb589377bdbe60d85bcae1', 2000)
 ```
 
 &nbsp;
@@ -667,3 +669,159 @@ const receipt = utils.eos.transferNativeToken(eosjs, 'eos account receiver', 'eo
 ```
 
 &nbsp;
+
+***
+
+&nbsp;
+
+
+## utils.ltc
+
+## ltc.broadcastTransaction
+
+```js
+ptokens.utils.ltc.broadcastTransaction(network, transaction)
+```
+
+Broadcast a Litecoin transaction using a Litecoin node __https://ltcnode.ptokens.io/insight-lite-api__ (currently on testnet)
+
+### Parameters
+
+- __`String`__ - __`address`__: can be __litecoin__ or __testnet__
+- __`String`__ - __`transaction`__: transaction in Hex format
+
+### Returns
+
+- __`Promise`__ : when resolved returns if the transaction has been broadcasted succesfully
+
+### Example
+```js
+const isBroadcasted = await utils.ltc.broadcastTransaction('testnet', 'tx hex')
+```
+
+&nbsp;
+
+## ltc.getUtxoByAddress
+
+```js
+ptokens.utils.ltc.getUtxoByAddress(network, address)
+```
+
+Return all UTXOs belonging to a Litecoin address 
+
+### Parameters
+
+- __`String`__ - __`network`__: can be __litecoin__ or __testnet__
+- __`String`__ - __`address`__: Litecoin address
+
+### Returns
+
+- __`Promise`__ : when resolved returns all UTXOs belonging to a Litecoin address 
+
+### Example
+```js
+const utxos = await utils.ltc.getUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP')
+```
+
+&nbsp;
+
+## ltc.getTransactionHexById
+
+```js
+ptokens.utils.ltc.getTransactionHexById(network, transactionId)
+```
+
+Return a transaction in hex format
+
+### Parameters
+
+- __`String`__ - __`address`__: can be __litecoin__ or __testnet__
+- __`String`__ - __`transactionId`__: Bitcoin transaction id
+
+### Returns
+
+- __`Promise`__ : when resolved returns a transaction in hex format 
+
+### Example
+```js
+const txHex = await utils.btc.getTransactionHexById('testnet', 'fa28b38133a6d7f657068da23a509ebb81929b088b0d81837f0654e879e23ce5')
+```
+
+&nbsp;
+
+## ltc.isValidAddress
+
+```js
+ptokens.utils.ltc.isValidAddress(network, address)
+```
+
+Returns a boolean indicating the address validity
+
+### Parameters
+
+- __`String`__ - __`address`__: can be __litecoin__ or __testnet__
+- __`String`__ - __`address`__: address
+
+### Returns
+
+- __`Boolean`__ : the address validity
+
+### Example
+```js
+utils.ltc.isValidAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP')
+```
+
+&nbsp;
+
+## ltc.monitorUtxoByAddress
+
+```js
+ptokens.utils.ltc.monitorUtxoByAddress(network, address, eventEmitter, pollingTime)
+```
+
+Allow to monitor if an address is receving a transaction
+
+### Parameters
+
+- __`String`__ - __`network`__: can be __litecoin__ or __testnet__
+- __`String`__ - __`address`__: Litecoin address
+- __`EventEmitter`__ - __`eventEmitter`__: event emitter used to emit __onLtcTxBroadcasted__ and __onLtcTxConfirmed__ events
+- __`Number`__ - __`pollingTime`__: time interval to call BlockStream Esplora API
+
+### Returns
+
+- __`Promise`__ : when resolved returns the utxo just confirmed
+
+### Example
+```js
+const eventEmitter = new EventEmitter()
+
+eventEmitter.once('onLtcTxBroadcasted', tx => ...)
+eventEmitter.once('onLtcTxConfirmed', tx => ...)
+const utxo = await utils.ltc.monitorUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP', eventEmitter, 2000)
+```
+
+&nbsp;
+
+## ltc.waitForTransactionConfirmation
+
+```js
+ptokens.utils.ltc.waitForTransactionConfirmation(network, transaction, pollingTime)
+```
+
+Allow to wait for a LTC transaction confirmation
+
+### Parameters
+
+- __`String`__ - __`network`__: can be __litecoin__ or __testnet__
+- __`String`__ - __`transaction`__: Litecoin address
+- __`Number`__ - __`pollingTime`__: time interval to call a Litecoin node (__https://ltcnode.ptokens.io/insight-lite-api__)
+
+### Returns
+
+- __`Promise`__ : when resolved returns the confirmed transaction
+
+### Example
+```js
+const tx = await utils.ltc.waitForTransactionConfirmation('testnet', 'fa28b38133a6d7f657068da23a509ebb81929b088b0d81837f0654e879e23ce5', 2000)
+```

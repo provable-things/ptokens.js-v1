@@ -1,38 +1,38 @@
-# ptokens-pbtc
+# ptokens-ltc
 
-This module allows to interact with pBTC token.
+This module allows to interact with pLTC token.
 
 ### Installation
 
 It is possible to install individually this package without installing the main one (__`ptokens`__).
 
 ```
-npm install ptokens-pbtc
+npm install ptokens-pltc
 ```
 
 
 ### Usage
 
 ```js
-const pBTC = require('ptokens-pbtc')
+const pLTC = require('ptokens-pltc')
 
-const pbtc = new pBTC({
+const pltc = new pLTC({
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
-  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+  ltcNetwork: 'testnet' //'testnet' or 'litecoin', default 'testnet'
 })
 ```
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pBTC = require('ptokens-pbtc')
+const pLTC = require('ptokens-pltc')
 
 if (window.web3) {
   
-  const pbtc = new pBTC({
+  const pltc = new pLTC({
     ethProvider: window.web3.currentProvider,
-    btcNetwork: 'testnet'
+    ltcNetwork: 'testnet'
   })
 } else {
   console.log('No web3 detected')
@@ -61,7 +61,7 @@ if (window.web3) {
 ## approve
 
 ```js
-ptokens.pbtc.approve(spender, amount)
+ptokens.pltc.approve(spender, amount)
 ```
 
 ### Parameters
@@ -69,7 +69,7 @@ ptokens.pbtc.approve(spender, amount)
 - __`String`__ - __`spender`__: spender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Approve to spend the specified amount of pBTC to the provided Ethereum address by setting the allowance of spender address
+Approve to spend the specified amount of pLTC to the provided Ethereum address by setting the allowance of spender address
 
 ### Returns
 
@@ -77,7 +77,7 @@ Approve to spend the specified amount of pBTC to the provided Ethereum address b
 
 ### Example
 ```js
-ptokens.pbtc.approve('eth address', 1.3452).then(status => console.log(status))
+ptokens.pltc.approve('eth address', 1.3452).then(status => console.log(status))
 ```
 
 &nbsp;
@@ -85,7 +85,7 @@ ptokens.pbtc.approve('eth address', 1.3452).then(status => console.log(status))
 ## getAllowance
 
 ```js
-ptokens.pbtc.getAllowance(owner, spender)
+ptokens.pltc.getAllowance(owner, spender)
 ```
 
 ### Parameters
@@ -93,15 +93,15 @@ ptokens.pbtc.getAllowance(owner, spender)
 - __`String`__ - __`owner`__: Owner Ethereum address
 - __`String`__ - __`spender`__: Spender Ethereum address
 
-Get the remaining number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+Get the remaining number of pLTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Returns
 
-- __`Number`__ : number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+- __`Number`__ : number of pLTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Example
 ```js
-ptokens.pbtc.getAllowance('owner eth address', 'spender eth address').then(allowance => console.log(status))
+ptokens.pltc.getAllowance('owner eth address', 'spender eth address').then(allowance => console.log(status))
 ```
 
 &nbsp;
@@ -109,14 +109,14 @@ ptokens.pbtc.getAllowance('owner eth address', 'spender eth address').then(allow
 ## getBalance
 
 ```js
-ptokens.pbtc.getBalance(address)
+ptokens.pltc.getBalance(address)
 ```
 
 ### Parameters
 
 - __`String`__ - __`address`__: Ethereum address
 
-Get the current pBTC balance of the provided address
+Get the current pLTC balance of the provided address
 
 
 ### Returns
@@ -125,7 +125,7 @@ Get the current pBTC balance of the provided address
 
 ### Example
 ```js
-ptokens.pbtc.getBalance(address).then(balance => console.log(balance))
+ptokens.pltc.getBalance(address).then(balance => console.log(balance))
 ```
 
 &nbsp;
@@ -134,7 +134,7 @@ ptokens.pbtc.getBalance(address).then(balance => console.log(balance))
 ## getBurnNonce
 
 ```js
-ptokens.pbtc.getBurnNonce()
+ptokens.pltc.getBurnNonce()
 ```
 
 ### Parameters
@@ -148,7 +148,7 @@ Get the total number of Burn events
 
 ### Example
 ```js
-ptokens.pbtc.getBurnNonce().then(burnNonce => console.log(burnNonce))
+ptokens.pltc.getBurnNonce().then(burnNonce => console.log(burnNonce))
 ```
 
 &nbsp;
@@ -161,9 +161,9 @@ ptokens.pbtc.getBurnNonce().then(burnNonce => console.log(burnNonce))
 ## getDepositAddress
 
 ```js
-ptokens.pbtc.getDepositAddress(ethAddress)
+ptokens.pltc.getDepositAddress(ethAddress)
 ```
-Generate a BTC Deposit Address
+Generate a LTC Deposit Address
 
 ### Parameters
 - __`String`__ - __`ethAddress`__: Ethereum address
@@ -171,17 +171,17 @@ Generate a BTC Deposit Address
 
 ### Returns
 
-- __`BtcDepositAddress`__ : a deposit Address
+- __`LtcDepositAddress`__ : a deposit Address
 
 ### Example
 ```js
-const depositAddress= await ptokens.pbtc.getDepositAddress(ethAddress)
+const depositAddress= await ptokens.pltc.getDepositAddress(ethAddress)
 
 console.log(depositAddress.toString())
 
 depositAddress.waitForDeposit()
-  .once('onBtcTxBroadcasted', tx => ... )
-  .once('onBtcTxConfirmed', tx => ...)
+  .once('onLtcTxBroadcasted', tx => ... )
+  .once('onLtcTxConfirmed', tx => ...)
   .once('onEnclaveReceivedTx', tx => ...)
   .once('onEnclaveBroadcastedTx', tx => ...)
   .once('onEthTxConfirmed', tx => ...)
@@ -193,19 +193,19 @@ depositAddress.waitForDeposit()
 ## getCirculatingSupply
 
 ```js
-ptokens.pbtc.getCirculatingSupply()
+ptokens.pltc.getCirculatingSupply()
 ```
 
-Get the current pBTC circulating supply
+Get the current pLTC circulating supply
 
 
 ### Returns
 
-- __`Number`__ : current pBTC circulating supply 
+- __`Number`__ : current pLTC circulating supply 
 
 ### Example
 ```js
-ptokens.pbtc.getCirculatingSupply().then(circulatingSupply => console.log(circulatingSupply))
+ptokens.pltc.getCirculatingSupply().then(circulatingSupply => console.log(circulatingSupply))
 ```
 
 &nbsp;
@@ -214,7 +214,7 @@ ptokens.pbtc.getCirculatingSupply().then(circulatingSupply => console.log(circul
 ## getMintNonce
 
 ```js
-ptokens.pbtc.getMintNonce()
+ptokens.pltc.getMintNonce()
 ```
 
 ### Parameters
@@ -228,7 +228,7 @@ Get the total number of Mint events
 
 ### Example
 ```js
-ptokens.pbtc.getMintNonce().then(mintNonce => console.log(mintNonce))
+ptokens.pltc.getMintNonce().then(mintNonce => console.log(mintNonce))
 ```
 
 &nbsp;
@@ -236,19 +236,19 @@ ptokens.pbtc.getMintNonce().then(mintNonce => console.log(mintNonce))
 ## getTotalIssued
 
 ```js
-ptokens.pbtc.getTotalIssued()
+ptokens.pltc.getTotalIssued()
 ```
 
-Get the total number of total issued pBTC.
+Get the total number of total issued pLTC.
 
 
 ### Returns
 
-- __`Number`__ : total number of issued pBTC
+- __`Number`__ : total number of issued pLTC
 
 ### Example
 ```js
-ptokens.pbtc.getTotalIssued().then(totalIssued => console.log(totalIssued))
+ptokens.pltc.getTotalIssued().then(totalIssued => console.log(totalIssued))
 ```
 
 &nbsp;
@@ -256,19 +256,19 @@ ptokens.pbtc.getTotalIssued().then(totalIssued => console.log(totalIssued))
 ## getTotalRedeemed
 
 ```js
-ptokens.pbtc.getTotalRedeemed()
+ptokens.pltc.getTotalRedeemed()
 ```
 
-Get the total number of total redeemed pBTC.
+Get the total number of total redeemed pLTC.
 
 
 ### Returns
 
-- __`Number`__ : total number of redeemed pBTC
+- __`Number`__ : total number of redeemed pLTC
 
 ### Example
 ```js
-ptokens.pbtc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed))
+ptokens.pltc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed))
 ```
 
 &nbsp;
@@ -278,24 +278,24 @@ ptokens.pbtc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ## redeem
 
 ```js
-ptokens.pbtc.redeem(amount, eosAccount)
+ptokens.pltc.redeem(amount, eosAccount)
 ```
 
-Redeem a specified number of pBTC to the specified BTC account.
+Redeem a specified number of pLTC to the specified LTC account.
 
 ### Parameters
 
-- __`Number`__ - __`amount`__: amount of pBTC to redeem
-- __`String`__ - __`ethAddress`__: BTC account on which receive back the deposited BTC
+- __`Number`__ - __`amount`__: amount of pLTC to redeem
+- __`String`__ - __`ethAddress`__: LTC account on which receive back the deposited LTC
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pBTC
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pLTC
 
 ### Example
 ```js
-ptokens.pbtc.redeem(1, 'btc account')
-  .once('onEthTxConfirmed', e => { console.log(e) }) 
+ptokens.pltc.redeem(1, 'litecoin address')
+  .once('onEthTxConfirmed', e => { console.log(e) })
   .once('onEnclaveReceivedTx', e => { console.log(e) })
   .once('onEnclaveBroadcastedTx', e => { console.log(e) })
   .once('onLtcTxConfirmed', e => { console.log(e) })
@@ -307,7 +307,7 @@ ptokens.pbtc.redeem(1, 'btc account')
 ## transfer
 
 ```js
-ptokens.pbtc.transfer(to, amount)
+ptokens.pltc.transfer(to, amount)
 ```
 
 ### Parameters
@@ -315,7 +315,7 @@ ptokens.pbtc.transfer(to, amount)
 - __`String`__ - __`to`__: receiver Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Transfer a specified amount of pBTC to the provided Ethereum address
+Transfer a specified amount of pLTC to the provided Ethereum address
 
 ### Returns
 
@@ -323,7 +323,7 @@ Transfer a specified amount of pBTC to the provided Ethereum address
 
 ### Example
 ```js
-ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
+ptokens.pltc.transfer('eth address', 1.3452).then(status => console.log(status))
 ```
 
 &nbsp;
@@ -332,7 +332,7 @@ ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
 ## transferFrom
 
 ```js
-ptokens.pbtc.transferFrom(from, to, amount)
+ptokens.pltc.transferFrom(from, to, amount)
 ```
 
 ### Parameters
@@ -340,7 +340,7 @@ ptokens.pbtc.transferFrom(from, to, amount)
 - __`String`__ - __`from`__: sender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Move the specified amount of pBTC from `from` to `to` using the allowance mechanism
+Move the specified amount of pLTC from `from` to `to` using the allowance mechanism
 
 ### Returns
 
@@ -348,5 +348,5 @@ Move the specified amount of pBTC from `from` to `to` using the allowance mechan
 
 ### Example
 ```js
-ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
+ptokens.pltc.transfer('eth address', 1.3452).then(status => console.log(status))
 ```

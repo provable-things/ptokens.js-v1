@@ -40,6 +40,11 @@ const ptokens = new pTokens({
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
     btcNetwork: 'testnet'  //'testnet' or 'bitcoin', default 'testnet'
+  },
+  pltc: {
+    ethPrivateKey: 'Eth private key',
+    ethProvider: 'Eth provider',
+    ltcNetwork: 'testnet'  //'testnet' or 'litecoin', default 'testnet'
   }
 })
 ```
