@@ -13,8 +13,7 @@ const HASH_INCOMING_TX =
 const HASH_BROADCASTED_TX =
   '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
 
-const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
-const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+const BTC_TESTING_ADDRESS = '2NFLTr9nFbnexQgRP3hpEH5NKduvqpiAUpw'
 
 test('Should ping the enclave', async () => {
   const expectedResult = PING_RETURN_VALUE
@@ -64,11 +63,11 @@ test('Should get one BTC report', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get four ETH reports by address', async () => {
-  const expectedResultLength = 4
-  const limit = 4
+test('Should get one ETH reports by address', async () => {
+  const expectedResultLength = 1
+  const limit = 1
   const type = 'eth'
-  const ethAddress = ETH_TESTING_ADDRESS
+  const ethAddress = BTC_TESTING_ADDRESS
   const enclave = new Enclave({
     pToken: 'pbtc'
   })
@@ -79,9 +78,9 @@ test('Should get four ETH reports by address', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get five BTC reports by address', async () => {
-  const expectedResultLength = 5
-  const limit = 5
+test('Should get one BTC report by address', async () => {
+  const expectedResultLength = 1
+  const limit = 1
   const type = 'btc'
   const btcAddress = BTC_TESTING_ADDRESS
   const enclave = new Enclave({
