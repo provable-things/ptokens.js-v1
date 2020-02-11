@@ -65,9 +65,9 @@ if (window.web3) {
       btcNetwork: 'bitcoin'
     },
     pltc: {
-    ethProvider: window.web3.currentProvider,
-    ltcNetwork: 'litecoin'
-  }
+      ethProvider: window.web3.currentProvider,
+      ltcNetwork: 'litecoin'
+    }
   })
 } else {
   console.log('No web3 detected')
