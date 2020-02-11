@@ -8,9 +8,4 @@ const pTokenNameIsValid = _pToken => {
   return false
 }
 
-/**
- * @param {String} _pToken
- */
-const pTokenNameNormalized = _pToken => _pToken.toLowerCase()
-
-export { pTokenNameIsValid, pTokenNameNormalized }
+export { pTokenNameIsValid }
