@@ -1,6 +1,6 @@
 {
   "name": "ptokens-enclave",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "repo holding the code for interacting with the Enclave",
   "main": "dist/ptokens-enclave.cjs.js",
   "module": "dist/ptokens-enclave.esm.js",
@@ -16,7 +16,10 @@
     "@babel/runtime": "^7.3.1",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
-    "ptokens-utils": "0.1.0"
+    "eventemitter3": "^4.0.0",
+    "light-async-polling": "^1.0.2",
+    "ptokens-utils": "^0.2.0",
+    "web3-core-promievent": "^1.2.5-rc.0"
   },
   "devDependencies": {
     "jest": "^24.8.0"

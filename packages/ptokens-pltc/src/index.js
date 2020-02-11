@@ -1,38 +1,29 @@
-import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
+import Web3PromiEvent from 'web3-core-promievent'
 import Enclave from 'ptokens-enclave'
 import utils from 'ptokens-utils'
+import Web3Utils from 'web3-utils'
+import LtcDepositAddress from './lib/ltc-deposit-address'
+import pltcAbi from './utils/contractAbi/pLTCTokenETHContractAbi.json'
+import * as bitcoin from 'bitcoinjs-lib'
 import {
-  EOS_BLOCKS_BEHIND,
-  EOS_EXPIRE_SECONDS,
-  EOS_NATIVE_TOKEN,
-  EOS_TOKEN_SYMBOL,
-  ETH_NODE_POLLING_TIME_INTERVAL,
-  MINIMUM_MINTABLE_PEOS_AMOUNT,
-  PEOS_TOKEN_DECIMALS,
-  PEOS_EOS_CONTRACT_ACCOUNT,
-  PEOS_ETH_CONTRACT_ADDRESS
+  PLTC_TOKEN_DECIMALS,
+  MINIMUN_SATS_REDEEMABLE,
+  LTC_NODE_POLLING_TIME
 } from './utils/constants'
-import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
 
-class pEOS {
+class pLTC {
   /**
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const {
-      ethPrivateKey,
-      ethProvider,
-      eosPrivateKey,
-      eosRpc,
-      eosSignatureProvider
-    } = _configs
-
-    this.enclave = new Enclave({
-      pToken: 'peos'
-    })
+    const { ethPrivateKey, ethProvider, ltcNetwork } = _configs
 
     this._web3 = new Web3(ethProvider)
+
+    this.enclave = new Enclave({
+      pToken: 'pltc'
+    })
 
     if (ethPrivateKey) {
       this._isWeb3Injected = false
@@ -48,95 +39,64 @@ class pEOS {
       this._ethPrivateKey = null
     }
 
-    if (eosSignatureProvider)
-      this._eosjs = utils.eos.getApi(null, eosRpc, eosSignatureProvider)
-    else if (eosPrivateKey && eosRpc)
-      this._eosjs = utils.eos.getApi(eosPrivateKey, eosRpc, null)
-    else this._eosjs = utils.eos.getApi(null, eosRpc, null)
+    if (ltcNetwork === 'litecoin' || ltcNetwork === 'testnet')
+      this._ltcNetwork = ltcNetwork
+    else this._ltcNetwork = 'testnet'
+
+    this._contractAddress = null
   }
 
   /**
-   * @param {Number} _amount
    * @param {String} _ethAddress
    */
-  issue(_amount, _ethAddress) {
-    const promiEvent = Web3PromiEvent()
+  async getDepositAddress(_ethAddress) {
+    if (!Web3Utils.isAddress(_ethAddress))
+      throw new Error('Eth Address is not valid')
 
-    const start = async () => {
-      if (_amount < MINIMUM_MINTABLE_PEOS_AMOUNT) {
-        promiEvent.reject('Amount to issue must be greater than 1 pEOS')
-        return
-      }
+    const deposit = await this.enclave.generic(
+      'GET',
+      `get-ltc-deposit-address/${this._ltcNetwork}/${_ethAddress}`
+    )
 
-      if (!this._web3.utils.isAddress(_ethAddress)) {
-        promiEvent.reject('Eth Address is not valid')
-        return
-      }
+    const depositAddress = new LtcDepositAddress({
+      ethAddress: _ethAddress,
+      nonce: deposit.nonce,
+      enclavePublicKey: deposit.enclavePublicKey,
+      value: deposit.btcDepositAddress,
+      ltcNetwork: this._ltcNetwork,
+      enclave: this.enclave,
+      web3: this._web3
+    })
 
-      try {
-        const eosPublicKeys = await utils.eos.getAvailablePublicKeys(
-          this._eosjs
-        )
-        const eosAccountName = await utils.eos.getAccountName(
-          this._eosjs,
-          eosPublicKeys
-        )
+    if (!depositAddress.verify())
+      throw new Error('Enclave deposit address does not match expected address')
 
-        const eosTxReceipt = await utils.eos.transferNativeToken(
-          this._eosjs,
-          PEOS_EOS_CONTRACT_ACCOUNT,
-          eosAccountName,
-          _amount,
-          _ethAddress,
-          EOS_BLOCKS_BEHIND,
-          EOS_EXPIRE_SECONDS
-        )
-
-        promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
-
-        const broadcastedEthTx = await this.enclave.monitorIncomingTransaction(
-          eosTxReceipt.transaction_id,
-          'issue',
-          promiEvent.eventEmitter
-        )
-
-        const ethTxReceipt = await utils.eth.waitForTransactionConfirmation(
-          this._web3,
-          broadcastedEthTx,
-          ETH_NODE_POLLING_TIME_INTERVAL
-        )
-
-        promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
-
-        promiEvent.resolve({
-          amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
-          to: _ethAddress,
-          tx: broadcastedEthTx
-        })
-      } catch (err) {
-        promiEvent.reject(err)
-      }
-    }
-
-    start()
-    return promiEvent.eventEmitter
+    return depositAddress
   }
 
   /**
    * @param {Number} _amount
-   * @param {String} _eosAccountName
+   * @param {String} _ltcAddress
    */
-  redeem(_amount, _eosAccountName) {
+  redeem(_amount, _ltcAddress) {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
-      if (_amount === 0) {
-        promiEvent.reject('Impossible to burn 0 pEOS')
+      if (_amount < MINIMUN_SATS_REDEEMABLE) {
+        promiEvent.reject(
+          `Impossible to burn less than ${MINIMUN_SATS_REDEEMABLE} pLTC`
+        )
         return
       }
 
-      if (!utils.eos.isValidAccountName(_eosAccountName)) {
-        promiEvent.reject('Eos Account is not valid')
+      // NOTE: add support for p2sh testnet address (Q...)
+      let ltcAddressToCheck = _ltcAddress
+      const decoded = bitcoin.address.fromBase58Check(_ltcAddress)
+      if (decoded.version === 0xc4)
+        ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
+
+      if (!utils.ltc.isValidAddress(this._ltcNetwork, ltcAddressToCheck)) {
+        promiEvent.reject('Ltc Address is not valid')
         return
       }
 
@@ -146,35 +106,35 @@ class pEOS {
           'burn',
           {
             isWeb3Injected: this._isWeb3Injected,
-            abi: peosAbi,
-            contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+            abi: pltcAbi,
+            contractAddress: this._getContractAddress(),
             privateKey: this._ethPrivateKey,
             value: utils.eth.zeroEther
           },
           [
-            utils.eth.correctFormat(_amount, PEOS_TOKEN_DECIMALS, '*'),
-            _eosAccountName
+            utils.eth.correctFormat(_amount, PLTC_TOKEN_DECIMALS, '*'),
+            _ltcAddress
           ]
         )
-
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedEosTx = await this.enclave.monitorIncomingTransaction(
+        const broadcastedLtcTx = await this.enclave.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           'redeem',
           promiEvent.eventEmitter
         )
 
-        const eosTxReceipt = await utils.eos.waitForTransactionConfirmation(
-          this._eosjs,
-          broadcastedEosTx
+        await utils.ltc.waitForTransactionConfirmation(
+          this._ltcNetwork,
+          broadcastedLtcTx,
+          LTC_NODE_POLLING_TIME
         )
-        promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt.data)
+        promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedLtcTx)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(PEOS_TOKEN_DECIMALS),
-          to: _eosAccountName,
-          tx: broadcastedEosTx
+          amount: _amount.toFixed(PLTC_TOKEN_DECIMALS),
+          to: _ltcAddress,
+          tx: broadcastedLtcTx
         })
       } catch (err) {
         promiEvent.reject(err)
@@ -190,14 +150,14 @@ class pEOS {
       utils.eth
         .makeContractCall(this._web3, 'totalMinted', {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pltcAbi,
+          contractAddress: this._getContractAddress()
         })
         .then(totalIssued =>
           resolve(
             utils.eth.correctFormat(
               parseInt(totalIssued),
-              PEOS_TOKEN_DECIMALS,
+              PLTC_TOKEN_DECIMALS,
               '/'
             )
           )
@@ -211,14 +171,14 @@ class pEOS {
       utils.eth
         .makeContractCall(this._web3, 'totalBurned', {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pltcAbi,
+          contractAddress: this._getContractAddress()
         })
         .then(totalRedeemed =>
           resolve(
             utils.eth.correctFormat(
               parseInt(totalRedeemed),
-              PEOS_TOKEN_DECIMALS,
+              PLTC_TOKEN_DECIMALS,
               '/'
             )
           )
@@ -232,31 +192,18 @@ class pEOS {
       utils.eth
         .makeContractCall(this._web3, 'totalSupply', {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pltcAbi,
+          contractAddress: this._getContractAddress()
         })
         .then(totalSupply =>
           resolve(
             utils.eth.correctFormat(
               parseInt(totalSupply),
-              PEOS_TOKEN_DECIMALS,
+              PLTC_TOKEN_DECIMALS,
               '/'
             )
           )
         )
-        .catch(err => reject(err))
-    })
-  }
-
-  getCollateral() {
-    return new Promise((resolve, reject) => {
-      this._eosjs.rpc
-        .get_currency_balance(
-          EOS_NATIVE_TOKEN,
-          PEOS_EOS_CONTRACT_ACCOUNT,
-          EOS_TOKEN_SYMBOL
-        )
-        .then(deposited => resolve(deposited))
         .catch(err => reject(err))
     })
   }
@@ -272,14 +219,14 @@ class pEOS {
           'balanceOf',
           {
             isWeb3Injected: this._isWeb3Injected,
-            abi: peosAbi,
-            contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+            abi: pltcAbi,
+            contractAddress: this._getContractAddress()
           },
           [_ethAddress]
         )
         .then(balance =>
           resolve(
-            utils.eth.correctFormat(parseInt(balance), PEOS_TOKEN_DECIMALS, '/')
+            utils.eth.correctFormat(parseInt(balance), PLTC_TOKEN_DECIMALS, '/')
           )
         )
         .catch(err => reject(err))
@@ -296,14 +243,14 @@ class pEOS {
       'transfer',
       {
         isWeb3Injected: this._isWeb3Injected,
-        abi: peosAbi,
-        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        abi: pltcAbi,
+        contractAddress: this._getContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
         _to,
-        utils.eth.correctFormat(parseInt(_amount), PEOS_TOKEN_DECIMALS, '*')
+        utils.eth.correctFormat(parseInt(_amount), PLTC_TOKEN_DECIMALS, '*')
       ]
     )
   }
@@ -318,14 +265,14 @@ class pEOS {
       'approve',
       {
         isWeb3Injected: this._isWeb3Injected,
-        abi: peosAbi,
-        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        abi: pltcAbi,
+        contractAddress: this._getContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
         _spender,
-        utils.eth.correctFormat(parseInt(_amount), PEOS_TOKEN_DECIMALS, '*')
+        utils.eth.correctFormat(parseInt(_amount), PLTC_TOKEN_DECIMALS, '*')
       ]
     )
   }
@@ -341,15 +288,15 @@ class pEOS {
       'transferFrom',
       {
         isWeb3Injected: this._isWeb3Injected,
-        abi: peosAbi,
-        contractAddress: PEOS_ETH_CONTRACT_ADDRESS,
+        abi: pltcAbi,
+        contractAddress: this._getContractAddress(),
         privateKey: this._ethPrivateKey,
         value: utils.eth.zeroEther
       },
       [
         _from,
         _to,
-        utils.eth.correctFormat(parseInt(_amount), PEOS_TOKEN_DECIMALS, '*')
+        utils.eth.correctFormat(parseInt(_amount), PLTC_TOKEN_DECIMALS, '*')
       ]
     )
   }
@@ -359,8 +306,8 @@ class pEOS {
       utils.eth
         .makeContractCall(this._web3, 'burnNonce', {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pltcAbi,
+          contractAddress: this._getContractAddress()
         })
         .then(burnNonce => resolve(parseInt(burnNonce)))
         .catch(err => reject(err))
@@ -372,8 +319,8 @@ class pEOS {
       utils.eth
         .makeContractCall(this._web3, 'mintNonce', {
           isWeb3Injected: this._isWeb3Injected,
-          abi: peosAbi,
-          contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+          abi: pltcAbi,
+          contractAddress: this._getContractAddress()
         })
         .then(mintNonce => resolve(parseInt(mintNonce)))
         .catch(err => reject(err))
@@ -392,8 +339,8 @@ class pEOS {
           'allowance',
           {
             isWeb3Injected: this._isWeb3Injected,
-            abi: peosAbi,
-            contractAddress: PEOS_ETH_CONTRACT_ADDRESS
+            abi: pltcAbi,
+            contractAddress: this._getContractAddress()
           },
           [_owner, _spender]
         )
@@ -401,7 +348,7 @@ class pEOS {
           resolve(
             utils.eth.correctFormat(
               parseInt(allowance),
-              PEOS_TOKEN_DECIMALS,
+              PLTC_TOKEN_DECIMALS,
               '/'
             )
           )
@@ -409,6 +356,16 @@ class pEOS {
         .catch(err => reject(err))
     })
   }
+
+  async _getContractAddress() {
+    if (!this._contractAddress) {
+      const ethNetwork = await this._web3.eth.net.getNetworkType()
+      const info = await this.enclave.getInfo(this._ltcNetwork, ethNetwork)
+      this._contractAddress = info['pbtc-smart-contract-address']
+    }
+
+    return this._contractAddress
+  }
 }
 
-export default pEOS
+export default pLTC

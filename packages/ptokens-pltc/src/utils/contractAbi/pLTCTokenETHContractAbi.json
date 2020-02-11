@@ -54,36 +54,11 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "_btcAddress",
+        "name": "_ltcAddress",
         "type": "string"
       }
     ],
     "name": "Burn",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_value",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_nonce",
-        "type": "uint256"
-      }
-    ],
-    "name": "Mint",
     "type": "event"
   },
   {
@@ -209,7 +184,7 @@
       },
       {
         "internalType": "string",
-        "name": "_btcAddress",
+        "name": "_ltcAddress",
         "type": "string"
       }
     ],
@@ -238,6 +213,27 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "changeProvableAddress",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_success",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

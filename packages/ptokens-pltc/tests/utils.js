@@ -2,37 +2,37 @@ import * as bitcoin from 'bitcoinjs-lib'
 import utils from 'ptokens-utils'
 
 /**
- * @param {String} _btcPrivateKey
- * @param {String} _btcAddress
+ * @param {String} _ltcPrivateKey
+ * @param {String} _ltcAddress
  * @param {Number} _value
  * @param {Number} _minerFees
  * @param {String} _to
  */
-const sendBitcoin = async (
-  _btcPrivateKey,
-  _btcAddress,
+const sendLitecoin = async (
+  _ltcPrivateKey,
+  _ltcAddress,
   _value,
   _minerFees,
   _to
 ) => {
   const key = bitcoin.ECPair.fromPrivateKey(
-    Buffer.from(_btcPrivateKey, 'hex'),
+    Buffer.from(_ltcPrivateKey, 'hex'),
     bitcoin.networks.testnet
   )
 
-  const utxos = await utils.btc.getUtxoByAddress('testnet', _btcAddress)
+  const utxos = await utils.ltc.getUtxoByAddress('testnet', _ltcAddress)
 
   // get utxo with the min value
   let min = Math.pow(2, 32)
   let utxoToSpend = null
   for (let utxo of utxos) {
-    if (utxo.value < min && utxo.value > _minerFees + 2 * _value) {
-      min = utxo.value
+    if (utxo.satoshis < min && utxo.satoshis > _minerFees + 2 * _value) {
+      min = utxo.satoshis
       utxoToSpend = utxo
     }
   }
 
-  const utxoToSpendHex = await utils.btc.getTransactionHexById(
+  const utxoToSpendHex = await utils.ltc.getTransactionHexById(
     'testnet',
     utxoToSpend.txid
   )
@@ -41,18 +41,23 @@ const sendBitcoin = async (
   psbt.addInput({
     index: utxoToSpend.vout,
     hash: utxoToSpend.txid,
-    nonWitnessUtxo: Buffer.from(utxoToSpendHex, 'hex')
+    nonWitnessUtxo: Buffer.from(utxoToSpendHex.rawtx, 'hex')
   })
 
+  let receiver = _to
+  const decoded = bitcoin.address.fromBase58Check(receiver)
+  if (decoded.version === 0x3a)
+    receiver = bitcoin.address.toBase58Check(decoded.hash, 0xc4)
+
   psbt.addOutput({
-    address: _to,
+    address: receiver,
     value: _value
   })
 
   // NOTE: address reuse for facilitating tests
   psbt.addOutput({
-    address: _btcAddress,
-    value: utxoToSpend.value - _minerFees - _value
+    address: _ltcAddress,
+    value: utxoToSpend.satoshis - _minerFees - _value
   })
 
   psbt.signInput(0, key)
@@ -61,7 +66,7 @@ const sendBitcoin = async (
 
   const txHexToBroadcast = psbt.extractTransaction().toHex()
 
-  return utils.btc.broadcastTransaction('testnet', txHexToBroadcast)
+  return utils.ltc.broadcastTransaction('testnet', txHexToBroadcast)
 }
 
-export { sendBitcoin }
+export { sendLitecoin }

@@ -25,7 +25,4 @@ const encodeUint64le = number => {
   return buffer
 }
 
-export {
-  decodeUint64le,
-  encodeUint64le
-}
+export { decodeUint64le, encodeUint64le }

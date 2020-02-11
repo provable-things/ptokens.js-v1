@@ -1,10 +1,10 @@
 {
-  "name": "ptokens-pbtc",
+  "name": "ptokens-pltc",
   "version": "0.2.0",
-  "description": "repo holding the code for interacting with pBTC",
-  "main": "dist/ptokens-pbtc.cjs.js",
-  "module": "dist/ptokens-pbtc.esm.js",
-  "browser": "dist/ptokens-pbtc.umd.js",
+  "description": "repo holding the code for interacting with pLTC",
+  "main": "dist/ptokens-pltc.cjs.js",
+  "module": "dist/ptokens-pltc.esm.js",
+  "browser": "dist/ptokens-pltc.umd.js",
   "scripts": {
     "build": "rollup -c",
     "test": "jest --ci --forceExit --detectOpenHandles",

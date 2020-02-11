@@ -3,7 +3,8 @@ import { expect } from 'chai'
 import { PEOS_TOKEN_DECIMALS } from '../src/utils/constants'
 
 const configs = {
-  ethPrivateKey: '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
+  ethPrivateKey:
+    '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
   ethProvider: 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6',
   eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
   eosRpc: 'https://ptoken-eos.provable.xyz:443'
@@ -26,11 +27,20 @@ test('Should issue 1 pEOS', async () => {
   const start = () =>
     new Promise(resolve => {
       const peos = new pEOS(configs)
-      peos.issue(peosToIssue, to)
-        .once('onEosTxConfirmed', () => { eosTxIsConfirmed = true })
-        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
-        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
-        .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
+      peos
+        .issue(peosToIssue, to)
+        .once('onEosTxConfirmed', () => {
+          eosTxIsConfirmed = true
+        })
+        .once('onEnclaveReceivedTx', () => {
+          enclaveHasReceivedTx = true
+        })
+        .once('onEnclaveBroadcastedTx', () => {
+          enclaveHasBroadcastedTx = true
+        })
+        .once('onEthTxConfirmed', () => {
+          ethTxIsConfirmed = true
+        })
         .then(r => {
           expect(r).to.deep.include({
             amount: expectedAmountIssued,
@@ -56,11 +66,10 @@ test('Should generate an error since it is not possible to generate less than 1 
   const start = () =>
     new Promise(resolve => {
       const peos = new pEOS(configs)
-      peos.issue(invalidAmountToIssue, to)
-        .catch(err => {
-          hasGeneratedError = true
-          resolve(err)
-        })
+      peos.issue(invalidAmountToIssue, to).catch(err => {
+        hasGeneratedError = true
+        resolve(err)
+      })
     })
   const err = await start()
   expect(hasGeneratedError).to.equal(true)
@@ -77,11 +86,10 @@ test('Should generate an error because of invalid ETH address', async () => {
   const start = () =>
     new Promise(resolve => {
       const peos = new pEOS(configs)
-      peos.issue(amountToIssue, to)
-        .catch(err => {
-          hasGeneratedError = true
-          resolve(err)
-        })
+      peos.issue(amountToIssue, to).catch(err => {
+        hasGeneratedError = true
+        resolve(err)
+      })
     })
   const err = await start()
   expect(hasGeneratedError).to.equal(true)
@@ -104,11 +112,20 @@ test('Should redeem 1 pEOS', async () => {
     new Promise(resolve => {
       const peos = new pEOS(configs)
       peos.issue(peosToIssue, ethAddress)
-      peos.redeem(peosToRedeem, to)
-        .once('onEthTxConfirmed', () => { ethTxIsConfirmed = true })
-        .once('onEnclaveReceivedTx', () => { enclaveHasReceivedTx = true })
-        .once('onEnclaveBroadcastedTx', () => { enclaveHasBroadcastedTx = true })
-        .once('onEosTxConfirmed', () => { eosTxIsConfirmed = true })
+      peos
+        .redeem(peosToRedeem, to)
+        .once('onEthTxConfirmed', () => {
+          ethTxIsConfirmed = true
+        })
+        .once('onEnclaveReceivedTx', () => {
+          enclaveHasReceivedTx = true
+        })
+        .once('onEnclaveBroadcastedTx', () => {
+          enclaveHasBroadcastedTx = true
+        })
+        .once('onEosTxConfirmed', () => {
+          eosTxIsConfirmed = true
+        })
         .then(r => {
           expect(r).to.deep.include({
             amount: expectedAmountRedeemed,
@@ -134,11 +151,10 @@ test('Should generate an error since it is not possible to burn 0 pEOS', async (
   const start = () =>
     new Promise(resolve => {
       const peos = new pEOS(configs)
-      peos.redeem(invalidAmountToRedeem, to)
-        .catch(err => {
-          hasGeneratedError = true
-          resolve(err)
-        })
+      peos.redeem(invalidAmountToRedeem, to).catch(err => {
+        hasGeneratedError = true
+        resolve(err)
+      })
     })
   const err = await start()
   expect(hasGeneratedError).to.equal(true)
@@ -155,11 +171,10 @@ test('Should generate an error because of invalid EOS account', async () => {
   const start = () =>
     new Promise(resolve => {
       const peos = new pEOS(configs)
-      peos.redeem(amountToRedeem, to)
-        .catch(err => {
-          hasGeneratedError = true
-          resolve(err)
-        })
+      peos.redeem(amountToRedeem, to).catch(err => {
+        hasGeneratedError = true
+        resolve(err)
+      })
     })
   const err = await start()
   expect(hasGeneratedError).to.equal(true)

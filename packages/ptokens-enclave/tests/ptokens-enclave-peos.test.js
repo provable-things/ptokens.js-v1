@@ -1,15 +1,15 @@
 import Enclave from '../src/index'
-import {
-  ETH_PEOS_BLOCK,
-  EOS_PEOS_BLOCK
-} from './utils'
+import { ETH_PEOS_BLOCK, EOS_PEOS_BLOCK } from './utils'
 import { expect } from 'chai'
+import EventEmitter from 'eventemitter3'
 
 jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'Provable pong!'
-const HASH_INCOMING_TX = 'c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3'
-const HASH_BROADCASTED_TX = '3aa61c0188e065a7a90234dc3d544e8791f76423b5eb34d63201531c61f24066'
+const HASH_INCOMING_TX =
+  'c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3'
+const HASH_BROADCASTED_TX =
+  '3aa61c0188e065a7a90234dc3d544e8791f76423b5eb34d63201531c61f24066'
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const EOS_BLOCK_SUBMITTED_RETURN_VALUE = 'Eos block submitted to the enclave!'
 
@@ -20,19 +20,17 @@ test('Should ping the enclave', async () => {
   })
 
   const result = await enclave.ping()
-  expect(result)
-    .to.be.equal(expectedResult)
+  expect(result).to.be.equal(expectedResult)
 })
 
-test('Should generate an error because of invalid pToken name', async () => {
+test('Should generate an error because of invalid pToken name', () => {
   const invalidpTokenName = 'invalid'
   const expectedErrorMessage = 'Invalid pToken'
 
   try {
     new Enclave({ pToken: invalidpTokenName })
   } catch (err) {
-    expect(err.message)
-      .to.be.equal(expectedErrorMessage)
+    expect(err.message).to.be.equal(expectedErrorMessage)
   }
 })
 
@@ -102,10 +100,8 @@ test('Should get ETH reports by nonce', async () => {
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
-  expect(res)
-    .to.be.an.instanceof(Object)
-  expect(res._id)
-    .to.be.equal(`ETH ${nonce}`)
+  expect(res).to.be.an.instanceof(Object)
+  expect(res._id).to.be.equal(`ETH ${nonce}`)
 })
 
 test('Should get EOS reports by nonce', async () => {
@@ -116,10 +112,8 @@ test('Should get EOS reports by nonce', async () => {
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
-  expect(res)
-    .to.be.an.instanceof(Object)
-  expect(res._id)
-    .to.be.equal(`EOS ${nonce}`)
+  expect(res).to.be.an.instanceof(Object)
+  expect(res._id).to.be.equal(`EOS ${nonce}`)
 })
 
 test('Should get last ETH processed block', async () => {
@@ -129,8 +123,7 @@ test('Should get last ETH processed block', async () => {
   })
 
   const res = await enclave.getLastProcessedBlock(type)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get last EOS processed block', async () => {
@@ -140,8 +133,7 @@ test('Should get last EOS processed block', async () => {
   })
 
   const res = await enclave.getLastProcessedBlock(type)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get the status of an incoming tx', async () => {
@@ -151,8 +143,7 @@ test('Should get the status of an incoming tx', async () => {
   })
 
   const res = await enclave.getIncomingTransactionStatus(hash)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get the status of an brodcasted tx', async () => {
@@ -162,8 +153,7 @@ test('Should get the status of an brodcasted tx', async () => {
   })
 
   const res = await enclave.getBroadcastTransactionStatus(hash)
-  expect(res)
-    .to.be.an.instanceof(Object)
+  expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should submit an ETH block', async () => {
@@ -174,8 +164,7 @@ test('Should submit an ETH block', async () => {
   })
 
   const res = await enclave.submitBlock(type, ETH_PEOS_BLOCK)
-  expect(res)
-    .to.be.equal(expectedResult)
+  expect(res).to.be.equal(expectedResult)
 })
 
 test('Should submit an EOS block', async () => {
@@ -186,6 +175,35 @@ test('Should submit an EOS block', async () => {
   })
 
   const res = await enclave.submitBlock(type, EOS_PEOS_BLOCK)
-  expect(res)
-    .to.be.equal(expectedResult)
+  expect(res).to.be.equal(expectedResult)
+})
+
+test('Should monitor an incoming transaction', async () => {
+  const enclave = new Enclave({
+    pToken: 'peos'
+  })
+
+  let enclaveHasReceivedTx = false
+  let enclaveHasBroadcastedTx = false
+
+  const eventEmitter = new EventEmitter()
+
+  const start = () =>
+    new Promise(resolve => {
+      eventEmitter.once('onEnclaveReceivedTx', () => {
+        enclaveHasReceivedTx = true
+      })
+      eventEmitter.once('onEnclaveBroadcastedTx', () => {
+        enclaveHasBroadcastedTx = true
+      })
+      enclave
+        .monitorIncomingTransaction(HASH_INCOMING_TX, 'issue', eventEmitter)
+        .then(tx => {
+          expect(tx).to.be.a('string')
+          resolve()
+        })
+    })
+  await start()
+  expect(enclaveHasReceivedTx).to.be.equal(true)
+  expect(enclaveHasBroadcastedTx).to.be.equal(true)
 })

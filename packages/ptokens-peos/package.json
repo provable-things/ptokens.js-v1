@@ -1,6 +1,6 @@
 {
   "name": "ptokens-peos",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "repo holding the code for interacting with pEOS",
   "main": "dist/ptokens-peos.cjs.js",
   "module": "dist/ptokens-peos.esm.js",
@@ -16,9 +16,8 @@
     "@babel/runtime": "^7.3.1",
     "chai": "^4.2.0",
     "eosjs": "^20.0.0",
-    "light-async-polling": "^1.0.2",
-    "ptokens-enclave": "0.1.0",
-    "ptokens-utils": "0.1.0",
+    "ptokens-enclave": "^0.2.0",
+    "ptokens-utils": "^0.2.0",
     "text-encoding": "^0.7.0",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1"

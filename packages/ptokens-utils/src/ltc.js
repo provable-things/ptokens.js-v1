@@ -1,26 +1,27 @@
-import validate from 'bitcoin-address-validation'
 import axios from 'axios'
 import polling from 'light-async-polling'
+import validate from 'bitcoin-address-validation'
+import * as bitcoin from 'bitcoinjs-lib'
 
-const BLOCKSTREAM_BASE_TESTNET_ENDPOINT =
-  'https://blockstream.info/testnet/api/'
-const BLOCKSTREAM_BASE_MAINNET_ENDPOINT = 'https://blockstream.info/api/'
+const LTC_PTOKENS_NODE_TESTNET_API =
+  'https://ltcnode.ptokens.io/insight-lite-api'
+const LTC_PTOKENS_NODE_MAINNET_API = 'Not available yet'
 
-const _getEsploraApi = _network =>
+const _getInsightLiteApi = _network =>
   axios.create({
     baseURL:
-      _network === 'bitcoin'
-        ? BLOCKSTREAM_BASE_MAINNET_ENDPOINT
-        : BLOCKSTREAM_BASE_TESTNET_ENDPOINT,
+      _network === 'litecoin'
+        ? LTC_PTOKENS_NODE_MAINNET_API
+        : LTC_PTOKENS_NODE_TESTNET_API,
     timeout: 50000,
     headers: {
-      'Content-Type': 'text/plain'
+      'Content-Type': 'application/json'
     }
   })
 
-const _makeEsploraApiCall = (_network, _callType, _apiPath, _params) =>
+const _makeInsightLiteApiCall = (_network, _callType, _apiPath, _params) =>
   new Promise((resolve, reject) => {
-    _getEsploraApi(_network)
+    _getInsightLiteApi(_network)
       [_callType.toLowerCase()](_apiPath, _params)
       .then(_res => resolve(_res.data))
       .catch(_err => reject(_err))
@@ -32,7 +33,9 @@ const _makeEsploraApiCall = (_network, _callType, _apiPath, _params) =>
  * @param {String} _tx
  */
 const broadcastTransaction = (_network, _tx) =>
-  _makeEsploraApiCall(_network, 'POST', '/tx', _tx)
+  _makeInsightLiteApiCall(_network, 'POST', '/tx/send', {
+    rawtx: _tx
+  })
 
 /**
  *
@@ -40,7 +43,7 @@ const broadcastTransaction = (_network, _tx) =>
  * @param {String} _address
  */
 const getUtxoByAddress = (_network, _address) =>
-  _makeEsploraApiCall(_network, 'GET', `/address/${_address}/utxo`)
+  _makeInsightLiteApiCall(_network, 'GET', `/addrs/${_address}/utxo`)
 
 /**
  *
@@ -48,13 +51,29 @@ const getUtxoByAddress = (_network, _address) =>
  * @param {String} _txId
  */
 const getTransactionHexById = (_network, _txId) =>
-  _makeEsploraApiCall(_network, 'GET', `/tx/${_txId}/hex`)
+  _makeInsightLiteApiCall(_network, 'GET', `/rawtx/${_txId}`)
 
 /**
  * @param {String} _address
  * @param {String} _network
  */
-const isValidAddress = _address => Boolean(validate(_address))
+const isValidAddress = (_network, _address) => {
+  if (_network === 'testnet') {
+    let address = _address
+    try {
+      const decoded = bitcoin.address.fromBase58Check(address)
+      if (decoded.version === 0xc4)
+        address = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
+    } catch (err) {
+      return false
+    }
+    return Boolean(validate(address))
+  } else {
+    const res = _address.match(/[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/g)
+    if (!res) return false
+    return res[0] === _address
+  }
+}
 
 /**
  * @param {String} _address
@@ -72,22 +91,22 @@ const monitorUtxoByAddress = async (
   await polling(async () => {
     // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
 
-    utxos = await _makeEsploraApiCall(
+    utxos = await _makeInsightLiteApiCall(
       _network,
       'GET',
-      `/address/${_address}/utxo`
+      `/addrs/${_address}/utxo`
     )
 
     if (utxos.length > 0) {
-      if (utxos[0].status.confirmed) {
-        if (!isBroadcasted) _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+      if (utxos[0].confirmations > 0) {
+        if (!isBroadcasted) _eventEmitter.emit('onLtcTxBroadcasted', utxos[0])
 
-        _eventEmitter.emit('onBtcTxConfirmed', utxos[0])
+        _eventEmitter.emit('onLtcTxConfirmed', utxos[0])
         utxo = utxos[0].txid
         return true
       } else if (!isBroadcasted) {
         isBroadcasted = true
-        _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+        _eventEmitter.emit('onLtcTxBroadcasted', utxos[0])
         return false
       }
     } else {
@@ -104,13 +123,13 @@ const monitorUtxoByAddress = async (
  */
 const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
   await polling(async () => {
-    const status = await _makeEsploraApiCall(
+    const transaction = await _makeInsightLiteApiCall(
       _network,
       'GET',
-      `/tx/${_tx}/status`
+      `/tx/${_tx}/`
     )
 
-    if (status.confirmed) return true
+    if (transaction.confirmations > 0) return true
     else return false
   }, _pollingTime)
   return true

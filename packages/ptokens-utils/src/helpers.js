@@ -1,14 +1,10 @@
-const PEOS = 'peos'
-const PBTC = 'pbtc'
-
 /**
  * @param {String} _pToken
  */
 const pTokenNameIsValid = _pToken => {
-  if (_pToken.toLowerCase() === PEOS)
-    return true
-  if (_pToken.toLowerCase() === PBTC)
-    return true
+  if (_pToken.toLowerCase() === 'peos') return true
+  if (_pToken.toLowerCase() === 'pbtc') return true
+  if (_pToken.toLowerCase() === 'pltc') return true
   return false
 }
 
@@ -17,7 +13,4 @@ const pTokenNameIsValid = _pToken => {
  */
 const pTokenNameNormalized = _pToken => _pToken.toLowerCase()
 
-export {
-  pTokenNameIsValid,
-  pTokenNameNormalized
-}
+export { pTokenNameIsValid, pTokenNameNormalized }
