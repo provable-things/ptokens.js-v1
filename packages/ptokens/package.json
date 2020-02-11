@@ -1,6 +1,6 @@
 {
   "name": "ptokens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ptokens main package",
   "main": "dist/ptokens.cjs.js",
   "module": "dist/ptokens.esm.js",
@@ -13,10 +13,10 @@
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "chai": "^4.2.0",
-    "ptokens-pbtc": "0.1.0",
-    "ptokens-peos": "0.1.0",
-    "ptokens-pltc": "0.1.0",
-    "ptokens-utils": "0.1.0"
+    "ptokens-pbtc": "^0.2.0",
+    "ptokens-peos": "^0.2.0",
+    "ptokens-pltc": "^0.2.0",
+    "ptokens-utils": "^0.2.0"
   },
   "devDependencies": {
     "jest": "^24.8.0"

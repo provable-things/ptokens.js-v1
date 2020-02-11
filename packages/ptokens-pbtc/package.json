@@ -1,6 +1,6 @@
 {
   "name": "ptokens-pbtc",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "repo holding the code for interacting with pBTC",
   "main": "dist/ptokens-pbtc.cjs.js",
   "module": "dist/ptokens-pbtc.esm.js",
@@ -18,8 +18,8 @@
     "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
     "light-async-polling": "^1.0.2",
-    "ptokens-enclave": "0.1.0",
-    "ptokens-utils": "0.1.0",
+    "ptokens-enclave": "^0.2.0",
+    "ptokens-utils": "^0.2.0",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1",
     "web3-utils": "^1.2.4"
