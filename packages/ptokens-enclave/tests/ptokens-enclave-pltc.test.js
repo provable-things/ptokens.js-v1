@@ -14,19 +14,53 @@ const HASH_BROADCASTED_TX =
 
 const LTC_TESTING_ADDRESS = 'QQPAnYG1muVgNvq7d7sKAgAvvTgydJ24oi'
 
-test('Should ping the enclave', async () => {
+test('Should ping the enclave without a selected node', async () => {
   const expectedResult = PING_RETURN_VALUE
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.ping()
   expect(res).to.be.equal(expectedResult)
 })
 
+test('Should ping the enclave with a selected node', async () => {
+  const expectedResult = PING_RETURN_VALUE
+  const enclave = new Enclave({
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    },
+    defaultNode: 'https://nuc-bridge-3.ngrok.io'
+  })
+
+  const res = await enclave.ping()
+  expect(res).to.be.equal(expectedResult)
+})
+
+test('Should ping the enclave with a node different of default because it is invalid', async () => {
+  const uncreachableNode = 'https://uncreachable-node.io'
+  const enclave = new Enclave({
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    },
+    defaultNode: uncreachableNode
+  })
+
+  await enclave.ping()
+  expect(enclave.selectedNode.endpoint).to.be.not.equal(uncreachableNode)
+})
+
 test('Should get the Enclave Info', async () => {
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const info = await enclave.getInfo('testnet', 'ropsten')
@@ -39,7 +73,10 @@ test('Should get one ETH report', async () => {
   const limit = 1
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReports(type, limit)
@@ -53,7 +90,10 @@ test('Should get one LTC report', async () => {
   const limit = 1
   const type = 'ltc'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReports(type, limit)
@@ -68,7 +108,10 @@ test('Should get one ETH report by address', async () => {
   const type = 'eth'
   const ethAddress = LTC_TESTING_ADDRESS
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportsByAddress(type, ethAddress, limit)
@@ -83,7 +126,10 @@ test('Should get one LTC reports by address', async () => {
   const type = 'ltc'
   const ltcAddress = LTC_TESTING_ADDRESS
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportsByAddress(type, ltcAddress, limit)
@@ -96,7 +142,10 @@ test('Should get ETH reports by nonce', async () => {
   const nonce = 1
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
@@ -108,7 +157,10 @@ test('Should get LTC reports by nonce', async () => {
   const nonce = 1
   const type = 'ltc'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
@@ -119,7 +171,10 @@ test('Should get LTC reports by nonce', async () => {
 test('Should get last ETH processed block', async () => {
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getLastProcessedBlock(type)
@@ -129,7 +184,10 @@ test('Should get last ETH processed block', async () => {
 test('Should get last LTC processed block', async () => {
   const type = 'ltc'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getLastProcessedBlock(type)
@@ -139,7 +197,10 @@ test('Should get last LTC processed block', async () => {
 test('Should get the status of an incoming tx', async () => {
   const hash = HASH_INCOMING_TX
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getIncomingTransactionStatus(hash)
@@ -149,7 +210,10 @@ test('Should get the status of an incoming tx', async () => {
 test('Should get the status of an brodcasted tx', async () => {
   const hash = HASH_BROADCASTED_TX
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getBroadcastTransactionStatus(hash)
@@ -160,7 +224,10 @@ test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.submitBlock(type, ETH_PLTC_BLOCK)
@@ -171,7 +238,10 @@ test('Should submit a LTC block', async () => {
   const expectedResult = LTC_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'ltc'
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.submitBlock(type, LTC_PLTC_BLOCK)
@@ -180,7 +250,10 @@ test('Should submit a LTC block', async () => {
 
 test('Should monitor an incoming pLTC transaction', async () => {
   const enclave = new Enclave({
-    pToken: 'pltc'
+    pToken: {
+      name: 'pLTC',
+      redeemFrom: 'ETH'
+    }
   })
 
   let enclaveHasReceivedTx = false

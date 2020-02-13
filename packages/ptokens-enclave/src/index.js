@@ -1,6 +1,6 @@
-import { getApi, makeApiCall, REPORT_LIMIT } from './utils/index'
-import utils from 'ptokens-utils'
+import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
+import NodeSelector from 'ptokens-node-selector'
 
 const ENCLAVE_POLLING_TIME = 200
 
@@ -19,23 +19,18 @@ const mapIncomingTxParamValue = {
   }
 }
 
-class Enclave {
+class Enclave extends NodeSelector {
   /**
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken } = configs
+    super(configs)
 
-    if (!utils.helpers.pTokenNameIsValid(pToken))
-      throw new Error('Invalid pToken')
-
-    this.pToken = utils.helpers.pTokenNameNormalized(pToken)
-    this._api = getApi(this.pToken)
     this._info = null
   }
 
   ping() {
-    return makeApiCall(this._api, 'GET', `/${this.pToken}/ping`)
+    return makeApiCall(this.getApi(), 'GET', `/${this.pToken.name}/ping`)
   }
 
   /**
@@ -46,9 +41,9 @@ class Enclave {
   async getInfo(_issueFromNetwork, _redeemFromNetwork) {
     if (!this._info) {
       const info = await makeApiCall(
-        this._api,
+        this.getApi(),
         'GET',
-        `/${this.pToken}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
+        `/${this.pToken.name}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
       )
       this._info = info
     }
@@ -61,9 +56,9 @@ class Enclave {
    */
   getReports(_type, _limit = REPORT_LIMIT) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'GET',
-      `/${this.pToken}/${_type}-reports/limit/${_limit}`
+      `/${this.pToken.name}/${_type}-reports/limit/${_limit}`
     )
   }
 
@@ -74,9 +69,9 @@ class Enclave {
    */
   getReportsByAddress(_type, _address, _limit = REPORT_LIMIT) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'GET',
-      `${this.pToken}/${_type}-address/${_address}/limit/${_limit}`
+      `${this.pToken.name}/${_type}-address/${_address}/limit/${_limit}`
     )
   }
 
@@ -86,9 +81,9 @@ class Enclave {
    */
   getReportByNonce(_type, _nonce) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'GET',
-      `/${this.pToken}/report/${_type}/nonce/${_nonce}`
+      `/${this.pToken.name}/report/${_type}/nonce/${_nonce}`
     )
   }
 
@@ -97,9 +92,9 @@ class Enclave {
    */
   getLastProcessedBlock(_type) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'GET',
-      `${this.pToken}/last-processed-${_type}-block`
+      `${this.pToken.name}/last-processed-${_type}-block`
     )
   }
 
@@ -108,9 +103,9 @@ class Enclave {
    */
   getIncomingTransactionStatus(_hash) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'GET',
-      `${this.pToken}/incoming-tx-hash/${_hash}`
+      `${this.pToken.name}/incoming-tx-hash/${_hash}`
     )
   }
 
@@ -119,9 +114,9 @@ class Enclave {
    */
   getBroadcastTransactionStatus(_hash) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'GET',
-      `${this.pToken}/broadcast-tx-hash/${_hash}`
+      `${this.pToken.name}/broadcast-tx-hash/${_hash}`
     )
   }
 
@@ -131,9 +126,9 @@ class Enclave {
    */
   submitBlock(_type, _block) {
     return makeApiCall(
-      this._api,
+      this.getApi(),
       'POST',
-      `/${this.pToken}/submit-${_type}-block`,
+      `/${this.pToken.name}/submit-${_type}-block`,
       _block
     )
   }
@@ -144,7 +139,12 @@ class Enclave {
    * @param {Object} [_data = null]
    */
   generic(_type, _path, _data = null) {
-    return makeApiCall(this._api, _type, `/${this.pToken}/${_path}`, _data)
+    return makeApiCall(
+      this.getApi(),
+      _type,
+      `/${this.pToken.name}/${_path}`,
+      _data
+    )
   }
 
   /**
@@ -167,7 +167,7 @@ class Enclave {
         if (!isSeen) _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
 
         broadcastedTx =
-          incomingTxStatus[mapIncomingTxParamValue[this.pToken][_type]]
+          incomingTxStatus[mapIncomingTxParamValue[this.pToken.name][_type]]
         _eventEmitter.emit('onEnclaveBroadcastedTx', broadcastedTx)
         return true
       } else {

@@ -7,7 +7,7 @@
   "browser": "dist/ptokens-enclave.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
   "author": "alle.manfredi@gmail.com @provable-things",
@@ -18,8 +18,8 @@
     "chai": "^4.2.0",
     "eventemitter3": "^4.0.0",
     "light-async-polling": "^1.0.2",
-    "ptokens-utils": "^0.2.0",
-    "web3-core-promievent": "^1.2.5-rc.0"
+    "web3-core-promievent": "^1.2.5-rc.0",
+    "ptokens-node-selector": "0.2.0"
   },
   "devDependencies": {
     "jest": "^24.8.0"

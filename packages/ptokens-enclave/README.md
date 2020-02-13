@@ -26,6 +26,10 @@ npm install ptokens-enclave
 import Enclave from 'ptokens-enclave'
 
 const enclave = new Enclave({
-  pToken 'pToken type' // pEOS or pBTC (for now)
+  pToken: {
+    name: 'pToken name',
+    redeemFrom: 'ETH' //for now
+  },
+  defaultNode: 'https://...' //optional
 })
 ```

@@ -1,18 +1,15 @@
 import axios from 'axios'
 
 const REPORT_LIMIT = 100
-const PEOS_ENDPOINT = 'https://nuc-bridge-1.ngrok.io/'
-const PBTC_ENDPOINT = 'https://nuc-bridge-2.ngrok.io/'
-const PLTC_ENDPOINT = 'https://nuc-bridge-3.ngrok.io/'
 
 /**
  * @param {String} _pToken
+ * @param {Number} _timeout
  */
-const getApi = _pToken => {
-  const endpoint = _getEndpoint(_pToken)
+const createApi = (_endpoint, _timeout = 50000) => {
   return axios.create({
-    baseURL: endpoint,
-    timeout: 50000,
+    baseURL: _endpoint,
+    timeout: _timeout,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
@@ -23,35 +20,22 @@ const getApi = _pToken => {
 }
 
 /**
- * @param {String} _pToken
- */
-const _getEndpoint = _pToken => {
-  switch (_pToken) {
-    case 'peos': {
-      return PEOS_ENDPOINT
-    }
-    case 'pbtc': {
-      return PBTC_ENDPOINT
-    }
-    case 'pltc': {
-      return PLTC_ENDPOINT
-    }
-    default:
-      return null
-  }
-}
-
-/**
  * @param {Object} _api
  * @param {String} _callType
  * @param {String} _apiPath
  * @param {Object} _params
  */
-const makeApiCall = (_api, _callType, _apiPath, _params = null) =>
-  new Promise((resolve, reject) =>
-    _api[_callType.toLowerCase()](_apiPath, _params)
-      .then(_res => resolve(_res.data))
-      .catch(_err => reject(_err))
-  )
+const makeApiCall = async (_api, _callType, _apiPath, _params = null) => {
+  try {
+    let api = null
+    if (Promise.resolve(_api) === _api) api = await _api
+    else api = _api
 
-export { getApi, makeApiCall, REPORT_LIMIT }
+    const res = await api[_callType.toLowerCase()](_apiPath, _params)
+    return res.data
+  } catch (err) {
+    throw new Error(err.message)
+  }
+}
+
+export { createApi, makeApiCall, REPORT_LIMIT }

@@ -13,14 +13,45 @@ const HASH_BROADCASTED_TX =
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const EOS_BLOCK_SUBMITTED_RETURN_VALUE = 'Eos block submitted to the enclave!'
 
-test('Should ping the enclave', async () => {
+test('Should ping the enclave without a selected node', async () => {
   const expectedResult = PING_RETURN_VALUE
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
-  const result = await enclave.ping()
-  expect(result).to.be.equal(expectedResult)
+  const res = await enclave.ping()
+  expect(res).to.be.equal(expectedResult)
+})
+
+test('Should ping the enclave with a selected node', async () => {
+  const expectedResult = PING_RETURN_VALUE
+  const enclave = new Enclave({
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    },
+    defaultNode: 'https://nuc-bridge-1.ngrok.io'
+  })
+
+  const res = await enclave.ping()
+  expect(res).to.be.equal(expectedResult)
+})
+
+test('Should ping the enclave with a node different of default because it is invalid', async () => {
+  const uncreachableNode = 'https://uncreachable-node.io'
+  const enclave = new Enclave({
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    },
+    defaultNode: uncreachableNode
+  })
+
+  await enclave.ping()
+  expect(enclave.selectedNode.endpoint).to.be.not.equal(uncreachableNode)
 })
 
 test('Should generate an error because of invalid pToken name', () => {
@@ -28,7 +59,12 @@ test('Should generate an error because of invalid pToken name', () => {
   const expectedErrorMessage = 'Invalid pToken'
 
   try {
-    new Enclave({ pToken: invalidpTokenName })
+    new Enclave({
+      pToken: {
+        name: invalidpTokenName,
+        redeemFrom: 'ETH'
+      }
+    })
   } catch (err) {
     expect(err.message).to.be.equal(expectedErrorMessage)
   }
@@ -39,7 +75,10 @@ test('Should get ten ETH report', async () => {
   const limit = 10
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReports(type, limit)
@@ -53,7 +92,10 @@ test('Should get ten EOS report', async () => {
   const limit = 10
   const type = 'eos'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReports(type, limit)
@@ -68,7 +110,10 @@ test('Should get ten ETH reports by address', async () => {
   const type = 'eth'
   const ethAddress = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportsByAddress(type, ethAddress, limit)
@@ -83,7 +128,10 @@ test('Should get ten EOS reports by address', async () => {
   const type = 'eos'
   const eosAccount = 'all3manfr3di'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportsByAddress(type, eosAccount, limit)
@@ -96,7 +144,10 @@ test('Should get ETH reports by nonce', async () => {
   const nonce = 750
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
@@ -108,7 +159,10 @@ test('Should get EOS reports by nonce', async () => {
   const nonce = 750
   const type = 'eos'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getReportByNonce(type, nonce)
@@ -119,7 +173,10 @@ test('Should get EOS reports by nonce', async () => {
 test('Should get last ETH processed block', async () => {
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getLastProcessedBlock(type)
@@ -129,7 +186,10 @@ test('Should get last ETH processed block', async () => {
 test('Should get last EOS processed block', async () => {
   const type = 'eos'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getLastProcessedBlock(type)
@@ -139,7 +199,10 @@ test('Should get last EOS processed block', async () => {
 test('Should get the status of an incoming tx', async () => {
   const hash = HASH_INCOMING_TX
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getIncomingTransactionStatus(hash)
@@ -149,7 +212,10 @@ test('Should get the status of an incoming tx', async () => {
 test('Should get the status of an brodcasted tx', async () => {
   const hash = HASH_BROADCASTED_TX
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.getBroadcastTransactionStatus(hash)
@@ -160,7 +226,10 @@ test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eth'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.submitBlock(type, ETH_PEOS_BLOCK)
@@ -171,7 +240,10 @@ test('Should submit an EOS block', async () => {
   const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eos'
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   const res = await enclave.submitBlock(type, EOS_PEOS_BLOCK)
@@ -180,7 +252,10 @@ test('Should submit an EOS block', async () => {
 
 test('Should monitor an incoming transaction', async () => {
   const enclave = new Enclave({
-    pToken: 'peos'
+    pToken: {
+      name: 'pEOS',
+      redeemFrom: 'ETH'
+    }
   })
 
   let enclaveHasReceivedTx = false
