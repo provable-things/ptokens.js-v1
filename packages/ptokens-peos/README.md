@@ -30,7 +30,8 @@ const peos = new pEOS({
   ethProvider: 'Eth provider',
   eosPrivateKey: 'EOS private key',
   eosRpc: 'EOS RPC Address'
-  eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
+  eosSignatureProvider: 'An EOS Signature Provider',  //if the private key is not passed
+  defaultNode: 'https://.....' //optional
 })
 ```
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
@@ -43,6 +44,8 @@ if (window.web3) {
   
   const peos = new pEOS({
     ethProvider: window.web3.currentProvider,
+    eosSignatureProvider: 'An EOS Signature Provider',  //if the private key is not passed
+    defaultNode: 'https://.....' //optional
   })
 } else {
   console.log('No web3 detected')

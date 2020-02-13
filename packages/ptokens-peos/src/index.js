@@ -25,11 +25,16 @@ class pEOS {
       ethProvider,
       eosPrivateKey,
       eosRpc,
-      eosSignatureProvider
+      eosSignatureProvider,
+      defaultNode
     } = _configs
 
     this.enclave = new Enclave({
-      pToken: 'peos'
+      pToken: {
+        name: 'pEOS',
+        redeemFrom: 'ETH'
+      },
+      defaultNode
     })
 
     this._web3 = new Web3(ethProvider)
