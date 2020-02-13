@@ -1,4 +1,5 @@
 const config = {
+  testEnvironment: "node",
   collectCoverage: true,
   resetModules: true,
   testMatch: ['/**/**.test.js'],
