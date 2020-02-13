@@ -59,8 +59,8 @@ test('Should monitor an issuing of 1 pBTC', async () => {
 
   let btcTxIsBroadcasted = false
   let btcTxIsConfirmed = false
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
   let ethTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
@@ -72,11 +72,11 @@ test('Should monitor an issuing of 1 pBTC', async () => {
         .once('onBtcTxConfirmed', () => {
           btcTxIsConfirmed = true
         })
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx = true
         })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx = true
         })
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed = true
@@ -87,8 +87,8 @@ test('Should monitor an issuing of 1 pBTC', async () => {
 
   expect(btcTxIsBroadcasted).to.equal(true)
   expect(btcTxIsConfirmed).to.equal(true)
-  expect(enclaveHasReceivedTx).to.equal(true)
-  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(nodeHasReceivedTx).to.equal(true)
+  expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ethTxIsConfirmed).to.equal(true)
 })
 
@@ -99,8 +99,8 @@ test('Should redeem 1 pBTC', async () => {
   const amountToRedeem = 0.00001
 
   let ethTxIsConfirmed = false
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
   let btcTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
@@ -109,11 +109,11 @@ test('Should redeem 1 pBTC', async () => {
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx = true
         })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx = true
         })
         .once('onBtcTxConfirmed', () => {
           btcTxIsConfirmed = true
@@ -123,7 +123,7 @@ test('Should redeem 1 pBTC', async () => {
   await start()
 
   expect(ethTxIsConfirmed).to.equal(true)
-  expect(enclaveHasReceivedTx).to.equal(true)
-  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(nodeHasReceivedTx).to.equal(true)
+  expect(nodeHasBroadcastedTx).to.equal(true)
   expect(btcTxIsConfirmed).to.equal(true)
 })

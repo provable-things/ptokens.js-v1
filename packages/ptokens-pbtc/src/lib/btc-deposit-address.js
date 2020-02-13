@@ -17,7 +17,7 @@ class BtcDepositAddress {
       enclavePublicKey,
       value,
       btcNetwork,
-      enclave,
+      node,
       web3
     } = _params
 
@@ -26,7 +26,7 @@ class BtcDepositAddress {
     this.enclavePublicKey = enclavePublicKey
     this._value = value
     this._btcNetwork = btcNetwork
-    this._enclave = enclave
+    this._node = node
     this._web3 = web3
   }
 
@@ -87,7 +87,7 @@ class BtcDepositAddress {
         BTC_ESPLORA_POLLING_TIME
       )
 
-      const broadcastedEthTx = await this._enclave.monitorIncomingTransaction(
+      const broadcastedEthTx = await this._node.monitorIncomingTransaction(
         utxoToMonitor,
         'issue',
         promiEvent.eventEmitter
