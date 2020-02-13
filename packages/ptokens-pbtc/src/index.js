@@ -16,12 +16,16 @@ class pBTC {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { ethPrivateKey, ethProvider, btcNetwork } = _configs
+    const { ethPrivateKey, ethProvider, btcNetwork, defaultNode } = _configs
 
     this._web3 = new Web3(ethProvider)
 
     this.enclave = new Enclave({
-      pToken: 'pbtc'
+      pToken: {
+        name: 'pBTC',
+        redeemFrom: 'ETH'
+      },
+      defaultNode
     })
 
     if (ethPrivateKey) {
