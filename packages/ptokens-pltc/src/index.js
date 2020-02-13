@@ -17,12 +17,16 @@ class pLTC {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { ethPrivateKey, ethProvider, ltcNetwork } = _configs
+    const { ethPrivateKey, ethProvider, ltcNetwork, defaultNode } = _configs
 
     this._web3 = new Web3(ethProvider)
 
     this.enclave = new Enclave({
-      pToken: 'pltc'
+      pToken: {
+        name: 'pLTC',
+        redeemFrom: 'ETH'
+      },
+      defaultNode
     })
 
     if (ethPrivateKey) {
