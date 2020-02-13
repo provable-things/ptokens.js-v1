@@ -66,18 +66,30 @@ class NodeSelector {
 
   async select() {
     try {
-      try {
-        await this.set(this.defaultNode)
-      } catch (err) {}
-
       if (this.nodes.length === 0) this.nodes = await this.discover()
 
       const feature = `${this.pToken.name}-on-${this.pToken.redeemFrom}`
+
+      if (this.defaultNode) {
+        const node = this.nodes.find(
+          node =>
+            node.webapi === this.defaultNode && node.features.includes(feature)
+        )
+
+        if (
+          node &&
+          (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
+        ) {
+          return this.set(node.webapi)
+        }
+      }
+
       const filteredNodesByFeature = this.nodes.filter(node =>
         node.features.includes(feature)
       )
 
-      if (filteredNodesByFeature.length === 0) return null
+      if (filteredNodesByFeature.length === 0)
+        throw new Error('No Nodes Available')
 
       const nodesNotReachable = []
       for (;;) {
@@ -93,13 +105,7 @@ class NodeSelector {
           )) &&
           !nodesNotReachable.includes(selectedNode)
         ) {
-          this.selectedNode = {
-            endpoint: selectedNode.webapi,
-            features: selectedNode.features,
-            api: createApi(selectedNode.webapi)
-          }
-
-          return this.selectedNode
+          return this.set(selectedNode.webapi)
         } else if (!nodesNotReachable.includes(selectedNode)) {
           nodesNotReachable.push(selectedNode)
         }
@@ -116,22 +122,9 @@ class NodeSelector {
    * @param {String} _endpoint
    */
   async set(_endpoint) {
-    if (this.nodes.length === 0) this.nodes = await this.discover()
-
-    const feature = `${this.pToken.name}-on-${this.pToken.redeemFrom}`
-    const node = this.nodes.find(
-      node => node.webapi === _endpoint && node.features.includes(feature)
-    )
-
-    if (!node) throw new Error('Node not found or Wrong Feature')
-
-    if (await !this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
-      throw new Error('Node Not Available')
-
     this.selectedNode = {
-      endpoint: node.webapi,
-      features: node.features,
-      api: createApi(node.webapi)
+      endpoint: _endpoint,
+      api: createApi(_endpoint)
     }
 
     return this.selectedNode

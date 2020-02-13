@@ -4,7 +4,6 @@ import { expect } from 'chai'
 jest.setTimeout(300000)
 
 test('Should select a pBTC node on Ethereum', async () => {
-  const expectedIncludedFeature = 'pbtc-on-eth'
   const nodeSelector = new NodeSelector({
     pToken: {
       name: 'pBTC',
@@ -13,11 +12,10 @@ test('Should select a pBTC node on Ethereum', async () => {
   })
 
   const node = await nodeSelector.select()
-  expect(node.features).includes(expectedIncludedFeature)
+  expect(node.endpoint).to.be.not.null
 })
 
 test('Should select a pEOS node on Ethereum', async () => {
-  const expectedIncludedFeature = 'peos-on-eth'
   const nodeSelector = new NodeSelector({
     pToken: {
       name: 'pEOS',
@@ -26,11 +24,10 @@ test('Should select a pEOS node on Ethereum', async () => {
   })
 
   const node = await nodeSelector.select()
-  expect(node.features).includes(expectedIncludedFeature)
+  expect(node.endpoint).to.be.not.null
 })
 
 test('Should select a pLTC node on Ethereum', async () => {
-  const expectedIncludedFeature = 'pltc-on-eth'
   const nodeSelector = new NodeSelector({
     pToken: {
       name: 'pLTC',
@@ -39,7 +36,7 @@ test('Should select a pLTC node on Ethereum', async () => {
   })
 
   const node = await nodeSelector.select()
-  expect(node.features).includes(expectedIncludedFeature)
+  expect(node.endpoint).to.be.not.null
 })
 
 test('Should not be connected if a node is unreachable', async () => {
