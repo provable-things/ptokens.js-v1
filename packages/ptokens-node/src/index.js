@@ -2,7 +2,7 @@ import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
 import NodeSelector from 'ptokens-node-selector'
 
-const ENCLAVE_POLLING_TIME = 200
+const NODE_POLLING_TIME = 200
 
 const mapIncomingTxParamValue = {
   pbtc: {
@@ -19,7 +19,7 @@ const mapIncomingTxParamValue = {
   }
 }
 
-class Enclave extends NodeSelector {
+class Node extends NodeSelector {
   /**
    * @param {Object} configs
    */
@@ -160,22 +160,22 @@ class Enclave extends NodeSelector {
         _transaction
       )
       if (incomingTxStatus.broadcast === false && !isSeen) {
-        _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+        _eventEmitter.emit('onNodeReceivedTx', incomingTxStatus)
         isSeen = true
         return false
       } else if (incomingTxStatus.broadcast === true) {
-        if (!isSeen) _eventEmitter.emit('onEnclaveReceivedTx', incomingTxStatus)
+        if (!isSeen) _eventEmitter.emit('onNodeReceivedTx', incomingTxStatus)
 
         broadcastedTx =
           incomingTxStatus[mapIncomingTxParamValue[this.pToken.name][_type]]
-        _eventEmitter.emit('onEnclaveBroadcastedTx', broadcastedTx)
+        _eventEmitter.emit('onNodeBroadcastedTx', broadcastedTx)
         return true
       } else {
         return false
       }
-    }, ENCLAVE_POLLING_TIME)
+    }, NODE_POLLING_TIME)
     return broadcastedTx
   }
 }
 
-export default Enclave
+export default Node

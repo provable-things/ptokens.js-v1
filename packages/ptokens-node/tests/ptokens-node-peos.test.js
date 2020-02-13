@@ -1,4 +1,4 @@
-import Enclave from '../src/index'
+import Node from '../src/index'
 import { ETH_PEOS_BLOCK, EOS_PEOS_BLOCK } from './utils'
 import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'
@@ -13,22 +13,22 @@ const HASH_BROADCASTED_TX =
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const EOS_BLOCK_SUBMITTED_RETURN_VALUE = 'Eos block submitted to the enclave!'
 
-test('Should ping the enclave without a selected node', async () => {
+test('Should ping a node without selecting one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.ping()
+  const res = await node.ping()
   expect(res).to.be.equal(expectedResult)
 })
 
-test('Should ping the enclave with a selected node', async () => {
+test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
@@ -36,13 +36,13 @@ test('Should ping the enclave with a selected node', async () => {
     defaultNode: 'https://nuc-bridge-1.ngrok.io'
   })
 
-  const res = await enclave.ping()
+  const res = await node.ping()
   expect(res).to.be.equal(expectedResult)
 })
 
-test('Should ping the enclave with a node different of default because it is invalid', async () => {
+test('Should ping a different node because the default one is invalid', async () => {
   const uncreachableNode = 'https://uncreachable-node.io'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
@@ -50,8 +50,8 @@ test('Should ping the enclave with a node different of default because it is inv
     defaultNode: uncreachableNode
   })
 
-  await enclave.ping()
-  expect(enclave.selectedNode.endpoint).to.be.not.equal(uncreachableNode)
+  await node.ping()
+  expect(node.selectedNode.endpoint).to.be.not.equal(uncreachableNode)
 })
 
 test('Should generate an error because of invalid pToken name', () => {
@@ -59,7 +59,7 @@ test('Should generate an error because of invalid pToken name', () => {
   const expectedErrorMessage = 'Invalid pToken'
 
   try {
-    new Enclave({
+    new Node({
       pToken: {
         name: invalidpTokenName,
         redeemFrom: 'ETH'
@@ -74,14 +74,14 @@ test('Should get ten ETH report', async () => {
   const expectedResultLength = 10
   const limit = 10
   const type = 'eth'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getReports(type, limit)
+  const res = await node.getReports(type, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -91,14 +91,14 @@ test('Should get ten EOS report', async () => {
   const expectedResultLength = 10
   const limit = 10
   const type = 'eos'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getReports(type, limit)
+  const res = await node.getReports(type, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -109,14 +109,14 @@ test('Should get ten ETH reports by address', async () => {
   const limit = 10
   const type = 'eth'
   const ethAddress = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getReportsByAddress(type, ethAddress, limit)
+  const res = await node.getReportsByAddress(type, ethAddress, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -127,14 +127,14 @@ test('Should get ten EOS reports by address', async () => {
   const limit = 10
   const type = 'eos'
   const eosAccount = 'all3manfr3di'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getReportsByAddress(type, eosAccount, limit)
+  const res = await node.getReportsByAddress(type, eosAccount, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -143,14 +143,14 @@ test('Should get ten EOS reports by address', async () => {
 test('Should get ETH reports by nonce', async () => {
   const nonce = 750
   const type = 'eth'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getReportByNonce(type, nonce)
+  const res = await node.getReportByNonce(type, nonce)
   expect(res).to.be.an.instanceof(Object)
   expect(res._id).to.be.equal(`ETH ${nonce}`)
 })
@@ -158,120 +158,120 @@ test('Should get ETH reports by nonce', async () => {
 test('Should get EOS reports by nonce', async () => {
   const nonce = 750
   const type = 'eos'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getReportByNonce(type, nonce)
+  const res = await node.getReportByNonce(type, nonce)
   expect(res).to.be.an.instanceof(Object)
   expect(res._id).to.be.equal(`EOS ${nonce}`)
 })
 
 test('Should get last ETH processed block', async () => {
   const type = 'eth'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getLastProcessedBlock(type)
+  const res = await node.getLastProcessedBlock(type)
   expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get last EOS processed block', async () => {
   const type = 'eos'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getLastProcessedBlock(type)
+  const res = await node.getLastProcessedBlock(type)
   expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get the status of an incoming tx', async () => {
   const hash = HASH_INCOMING_TX
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getIncomingTransactionStatus(hash)
+  const res = await node.getIncomingTransactionStatus(hash)
   expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should get the status of an brodcasted tx', async () => {
   const hash = HASH_BROADCASTED_TX
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.getBroadcastTransactionStatus(hash)
+  const res = await node.getBroadcastTransactionStatus(hash)
   expect(res).to.be.an.instanceof(Object)
 })
 
 test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eth'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.submitBlock(type, ETH_PEOS_BLOCK)
+  const res = await node.submitBlock(type, ETH_PEOS_BLOCK)
   expect(res).to.be.equal(expectedResult)
 })
 
 test('Should submit an EOS block', async () => {
   const expectedResult = EOS_BLOCK_SUBMITTED_RETURN_VALUE
   const type = 'eos'
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  const res = await enclave.submitBlock(type, EOS_PEOS_BLOCK)
+  const res = await node.submitBlock(type, EOS_PEOS_BLOCK)
   expect(res).to.be.equal(expectedResult)
 })
 
 test('Should monitor an incoming transaction', async () => {
-  const enclave = new Enclave({
+  const node = new Node({
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
     }
   })
 
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
 
   const eventEmitter = new EventEmitter()
 
   const start = () =>
     new Promise(resolve => {
-      eventEmitter.once('onEnclaveReceivedTx', () => {
-        enclaveHasReceivedTx = true
+      eventEmitter.once('onNodeReceivedTx', () => {
+        nodeHasReceivedTx = true
       })
-      eventEmitter.once('onEnclaveBroadcastedTx', () => {
-        enclaveHasBroadcastedTx = true
+      eventEmitter.once('onNodeBroadcastedTx', () => {
+        nodeHasBroadcastedTx = true
       })
-      enclave
+      node
         .monitorIncomingTransaction(HASH_INCOMING_TX, 'issue', eventEmitter)
         .then(tx => {
           expect(tx).to.be.a('string')
@@ -279,6 +279,6 @@ test('Should monitor an incoming transaction', async () => {
         })
     })
   await start()
-  expect(enclaveHasReceivedTx).to.be.equal(true)
-  expect(enclaveHasBroadcastedTx).to.be.equal(true)
+  expect(nodeHasReceivedTx).to.be.equal(true)
+  expect(nodeHasBroadcastedTx).to.be.equal(true)
 })

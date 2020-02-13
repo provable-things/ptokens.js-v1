@@ -1,10 +1,10 @@
 {
-  "name": "ptokens-enclave",
+  "name": "ptokens-node",
   "version": "0.2.0",
-  "description": "repo holding the code for interacting with the Enclave",
-  "main": "dist/ptokens-enclave.cjs.js",
-  "module": "dist/ptokens-enclave.esm.js",
-  "browser": "dist/ptokens-enclave.umd.js",
+  "description": "repo holding the code for interacting with a Node",
+  "main": "dist/ptokens-node.cjs.js",
+  "module": "dist/ptokens-node.esm.js",
+  "browser": "dist/ptokens-node.umd.js",
   "scripts": {
     "build": "rollup -c",
     "test": "jest --detectOpenHandles",

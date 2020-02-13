@@ -1,6 +1,6 @@
-# ptokens-enclave
+# ptokens-node
 
-Module for interacting with the Enclave.
+Module for interacting with a Node.
 
 &nbsp;
 
@@ -11,7 +11,7 @@ Module for interacting with the Enclave.
 ### Installation:
 
 ```
-npm install ptokens-enclave
+npm install ptokens-node
 ```
 
 &nbsp;
@@ -23,9 +23,9 @@ npm install ptokens-enclave
 ### Usage:
 
 ```js
-import Enclave from 'ptokens-enclave'
+import Node from 'ptokens-node'
 
-const enclave = new Enclave({
+const node = new Node({
   pToken: {
     name: 'pToken name',
     redeemFrom: 'ETH' //for now
