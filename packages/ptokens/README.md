@@ -30,13 +30,21 @@ const ptokens = new pTokens({
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
     eosPrivateKey: 'EOS private key',
-    eosRpc: 'EOS RPC Address'
-    eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
+    eosRpc: 'EOS RPC Address',
+    eosSignatureProvider: 'An EOS Signature Provider',  //if the private key is not passed
+    defaultNode: 'https://......' //optional
   },
   pbtc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
-    btcNetwork: 'testnet'  // 'testnet' or 'bitcoin', default 'testnet'
+    btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
+    defaultNode: 'https://......' //optional
+  },
+  pltc: {
+    ethPrivateKey: 'Eth private key',
+    ethProvider: 'Eth provider',
+    ltcNetwork: 'testnet',  //'testnet' or 'litecoin', default 'testnet'
+    defaultNode: 'https://......' //optional
   }
 })
 ```
@@ -56,6 +64,10 @@ if (window.web3) {
     pbtc: {
       ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'
+    },
+    pltc: {
+      ethProvider: window.web3.currentProvider,
+      ltcNetwork: 'litecoin'
     }
   })
 } else {
