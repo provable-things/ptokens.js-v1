@@ -22,6 +22,7 @@ module.exports = {
     quotes: [2, 'single', { avoidEscape: true }],
     'prefer-promise-reject-errors': 1,
     'no-template-curly-in-string': 2,
+    
     'no-extra-parens': [1, 'all'],
     'no-misleading-character-class': 1,
     'no-prototype-builtins': 1,
@@ -37,6 +38,7 @@ module.exports = {
     }],
     'dot-location': [2, 'property'],
     'no-empty-function': 1,
+    'no-empty': 1,
     'no-eval': 2,
     'no-extend-native': 1,
     'no-extra-bind': 1,
@@ -52,7 +54,7 @@ module.exports = {
     'new-cap': 0, //since token name start with 'p'
     'no-param-reassign': 2,
     'no-redeclare': [2, { 'builtinGlobals': true }],
-    'no-shadow': [2, {
+    'no-shadow': [1, {
       'builtinGlobals': true,
       'allow': [
         'done',
@@ -60,7 +62,7 @@ module.exports = {
         'reject',
         'TextEncoder',
         'TextDecoder',
-        'cb', // x could potentially be added
+        'cb',
       ]
     }],
     'no-return-await': 1,
