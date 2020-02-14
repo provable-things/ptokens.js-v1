@@ -21,8 +21,8 @@ test('Should issue 1 pEOS', async () => {
   const expectedEthAccount = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
   let eosTxIsConfirmed = false
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
   let ethTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
@@ -32,11 +32,11 @@ test('Should issue 1 pEOS', async () => {
         .once('onEosTxConfirmed', () => {
           eosTxIsConfirmed = true
         })
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx = true
         })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx = true
         })
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed = true
@@ -51,8 +51,8 @@ test('Should issue 1 pEOS', async () => {
     })
   await start()
   expect(eosTxIsConfirmed).to.equal(true)
-  expect(enclaveHasReceivedTx).to.equal(true)
-  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(nodeHasReceivedTx).to.equal(true)
+  expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ethTxIsConfirmed).to.equal(true)
 })
 
@@ -105,8 +105,8 @@ test('Should redeem 1 pEOS', async () => {
   const expectedEosAccount = 'all3manfr4di'
 
   let ethTxIsConfirmed = false
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
   let eosTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
@@ -117,11 +117,11 @@ test('Should redeem 1 pEOS', async () => {
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx = true
         })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx = true
         })
         .once('onEosTxConfirmed', () => {
           eosTxIsConfirmed = true
@@ -136,8 +136,8 @@ test('Should redeem 1 pEOS', async () => {
     })
   await start()
   expect(ethTxIsConfirmed).to.equal(true)
-  expect(enclaveHasReceivedTx).to.equal(true)
-  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(nodeHasReceivedTx).to.equal(true)
+  expect(nodeHasBroadcastedTx).to.equal(true)
   expect(eosTxIsConfirmed).to.equal(true)
 })
 

@@ -1,6 +1,6 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
-import Enclave from 'ptokens-enclave'
+import Node from 'ptokens-node'
 import utils from 'ptokens-utils'
 import {
   EOS_BLOCKS_BEHIND,
@@ -29,7 +29,7 @@ class pEOS {
       defaultNode
     } = _configs
 
-    this.enclave = new Enclave({
+    this.node = new Node({
       pToken: {
         name: 'pEOS',
         redeemFrom: 'ETH'
@@ -99,7 +99,7 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
 
-        const broadcastedEthTx = await this.enclave.monitorIncomingTransaction(
+        const broadcastedEthTx = await this.node.monitorIncomingTransaction(
           eosTxReceipt.transaction_id,
           'issue',
           promiEvent.eventEmitter
@@ -164,7 +164,7 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedEosTx = await this.enclave.monitorIncomingTransaction(
+        const broadcastedEosTx = await this.node.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           'redeem',
           promiEvent.eventEmitter
