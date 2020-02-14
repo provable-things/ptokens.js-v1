@@ -17,7 +17,7 @@ class LtcDepositAddress {
       enclavePublicKey,
       value,
       ltcNetwork,
-      enclave,
+      node,
       web3
     } = _params
 
@@ -26,7 +26,7 @@ class LtcDepositAddress {
     this.enclavePublicKey = enclavePublicKey
     this._value = value
     this._ltcNetwork = ltcNetwork
-    this._enclave = enclave
+    this._node = node
     this._web3 = web3
   }
 
@@ -92,7 +92,7 @@ class LtcDepositAddress {
         LTC_NODE_POLLING_TIME
       )
 
-      const broadcastedEthTx = await this._enclave.monitorIncomingTransaction(
+      const broadcastedEthTx = await this._node.monitorIncomingTransaction(
         utxoToMonitor,
         'issue',
         promiEvent.eventEmitter

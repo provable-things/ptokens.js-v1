@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
-import Enclave from 'ptokens-enclave'
+import Node from 'ptokens-node'
 import utils from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import LtcDepositAddress from './lib/ltc-deposit-address'
@@ -21,7 +21,7 @@ class pLTC {
 
     this._web3 = new Web3(ethProvider)
 
-    this.enclave = new Enclave({
+    this.node = new Node({
       pToken: {
         name: 'pLTC',
         redeemFrom: 'ETH'
@@ -57,7 +57,7 @@ class pLTC {
     if (!Web3Utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
 
-    const deposit = await this.enclave.generic(
+    const deposit = await this.node.generic(
       'GET',
       `get-ltc-deposit-address/${this._ltcNetwork}/${_ethAddress}`
     )
@@ -68,12 +68,12 @@ class pLTC {
       enclavePublicKey: deposit.enclavePublicKey,
       value: deposit.btcDepositAddress,
       ltcNetwork: this._ltcNetwork,
-      enclave: this.enclave,
+      node: this.node,
       web3: this._web3
     })
 
     if (!depositAddress.verify())
-      throw new Error('Enclave deposit address does not match expected address')
+      throw new Error('Node deposit address does not match expected address')
 
     return depositAddress
   }
@@ -122,7 +122,7 @@ class pLTC {
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedLtcTx = await this.enclave.monitorIncomingTransaction(
+        const broadcastedLtcTx = await this.node.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           'redeem',
           promiEvent.eventEmitter
@@ -364,7 +364,7 @@ class pLTC {
   async _getContractAddress() {
     if (!this._contractAddress) {
       const ethNetwork = await this._web3.eth.net.getNetworkType()
-      const info = await this.enclave.getInfo(this._ltcNetwork, ethNetwork)
+      const info = await this.node.getInfo(this._ltcNetwork, ethNetwork)
       this._contractAddress = info['pbtc-smart-contract-address']
     }
 
