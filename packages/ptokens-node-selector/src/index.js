@@ -33,7 +33,7 @@ class NodeSelector {
       await makeApiCallWithTimeout(
         createApi(_endpoint),
         'GET',
-        `/${this.pToken.name}/ping`,
+        `/${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`,
         null,
         _timeout
       )
