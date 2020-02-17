@@ -10,8 +10,11 @@ export class NodeSelector {
   )
 
   checkConnection(_endpoint: string, _timeout?: number): Promise<boolean>
+
   getApi(): Promise<object>
+
   select(): Promise<SelectedNode>
+  
   set(_endpoint: string): Promise<SelectedNode>
 }
 
