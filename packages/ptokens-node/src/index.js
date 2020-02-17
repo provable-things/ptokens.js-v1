@@ -4,21 +4,6 @@ import NodeSelector from 'ptokens-node-selector'
 
 const NODE_POLLING_TIME = 200
 
-const mapIncomingTxParamValue = {
-  pbtc: {
-    redeem: 'btc_tx_hash',
-    issue: 'eth_tx_hash'
-  },
-  pltc: {
-    redeem: 'btc_tx_hash',
-    issue: 'eth_tx_hash'
-  },
-  peos: {
-    redeem: 'broadcast_transaction_hash',
-    issue: 'broadcast_transaction_hash'
-  }
-}
-
 class Node extends NodeSelector {
   /**
    * @param {Object} configs
@@ -30,7 +15,7 @@ class Node extends NodeSelector {
   }
 
   ping() {
-    return makeApiCall(this.getApi(), 'GET', `/${this.pToken.name}/ping`)
+    return makeApiCall(this.getApi(), 'GET', `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`)
   }
 
   /**
@@ -40,12 +25,11 @@ class Node extends NodeSelector {
    */
   async getInfo(_issueFromNetwork, _redeemFromNetwork) {
     if (!this._info) {
-      const info = await makeApiCall(
+      this._info = await makeApiCall(
         this.getApi(),
         'GET',
-        `/${this.pToken.name}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
+        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
       )
-      this._info = info
     }
     return this._info
   }
@@ -58,7 +42,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'GET',
-      `/${this.pToken.name}/${_type}-reports/limit/${_limit}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-reports/limit/${_limit}`
     )
   }
 
@@ -71,7 +55,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'GET',
-      `${this.pToken.name}/${_type}-address/${_address}/limit/${_limit}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-address/${_address}/limit/${_limit}`
     )
   }
 
@@ -83,7 +67,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'GET',
-      `/${this.pToken.name}/report/${_type}/nonce/${_nonce}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/report/${_type}/nonce/${_nonce}`
     )
   }
 
@@ -94,7 +78,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'GET',
-      `${this.pToken.name}/last-processed-${_type}-block`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/last-processed-${_type}-block`
     )
   }
 
@@ -105,7 +89,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'GET',
-      `${this.pToken.name}/incoming-tx-hash/${_hash}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/incoming-tx-hash/${_hash}`
     )
   }
 
@@ -116,7 +100,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'GET',
-      `${this.pToken.name}/broadcast-tx-hash/${_hash}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/broadcast-tx-hash/${_hash}`
     )
   }
 
@@ -128,7 +112,7 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       'POST',
-      `/${this.pToken.name}/submit-${_type}-block`,
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/submit-${_type}-block`,
       _block
     )
   }
@@ -142,23 +126,25 @@ class Node extends NodeSelector {
     return makeApiCall(
       this.getApi(),
       _type,
-      `/${this.pToken.name}/${_path}`,
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_path}`,
       _data
     )
   }
 
   /**
-   * @param {String} _transaction
+   * @param {String} _hash
    * @param {String} __type
    * @param {EventEmitter} _eventEmitter
    */
-  async monitorIncomingTransaction(_transaction, _type, _eventEmitter) {
+  async monitorIncomingTransaction(_hash, _type, _eventEmitter) {
+
     let broadcastedTx = null
     let isSeen = false
     await polling(async () => {
       const incomingTxStatus = await this.getIncomingTransactionStatus(
-        _transaction
+        _hash
       )
+
       if (incomingTxStatus.broadcast === false && !isSeen) {
         _eventEmitter.emit('onNodeReceivedTx', incomingTxStatus)
         isSeen = true
@@ -167,7 +153,7 @@ class Node extends NodeSelector {
         if (!isSeen) _eventEmitter.emit('onNodeReceivedTx', incomingTxStatus)
 
         broadcastedTx =
-          incomingTxStatus[mapIncomingTxParamValue[this.pToken.name][_type]]
+          incomingTxStatus[`${_type}_tx_hash`]
         _eventEmitter.emit('onNodeBroadcastedTx', broadcastedTx)
         return true
       } else {
