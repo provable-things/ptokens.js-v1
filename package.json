@@ -8,6 +8,7 @@
     "link": "lerna link",
     "build": "lerna run build",
     "init": "npm i && lerna bootstrap",
+    "dtslint": "lerna run dtslint",
     "lint": "lerna run lint",
     "publish": "npm run bootstrap && lerna publish --dist-tag next --skip-git",
     "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\"",
@@ -31,6 +32,8 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
+    "@types/bn.js": "^4.11.5",
+    "@types/node": "^12.6.1",
     "babel-jest": "^24.9.0",
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^6.9.0",
@@ -47,6 +50,7 @@
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-json": "^4.0.0"
+    "rollup-plugin-json": "^4.0.0",
+    "typescript": "^3.7.5"
   }
 }
