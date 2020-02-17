@@ -8,12 +8,14 @@
   "scripts": {
     "build": "rollup -c",
     "test": "jest --detectOpenHandles",
-    "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
+    "lint": "npx eslint ./src --fix && npx eslint ./tests --fix",
+    "dtslint": "dtslint types --onlyTestTsNext"
   },
   "author": "alle.manfredi@gmail.com @provable-things",
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
+    "@types/node": "^12.6.1",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
     "eventemitter3": "^4.0.0",
@@ -22,9 +24,11 @@
     "ptokens-node-selector": "0.2.0"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "dtslint": "0.4.2"
   },
   "files": [
-    "dist"
+    "dist",
+    "types/index.d.ts"
   ]
 }
