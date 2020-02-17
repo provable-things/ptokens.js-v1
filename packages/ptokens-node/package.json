@@ -5,6 +5,7 @@
   "main": "dist/ptokens-node.cjs.js",
   "module": "dist/ptokens-node.esm.js",
   "browser": "dist/ptokens-node.umd.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "test": "jest --detectOpenHandles",
