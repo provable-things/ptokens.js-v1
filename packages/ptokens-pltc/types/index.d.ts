@@ -53,18 +53,18 @@ export interface IssueResult {
   tx: string
 }
 
+export interface LtcDepositAddressConfigs {
+  ethAddress: string,
+  nonce: number,
+  enclavePublicKey: string,
+  value: string,
+  ltcNetwork: string,
+  node: Node,
+  web3: object
+}
+
 export class LtcDepositAddress {
-  constructor(
-    configs: {
-      ethAddress: string,
-      nonce: number,
-      enclavePublicKey: string,
-      value: string,
-      ltcNetwork: string,
-      node: Node,
-      web3: object
-    }
-  )
+  constructor(configs: LtcDepositAddressConfigs)
 
   toString(): string
 
