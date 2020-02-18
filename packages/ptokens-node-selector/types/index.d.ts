@@ -14,11 +14,11 @@ export class NodeSelector {
   getApi(): Promise<object>
 
   select(): Promise<SelectedNode>
-  
+
   set(_endpoint: string): Promise<SelectedNode>
 }
 
 export interface SelectedNode {
-  endpoint: string;
-  api: object;
+  endpoint: string,
+  api: object
 }
