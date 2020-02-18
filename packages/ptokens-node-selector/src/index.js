@@ -43,19 +43,6 @@ class NodeSelector {
     }
   }
 
-  async discover() {
-    try {
-      const res = await makeApiCallWithTimeout(
-        getBootNodeApi(),
-        'GET',
-        '/peers'
-      )
-      return res.peers
-    } catch (err) {
-      throw new Error(err.message)
-    }
-  }
-
   async getApi() {
     if (!this.selectedNode) {
       const node = await this.select()
@@ -66,7 +53,14 @@ class NodeSelector {
 
   async select() {
     try {
-      if (this.nodes.length === 0) this.nodes = await this.discover()
+      if (this.nodes.length === 0) {
+        const res = await makeApiCallWithTimeout(
+          getBootNodeApi(),
+          'GET',
+          '/peers'
+        )
+        this.nodes = res.peers
+      }
 
       const feature = `${this.pToken.name}-on-${this.pToken.redeemFrom}`
 
