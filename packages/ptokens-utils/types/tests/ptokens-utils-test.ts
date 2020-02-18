@@ -28,7 +28,7 @@ btc.isValidAddress(BTC_TESTING_ADDRESS)
 // $ExpectType Promise<BitcoinUtxoList>
 btc.monitorUtxoByAddress('testnet', BTC_TESTING_ADDRESS, new EventEmitter(), 1000)
 
-// $ExpectType Promise<boolean>
+// $ExpectType Promise<BitcoinTransactionReceipt>
 btc.waitForTransactionConfirmation('testnet', BTC_UTXO, 10000)
 
 // converters
@@ -119,5 +119,5 @@ ltc.isValidAddress('testnet', LTC_TESTING_ADDRESS)
 // $ExpectType Promise<LitecoinUtxoList>
 ltc.monitorUtxoByAddress('testnet', LTC_TESTING_ADDRESS, new EventEmitter(), 1000)
 
-// $ExpectType Promise<boolean>
+// $ExpectType Promise<LitecoinTransactionReceipt>
 ltc.waitForTransactionConfirmation('testnet', LTC_UTXO, 10000)

@@ -21,6 +21,54 @@ export interface BitcoinBroadcastedTx {
   txid: string
 }
 
+export interface BitcoinVin {
+  txid: string,
+  vout: number,
+  prevout: {
+      scriptpubkey: string,
+      scriptpubkey_asm: string,
+      scriptpubkey_type: string,
+      scriptpubkey_address: string,
+      value: number
+  },
+  scriptsig: string,
+  scriptsig_asm: string,
+  is_coinbase: false,
+  sequence: number,
+  inner_redeemscript_asm: string,
+
+}
+
+export interface BitcoinVout {
+  n: number
+  scriptPubKey: {
+    addresses: Array<string>,
+    asm: string,
+    hex: string,
+    type: string,
+  }
+  spentHeight: number,
+  spentIndex: number,
+  spentTxId: string,
+  value: number,
+}
+
+export interface BitcoinVinList extends Array<BitcoinVin> {}
+
+export interface BitcoinVoutList extends Array<BitcoinVout> {}
+
+export interface BitcoinTransactionReceipt {
+  txid: string,
+  version: number,
+  locktime: number,
+  vin: BitcoinVinList,
+  vout: BitcoinVoutList
+  size: number,
+  weight: number,
+  fee: number,
+  status: BitcoinTransactionStatus
+}
+
 export interface btcInterface {
   broadcastTransaction(_network: string, _tx: string): Promise<BitcoinBroadcastedTx>
   getUtxoByAddress(_network: string, _address: string): Promise<BitcoinUtxoList>
@@ -32,7 +80,7 @@ export interface btcInterface {
     _eventEmitter: EventEmitter,
     _pollingTime: number
   ): Promise<BitcoinUtxoList>
-  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<boolean>
+  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<BitcoinTransactionReceipt>
 }
 
 export const btc: btcInterface
@@ -113,6 +161,56 @@ export interface LitecoinBroadcastedTx {
   txid: string
 }
 
+export interface LitecoinVin {
+  addr: string,
+  doubleSpentTxID: string | null,
+  n: number,
+  scriptSig: {
+    asm: string,
+    hex: string,
+  },
+  sequence: number
+  txid: string
+  value: number
+  valueSat: number
+  vout: number
+}
+
+export interface LitecoinVout {
+  n: number
+  scriptPubKey: {
+    addresses: Array<string>,
+    asm: string,
+    hex: string,
+    type: string,
+  }
+  spentHeight: number,
+  spentIndex: number,
+  spentTxId: string,
+  value: number,
+}
+
+export interface LitecoinVinList extends Array<LitecoinVin> {}
+
+export interface LitecoinVoutList extends Array<LitecoinVout> {}
+
+export interface LitecoinTransactionReceipt {
+  blockhash: string,
+  blockheight: number,
+  blocktime: number,
+  confirmations: number,
+  fees: number,
+  locktime: number,
+  size: number,
+  time: number,
+  txid: string,
+  valueIn: number,
+  valueOut: number,
+  version: number,
+  vin: LitecoinVinList
+  vout: LitecoinVoutList
+}
+
 export interface ltcInterface {
   broadcastTransaction(_network: string, _tx: string): Promise<LitecoinBroadcastedTx>
   getUtxoByAddress(_network: string, _address: string): Promise<LitecoinUtxoList>
@@ -124,7 +222,7 @@ export interface ltcInterface {
     _eventEmitter: EventEmitter,
     _pollingTime: number
   ): Promise <LitecoinUtxoList>
-  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<boolean>
+  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<LitecoinTransactionReceipt>
 }
 
 export const ltc: ltcInterface
