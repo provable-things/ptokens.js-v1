@@ -36,13 +36,12 @@ export interface BitcoinVin {
   is_coinbase: false,
   sequence: number,
   inner_redeemscript_asm: string,
-
 }
 
 export interface BitcoinVout {
   n: number
   scriptPubKey: {
-    addresses: Array<string>,
+    addresses: string[]
     asm: string,
     hex: string,
     type: string,
@@ -79,7 +78,7 @@ export interface btcInterface {
     _address: string,
     _eventEmitter: EventEmitter,
     _pollingTime: number
-  ): Promise<BitcoinUtxoList>
+  ): Promise<string>
   waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<BitcoinTransactionReceipt>
 }
 
@@ -179,7 +178,7 @@ export interface LitecoinVin {
 export interface LitecoinVout {
   n: number
   scriptPubKey: {
-    addresses: Array<string>,
+    addresses: string[],
     asm: string,
     hex: string,
     type: string,
@@ -221,7 +220,7 @@ export interface ltcInterface {
     _address: string,
     _eventEmitter: EventEmitter,
     _pollingTime: number
-  ): Promise <LitecoinUtxoList>
+  ): Promise <string>
   waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<LitecoinTransactionReceipt>
 }
 

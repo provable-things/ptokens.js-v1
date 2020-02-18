@@ -25,7 +25,7 @@ btc.getTransactionHexById('testnet', BTC_UTXO)
 // $ExpectType boolean
 btc.isValidAddress(BTC_TESTING_ADDRESS)
 
-// $ExpectType Promise<BitcoinUtxoList>
+// $ExpectType Promise<string>
 btc.monitorUtxoByAddress('testnet', BTC_TESTING_ADDRESS, new EventEmitter(), 1000)
 
 // $ExpectType Promise<BitcoinTransactionReceipt>
@@ -116,7 +116,7 @@ ltc.getTransactionHexById('testnet', LTC_UTXO)
 // $ExpectType boolean
 ltc.isValidAddress('testnet', LTC_TESTING_ADDRESS)
 
-// $ExpectType Promise<LitecoinUtxoList>
+// $ExpectType Promise<string>
 ltc.monitorUtxoByAddress('testnet', LTC_TESTING_ADDRESS, new EventEmitter(), 1000)
 
 // $ExpectType Promise<LitecoinTransactionReceipt>
