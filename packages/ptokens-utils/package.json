@@ -18,6 +18,7 @@
     "@babel/runtime": "^7.3.1",
     "@types/node": "^12.6.1",
     "axios": "^0.19.2",
+    "bignumber.js": "^9.0.0",
     "bitcoin-address-validation": "^1.0.0",
     "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
@@ -28,7 +29,6 @@
     "web3": "^1.2.2"
   },
   "devDependencies": {
-    "bignumber.js": "^9.0.0",
     "dtslint": "0.4.2",
     "jest": "^24.8.0"
   },
