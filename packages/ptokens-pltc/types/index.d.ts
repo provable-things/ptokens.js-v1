@@ -6,15 +6,15 @@ import {
 } from 'ptokens-utils'
 import { PromiEvent } from 'web3-core'
 
+export interface Configs {
+  ethPrivateKey?: string,
+  ethProvider: string,
+  ltcNetwork: string,
+  defaultNode?: string
+}
+
 export class pLTC {
-  constructor(
-    configs: {
-      ethPrivateKey?: string,
-      ethProvider: string,
-      ltcNetwork: string,
-      defaultNode?: string
-    }
-  )
+  constructor(configs: Configs)
 
   getDepositAddress(_ethAddress: string): Promise<LtcDepositAddress>
 
