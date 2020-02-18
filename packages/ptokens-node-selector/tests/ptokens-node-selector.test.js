@@ -1,4 +1,4 @@
-import NodeSelector from '../src/index'
+import { NodeSelector } from '../src/index'
 import { expect } from 'chai'
 
 jest.setTimeout(300000)

@@ -23,7 +23,7 @@ npm install ptokens-node-selector
 ### Usage:
 
 ```js
-import NodeSelector from 'ptokens-node-selector'
+import { NodeSelector } from 'ptokens-node-selector'
 
 const nodeSelector = new NodeSelector({
   pToken: {

@@ -6,7 +6,7 @@ import {
 } from './utils/index'
 import utils from 'ptokens-utils'
 
-class NodeSelector {
+export class NodeSelector {
   /**
    * @param {Object} configs
    */
@@ -124,5 +124,3 @@ class NodeSelector {
     return this.selectedNode
   }
 }
-
-export default NodeSelector
