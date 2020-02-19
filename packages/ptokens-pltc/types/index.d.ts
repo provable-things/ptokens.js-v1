@@ -11,7 +11,7 @@ export interface Configs {
   ethPrivateKey?: string,
   ethProvider: string,
   ltcNetwork: string,
-  defaultNode?: string
+  defaultEndpoint?: string
 }
 
 export class pLTC {
@@ -51,7 +51,7 @@ export interface RedeemResult {
 }
 
 export interface IssueResult {
-  amount?: number,
+  amount: number,
   to: string,
   tx: string
 }
@@ -64,6 +64,14 @@ export interface LtcDepositAddressConfigs {
 
 export class LtcDepositAddress {
   constructor(configs: LtcDepositAddressConfigs)
+
+  ethAddress: string | null
+
+  nonce: number | null
+
+  enclavePublicKey: string | null
+
+  value: string | null
 
   generate(_ethAddress: string): Promise<string>
 

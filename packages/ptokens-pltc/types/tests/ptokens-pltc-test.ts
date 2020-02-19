@@ -55,7 +55,8 @@ const node = new Node({
   pToken: {
     name: 'pLTC',
     redeemFrom: 'ETH'
-  }
+  },
+  endpoint: 'https://..'
 })
 
 const ltcDepositAddress = new LtcDepositAddress({

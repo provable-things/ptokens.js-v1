@@ -4,7 +4,8 @@ import * as bitcoin from 'bitcoinjs-lib'
 import { ltc, eth, converters } from 'ptokens-utils'
 import {
   LTC_NODE_POLLING_TIME,
-  ETH_NODE_POLLING_TIME_INTERVAL
+  ETH_NODE_POLLING_TIME_INTERVAL,
+  PLTC_TOKEN_DECIMALS
 } from './utils/constants'
 
 export class LtcDepositAddress {
@@ -117,8 +118,13 @@ export class LtcDepositAddress {
 
       promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
       promiEvent.resolve({
-        to: this._ethAddress,
-        tx: broadcastedEthTxReport.host_tx_hash
+        to: this.ethAddress,
+        tx: broadcastedEthTxReport.host_tx_hash,
+        amount: eth.correctFormat(
+          broadcastedEthTxReport.host_tx_amount,
+          PLTC_TOKEN_DECIMALS,
+          '/'
+        )
       })
     }
 
