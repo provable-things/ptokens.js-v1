@@ -22,7 +22,7 @@
     "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
     "light-async-polling": "^1.0.2",
-    "ptokens-node": "^0.2.0",
+    "ptokens-node-selector": "^0.2.0",
     "ptokens-utils": "^0.2.0",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1",

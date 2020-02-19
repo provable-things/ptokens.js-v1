@@ -4,7 +4,8 @@ import * as bitcoin from 'bitcoinjs-lib'
 import { btc, eth, converters } from 'ptokens-utils'
 import {
   BTC_ESPLORA_POLLING_TIME,
-  ETH_NODE_POLLING_TIME_INTERVAL
+  ETH_NODE_POLLING_TIME_INTERVAL,
+  PBTC_TOKEN_DECIMALS
 } from './utils/constants'
 
 export class BtcDepositAddress {
@@ -32,8 +33,8 @@ export class BtcDepositAddress {
         `get-native-deposit-address/${this.network}/${_ethAddress}`
       )
 
-      ;(this.nonce = deposit.nonce),
-        (this.enclavePublicKey = deposit.enclavePublicKey)
+      this.nonce = deposit.nonce
+      this.enclavePublicKey = deposit.enclavePublicKey
       this.value = deposit.nativeDepositAddress
       this.ethAddress = _ethAddress
       return this.value
@@ -112,8 +113,13 @@ export class BtcDepositAddress {
 
       promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
       promiEvent.resolve({
-        to: this._ethAddress,
-        tx: broadcastedEthTx.host_tx_hash
+        to: this.ethAddress,
+        tx: broadcastedEthTxReport.host_tx_hash,
+        amount: eth.correctFormat(
+          broadcastedEthTxReport.host_tx_amount,
+          PBTC_TOKEN_DECIMALS,
+          '/'
+        )
       })
     }
 

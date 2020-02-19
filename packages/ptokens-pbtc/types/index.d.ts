@@ -5,16 +5,19 @@ import {
   BitcoinTransactionReceipt
 } from 'ptokens-utils'
 import { PromiEvent } from 'web3-core'
+import { NodeSelector } from 'ptokens-node-selector'
 
 export interface Configs {
   ethPrivateKey?: string,
   ethProvider: string,
   btcNetwork: string,
-  defaultNode?: string
+  defaultEndpoint?: string
 }
 
 export class pBTC {
   constructor(configs: Configs)
+
+  nodeSelector: NodeSelector
 
   getDepositAddress(_ethAddress: string): Promise<BtcDepositAddress>
 
@@ -48,7 +51,7 @@ export interface RedeemResult {
 }
 
 export interface IssueResult {
-  amount?: number,
+  amount: number,
   to: string,
   tx: string
 }
@@ -61,6 +64,14 @@ export interface BtcDepositAddressConfigs {
 
 export class BtcDepositAddress {
   constructor(configs: BtcDepositAddressConfigs)
+
+  ethAddress: string | null
+
+  nonce: number | null
+
+  enclavePublicKey: string | null
+
+  value: string | null
 
   generate(_ethAddress: string): Promise<string>
 

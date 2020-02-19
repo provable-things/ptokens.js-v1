@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
-import { Node } from 'ptokens-node'
+import { NodeSelector } from 'ptokens-node-selector'
 import { eth, btc } from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import { BtcDepositAddress } from './btc-deposit-address'
@@ -16,16 +16,16 @@ export class pBTC {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { ethPrivateKey, ethProvider, btcNetwork, defaultNode } = _configs
+    const { ethPrivateKey, ethProvider, btcNetwork, defaultEndpoint } = _configs
 
     this._web3 = new Web3(ethProvider)
 
-    this.node = new Node({
+    this.nodeSelector = new NodeSelector({
       pToken: {
         name: 'pBTC',
         redeemFrom: 'ETH'
       },
-      defaultNode
+      defaultEndpoint
     })
 
     if (ethPrivateKey) {
@@ -56,9 +56,13 @@ export class pBTC {
     if (!Web3Utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
 
+    if (!this.nodeSelector.selectedNode) {
+      await this.nodeSelector.select()
+    }
+
     const depositAddress = new BtcDepositAddress({
       network: this._btcNetwork,
-      node: this.node,
+      node: this.nodeSelector.selectedNode,
       web3: this._web3
     })
 
@@ -91,6 +95,10 @@ export class pBTC {
       }
 
       try {
+        if (!this.nodeSelector.selectedNode) {
+          await this.nodeSelector.select()
+        }
+
         const ethTxReceipt = await eth.makeContractSend(
           this._web3,
           'burn',
@@ -105,7 +113,7 @@ export class pBTC {
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedBtcTxReport = await this.node.monitorIncomingTransaction(
+        const broadcastedBtcTxReport = await this.nodeSelector.selectedNode.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           promiEvent.eventEmitter
         )
@@ -323,8 +331,15 @@ export class pBTC {
 
   async _getContractAddress() {
     if (!this._contractAddress) {
+      if (!this.nodeSelector.selectedNode) {
+        await this.nodeSelector.select()
+      }
+
       const ethNetwork = await this._web3.eth.net.getNetworkType()
-      const info = await this.node.getInfo(this._btcNetwork, ethNetwork)
+      const info = await this.nodeSelector.selectedNode.getInfo(
+        this._btcNetwork,
+        ethNetwork
+      )
       this._contractAddress = info['smart-contract-address']
     }
 
