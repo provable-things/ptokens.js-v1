@@ -41,7 +41,7 @@ test('Should not get a LTC deposit address because of invalid Eth address', asyn
   }
 })
 
-/*test('Should monitor an issuing of 0.005 pLTC', async () => {
+test('Should monitor an issuing of 0.005 pLTC', async () => {
   const pltc = new pLTC(configs)
 
   const amountToIssue = 500
@@ -90,7 +90,7 @@ test('Should not get a LTC deposit address because of invalid Eth address', asyn
   expect(nodeHasReceivedTx).to.equal(true)
   expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ethTxIsConfirmed).to.equal(true)
-})*/
+})
 
 test('Should redeem 0.0000546 pLTC', async () => {
   const pltc = new pLTC(configs)
