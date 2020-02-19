@@ -1,6 +1,6 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
-import { Node } from 'ptokens-node'
+import { NodeSelector } from 'ptokens-node-selector'
 import utils from 'ptokens-utils'
 import {
   EOS_BLOCKS_BEHIND,
@@ -15,7 +15,7 @@ import {
 } from './utils/constants'
 import peosAbi from './utils/contractAbi/pEOSTokenETHContractAbi.json'
 
-class pEOS {
+export class pEOS {
   /**
    * @param {Object} _configs
    */
@@ -26,15 +26,15 @@ class pEOS {
       eosPrivateKey,
       eosRpc,
       eosSignatureProvider,
-      defaultNode
+      defaultEndpoint
     } = _configs
 
-    this.node = new Node({
+    this.nodeSelector = new NodeSelector({
       pToken: {
         name: 'pEOS',
         redeemFrom: 'ETH'
       },
-      defaultNode
+      defaultEndpoint
     })
 
     this._web3 = new Web3(ethProvider)
@@ -79,6 +79,10 @@ class pEOS {
       }
 
       try {
+        if (!this.nodeSelector.selectedNode) {
+          await this.nodeSelector.select()
+        }
+
         const eosPublicKeys = await utils.eos.getAvailablePublicKeys(
           this._eosjs
         )
@@ -99,7 +103,7 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
 
-        const broadcastedEthTx = await this.node.monitorIncomingTransaction(
+        const broadcastedEthTx = await this.nodeSelector.selectedNode.monitorIncomingTransaction(
           eosTxReceipt.transaction_id,
           'issue',
           promiEvent.eventEmitter
@@ -146,6 +150,10 @@ class pEOS {
       }
 
       try {
+        if (!this.nodeSelector.selectedNode) {
+          await this.nodeSelector.select()
+        }
+
         const ethTxReceipt = await utils.eth.makeContractSend(
           this._web3,
           'burn',
@@ -164,7 +172,7 @@ class pEOS {
 
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedEosTx = await this.node.monitorIncomingTransaction(
+        const broadcastedEosTx = await this.nodeSelector.selectedNode.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           'redeem',
           promiEvent.eventEmitter
@@ -415,5 +423,3 @@ class pEOS {
     })
   }
 }
-
-export default pEOS

@@ -1,4 +1,4 @@
-import pEOS from '../src/index'
+import { pEOS } from '../src/index'
 import { expect } from 'chai'
 import { PEOS_TOKEN_DECIMALS } from '../src/utils/constants'
 
