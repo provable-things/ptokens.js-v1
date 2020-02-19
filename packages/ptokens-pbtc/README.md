@@ -23,7 +23,7 @@ npm install ptokens-pbtc
 ### Usage:
 
 ```js
-const pBTC = require('ptokens-pbtc')
+import { pBTC } from 'ptokens-pbtc'
 
 const pbtc = new pBTC({
   ethPrivateKey: 'Eth private key',
@@ -36,7 +36,7 @@ It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ val
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pBTC = require('ptokens-pbtc')
+import { pBTC } from 'ptokens-pbtc'
 
 if (window.web3) {
   

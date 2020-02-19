@@ -1,4 +1,4 @@
-import pBTC from '../src/index'
+import { pBTC } from '../src/index'
 import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 
