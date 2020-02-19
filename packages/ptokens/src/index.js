@@ -1,4 +1,4 @@
-import pEOS from 'ptokens-peos'
+import { pEOS } from 'ptokens-peos'
 import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
 import utils from 'ptokens-utils'
