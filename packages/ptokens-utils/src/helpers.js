@@ -1,5 +1,4 @@
 const availables = {
-  peos: ['ETH'],
   pbtc: ['ETH'],
   pltc: ['ETH']
 }
@@ -8,7 +7,6 @@ const availables = {
  * @param {String} _pTokenName
  */
 const pTokenNameIsValid = _pTokenName => {
-  if (_pTokenName.toLowerCase() === 'peos') return true
   if (_pTokenName.toLowerCase() === 'pbtc') return true
   if (_pTokenName.toLowerCase() === 'pltc') return true
   return false

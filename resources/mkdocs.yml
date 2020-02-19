@@ -13,7 +13,6 @@ nav:
     - Modules:
         - ptokens: ptokens.md
         - ptokens-pbtc: ptokens-pbtc.md
-        - ptokens-peos: ptokens-peos.md
         - ptokens-pltc: ptokens-pltc.md
         - ptokens-node: ptokens-node.md
         - ptokens-node-selector: ptokens-node-selector.md

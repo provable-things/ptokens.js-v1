@@ -4,7 +4,7 @@ import {
   makeApiCallWithTimeout,
   NODE_CONNECTION_TIMEOUT
 } from './utils/index'
-import utils from 'ptokens-utils'
+import { helpers } from 'ptokens-utils'
 import { Node } from 'ptokens-node'
 
 export class NodeSelector {
@@ -14,7 +14,7 @@ export class NodeSelector {
   constructor(configs) {
     const { pToken, defaultEndpoint } = configs
 
-    if (!utils.helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
+    if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
     this.pToken = pToken
     this.pToken.name = pToken.name.toLowerCase()

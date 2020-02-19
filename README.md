@@ -28,14 +28,6 @@ npm install ptokens
 import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
-  peos: {
-    ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
-    eosPrivateKey: 'EOS private key',
-    eosRpc: 'EOS RPC Address',
-    eosSignatureProvider: 'An EOS Signature Provider',  //if the private key is not passed
-    defaultEndpoint: 'https://......' //optional
-  },
   pbtc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
@@ -59,10 +51,6 @@ import pTokens from 'ptokens'
 if (window.web3) {
   
   const ptokens = new pTokens({
-    peos: {
-      ethProvider: window.web3.currentProvider,
-      ....
-    },
     pbtc: {
       ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'

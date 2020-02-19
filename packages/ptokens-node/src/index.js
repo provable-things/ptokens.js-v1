@@ -1,5 +1,6 @@
 import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
+import { helpers } from 'ptokens-utils'
 
 const NODE_POLLING_TIME = 200
 
@@ -9,6 +10,8 @@ export class Node {
    */
   constructor(configs) {
     const { pToken, endpoint } = configs
+
+    if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
     this.info = null
     this.pToken = pToken

@@ -3,7 +3,7 @@ import { expect } from 'chai'
 
 test('Should return true because of valid pToken', () => {
   const pToken = {
-    name: 'pEOS',
+    name: 'pBTC',
     redeemFrom: 'ETH'
   }
   const exptectedResult = true
@@ -13,7 +13,7 @@ test('Should return true because of valid pToken', () => {
 
 test('Should return false because of invalid pTokenName', () => {
   const pToken = {
-    name: 'pEOSssss',
+    name: 'pBTCccc',
     redeemFrom: 'eth'
   }
   const exptectedResult = false

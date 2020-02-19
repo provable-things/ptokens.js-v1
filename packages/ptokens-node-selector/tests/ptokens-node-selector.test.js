@@ -15,18 +15,6 @@ test('Should select a pBTC node on Ethereum', async () => {
   expect(node.endpoint).to.be.not.null
 })
 
-test('Should select a pEOS node on Ethereum', async () => {
-  const nodeSelector = new NodeSelector({
-    pToken: {
-      name: 'pEOS',
-      redeemFrom: 'ETH'
-    }
-  })
-
-  const node = await nodeSelector.select()
-  expect(node.endpoint).to.be.not.null
-})
-
 test('Should select a pLTC node on Ethereum', async () => {
   const nodeSelector = new NodeSelector({
     pToken: {
