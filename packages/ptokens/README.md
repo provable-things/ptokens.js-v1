@@ -23,7 +23,7 @@ npm install ptokens
 ### Usage: 
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
   peos: {
