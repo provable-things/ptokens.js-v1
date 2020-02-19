@@ -1,16 +1,25 @@
 import { NodeSelector } from 'ptokens-node-selector'
 import { EventEmitter } from 'events'
 
-export class Node extends NodeSelector {
-  constructor(
-    configs: {
-      pToken: {
-        name: string,
-        redeemFrom: string
-      },
-      defaultNode?: string
-    }
-  )
+export interface NodeConfigs {
+  pToken: {
+    name: string,
+    redeemFrom: string
+  },
+  endpoint: string
+}
+
+export interface pToken {
+  name: string
+  redeemFrom: string
+}
+
+export class Node {
+  constructor(_configs: NodeConfigs)
+
+  pToken: pToken
+
+  endpoint: string
 
   ping(): Promise<string>
 

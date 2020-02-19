@@ -30,6 +30,6 @@ const node = new Node({
     name: 'pToken name',
     redeemFrom: 'ETH' //for now
   },
-  defaultNode: 'https://...' //optional
+  endpoint: 'https://...' //optional
 })
 ```

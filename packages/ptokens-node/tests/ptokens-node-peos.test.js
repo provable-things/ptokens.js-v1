@@ -13,19 +13,6 @@ const HASH_BROADCASTED_TX =
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const EOS_BLOCK_SUBMITTED_RETURN_VALUE = 'Eos block submitted to the enclave!'
 
-test('Should ping a node without selecting one as default', async () => {
-  const expectedResult = PING_RETURN_VALUE
-  const node = new Node({
-    pToken: {
-      name: 'pEOS',
-      redeemFrom: 'ETH'
-    }
-  })
-
-  const res = await node.ping()
-  expect(res).to.be.equal(expectedResult)
-})
-
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
   const node = new Node({
@@ -33,25 +20,11 @@ test('Should ping a node with one as default', async () => {
       name: 'pEOS',
       redeemFrom: 'ETH'
     },
-    defaultNode: 'https://nuc-bridge-1.ngrok.io'
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.ping()
   expect(res).to.be.equal(expectedResult)
-})
-
-test('Should ping a different node because the default one is invalid', async () => {
-  const uncreachableNode = 'https://uncreachable-node.io'
-  const node = new Node({
-    pToken: {
-      name: 'pEOS',
-      redeemFrom: 'ETH'
-    },
-    defaultNode: uncreachableNode
-  })
-
-  await node.ping()
-  expect(node.selectedNode.endpoint).to.be.not.equal(uncreachableNode)
 })
 
 test('Should generate an error because of invalid pToken name', () => {
@@ -63,7 +36,8 @@ test('Should generate an error because of invalid pToken name', () => {
       pToken: {
         name: invalidpTokenName,
         redeemFrom: 'ETH'
-      }
+      },
+      endpoint: 'https://nuc-bridge-1.ngrok.io'
     })
   } catch (err) {
     expect(err.message).to.be.equal(expectedErrorMessage)
@@ -78,7 +52,8 @@ test('Should get ten ETH report', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReports(type, limit)
@@ -95,7 +70,8 @@ test('Should get ten EOS report', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReports(type, limit)
@@ -113,7 +89,8 @@ test('Should get ten ETH reports by address', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReportsByAddress(type, ethAddress, limit)
@@ -131,7 +108,8 @@ test('Should get ten EOS reports by address', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReportsByAddress(type, eosAccount, limit)
@@ -147,7 +125,8 @@ test('Should get ETH reports by nonce', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReportByNonce(type, nonce)
@@ -162,7 +141,8 @@ test('Should get EOS reports by nonce', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReportByNonce(type, nonce)
@@ -176,7 +156,8 @@ test('Should get last ETH processed block', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -189,7 +170,8 @@ test('Should get last EOS processed block', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -202,7 +184,8 @@ test('Should get the status of an incoming tx', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getIncomingTransactionStatus(hash)
@@ -215,7 +198,8 @@ test('Should get the status of an brodcasted tx', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getBroadcastTransactionStatus(hash)
@@ -229,7 +213,8 @@ test('Should submit an ETH block', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.submitBlock(type, ETH_PEOS_BLOCK)
@@ -243,7 +228,8 @@ test('Should submit an EOS block', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.submitBlock(type, EOS_PEOS_BLOCK)
@@ -255,7 +241,8 @@ test('Should monitor an incoming transaction', async () => {
     pToken: {
       name: 'pEOS',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   let nodeHasReceivedTx = false

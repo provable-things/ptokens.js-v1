@@ -1,22 +1,23 @@
 import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
-import { NodeSelector } from 'ptokens-node-selector'
 
 const NODE_POLLING_TIME = 200
 
-export class Node extends NodeSelector {
+export class Node {
   /**
    * @param {Object} configs
    */
   constructor(configs) {
-    super(configs)
+    const { pToken, endpoint } = configs
 
-    this._info = null
+    this.info = null
+    this.pToken = pToken
+    this.endpoint = endpoint
   }
 
   ping() {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`
     )
@@ -28,14 +29,14 @@ export class Node extends NodeSelector {
    * @param {String} _redeemFromNetwork
    */
   async getInfo(_issueFromNetwork, _redeemFromNetwork) {
-    if (!this._info) {
-      this._info = await makeApiCall(
-        this.getApi(),
+    if (!this.info) {
+      this.info = await makeApiCall(
+        this.endpoint,
         'GET',
         `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
       )
     }
-    return this._info
+    return this.info
   }
 
   /**
@@ -44,7 +45,7 @@ export class Node extends NodeSelector {
    */
   getReports(_type, _limit = REPORT_LIMIT) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-reports/limit/${_limit}`
     )
@@ -57,7 +58,7 @@ export class Node extends NodeSelector {
    */
   getReportsByAddress(_type, _address, _limit = REPORT_LIMIT) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-address/${_address}/limit/${_limit}`
     )
@@ -69,7 +70,7 @@ export class Node extends NodeSelector {
    */
   getReportByNonce(_type, _nonce) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/report/${_type}/nonce/${_nonce}`
     )
@@ -80,7 +81,7 @@ export class Node extends NodeSelector {
    */
   getLastProcessedBlock(_type) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/last-processed-${_type}-block`
     )
@@ -91,7 +92,7 @@ export class Node extends NodeSelector {
    */
   getIncomingTransactionStatus(_hash) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/incoming-tx-hash/${_hash}`
     )
@@ -102,7 +103,7 @@ export class Node extends NodeSelector {
    */
   getBroadcastTransactionStatus(_hash) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/broadcast-tx-hash/${_hash}`
     )
@@ -114,7 +115,7 @@ export class Node extends NodeSelector {
    */
   submitBlock(_type, _block) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       'POST',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/submit-${_type}-block`,
       _block
@@ -128,7 +129,7 @@ export class Node extends NodeSelector {
    */
   generic(_type, _path, _data = null) {
     return makeApiCall(
-      this.getApi(),
+      this.endpoint,
       _type,
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_path}`,
       _data

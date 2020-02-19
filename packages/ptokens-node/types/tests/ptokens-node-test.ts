@@ -28,7 +28,8 @@ const node = new Node({
   pToken: {
     name: 'pBTC',
     redeemFrom: 'ETH'
-  }
+  },
+  endpoint: 'https://nuc-bridge-3.ngrok.io'
 })
 
 // $ExpectType Promise<string>

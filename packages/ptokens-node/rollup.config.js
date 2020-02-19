@@ -1,6 +1,4 @@
 import pkg from './package.json'
 import rollupConfig from '../../rollup.config'
 
-export default rollupConfig('Node', pkg.name, {
-  'ptokens-node-selector': 'ptokens-node-selector'
-})
+export default rollupConfig('Node', pkg.name)

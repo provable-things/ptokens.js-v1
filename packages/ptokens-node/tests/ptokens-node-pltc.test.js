@@ -14,19 +14,6 @@ const HASH_BROADCASTED_TX =
 
 const LTC_TESTING_ADDRESS = 'QQPAnYG1muVgNvq7d7sKAgAvvTgydJ24oi'
 
-test('Should ping a node without selecting one as default', async () => {
-  const expectedResult = PING_RETURN_VALUE
-  const node = new Node({
-    pToken: {
-      name: 'pLTC',
-      redeemFrom: 'ETH'
-    }
-  })
-
-  const res = await node.ping()
-  expect(res).to.be.equal(expectedResult)
-})
-
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
   const node = new Node({
@@ -34,25 +21,11 @@ test('Should ping a node with one as default', async () => {
       name: 'pLTC',
       redeemFrom: 'ETH'
     },
-    defaultNode: 'https://nuc-bridge-3.ngrok.io'
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.ping()
   expect(res).to.be.equal(expectedResult)
-})
-
-test('Should ping a different node because the default one is invalid', async () => {
-  const uncreachableNode = 'https://uncreachable-node.io'
-  const node = new Node({
-    pToken: {
-      name: 'pLTC',
-      redeemFrom: 'ETH'
-    },
-    defaultNode: uncreachableNode
-  })
-
-  await node.ping()
-  expect(node.selectedNode.endpoint).to.be.not.equal(uncreachableNode)
 })
 
 test('Should get the Node Info', async () => {
@@ -60,7 +33,8 @@ test('Should get the Node Info', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const info = await node.getInfo('testnet', 'ropsten')
@@ -76,7 +50,8 @@ test('Should get one ETH report', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getReports(type, limit)
@@ -93,7 +68,8 @@ test('Should get one LTC report', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getReports(type, limit)
@@ -111,7 +87,8 @@ test('Should get one ETH report by address', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getReportsByAddress(type, ethAddress, limit)
@@ -129,7 +106,8 @@ test('Should get one LTC reports by address', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getReportsByAddress(type, ltcAddress, limit)
@@ -145,7 +123,8 @@ test('Should get ETH report by nonce', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getReportByNonce(type, nonce)
@@ -160,7 +139,8 @@ test('Should get LTC report by nonce', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getReportByNonce(type, nonce)
@@ -174,7 +154,8 @@ test('Should get last ETH processed block', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -187,7 +168,8 @@ test('Should get last LTC processed block', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -200,7 +182,8 @@ test('Should get the status of an incoming tx', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getIncomingTransactionStatus(hash)
@@ -213,7 +196,8 @@ test('Should get the status of an brodcasted tx', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.getBroadcastTransactionStatus(hash)
@@ -227,7 +211,8 @@ test('Should submit an ETH block', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.submitBlock(type, ETH_PLTC_BLOCK)
@@ -241,7 +226,8 @@ test('Should submit a LTC block', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   const res = await node.submitBlock(type, LTC_PLTC_BLOCK)
@@ -253,7 +239,8 @@ test('Should monitor an incoming pLTC transaction', async () => {
     pToken: {
       name: 'pLTC',
       redeemFrom: 'ETH'
-    }
+    },
+    endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
   let nodeHasReceivedTx = false
