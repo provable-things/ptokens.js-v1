@@ -1,10 +1,10 @@
 import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
-import NodeSelector from 'ptokens-node-selector'
+import { NodeSelector } from 'ptokens-node-selector'
 
 const NODE_POLLING_TIME = 200
 
-class Node extends NodeSelector {
+export class Node extends NodeSelector {
   /**
    * @param {Object} configs
    */
@@ -15,7 +15,11 @@ class Node extends NodeSelector {
   }
 
   ping() {
-    return makeApiCall(this.getApi(), 'GET', `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`)
+    return makeApiCall(
+      this.getApi(),
+      'GET',
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`
+    )
   }
 
   /**
@@ -133,35 +137,27 @@ class Node extends NodeSelector {
 
   /**
    * @param {String} _hash
-   * @param {String} __type
    * @param {EventEmitter} _eventEmitter
    */
-  async monitorIncomingTransaction(_hash, _type, _eventEmitter) {
-
-    let broadcastedTx = null
+  async monitorIncomingTransaction(_hash, _eventEmitter) {
+    let incomingTx = null
     let isSeen = false
     await polling(async () => {
-      const incomingTxStatus = await this.getIncomingTransactionStatus(
-        _hash
-      )
+      incomingTx = await this.getIncomingTransactionStatus(_hash)
 
-      if (incomingTxStatus.broadcast === false && !isSeen) {
-        _eventEmitter.emit('onNodeReceivedTx', incomingTxStatus)
+      if (incomingTx.broadcast === false && !isSeen) {
+        _eventEmitter.emit('onNodeReceivedTx', incomingTx)
         isSeen = true
         return false
-      } else if (incomingTxStatus.broadcast === true) {
-        if (!isSeen) _eventEmitter.emit('onNodeReceivedTx', incomingTxStatus)
+      } else if (incomingTx.broadcast === true) {
+        if (!isSeen) _eventEmitter.emit('onNodeReceivedTx', incomingTx)
 
-        broadcastedTx =
-          incomingTxStatus[`${_type}_tx_hash`]
-        _eventEmitter.emit('onNodeBroadcastedTx', broadcastedTx)
+        _eventEmitter.emit('onNodeBroadcastedTx', incomingTx)
         return true
       } else {
         return false
       }
     }, NODE_POLLING_TIME)
-    return broadcastedTx
+    return incomingTx
   }
 }
-
-export default Node

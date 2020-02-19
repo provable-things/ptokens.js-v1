@@ -1,4 +1,4 @@
-import Node from '../src/index'
+import { Node } from '../src/index'
 import { ETH_PEOS_BLOCK, EOS_PEOS_BLOCK } from './utils'
 import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'

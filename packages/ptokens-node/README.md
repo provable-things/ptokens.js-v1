@@ -23,7 +23,7 @@ npm install ptokens-node
 ### Usage:
 
 ```js
-import Node from 'ptokens-node'
+import { Node } from 'ptokens-node'
 
 const node = new Node({
   pToken: {

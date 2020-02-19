@@ -1,4 +1,4 @@
-import Node from '../src/index'
+import { Node } from '../src/index'
 import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'
 import { ETH_PLTC_BLOCK, LTC_PLTC_BLOCK } from './utils'
@@ -64,14 +64,14 @@ test('Should get the Node Info', async () => {
   })
 
   const info = await node.getInfo('testnet', 'ropsten')
-  expect(info).to.have.property('pbtc-public-key')
-  expect(info).to.have.property('pbtc-smart-contract-address')
+  expect(info).to.have.property('public-key')
+  expect(info).to.have.property('smart-contract-address')
 })
 
 test('Should get one ETH report', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'eth'
+  const type = 'host'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -88,7 +88,7 @@ test('Should get one ETH report', async () => {
 test('Should get one LTC report', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'ltc'
+  const type = 'native'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -105,7 +105,7 @@ test('Should get one LTC report', async () => {
 test('Should get one ETH report by address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'eth'
+  const type = 'host'
   const ethAddress = LTC_TESTING_ADDRESS
   const node = new Node({
     pToken: {
@@ -123,7 +123,7 @@ test('Should get one ETH report by address', async () => {
 test('Should get one LTC reports by address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'ltc'
+  const type = 'native'
   const ltcAddress = LTC_TESTING_ADDRESS
   const node = new Node({
     pToken: {
@@ -138,9 +138,9 @@ test('Should get one LTC reports by address', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get ETH reports by nonce', async () => {
+test('Should get ETH report by nonce', async () => {
   const nonce = 1
-  const type = 'eth'
+  const type = 'host'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -153,9 +153,9 @@ test('Should get ETH reports by nonce', async () => {
   expect(res._id).to.be.equal(`pBTC_ETH ${nonce}`)
 })
 
-test('Should get LTC reports by nonce', async () => {
+test('Should get LTC report by nonce', async () => {
   const nonce = 1
-  const type = 'ltc'
+  const type = 'native'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -169,7 +169,7 @@ test('Should get LTC reports by nonce', async () => {
 })
 
 test('Should get last ETH processed block', async () => {
-  const type = 'eth'
+  const type = 'host'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -182,7 +182,7 @@ test('Should get last ETH processed block', async () => {
 })
 
 test('Should get last LTC processed block', async () => {
-  const type = 'ltc'
+  const type = 'native'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -222,7 +222,7 @@ test('Should get the status of an brodcasted tx', async () => {
 
 test('Should submit an ETH block', async () => {
   const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
-  const type = 'eth'
+  const type = 'host'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -236,7 +236,7 @@ test('Should submit an ETH block', async () => {
 
 test('Should submit a LTC block', async () => {
   const expectedResult = LTC_BLOCK_SUBMITTED_RETURN_VALUE
-  const type = 'ltc'
+  const type = 'native'
   const node = new Node({
     pToken: {
       name: 'pLTC',
@@ -270,7 +270,7 @@ test('Should monitor an incoming pLTC transaction', async () => {
         nodeHasBroadcastedTx = true
       })
       node
-        .monitorIncomingTransaction(HASH_INCOMING_TX, 'issue', eventEmitter)
+        .monitorIncomingTransaction(HASH_INCOMING_TX, eventEmitter)
         .then(() => {
           resolve()
         })
