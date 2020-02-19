@@ -25,7 +25,7 @@ npm install ptokens
 ### :zap: Usage: 
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
   peos: {
@@ -34,19 +34,19 @@ const ptokens = new pTokens({
     eosPrivateKey: 'EOS private key',
     eosRpc: 'EOS RPC Address',
     eosSignatureProvider: 'An EOS Signature Provider',  //if the private key is not passed
-    defaultNode: 'https://......' //optional
+    defaultEndpoint: 'https://......' //optional
   },
   pbtc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
     btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
-    defaultNode: 'https://......' //optional
+    defaultEndpoint: 'https://......' //optional
   },
   pltc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
     ltcNetwork: 'testnet',  //'testnet' or 'litecoin', default 'testnet'
-    defaultNode: 'https://......' //optional
+    defaultEndpoint: 'https://......' //optional
   }
 })
 ```
@@ -54,7 +54,7 @@ It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ val
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens'
 
 if (window.web3) {
   
