@@ -32,8 +32,8 @@ export class LtcDepositAddress {
         `get-native-deposit-address/${this.network}/${_ethAddress}`
       )
 
-      ;(this.nonce = deposit.nonce),
-        (this.enclavePublicKey = deposit.enclavePublicKey)
+      this.nonce = deposit.nonce
+      this.enclavePublicKey = deposit.enclavePublicKey
       this.value = deposit.nativeDepositAddress
       this.ethAddress = _ethAddress
       return this.value

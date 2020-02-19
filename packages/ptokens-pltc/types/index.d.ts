@@ -5,6 +5,7 @@ import {
   LitecoinTransactionReceipt
 } from 'ptokens-utils'
 import { PromiEvent } from 'web3-core'
+import { NodeSelector } from 'ptokens-node-selector'
 
 export interface Configs {
   ethPrivateKey?: string,
@@ -15,6 +16,8 @@ export interface Configs {
 
 export class pLTC {
   constructor(configs: Configs)
+
+  nodeSelector: NodeSelector
 
   getDepositAddress(_ethAddress: string): Promise<LtcDepositAddress>
 

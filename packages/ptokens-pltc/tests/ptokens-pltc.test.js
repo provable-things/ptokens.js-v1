@@ -92,10 +92,10 @@ test('Should not get a LTC deposit address because of invalid Eth address', asyn
   expect(ethTxIsConfirmed).to.equal(true)
 })*/
 
-test('Should redeem 0.005 pLTC', async () => {
+test('Should redeem 0.0000546 pLTC', async () => {
   const pltc = new pLTC(configs)
 
-  const amountToRedeem = 0.005
+  const amountToRedeem = 0.0000546
 
   let ethTxIsConfirmed = false
   let nodeHasReceivedTx = false

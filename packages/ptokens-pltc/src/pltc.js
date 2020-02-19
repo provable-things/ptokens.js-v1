@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
-import { Node } from 'ptokens-node'
+import { NodeSelector } from 'ptokens-node-selector'
 import { ltc, eth } from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import { LtcDepositAddress } from './ltc-deposit-address'
@@ -17,16 +17,16 @@ export class pLTC {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { ethPrivateKey, ethProvider, ltcNetwork, defaultNode } = _configs
+    const { ethPrivateKey, ethProvider, ltcNetwork, defaultEndpoint } = _configs
 
     this._web3 = new Web3(ethProvider)
 
-    this.node = new Node({
+    this.nodeSelector = new NodeSelector({
       pToken: {
         name: 'pLTC',
         redeemFrom: 'ETH'
       },
-      defaultNode
+      defaultEndpoint
     })
 
     if (ethPrivateKey) {
@@ -57,9 +57,13 @@ export class pLTC {
     if (!Web3Utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
 
+    if (!this.nodeSelector.selectedNode) {
+      await this.nodeSelector.select()
+    }
+
     const depositAddress = new LtcDepositAddress({
       network: this._ltcNetwork,
-      node: this.node,
+      node: this.nodeSelector.selectedNode,
       web3: this._web3
     })
 
@@ -84,6 +88,10 @@ export class pLTC {
           `Impossible to burn less than ${MINIMUN_SATS_REDEEMABLE} pLTC`
         )
         return
+      }
+
+      if (!this.nodeSelector.selectedNode) {
+        await this.nodeSelector.select()
       }
 
       // NOTE: add support for p2sh testnet address (Q...)
@@ -112,7 +120,7 @@ export class pLTC {
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
-        const broadcastedLtcTxReport = await this.node.monitorIncomingTransaction(
+        const broadcastedLtcTxReport = await this.nodeSelector.selectedNode.monitorIncomingTransaction(
           ethTxReceipt.transactionHash,
           promiEvent.eventEmitter
         )
@@ -330,8 +338,15 @@ export class pLTC {
 
   async _getContractAddress() {
     if (!this._contractAddress) {
+      if (!this.nodeSelector.selectedNode) {
+        await this.nodeSelector.select()
+      }
+
       const ethNetwork = await this._web3.eth.net.getNetworkType()
-      const info = await this.node.getInfo(this._ltcNetwork, ethNetwork)
+      const info = await this.nodeSelector.selectedNode.getInfo(
+        this._ltcNetwork,
+        ethNetwork
+      )
       this._contractAddress = info['smart-contract-address']
     }
 
