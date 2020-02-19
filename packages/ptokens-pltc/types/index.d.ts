@@ -54,17 +54,15 @@ export interface IssueResult {
 }
 
 export interface LtcDepositAddressConfigs {
-  ethAddress: string,
-  nonce: number,
-  enclavePublicKey: string,
-  value: string,
-  ltcNetwork: string,
+  network: string,
   node: Node,
   web3: object
 }
 
 export class LtcDepositAddress {
   constructor(configs: LtcDepositAddressConfigs)
+
+  generate(_ethAddress: string): Promise<string>
 
   toString(): string
 

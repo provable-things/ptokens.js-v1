@@ -59,14 +59,13 @@ const node = new Node({
 })
 
 const ltcDepositAddress = new LtcDepositAddress({
-  ethAddress: ETH_TESTING_ADDRESS,
-  nonce: 10,
-  enclavePublicKey: 'enc pub key',
-  value: LTC_TESTING_ADDRESS,
-  ltcNetwork: 'testnet',
+  network: 'testnet',
   node,
   web3
 })
+
+// $ExpectType Promise<string>
+ltcDepositAddress.generate(ETH_TESTING_ADDRESS)
 
 // $ExpectType string
 ltcDepositAddress.toString()

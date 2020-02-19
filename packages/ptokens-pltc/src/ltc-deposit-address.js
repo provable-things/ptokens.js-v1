@@ -1,52 +1,64 @@
 import Web3PromiEvent from 'web3-core-promievent'
+import Web3Utils from 'web3-utils'
 import * as bitcoin from 'bitcoinjs-lib'
-import utils from 'ptokens-utils'
+import { ltc, eth, converters } from 'ptokens-utils'
 import {
   LTC_NODE_POLLING_TIME,
   ETH_NODE_POLLING_TIME_INTERVAL
-} from '../utils/constants'
+} from './utils/constants'
 
-class LtcDepositAddress {
+export class LtcDepositAddress {
   /**
    * @param {Object} _params
    */
   constructor(_params) {
-    const {
-      ethAddress,
-      nonce,
-      enclavePublicKey,
-      value,
-      ltcNetwork,
-      node,
-      web3
-    } = _params
+    const { network, node, web3 } = _params
 
-    this.ethAddress = ethAddress
-    this.nonce = nonce
-    this.enclavePublicKey = enclavePublicKey
-    this._value = value
-    this._ltcNetwork = ltcNetwork
-    this._node = node
+    this.network = network
+    this.node = node
     this._web3 = web3
   }
 
+  /**
+   * @param {String} _ethAddress
+   */
+  async generate(_ethAddress) {
+    if (!Web3Utils.isAddress(_ethAddress))
+      throw new Error('Eth Address is not valid')
+
+    try {
+      const deposit = await this.node.generic(
+        'GET',
+        `get-native-deposit-address/${this.network}/${_ethAddress}`
+      )
+
+      ;(this.nonce = deposit.nonce),
+        (this.enclavePublicKey = deposit.enclavePublicKey)
+      this.value = deposit.nativeDepositAddress
+      this.ethAddress = _ethAddress
+      return this.value
+    } catch (err) {
+      throw new Error('Error during deposit address generation')
+    }
+  }
+
   toString() {
-    return this._value
+    return this.value
   }
 
   verify() {
     const network =
-      this._ltcNetwork === 'litecoin'
+      this.network === 'litecoin'
         ? bitcoin.networks.litecoin
         : bitcoin.networks.testnet
 
     const ethAddressBuf = Buffer.from(
-      utils.eth.removeHexPrefix(this.ethAddress),
+      eth.removeHexPrefix(this.ethAddress),
       'hex'
     )
-    const nonceBuf = utils.converters.encodeUint64le(this.nonce)
+    const nonceBuf = converters.encodeUint64le(this.nonce)
     const enclavePublicKeyBuf = Buffer.from(
-      utils.eth.removeHexPrefix(this.enclavePublicKey),
+      eth.removeHexPrefix(this.enclavePublicKey),
       'hex'
     )
 
@@ -76,38 +88,37 @@ class LtcDepositAddress {
     if (decoded.version === 0xc4)
       p2sh.address = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
 
-    return p2sh.address === this._value
+    return p2sh.address === this.value
   }
 
   waitForDeposit() {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
-      if (!this._value) promiEvent.reject('Please provide a deposit address')
+      if (!this.value) promiEvent.reject('Please provide a deposit address')
 
-      const utxoToMonitor = await utils.ltc.monitorUtxoByAddress(
-        this._ltcNetwork,
-        this._value,
+      const utxoToMonitor = await ltc.monitorUtxoByAddress(
+        this.network,
+        this.value,
         promiEvent.eventEmitter,
         LTC_NODE_POLLING_TIME
       )
 
-      const broadcastedEthTx = await this._node.monitorIncomingTransaction(
+      const broadcastedEthTxReport = await this.node.monitorIncomingTransaction(
         utxoToMonitor,
-        'issue',
         promiEvent.eventEmitter
       )
 
-      const ethTxReceipt = await utils.eth.waitForTransactionConfirmation(
+      const ethTxReceipt = await eth.waitForTransactionConfirmation(
         this._web3,
-        broadcastedEthTx,
+        broadcastedEthTxReport.host_tx_hash,
         ETH_NODE_POLLING_TIME_INTERVAL
       )
 
       promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
       promiEvent.resolve({
         to: this._ethAddress,
-        tx: broadcastedEthTx
+        tx: broadcastedEthTxReport.host_tx_hash
       })
     }
 
@@ -115,5 +126,3 @@ class LtcDepositAddress {
     return promiEvent.eventEmitter
   }
 }
-
-export default LtcDepositAddress

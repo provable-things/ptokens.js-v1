@@ -1,4 +1,4 @@
-import pLTC from '../src/index'
+import { pLTC, LtcDepositAddress } from '../src/index'
 import { expect } from 'chai'
 import { sendLitecoin } from './utils'
 
@@ -41,10 +41,10 @@ test('Should not get a LTC deposit address because of invalid Eth address', asyn
   }
 })
 
-test('Should monitor an issuing of 0.005 pLTC', async () => {
+/*test('Should monitor an issuing of 0.005 pLTC', async () => {
   const pltc = new pLTC(configs)
 
-  const amountToIssue = 500000
+  const amountToIssue = 500
   const minerFees = 50000
 
   const depositAddress = await pltc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -90,7 +90,7 @@ test('Should monitor an issuing of 0.005 pLTC', async () => {
   expect(nodeHasReceivedTx).to.equal(true)
   expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ethTxIsConfirmed).to.equal(true)
-})
+})*/
 
 test('Should redeem 0.005 pLTC', async () => {
   const pltc = new pLTC(configs)
