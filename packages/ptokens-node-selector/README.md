@@ -30,6 +30,6 @@ const nodeSelector = new NodeSelector({
     name: 'pToken name',
     redeemFrom: 'ETH' //for now
   },
-  defaultNode: 'https://.....' //optional 
+  defaultEndpoint: 'https://.....' //optional 
 })
 ```

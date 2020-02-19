@@ -4,7 +4,8 @@ const nodeSelector = new NodeSelector({
   pToken: {
     name: 'pBTC',
     redeemFrom: 'ETH'
-  }
+  },
+  defaultEndpoint: 'https://nuc-bridge-2.ngrok.io'
 })
 
 // $ExpectType Promise<boolean>
@@ -13,8 +14,8 @@ nodeSelector.checkConnection('https://unreachable-node.io')
 // $ExpectType Promise<object>
 nodeSelector.getApi()
 
-// $ExpectType Promise<SelectedNode>
+// $ExpectType Promise<Node>
 nodeSelector.select()
 
-// $ExpectType Promise<SelectedNode>
+// $ExpectType Promise<Node>
 nodeSelector.set('https://unreachable-node.io')

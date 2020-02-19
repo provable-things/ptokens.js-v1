@@ -92,7 +92,7 @@ test('Should not select a different node when a valid one is set as default and 
       name: 'pLTC',
       redeemFrom: 'ETH'
     },
-    defaultNode: reachableNode
+    defaultEndoint: reachableNode
   })
   const selectedNode = await nodeSelector.select()
   expect(selectedNode.endpoint).to.be.equal(reachableNode)

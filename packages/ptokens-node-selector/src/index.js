@@ -5,13 +5,14 @@ import {
   NODE_CONNECTION_TIMEOUT
 } from './utils/index'
 import utils from 'ptokens-utils'
+import { Node } from 'ptokens-node'
 
 export class NodeSelector {
   /**
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, defaultNode } = configs
+    const { pToken, defaultEndpoint } = configs
 
     if (!utils.helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
@@ -21,7 +22,7 @@ export class NodeSelector {
 
     this.selectedNode = null
     this.nodes = []
-    this.defaultNode = defaultNode
+    this.defaultEndpoint = defaultEndpoint
   }
 
   /**
@@ -64,10 +65,11 @@ export class NodeSelector {
 
       const feature = `${this.pToken.name}-on-${this.pToken.redeemFrom}`
 
-      if (this.defaultNode) {
+      if (this.defaultEndpoint) {
         const node = this.nodes.find(
           node =>
-            node.webapi === this.defaultNode && node.features.includes(feature)
+            node.webapi === this.defaultEndpoint &&
+            node.features.includes(feature)
         )
 
         if (
@@ -116,10 +118,10 @@ export class NodeSelector {
    * @param {String} _endpoint
    */
   async set(_endpoint) {
-    this.selectedNode = {
-      endpoint: _endpoint,
-      api: createApi(_endpoint)
-    }
+    this.selectedNode = new Node({
+      pToken: this.pToken,
+      endpoint: _endpoint
+    })
 
     return this.selectedNode
   }
