@@ -1,6 +1,6 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import Web3 from 'web3'
-import Node from 'ptokens-node'
+import { Node } from 'ptokens-node'
 import utils from 'ptokens-utils'
 import {
   EOS_BLOCKS_BEHIND,
