@@ -1,9 +1,10 @@
 import pTokens from '../src/index'
 import pEOS from 'ptokens-peos'
-import pBTC from 'ptokens-pbtc'
+import { pBTC } from 'ptokens-pbtc'
+import { pLTC } from 'ptokens-pltc'
 import { expect } from 'chai'
 
-test('Should init pTokens correctly with pEOS , pBTC and PLTC', () => {
+test('Should init pTokens correctly with pEOS, pBTC and PLTC', () => {
   const configs = {
     peos: {
       ethPrivateKey:
@@ -31,4 +32,5 @@ test('Should init pTokens correctly with pEOS , pBTC and PLTC', () => {
   const ptokens = new pTokens(configs)
   expect(ptokens.peos).to.be.an.instanceof(pEOS)
   expect(ptokens.pbtc).to.be.an.instanceof(pBTC)
+  expect(ptokens.pltc).to.be.an.instanceof(pLTC)
 })
