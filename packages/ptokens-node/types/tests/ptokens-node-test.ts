@@ -59,4 +59,4 @@ node.getBroadcastTransactionStatus(HASH_BROADCASTED_TX)
 node.submitBlock('native', BTC_PBTC_BLOCK)
 
 // $ExpectType Promise<Report>
-node.monitorIncomingTransaction(HASH_INCOMING_TX, 'native', new EventEmitter())
+node.monitorIncomingTransaction(HASH_INCOMING_TX, new EventEmitter())

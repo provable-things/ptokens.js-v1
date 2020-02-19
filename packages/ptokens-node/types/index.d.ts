@@ -30,7 +30,7 @@ export class Node extends NodeSelector {
 
   submitBlock(_type: string, _block: object): Promise<string>
 
-  monitorIncomingTransaction(_hash: string, _type: string, _eventEmitter: EventEmitter): Promise<Report>
+  monitorIncomingTransaction(_hash: string, _eventEmitter: EventEmitter): Promise<Report>
 }
 
 export interface NodeInfo {
