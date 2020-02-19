@@ -2,7 +2,7 @@
 
 # ptokens.js | pTokens Javascript API
 
-This module is composed of a series of packages that allow users to generate and redeem pTokens and interact with the Enclave
+This module is composed of a series of packages that allow users to generate and redeem pTokens and interact with Validator node APIs
 
 ## Installation
 

@@ -15,7 +15,8 @@ nav:
         - ptokens-pbtc: ptokens-pbtc.md
         - ptokens-peos: ptokens-peos.md
         - ptokens-pltc: ptokens-pltc.md
-        - ptokens-enclave: ptokens-enclave.md
+        - ptokens-node: ptokens-node.md
+        - ptokens-node-selector: ptokens-node-selector.md
         - ptokens-utils: ptokens-utils.md
 theme: 
     name: readthedocs
