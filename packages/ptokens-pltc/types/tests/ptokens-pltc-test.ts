@@ -1,6 +1,6 @@
 import { pLTC, LtcDepositAddress } from 'ptokens-pltc'
-import { Node } from 'ptokens-node'
 import Web3 from 'web3'
+import { Node } from 'ptokens-node'
 
 const web3 = new Web3()
 
