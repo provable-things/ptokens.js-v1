@@ -1,6 +1,6 @@
 {
   "name": "ptokens",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "ptokens main package",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens",
   "main": "dist/ptokens.cjs.js",
@@ -15,9 +15,9 @@
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "chai": "^4.2.0",
-    "ptokens-pbtc": "^0.2.0",
-    "ptokens-pltc": "^0.2.0",
-    "ptokens-utils": "^0.2.0"
+    "ptokens-pbtc": "^0.3.0",
+    "ptokens-pltc": "^0.3.0",
+    "ptokens-utils": "^0.3.0"
   },
   "devDependencies": {
     "jest": "^24.8.0"
