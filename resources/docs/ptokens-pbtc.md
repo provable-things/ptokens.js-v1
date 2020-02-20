@@ -88,12 +88,12 @@ ptokens.pbtc.approve('eth address', 1.3452).then(status => console.log(status))
 ptokens.pbtc.getAllowance(owner, spender)
 ```
 
+Get the remaining number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+
 ### Parameters
 
 - __`String`__ - __`owner`__: Owner Ethereum address
 - __`String`__ - __`spender`__: Spender Ethereum address
-
-Get the remaining number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
 
 ### Returns
 
@@ -111,12 +111,12 @@ ptokens.pbtc.getAllowance('owner eth address', 'spender eth address').then(allow
 ```js
 ptokens.pbtc.getBalance(address)
 ```
+Get the current pBTC balance of the provided address
+
 
 ### Parameters
 
 - __`String`__ - __`address`__: Ethereum address
-
-Get the current pBTC balance of the provided address
 
 
 ### Returns
@@ -136,9 +136,6 @@ ptokens.pbtc.getBalance(address).then(balance => console.log(balance))
 ```js
 ptokens.pbtc.getBurnNonce()
 ```
-
-### Parameters
-
 Get the total number of Burn events
 
 
@@ -178,8 +175,8 @@ console.log(depositAddress.toString())
 depositAddress.waitForDeposit()
   .once('onBtcTxBroadcasted', tx => ... )
   .once('onBtcTxConfirmed', tx => ...)
-  .once('onEnclaveReceivedTx', tx => ...)
-  .once('onEnclaveBroadcastedTx', tx => ...)
+  .once('onNodeReceivedTx', tx => ...)
+  .once('onNodeBroadcastedTx', tx => ...)
   .once('onEthTxConfirmed', tx => ...)
   .then(res => ...))
 ```
@@ -193,7 +190,6 @@ ptokens.pbtc.getCirculatingSupply()
 ```
 
 Get the current pBTC circulating supply
-
 
 ### Returns
 
@@ -213,16 +209,14 @@ ptokens.pbtc.getCirculatingSupply().then(circulatingSupply => console.log(circul
 ptokens.pbtc.getMintNonce()
 ```
 
-### Parameters
-
 Get the total number of Mint events
-
 
 ### Returns
 
 - __`Number`__ : current number of minting events
 
 ### Example
+
 ```js
 ptokens.pbtc.getMintNonce().then(mintNonce => console.log(mintNonce))
 ```
@@ -286,14 +280,14 @@ Redeem a specified number of pBTC to the specified BTC account.
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pBTC
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pBTC
 
 ### Example
 ```js
 ptokens.pbtc.redeem(1, 'btc address')
   .once('onEthTxConfirmed', e => { console.log(e) }) 
-  .once('onEnclaveReceivedTx', e => { console.log(e) })
-  .once('onEnclaveBroadcastedTx', e => { console.log(e) })
+  .once('onNodeReceivedTx', e => { console.log(e) })
+  .once('onNodeBroadcastedTx', e => { console.log(e) })
   .once('onLtcTxConfirmed', e => { console.log(e) })
   .then(res => { console.log(res) })
 ```
@@ -306,12 +300,13 @@ ptokens.pbtc.redeem(1, 'btc address')
 ptokens.pbtc.transfer(to, amount)
 ```
 
+Transfer a specified amount of pBTC to the provided Ethereum address
+
 ### Parameters
 
 - __`String`__ - __`to`__: receiver Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Transfer a specified amount of pBTC to the provided Ethereum address
 
 ### Returns
 
@@ -331,12 +326,13 @@ ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
 ptokens.pbtc.transferFrom(from, to, amount)
 ```
 
+Move the specified amount of pBTC from `from` to `to` using the allowance mechanism
+
+
 ### Parameters
 
 - __`String`__ - __`from`__: sender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
-
-Move the specified amount of pBTC from `from` to `to` using the allowance mechanism
 
 ### Returns
 
@@ -345,4 +341,119 @@ Move the specified amount of pBTC from `from` to `to` using the allowance mechan
 ### Example
 ```js
 ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
+```
+
+
+&nbsp;
+
+***
+
+&nbsp;
+
+# BtcDepositAddress
+
+### Usage
+
+```js
+import { BtcDepositAddress } from 'ptokens-pbtc'
+
+const depositAddress = new BtcDepositAddress({
+  web3: new Web3(...)
+  node: new NodeSelector({...})
+  network: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+})
+```
+
+***
+
+## Class Methods
+
+* __`generate`__
+* __`toString`__
+* __`verify`__
+* __`waitForDeposit`__
+
+## generate
+
+```js
+depositAddress.generate(ethAddress)
+```
+
+Generate a new BTC deposit address
+
+### Parameters
+
+- __`String`__ - __`ethAddress`__: Ethereum address
+
+### Returns
+
+- __`Promise`__ : when resolved returns a BTC deposit address
+
+### Example
+```js
+depositAddress.generate('eth address').then(addr => console.log(addr))
+```
+
+***
+
+## toString
+
+
+```js
+depositAddress.toString()
+```
+
+Generate a BTC address as string
+
+
+### Returns
+
+- __`String`__ : BTC deposit address
+
+### Example
+```js
+console.log(depositAddress.toString())
+```
+
+## verify
+
+```js
+depositAddress.verify()
+```
+
+Check that the deposit address matches with the expected address
+
+
+### Returns
+
+- __`Boolean`__ : indicating if the address matches or not
+
+### Example
+```js
+if (depositAddress.verify()) {
+  console.log('valid')
+}
+```
+
+## waitForDeposit
+
+```js
+depositAddress.waitForDeposit()
+```
+
+Monitors the pBTC minting process
+
+### Returns
+
+- __`PromiEvent`__ :  Will be resolved when the Node issues the corresponsing transaction
+
+### Example
+```js
+depositAddress.waitForDeposit(
+  .once('onBtcTxBroadcasted', e => { console.log(e) }) 
+  .once('onBtcTxConfirmed', e => { console.log(e) }) 
+  .once('onNodeReceivedTx', e => { console.log(e) })
+  .once('onNodeBroadcastedTx', e => { console.log(e) })
+  .once('onEthTxConfirmed', e => { console.log(e) })
+  .then(res => { console.log(res) })
 ```
