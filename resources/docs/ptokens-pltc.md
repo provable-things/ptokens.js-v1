@@ -1,17 +1,25 @@
-# ptokens-ltc
+# ptokens-pltc
 
-This module allows to interact with pLTC token.
+This module enables the interaction with pLTC tokens.
+
+&nbsp;
 
 ### Installation
-
-It is possible to install individually this package without installing the main one (__`ptokens`__).
 
 ```
 npm install ptokens-pltc
 ```
 
+&nbsp;
 
-### Usage
+***
+
+&nbsp;
+
+## Usage
+
+### Peg-in
+
 
 ```js
 import { pLTC } from 'ptokens-pltc'
@@ -21,7 +29,47 @@ const pltc = new pLTC({
   ethProvider: 'Eth provider',
   ltcNetwork: 'testnet' //'testnet' or 'litecoin', default 'testnet'
 })
+
+const depositAddress = await pltc.getDepositAddress()
+
+console.log(depositAddress.toString())
+
+//fund the LTC address just generated (not ptokens.js stuff)
+
+depositAddress.waitForDeposit()
+  .once('onLtcTxBroadcasted', tx => ... )
+  .once('onLtcTxConfirmed', tx => ...)
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeReceivedTx', report => ...)
+  .once('onEthTxConfirmed', tx => ...)
+  .then(res => ...))
+
 ```
+
+&nbsp;
+
+### Peg-out
+
+
+```js
+import { pLTC } from 'ptokens-pltc'
+
+const pltc = new pLTC({
+  ethPrivateKey: 'Eth private key',
+  ethProvider: 'Eth provider',
+  ltcNetwork: 'testnet' //'testnet' or 'litecoin', default 'testnet'
+})
+
+pltc.redeem(amount, btcAddress)
+  .once('onEthTxConfirmed', tx => ...) 
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeBroadcastedTx', report => ...)
+  .once('onLtcTxConfirmed', tx => ...)
+  .then(res => ...)
+```
+
+&nbsp;
+
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
@@ -38,8 +86,11 @@ if (window.web3) {
   console.log('No web3 detected')
 }
 ```
+&nbsp;
 
 ***
+
+&nbsp;
 
 ## Class Methods
 
@@ -69,7 +120,7 @@ ptokens.pltc.approve(spender, amount)
 - __`String`__ - __`spender`__: spender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Approve to spend the specified amount of pLTC to the provided Ethereum address by setting the allowance of spender address
+Approves to send the specified amount of pLTC to the provided Ethereum address by setting the allowance of spender address
 
 ### Returns
 
@@ -93,11 +144,11 @@ ptokens.pltc.getAllowance(owner, spender)
 - __`String`__ - __`owner`__: Owner Ethereum address
 - __`String`__ - __`spender`__: Spender Ethereum address
 
-Get the remaining number of pLTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+Get the remaining number of pLTC that `spender` can spend on behalf of `owner` through `transferFrom`
 
 ### Returns
 
-- __`Number`__ : number of pLTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+- __`Number`__ : number of pLTC that `spender` can spend on behalf of `owner` through `transferFrom`
 
 ### Example
 ```js
@@ -139,7 +190,7 @@ ptokens.pltc.getBurnNonce()
 
 ### Parameters
 
-Get the total number of Burn events
+Gets the total number of Burn events
 
 
 ### Returns
@@ -281,25 +332,25 @@ ptokens.pltc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ptokens.pltc.redeem(amount, ltcAddress)
 ```
 
-Redeem a specified number of pLTC to the specified LTC account.
+Redeem a specified number of pLTC to the specified LTC address.
 
 ### Parameters
 
 - __`Number`__ - __`amount`__: amount of pLTC to redeem
-- __`String`__ - __`ltcAddress`__: LTC address on which receive back the deposited LTC
+- __`String`__ - __`ltcAddress`__: LTC address where to receive the LTC redeemed
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pLTC
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Enclave redeemd the specified amount of pLTC redeemed
 
 ### Example
 ```js
 ptokens.pltc.redeem(1, 'litecoin address')
-  .once('onEthTxConfirmed', e => { console.log(e) })
-  .once('onNodeReceivedTx', e => { console.log(e) })
-  .once('onNodeBroadcastedTx', e => { console.log(e) })
-  .once('onLtcTxConfirmed', e => { console.log(e) })
-  .then(res => { console.log(res) })
+  .once('onEthTxConfirmed', tx =>. ...) 
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeBroadcastedTx', report => ...)
+  .once('onLtcTxConfirmed', tx => ...)
+  .then(res => ...)
 ```
 
 &nbsp;
@@ -319,7 +370,7 @@ Transfer a specified amount of pLTC to the provided Ethereum address
 
 ### Returns
 
-- __`Boolean`__ : boolean value indicating whether transfer operation succeeded
+- __`Boolean`__ : boolean value indicating whether the transfer operation succeeded
 
 ### Example
 ```js
@@ -361,7 +412,7 @@ import { LtcDepositAddress } from 'ptokens-pltc'
 const depositAddress = new LtcDepositAddress({
   web3: new Web3(...)
   node: new NodeSelector({...})
-  network: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+  network: 'testnet' //'testnet' or 'litecoin', default 'testnet'
 })
 ```
 
@@ -404,7 +455,7 @@ depositAddress.generate('eth address').then(addr => console.log(addr))
 depositAddress.toString()
 ```
 
-Generate a LTC address as string
+Returns a LTC address in the form of a string
 
 
 ### Returns
@@ -422,8 +473,7 @@ console.log(depositAddress.toString())
 depositAddress.verify()
 ```
 
-Check that the deposit address matches with the expected address
-
+Checks that the deposit address matches with the expected address.
 
 ### Returns
 
@@ -451,10 +501,10 @@ Monitors the pLTC minting process
 ### Example
 ```js
 depositAddress.waitForDeposit(
-  .once('onLtcTxBroadcasted', e => { console.log(e) }) 
-  .once('onLtcTxConfirmed', e => { console.log(e) }) 
-  .once('onNodeReceivedTx', e => { console.log(e) })
-  .once('onNodeBroadcastedTx', e => { console.log(e) })
-  .once('onEthTxConfirmed', e => { console.log(e) })
-  .then(res => { console.log(res) })
+  .once('onLtcTxBroadcasted', tx => ...) 
+  .once('onLtcTxConfirmed', tx => ...) 
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeBroadcastedTx', report => ...)
+  .once('onEthTxConfirmed', tx => ...)
+  .then(res => ...)
 ```

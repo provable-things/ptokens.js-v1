@@ -1,16 +1,20 @@
 # ptokens-utils
 
-This module allows to have access to some useful utilities used by other packages.
+This module enables access to some useful utilities used by other packages.
+
+&nbsp;
 
 ### Installation
-
-It is possible to install individually this package without installing the main one (__`ptokens`__).
 
 ```
 npm install ptokens-utils
 ```
 
+&nbsp;
+
 ***
+
+&nbsp;
 
 ## utils.btc
 
@@ -20,7 +24,7 @@ npm install ptokens-utils
 ptokens.utils.btc.broadcastTransaction(network, transaction)
 ```
 
-Broadcast a Bitcoin transaction using Blockstream Esplora API
+Broadcasts a Bitcoin transaction using Blockstream Esplora API
 
 ### Parameters
 
@@ -44,7 +48,7 @@ const isBroadcasted = await utils.btc.broadcastTransaction('testnet', 'tx hex')
 ptokens.utils.btc.getUtxoByAddress(network, address)
 ```
 
-Return all UTXOs belonging to a Bitcoin address 
+Returns all UTXOs belonging to a Bitcoin address 
 
 ### Parameters
 
@@ -68,7 +72,7 @@ const utxos = await utils.btc.getUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ
 ptokens.utils.btc.getTransactionHexById(network, transactionId)
 ```
 
-Return a transaction in hex format
+Returns a transaction in hex format
 
 ### Parameters
 
@@ -115,7 +119,7 @@ utils.btc.isValidAddress('mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP') //true
 ptokens.utils.btc.monitorUtxoByAddress(network, address, eventEmitter, pollingTime)
 ```
 
-Allow to monitor if an address is receving a transaction
+Allows to monitor if an address is receving a transaction
 
 ### Parameters
 
@@ -564,7 +568,7 @@ const isBroadcasted = await utils.ltc.broadcastTransaction('testnet', 'tx hex')
 ptokens.utils.ltc.getUtxoByAddress(network, address)
 ```
 
-Return all UTXOs belonging to a Litecoin address 
+Returns all UTXOs belonging to a Litecoin address 
 
 ### Parameters
 
@@ -588,7 +592,7 @@ const utxos = await utils.ltc.getUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ
 ptokens.utils.ltc.getTransactionHexById(network, transactionId)
 ```
 
-Return a transaction in hex format
+Returns a transaction in hex format
 
 ### Parameters
 

@@ -1,17 +1,26 @@
 # ptokens-pbtc
 
-This module allows to interact with pBTC token.
+This module enables the interaction with pBTC tokens.
+
+&nbsp;
 
 ### Installation
-
-It is possible to install individually this package without installing the main one (__`ptokens`__).
 
 ```
 npm install ptokens-pbtc
 ```
 
+&nbsp;
 
-### Usage
+***
+
+&nbsp;
+
+## Usage
+
+
+### Peg-in
+
 
 ```js
 import { pBTC } from 'ptokens-pbtc'
@@ -21,7 +30,47 @@ const pbtc = new pBTC({
   ethProvider: 'Eth provider',
   btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
 })
+
+const depositAddress = await pbtc.getDepositAddress()
+
+console.log(depositAddress.toString())
+
+//fund the BTC address just generated (not ptokens.js stuff)
+
+depositAddress.waitForDeposit()
+  .once('onBtcTxBroadcasted', tx => ... )
+  .once('onBtcTxConfirmed', tx => ...)
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeReceivedTx', report => ...)
+  .once('onEthTxConfirmed', tx => ...)
+  .then(res => ...))
+
 ```
+
+&nbsp;
+
+### Peg-out
+
+
+```js
+import { pBTC } from 'ptokens-pbtc'
+
+const pbtc = new pBTC({
+  ethPrivateKey: 'Eth private key',
+  ethProvider: 'Eth provider',
+  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+})
+
+pbtc.redeem(amount, btcAddress)
+  .once('onEthTxConfirmed', tx => ...) 
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeBroadcastedTx', report => ...)
+  .once('onBtcTxConfirmed', tx => ...)
+  .then(res => ...)
+```
+
+&nbsp;
+
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
@@ -38,8 +87,11 @@ if (window.web3) {
   console.log('No web3 detected')
 }
 ```
+&nbsp;
 
 ***
+
+&nbsp;
 
 ## Class Methods
 
@@ -69,7 +121,7 @@ ptokens.pbtc.approve(spender, amount)
 - __`String`__ - __`spender`__: spender Ethereum address
 - __`Number`__ - __`amount`__: amount to transfer
 
-Approve to spend the specified amount of pBTC to the provided Ethereum address by setting the allowance of spender address
+Approves to send the specified amount of pBTC to the provided Ethereum address by setting the allowance of spender address
 
 ### Returns
 
@@ -88,7 +140,7 @@ ptokens.pbtc.approve('eth address', 1.3452).then(status => console.log(status))
 ptokens.pbtc.getAllowance(owner, spender)
 ```
 
-Get the remaining number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+Get the remaining number of pBTC that `spender` can spend on behalf of `owner` through `transferFrom`
 
 ### Parameters
 
@@ -97,7 +149,7 @@ Get the remaining number of pBTC that `spender` can spend spend on behalf of `ow
 
 ### Returns
 
-- __`Number`__ : number of pBTC that `spender` can spend spend on behalf of `owner` through `transferFrom`
+- __`Number`__ : number of pBTC that `spender` can spend on behalf of `owner` through `transferFrom`
 
 ### Example
 ```js
@@ -141,7 +193,7 @@ Get the total number of Burn events
 
 ### Returns
 
-- __`Number`__ : current number of burning events
+- __`Number`__ : current number of burn events
 
 ### Example
 ```js
@@ -271,25 +323,25 @@ ptokens.pbtc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ptokens.pbtc.redeem(amount, btcAddress)
 ```
 
-Redeem a specified number of pBTC to the specified BTC account.
+Redeem a specified number of pBTC to the specified BTC address.
 
 ### Parameters
 
 - __`Number`__ - __`amount`__: amount of pBTC to redeem
-- __`String`__ - __`btcAddress`__: BTC account on which receive back the deposited BTC
+- __`String`__ - __`btcAddress`__: BTC address where to receive the BTC redeemed
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pBTC
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pBTC redeemed.
 
 ### Example
 ```js
 ptokens.pbtc.redeem(1, 'btc address')
-  .once('onEthTxConfirmed', e => { console.log(e) }) 
-  .once('onNodeReceivedTx', e => { console.log(e) })
-  .once('onNodeBroadcastedTx', e => { console.log(e) })
-  .once('onLtcTxConfirmed', e => { console.log(e) })
-  .then(res => { console.log(res) })
+  .once('onEthTxConfirmed', tx =>. ...) 
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeBroadcastedTx', report => ...)
+  .once('onBtcTxConfirmed', tx => ...)
+  .then(res => ...)
 ```
 
 &nbsp;
@@ -310,7 +362,7 @@ Transfer a specified amount of pBTC to the provided Ethereum address
 
 ### Returns
 
-- __`Boolean`__ : boolean value indicating whether transfer operation succeeded
+- __`Boolean`__ : boolean value indicating whether the transfer operation succeeded
 
 ### Example
 ```js
@@ -359,7 +411,7 @@ import { BtcDepositAddress } from 'ptokens-pbtc'
 
 const depositAddress = new BtcDepositAddress({
   web3: new Web3(...)
-  node: new NodeSelector({...})
+  node: new Node({...})
   network: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
 })
 ```
@@ -403,7 +455,7 @@ depositAddress.generate('eth address').then(addr => console.log(addr))
 depositAddress.toString()
 ```
 
-Generate a BTC address as string
+Returns a BTC address in the form of a string.
 
 
 ### Returns
@@ -421,8 +473,7 @@ console.log(depositAddress.toString())
 depositAddress.verify()
 ```
 
-Check that the deposit address matches with the expected address
-
+Checks that the deposit address matches with the expected address.
 
 ### Returns
 
@@ -450,10 +501,10 @@ Monitors the pBTC minting process
 ### Example
 ```js
 depositAddress.waitForDeposit(
-  .once('onBtcTxBroadcasted', e => { console.log(e) }) 
-  .once('onBtcTxConfirmed', e => { console.log(e) }) 
-  .once('onNodeReceivedTx', e => { console.log(e) })
-  .once('onNodeBroadcastedTx', e => { console.log(e) })
-  .once('onEthTxConfirmed', e => { console.log(e) })
-  .then(res => { console.log(res) })
+  .once('onBtcTxBroadcasted', tx => ...) 
+  .once('onBtcTxConfirmed', tx => ...) 
+  .once('onNodeReceivedTx', report => ...)
+  .once('onNodeBroadcastedTx', report => ...)
+  .once('onEthTxConfirmed', tx => ...)
+  .then(res => res => ...)
 ```
