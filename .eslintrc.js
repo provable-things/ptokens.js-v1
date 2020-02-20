@@ -22,7 +22,7 @@ module.exports = {
     quotes: [2, 'single', { avoidEscape: true }],
     'prefer-promise-reject-errors': 1,
     'no-template-curly-in-string': 2,
-    
+    'no-unused-expressions': 1, //for testing
     'no-extra-parens': [1, 'all'],
     'no-misleading-character-class': 1,
     'no-prototype-builtins': 1,
@@ -31,7 +31,7 @@ module.exports = {
     // best practices
     'accessor-pairs': 1,
     'array-callback-return': 0, // this best practice calls out the use of map over forEach
-    'complexity': [1, 5],
+    'complexity': 2,
     'curly': [1, 'multi-or-nest', 'consistent'],
     'space-before-function-paren': ['error', {
       'named': 'never',

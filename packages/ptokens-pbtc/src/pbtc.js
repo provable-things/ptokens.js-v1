@@ -56,9 +56,7 @@ export class pBTC {
     if (!Web3Utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
 
-    if (!this.nodeSelector.selectedNode) {
-      await this.nodeSelector.select()
-    }
+    if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
     const depositAddress = new BtcDepositAddress({
       network: this._btcNetwork,
@@ -95,9 +93,7 @@ export class pBTC {
       }
 
       try {
-        if (!this.nodeSelector.selectedNode) {
-          await this.nodeSelector.select()
-        }
+        if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
         const ethTxReceipt = await eth.makeContractSend(
           this._web3,
@@ -331,9 +327,7 @@ export class pBTC {
 
   async _getContractAddress() {
     if (!this._contractAddress) {
-      if (!this.nodeSelector.selectedNode) {
-        await this.nodeSelector.select()
-      }
+      if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
       const ethNetwork = await this._web3.eth.net.getNetworkType()
       const info = await this.nodeSelector.selectedNode.getInfo(

@@ -75,9 +75,8 @@ export class NodeSelector {
         if (
           node &&
           (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
-        ) {
+        )
           return this.set(node.webapi)
-        }
       }
 
       const filteredNodesByFeature = this.nodes.filter(node =>
@@ -89,10 +88,8 @@ export class NodeSelector {
 
       const nodesNotReachable = []
       for (;;) {
-        const selectedNode =
-          filteredNodesByFeature[
-            Math.floor(Math.random() * filteredNodesByFeature.length)
-          ]
+        const index = Math.floor(Math.random() * filteredNodesByFeature.length)
+        const selectedNode = filteredNodesByFeature[index]
 
         if (
           (await this.checkConnection(
@@ -100,11 +97,10 @@ export class NodeSelector {
             NODE_CONNECTION_TIMEOUT
           )) &&
           !nodesNotReachable.includes(selectedNode)
-        ) {
+        )
           return this.set(selectedNode.webapi)
-        } else if (!nodesNotReachable.includes(selectedNode)) {
+        else if (!nodesNotReachable.includes(selectedNode))
           nodesNotReachable.push(selectedNode)
-        }
 
         if (nodesNotReachable.length === filteredNodesByFeature.length)
           return null
@@ -117,7 +113,7 @@ export class NodeSelector {
   /**
    * @param {String} _endpoint
    */
-  async set(_endpoint) {
+  set(_endpoint) {
     this.selectedNode = new Node({
       pToken: this.pToken,
       endpoint: _endpoint

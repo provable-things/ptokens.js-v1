@@ -1,4 +1,4 @@
-import { pLTC, LtcDepositAddress } from '../src/index'
+import { pLTC } from '../src/index'
 import { expect } from 'chai'
 import { sendLitecoin } from './utils'
 

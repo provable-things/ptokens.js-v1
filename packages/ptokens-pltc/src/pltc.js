@@ -57,9 +57,7 @@ export class pLTC {
     if (!Web3Utils.isAddress(_ethAddress))
       throw new Error('Eth Address is not valid')
 
-    if (!this.nodeSelector.selectedNode) {
-      await this.nodeSelector.select()
-    }
+    if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
     const depositAddress = new LtcDepositAddress({
       network: this._ltcNetwork,
@@ -90,9 +88,7 @@ export class pLTC {
         return
       }
 
-      if (!this.nodeSelector.selectedNode) {
-        await this.nodeSelector.select()
-      }
+      if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
       // NOTE: add support for p2sh testnet address (Q...)
       let ltcAddressToCheck = _ltcAddress
@@ -338,9 +334,7 @@ export class pLTC {
 
   async _getContractAddress() {
     if (!this._contractAddress) {
-      if (!this.nodeSelector.selectedNode) {
-        await this.nodeSelector.select()
-      }
+      if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
       const ethNetwork = await this._web3.eth.net.getNetworkType()
       const info = await this.nodeSelector.selectedNode.getInfo(
