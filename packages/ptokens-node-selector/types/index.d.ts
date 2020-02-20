@@ -1,4 +1,4 @@
-import { Node } from 'ptokens-node'
+import { Node, Report } from 'ptokens-node'
 
 export interface NodeSelectorConfigs {
   pToken: {
