@@ -2,18 +2,18 @@
 
 This is the module that allows to instantiate a class for selecting a validator Node
 
-### Installation
+&nbsp;
 
-It is possible to install individually this package without installing the main one (__`ptokens`__).
+### Installation
 
 ```
 npm install ptokens-node-selector
 ```
 
-### Usage
-If no default node is used, the first available will be selected (randomly). 
-If an unavailable node is selected during the initialization (__`new NodeSelector({...})`__), another one will be searched. 
-It is also possible to set a node manually using the __`set`__ function
+&nbsp;
+
+## Usage
+In the situation where no default node is in use, the library randomly selects a node among the ones available. Similarly, if the default node (__`defaultEndoint`__) happens to be unavailable during the initialisation process (__`new NodeSelector({...})`__), the library will search for another one. Manual setting of nodes is possible via the __`set`__ function
 
 ```js
 import { NodeSelector } from 'ptokens-node-selector'
@@ -27,7 +27,11 @@ const node = new Node({
 })
 ```
 
+&nbsp;
+
 ***
+
+&nbsp;
 
 ## Class Methods
 
@@ -42,23 +46,23 @@ const node = new Node({
 ## checkConnection
 
 ```js
-ptokens.nodeSelector.checkConnection(endpoint, timeout)
+nodeSelector.checkConnection(endpoint, timeout)
 ```
 
-Check if a node is available
+Function to check whether a node is available or not.
 
 ### Parameters
 
 - __`String`__ - __`endpoint`__: node endpoint
-- __`String`__ - __`timeout`__: timeout (in ms) after which the connection fails
+- __`String`__ - __`timeout`__:  time span (in milliseconds) after which the connection fails
 
 ### Returns
 
-- __`Promise`__ : when resolved, a boolean indicating if the node is available
+- __`Promise`__ : when resolved, a boolean indicating if the node is available.
 
 ### Example
 ```js
-ptokens.nodeSelector.checkConnection('https://....', 1000).then(status => console.log(status))
+nodeSelector.checkConnection('https://....', 1000).then(status => console.log(status))
 ```
 
 &nbsp;
@@ -66,10 +70,10 @@ ptokens.nodeSelector.checkConnection('https://....', 1000).then(status => consol
 ## getApi
 
 ```js
-ptokens.nodeSelector.getApi()
+nodeSelector.getApi()
 ```
 
-Return an instance of __`AxiosInstance`__ used to perform http requests. If no node is selected, it searches for one
+Returns an instance of __`AxiosInstance`__ used to perform http requests. If no node is selected, it searches for one.
 
 ### Returns
 
@@ -77,7 +81,7 @@ Return an instance of __`AxiosInstance`__ used to perform http requests. If no n
 
 ### Example
 ```js
-ptokens.nodeSelector.getApi().then(api => api.get('http://...'))
+nodeSelector.getApi().then(api => api.get('http://...'))
 ```
 
 &nbsp;
@@ -86,19 +90,18 @@ ptokens.nodeSelector.getApi().then(api => api.get('http://...'))
 ## select
 
 ```js
-ptokens.nodeSelector.select()
+nodeSelector.select()
 ```
 
-Selects a node. If no default node is used (during the initialization), the first available will be selected (randomly). 
-If an unavailable node is selected during the initialization (__`new NodeSelector({...})`__), another one will be searched.  
+If no default node is used, the first available will be selected (randomly). Similarly, if the default node (__`defaultEndoint`__) is unavailable, it will search for another one.
 
 ### Returns
 
-- __`Promise`__ : an instance of Node
+- __`Promise`__ : an instance of __`Node`__
 
 ### Example
 ```js
-ptokens.nodeSelector.select().then(selectedNode => {
+nodeSelector.select().then(selectedNode => {
   console.log(selectedNode.endpoint)
   selectedNode.api.get('https://...')
 })
@@ -110,10 +113,10 @@ ptokens.nodeSelector.select().then(selectedNode => {
 ## set
 
 ```js
-ptokens.nodeSelector.set(endpoint)
+nodeSelector.set(endpoint)
 ```
 
-Set the selected node manually
+A function that manually sets a specific node.
 
 ### Parameters
 
@@ -125,7 +128,7 @@ Set the selected node manually
 
 ### Example
 ```js
-const selectedNode = ptokens.nodeSelector.set('https://..')
+const selectedNode = nodeSelector.set('https://..')
 console.log(selectedNode.endpoint)
 selectedNode.api.get('https://...')
 ```

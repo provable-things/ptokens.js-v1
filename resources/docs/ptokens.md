@@ -3,30 +3,25 @@
 
 This is the main module that allows you to instantiate an instance of all available pTokens.
 
-### Structure
-- __`Object`__ - __`pbtc`__: class for interacting with pBTC token
-- __`Object`__ - __`pltc`__: class for interacting with pLTC token
-- __`Object`__ - __`utils`__: some usefull utilities
-
-### Constructor parameters
-- __`Object`__ - __`configs`__: options for initializing a pTokens instance
-    - __`Object`__ - __`pbtc`__: options for initializing pBTC
-          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens (this can be null if you pass an already initialized instance of __`ethProvider`__)
-          - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
-          - __`String`__ - __`btcNetwork`__: Can be `bitcoin` or `testnet`
-          - __`String`__ - __`defaultNode`__: (Optional)
-     - __`Object`__ - __`pltc`__: options for initializing pBTC
-          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens (this can be null if you pass an already initialized instance of __`ethProvider`__)
-          - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
-          - __`String`__ - __`ltcNetwork`__: Can be `litecoin` or `testnet`
-          - __`String`__ - __`defaultNode`__: (Optional)
 
 &nbsp;
 
-### Usage: 
+### Installation
+
+```
+npm install ptokens
+```
+
+&nbsp;
+
+***
+
+&nbsp;
+
+### Usage
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens' 
 
 const ptokens = new pTokens({
   pbtc: {
@@ -41,11 +36,13 @@ const ptokens = new pTokens({
   }
 })
 ```
+
+
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens' 
 
 if (window.web3) {
   
@@ -63,3 +60,27 @@ if (window.web3) {
   console.log('No web3 detected')
 }
 ```
+
+&nbsp;
+
+### Structure
+- __`Object`__ - __`pbtc`__: class for interacting with pBTC token
+- __`Object`__ - __`pltc`__: class for interacting with pLTC token
+- __`Object`__ - __`utils`__: some usefull utilities
+
+&nbsp;
+
+### Constructor parameters
+- __`Object`__ - __`configs`__: options for initializing a pTokens instance
+    - __`Object`__ - __`pbtc`__: options for initializing pBTC
+          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens (this can be null if you pass an already initialized instance of __`ethProvider`__)
+          - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
+          - __`String`__ - __`btcNetwork`__: Can be `bitcoin` or `testnet`
+          - __`String`__ - __`defaultNode`__: (Optional)
+     - __`Object`__ - __`pltc`__: options for initializing pBTC
+          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens (this can be null if you pass an already initialized instance of __`ethProvider`__)
+          - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
+          - __`String`__ - __`ltcNetwork`__: Can be `litecoin` or `testnet`
+          - __`String`__ - __`defaultNode`__: (Optional)
+
+&nbsp;

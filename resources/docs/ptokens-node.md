@@ -1,14 +1,16 @@
 # ptokens-node
 
-This is the module that allows to interact with a Validator Node.
+This module enables the interaction with a Node Validator.
+
+&nbsp;
 
 ### Installation
-
-It is possible to install individually this package without installing the main one (__`ptokens`__).
 
 ```
 npm install ptokens-node
 ```
+
+&nbsp;
 
 ### Usage
 
@@ -24,7 +26,11 @@ const node = new Node({
 })
 ```
 
+&nbsp;
+
 ***
+
+&nbsp;
 
 ## Class Methods
 
@@ -45,10 +51,10 @@ const node = new Node({
 ## getBroadcastTransactionStatus
 
 ```js
-ptokens.node.getBroadcastTransactionStatus(hash)
+node.getBroadcastTransactionStatus(hash)
 ```
 
-Gets the status of a broadcasted transaction by the Node.
+Gets the status of a transaction broadcasted by the Node.
 
 ### Parameters
 
@@ -56,11 +62,11 @@ Gets the status of a broadcasted transaction by the Node.
 
 ### Returns
 
-- __`Promise`__ : when resolved, returns the information about a broadcasted transaction by the Node
+- __`Promise`__ : when resolved, it returns the details of the transaction broadcasted by the Node
 
 ### Example
 ```js
-ptokens.node.getBroadcastTransactionStatus('0x80b97c8d9676915a0c51c66468eeb1745a6fdd70063f2fb0412fd1e01b7cd083').then(status => console.log(status))
+node.getBroadcastTransactionStatus('0x80b97c8d9676915a0c51c66468eeb1745a6fdd70063f2fb0412fd1e01b7cd083').then(report => console.log(report))
 ```
 
 &nbsp;
@@ -68,7 +74,7 @@ ptokens.node.getBroadcastTransactionStatus('0x80b97c8d9676915a0c51c66468eeb1745a
 ## getIncomingTransactionStatus
 
 ```js
-ptokens.node.getIncomingTransactionStatus(hash)
+node.getIncomingTransactionStatus(hash)
 ```
 
 Gets the status of an incoming transaction to the Node.
@@ -79,11 +85,11 @@ Gets the status of an incoming transaction to the Node.
 
 ### Returns
 
-- __`Promise`__ : when resolved returns the information about an incoming transaction to the Node
+- __`Promise`__ : when resolved, it returns the details of the incoming transaction to the Node
 
 ### Example
 ```js
-ptokens.node.getIncomingTransactionStatus('c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3').then(status => console.log(status))
+node.getIncomingTransactionStatus('c1e09684a51f756230f16aba30739a8e0744e2125ab3893669483ae65ea3ecd3').then(status => console.log(status))
 ```
 
 &nbsp;
@@ -92,10 +98,10 @@ ptokens.node.getIncomingTransactionStatus('c1e09684a51f756230f16aba30739a8e0744e
 ## getInfo
 
 ```js
-ptokens.node.getInfo(nativeNetwork, hostNetwork)
+node.getInfo(nativeNetwork, hostNetwork)
 ```
 
-return info about smart contract address and enclave public key
+The function returns the details of the smart contract addess and the enclave public key.
 
 ### Parameters
 
@@ -104,11 +110,11 @@ return info about smart contract address and enclave public key
 
 ### Returns
 
-- __`Promise`__ : when resolved returns the node infos
+- __`Promise`__ : when resolved, it returns the node details
 
 ### Example
 ```js
-ptokens.node.getInfo('testnet', 'ropsten').then(status => console.log(status))
+node.getInfo('testnet', 'ropsten').then(info => console.log(info))
 ```
 
 &nbsp;
@@ -118,10 +124,10 @@ ptokens.node.getInfo('testnet', 'ropsten').then(status => console.log(status))
 ## getLastProcessedBlock
 
 ```js
-ptokens.node.getLastProcessedBlock(type)
+node.getLastProcessedBlock(type)
 ```
 
-Gets the last processed block by the Node of a given type.
+Gets the last block of a given type processed by the Node.
 
 ### Parameters
 
@@ -129,11 +135,11 @@ Gets the last processed block by the Node of a given type.
 
 ### Returns
 
-- __`Promise`__ : when resolved returns the last processed block by the Node given its type
+- __`Promise`__ : when resolved, it returns the last block of a given type processed by the Node
 
 ### Example
 ```js
-ptokens.node.getLastProcessedBlock('host').then(block => console.log(block))
+node.getLastProcessedBlock('host').then(block => console.log(block))
 ```
 
 &nbsp;
@@ -142,14 +148,14 @@ ptokens.node.getLastProcessedBlock('host').then(block => console.log(block))
 ## getReports
 
 ```js
-ptokens.node.getReports(type, limit)
+node.getReports(type, limit)
 ```
 
-Gets a report of the transactions relating to the `type` signature nonce supplied. A report is a list of the last `limit` minting/burning transactions. For example in case of `pBTC`, a report of `host` type consists of a list of all burning transactions.
+Gets a report of the transactions relating to the `type` signature nonce supplied. A report is a list of the last `limit` minting/burning transactions. For example, in the case of __`pBTC`__, a report of __`host`__ type is represented by a list of all transactions involving a token burn.
 
 ### Parameters
 
-- __`String`__ - __`type`__: type of report to get: Values can be: `host` and `native`
+- __`String`__ - __`type`__: type of report to get. Values can be: `host` and `native`
 - __`Number`__ - __`limit`__: maximum number of reports to be received. The default value is set to `100`
 
 ### Returns
@@ -158,7 +164,7 @@ Gets a report of the transactions relating to the `type` signature nonce supplie
 
 ### Example
 ```js
-ptokens.node.getReports('native', 1).then(report => console.log(report))
+node.getReports('native', 1).then(report => console.log(report))
 ```
 
 &nbsp;
@@ -169,14 +175,14 @@ ptokens.node.getReports('native', 1).then(report => console.log(report))
 ## getReportsByAddress
 
 ```js
-ptokens.node.getReportsByAddress(type, address, limit)
+node.getReportsByAddress(type, address, limit)
 ```
 
-Returns all reports given an address
+Given an address, it returns all reports related to such an address.
 
 ### Parameters
 
-- __`String`__ - __`type`__: type of report to get: Values can be: `host` and `native`
+- __`String`__ - __`type`__: type of report to get. Values can be: `host` and `native`
 - __`String`__ - __`address`__: `host` or `native` address
 - __`Number`__ - __`limit`__: maximum number of reports to be received. The default value is set to `100`
 
@@ -186,7 +192,7 @@ Returns all reports given an address
 
 ### Example
 ```js
-ptokens.node.getReportsByAddress('native', '0x1f0b6A3AC984B4c990d8Ce867103E9C384629747', 1).then(report => console.log(report))
+node.getReportsByAddress('native', '0x1f0b6A3AC984B4c990d8Ce867103E9C384629747', 1).then(report => console.log(report))
 ```
 
 &nbsp;
@@ -197,10 +203,10 @@ ptokens.node.getReportsByAddress('native', '0x1f0b6A3AC984B4c990d8Ce867103E9C384
 ## getReportsByNonce
 
 ```js
-ptokens.node.getReportsByNonce(type, nonce, limit)
+node.getReportsByNonce(type, nonce, limit)
 ```
 
-Returns all reports given a nonce
+Given a nonce, it returns all reports related to such a nonce.
 
 ### Parameters
 
@@ -214,7 +220,7 @@ Returns all reports given a nonce
 
 ### Example
 ```js
-ptokens.node.getReportsByNonce('native', 1, 1).then(report => console.log(report))
+node.getReportsByNonce('native', 1, 1).then(report => console.log(report))
 ```
 
 &nbsp;
@@ -224,18 +230,18 @@ ptokens.node.getReportsByNonce('native', 1, 1).then(report => console.log(report
 ## ping
 
 ```js
-ptokens.node.ping()
+node.ping()
 ```
 
-Check that the Node is running.
+Checks that the Node is running.
 
 ### Returns
 
-- __`Promise`__ : when resolved return a string
+- __`Promise`__ : when resolved, it returns a string
 
 ### Example
 ```js
-ptokens.node.ping().then(res => console.log(res))
+node.ping().then(res => console.log(res))
 ```
 
 &nbsp;
@@ -244,19 +250,19 @@ ptokens.node.ping().then(res => console.log(res))
 ## submitBlock
 
 ```js
-ptokens.node.submitBlock(type, block)
+node.submitBlock(type, block)
 ```
 
-Submit a valid block to the Node specifying its type.
+Submits a valid block to the Node specifying its type.
 
 ### Parameters
 
 - __`Object`__ - __`type`__: type of the submitted block. Values can be: `native` and `host`
-- __`Object`__ - __`block`__: valid block
+- __`Object`__ - __`block`__: valid block in JSON format
 
 ### Returns
 
-- __`Promise`__ : when resolved returs a string that specify if the submission succedeed
+- __`Promise`__ : when resolved, it returns a string that specifies whether the submission of the block was successful
 
 ### Example
 ```js
@@ -282,7 +288,7 @@ const block = {
   ],
   "uncles": []
 }
-ptokens.node.submitBlock('host', block).then(res => console.log(res))
+node.submitBlock('host', block).then(res => console.log(res))
 ```
 
 &nbsp;
