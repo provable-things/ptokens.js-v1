@@ -9,6 +9,7 @@
   "types": "types/index.d.ts",
   "scripts": {
     "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "jest --ci --forceExit --detectOpenHandles",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix",
     "dtslint": "dtslint types --onlyTestTsNext"
