@@ -2,11 +2,13 @@
   "name": "ptokens",
   "version": "0.2.0",
   "description": "ptokens main package",
+  "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens",
   "main": "dist/ptokens.cjs.js",
   "module": "dist/ptokens.esm.js",
   "browser": "dist/ptokens.umd.js",
   "scripts": {
     "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "jest",
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix"
   },
@@ -14,7 +16,6 @@
     "@babel/runtime": "^7.3.1",
     "chai": "^4.2.0",
     "ptokens-pbtc": "^0.2.0",
-    "ptokens-peos": "^0.2.0",
     "ptokens-pltc": "^0.2.0",
     "ptokens-utils": "^0.2.0"
   },
@@ -22,7 +23,7 @@
     "jest": "^24.8.0"
   },
   "author": "alle.manfredi@gmail.com @provable-things",
-  "license": "ISC",
+  "license": "LGPL-3.0",
   "files": [
     "dist"
   ]

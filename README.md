@@ -25,25 +25,20 @@ npm install ptokens
 ### :zap: Usage: 
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
-  peos: {
-    ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
-    eosPrivateKey: 'EOS private key',
-    eosRpc: 'EOS RPC Address'
-    eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
-  },
   pbtc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
-    btcNetwork: 'testnet'  //'testnet' or 'bitcoin', default 'testnet'
+    btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
+    defaultEndpoint: 'https://......' //optional
   },
   pltc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
-    ltcNetwork: 'testnet'  //'testnet' or 'litecoin', default 'testnet'
+    ltcNetwork: 'testnet',  //'testnet' or 'litecoin', default 'testnet'
+    defaultEndpoint: 'https://......' //optional
   }
 })
 ```
@@ -51,15 +46,11 @@ It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ val
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pTokens = require('ptokens')
+import pTokens from 'ptokens'
 
 if (window.web3) {
   
   const ptokens = new pTokens({
-    peos: {
-      ethProvider: window.web3.currentProvider,
-      ....
-    },
     pbtc: {
       ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'
@@ -86,8 +77,8 @@ console.log(depositAddress.toString())
 depositAddress.waitForDeposit()
   .once('onBtcTxBroadcasted', tx => ... )
   .once('onBtcTxConfirmed', tx => ...)
-  .once('onEnclaveReceivedTx', tx => ...)
-  .once('onEnclaveBroadcastedTx', tx => ...)
+  .once('onNodeReceivedTx', tx => ...)
+  .once('onNodeReceivedTx', tx => ...)
   .once('onEthTxConfirmed', tx => ...)
   .then(res => ...))
 ```

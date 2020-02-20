@@ -55,13 +55,13 @@ test('Should monitor a BTC transaction confirmation', async () => {
   const pollingTime = 200
   const network = 'testnet'
 
-  const hasBeenConfirmed = await utils.btc.waitForTransactionConfirmation(
+  const receipt = await utils.btc.waitForTransactionConfirmation(
     network,
     UTXO,
     pollingTime
   )
 
-  expect(hasBeenConfirmed).to.be.equal(true)
+  expect(receipt).to.be.an('object')
 })
 
 test('Should get all BTC utxo given an address', async () => {

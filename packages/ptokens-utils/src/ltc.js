@@ -122,17 +122,14 @@ const monitorUtxoByAddress = async (
  * @param {Number} _pollingTime
  */
 const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
+  let transaction = null
   await polling(async () => {
-    const transaction = await _makeInsightLiteApiCall(
-      _network,
-      'GET',
-      `/tx/${_tx}/`
-    )
+    transaction = await _makeInsightLiteApiCall(_network, 'GET', `/tx/${_tx}/`)
 
     if (transaction.confirmations > 0) return true
     else return false
   }, _pollingTime)
-  return true
+  return transaction
 }
 
 export {

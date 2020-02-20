@@ -1,16 +1,29 @@
+const availables = {
+  pbtc: ['ETH'],
+  pltc: ['ETH']
+}
+
 /**
- * @param {String} _pToken
+ * @param {String} _pTokenName
  */
-const pTokenNameIsValid = _pToken => {
-  if (_pToken.toLowerCase() === 'peos') return true
-  if (_pToken.toLowerCase() === 'pbtc') return true
-  if (_pToken.toLowerCase() === 'pltc') return true
+const pTokenNameIsValid = _pTokenName => {
+  if (_pTokenName.toLowerCase() === 'pbtc') return true
+  if (_pTokenName.toLowerCase() === 'pltc') return true
   return false
 }
 
 /**
- * @param {String} _pToken
+ * @param {Object} _pToken
  */
-const pTokenNameNormalized = _pToken => _pToken.toLowerCase()
+const pTokenIsValid = _pToken => {
+  const { name, redeemFrom } = _pToken
 
-export { pTokenNameIsValid, pTokenNameNormalized }
+  if (!pTokenNameIsValid(name)) return false
+
+  if (!availables[name.toLowerCase()].includes(redeemFrom.toUpperCase()))
+    return false
+
+  return true
+}
+
+export { pTokenNameIsValid, pTokenIsValid }

@@ -14,7 +14,7 @@ npm install ptokens-pltc
 ### Usage
 
 ```js
-const pLTC = require('ptokens-pltc')
+import { pLTC } from 'ptokens-pltc'
 
 const pltc = new pLTC({
   ethPrivateKey: 'Eth private key',
@@ -26,7 +26,7 @@ It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ val
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
 
 ```js
-const pLTC = require('ptokens-pltc')
+import { pLTC } from 'ptokens-pltc'
 
 if (window.web3) {
   
@@ -182,8 +182,8 @@ console.log(depositAddress.toString())
 depositAddress.waitForDeposit()
   .once('onLtcTxBroadcasted', tx => ... )
   .once('onLtcTxConfirmed', tx => ...)
-  .once('onEnclaveReceivedTx', tx => ...)
-  .once('onEnclaveBroadcastedTx', tx => ...)
+  .once('onNodeReceivedTx', tx => ...)
+  .once('onNodeBroadcastedTx', tx => ...)
   .once('onEthTxConfirmed', tx => ...)
   .then(res => ...))
 ```
@@ -278,7 +278,7 @@ ptokens.pltc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ## redeem
 
 ```js
-ptokens.pltc.redeem(amount, eosAccount)
+ptokens.pltc.redeem(amount, ltcAddress)
 ```
 
 Redeem a specified number of pLTC to the specified LTC account.
@@ -286,7 +286,7 @@ Redeem a specified number of pLTC to the specified LTC account.
 ### Parameters
 
 - __`Number`__ - __`amount`__: amount of pLTC to redeem
-- __`String`__ - __`ethAddress`__: LTC account on which receive back the deposited LTC
+- __`String`__ - __`ltcAddress`__: LTC address on which receive back the deposited LTC
 
 ### Returns
 
@@ -296,8 +296,8 @@ Redeem a specified number of pLTC to the specified LTC account.
 ```js
 ptokens.pltc.redeem(1, 'litecoin address')
   .once('onEthTxConfirmed', e => { console.log(e) })
-  .once('onEnclaveReceivedTx', e => { console.log(e) })
-  .once('onEnclaveBroadcastedTx', e => { console.log(e) })
+  .once('onNodeReceivedTx', e => { console.log(e) })
+  .once('onNodeBroadcastedTx', e => { console.log(e) })
   .once('onLtcTxConfirmed', e => { console.log(e) })
   .then(res => { console.log(res) })
 ```
@@ -349,4 +349,112 @@ Move the specified amount of pLTC from `from` to `to` using the allowance mechan
 ### Example
 ```js
 ptokens.pltc.transfer('eth address', 1.3452).then(status => console.log(status))
+```
+
+# LtcDepositAddress
+
+### Usage
+
+```js
+import { LtcDepositAddress } from 'ptokens-pltc'
+
+const depositAddress = new LtcDepositAddress({
+  web3: new Web3(...)
+  node: new NodeSelector({...})
+  network: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+})
+```
+
+***
+
+## Class Methods
+
+* __`generate`__
+* __`toString`__
+* __`verify`__
+* __`waitForDeposit`__
+
+## generate
+
+```js
+depositAddress.generate(ethAddress)
+```
+
+Generate a new LTC deposit address
+
+### Parameters
+
+- __`String`__ - __`ethAddress`__: Ethereum address
+
+### Returns
+
+- __`Promise`__ : when resolved returns a LTC deposit address
+
+### Example
+```js
+depositAddress.generate('eth address').then(addr => console.log(addr))
+```
+
+***
+
+## toString
+
+
+```js
+depositAddress.toString()
+```
+
+Generate a LTC address as string
+
+
+### Returns
+
+- __`String`__ : LTC deposit address
+
+### Example
+```js
+console.log(depositAddress.toString())
+```
+
+## verify
+
+```js
+depositAddress.verify()
+```
+
+Check that the deposit address matches with the expected address
+
+
+### Returns
+
+- __`Boolean`__ : indicating if the address matches or not
+
+### Example
+```js
+if (depositAddress.verify()) {
+  console.log('valid')
+}
+```
+
+## waitForDeposit
+
+```js
+depositAddress.waitForDeposit()
+```
+
+Monitors the pLTC minting process
+
+### Returns
+
+- __`PromiEvent`__ :  Will be resolved when the Node issues the corresponsing transaction
+
+### Example
+```js
+depositAddress.waitForDeposit(
+  .once('onLtcTxBroadcasted', e => { console.log(e) }) 
+  .once('onLtcTxConfirmed', e => { console.log(e) }) 
+  .once('onNodeReceivedTx', e => { console.log(e) })
+  .once('onNodeBroadcastedTx', e => { console.log(e) })
+  .once('onEthTxConfirmed', e => { console.log(e) })
+  .then(res => { console.log(res) })
 ```

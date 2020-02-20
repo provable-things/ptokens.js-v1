@@ -1,4 +1,4 @@
-import pLTC from '../src/index'
+import { pLTC } from '../src/index'
 import { expect } from 'chai'
 import { sendLitecoin } from './utils'
 
@@ -44,7 +44,7 @@ test('Should not get a LTC deposit address because of invalid Eth address', asyn
 test('Should monitor an issuing of 0.005 pLTC', async () => {
   const pltc = new pLTC(configs)
 
-  const amountToIssue = 500000
+  const amountToIssue = 500
   const minerFees = 50000
 
   const depositAddress = await pltc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -59,8 +59,8 @@ test('Should monitor an issuing of 0.005 pLTC', async () => {
 
   let ltcTxIsBroadcasted = false
   let ltcTxIsConfirmed = false
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
   let ethTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
@@ -72,11 +72,11 @@ test('Should monitor an issuing of 0.005 pLTC', async () => {
         .once('onLtcTxConfirmed', () => {
           ltcTxIsConfirmed = true
         })
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx = true
         })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx = true
         })
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed = true
@@ -87,19 +87,19 @@ test('Should monitor an issuing of 0.005 pLTC', async () => {
 
   expect(ltcTxIsBroadcasted).to.equal(true)
   expect(ltcTxIsConfirmed).to.equal(true)
-  expect(enclaveHasReceivedTx).to.equal(true)
-  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(nodeHasReceivedTx).to.equal(true)
+  expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ethTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.005 pLTC', async () => {
+test('Should redeem 0.0000546 pLTC', async () => {
   const pltc = new pLTC(configs)
 
-  const amountToRedeem = 0.005
+  const amountToRedeem = 0.0000546
 
   let ethTxIsConfirmed = false
-  let enclaveHasReceivedTx = false
-  let enclaveHasBroadcastedTx = false
+  let nodeHasReceivedTx = false
+  let nodeHasBroadcastedTx = false
   let ltcTxIsConfirmed = false
   const start = () =>
     new Promise(resolve => {
@@ -108,11 +108,11 @@ test('Should redeem 0.005 pLTC', async () => {
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
-        .once('onEnclaveReceivedTx', () => {
-          enclaveHasReceivedTx = true
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx = true
         })
-        .once('onEnclaveBroadcastedTx', () => {
-          enclaveHasBroadcastedTx = true
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx = true
         })
         .once('onLtcTxConfirmed', () => {
           ltcTxIsConfirmed = true
@@ -122,7 +122,7 @@ test('Should redeem 0.005 pLTC', async () => {
   await start()
 
   expect(ethTxIsConfirmed).to.equal(true)
-  expect(enclaveHasReceivedTx).to.equal(true)
-  expect(enclaveHasBroadcastedTx).to.equal(true)
+  expect(nodeHasReceivedTx).to.equal(true)
+  expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ltcTxIsConfirmed).to.equal(true)
 })

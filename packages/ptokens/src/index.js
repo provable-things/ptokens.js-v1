@@ -1,6 +1,5 @@
-import pEOS from 'ptokens-peos'
-import pBTC from 'ptokens-pbtc'
-import pLTC from 'ptokens-pltc'
+import { pBTC } from 'ptokens-pbtc'
+import { pLTC } from 'ptokens-pltc'
 import utils from 'ptokens-utils'
 
 class pTokens {
@@ -8,9 +7,7 @@ class pTokens {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { peos, pbtc, pltc } = _configs
-
-    if (peos) this.peos = new pEOS(peos)
+    const { pbtc, pltc } = _configs
 
     if (pbtc) this.pbtc = new pBTC(pbtc)
 

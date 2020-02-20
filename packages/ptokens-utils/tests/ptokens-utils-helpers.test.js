@@ -1,23 +1,22 @@
 import utils from '../src'
 import { expect } from 'chai'
 
-test('Should return pTokenName normalized', () => {
-  const pTokenName = 'pEOS'
-  const exptectedpTokenName = 'peos'
-  const result = utils.helpers.pTokenNameNormalized(pTokenName)
-  expect(result).to.be.equal(exptectedpTokenName)
-})
-
-test('Should return true because of valid pTokenName', () => {
-  const pTokenName = 'pEOS'
-  const exptectedpTokenName = true
-  const result = utils.helpers.pTokenNameIsValid(pTokenName)
-  expect(result).to.be.equal(exptectedpTokenName)
+test('Should return true because of valid pToken', () => {
+  const pToken = {
+    name: 'pBTC',
+    redeemFrom: 'ETH'
+  }
+  const exptectedResult = true
+  const result = utils.helpers.pTokenIsValid(pToken)
+  expect(result).to.be.equal(exptectedResult)
 })
 
 test('Should return false because of invalid pTokenName', () => {
-  const pTokenName = 'pEOSss'
-  const exptectedpTokenName = false
-  const result = utils.helpers.pTokenNameIsValid(pTokenName)
-  expect(result).to.be.equal(exptectedpTokenName)
+  const pToken = {
+    name: 'pBTCccc',
+    redeemFrom: 'eth'
+  }
+  const exptectedResult = false
+  const result = utils.helpers.pTokenIsValid(pToken)
+  expect(result).to.be.equal(exptectedResult)
 })

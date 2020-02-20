@@ -61,13 +61,13 @@ test('Should monitor a LTC transaction confirmation', async () => {
   const pollingTime = 200
   const network = 'testnet'
 
-  const hasBeenConfirmed = await utils.ltc.waitForTransactionConfirmation(
+  const receipt = await utils.ltc.waitForTransactionConfirmation(
     network,
     UTXO,
     pollingTime
   )
 
-  expect(hasBeenConfirmed).to.be.equal(true)
+  expect(receipt).to.be.an('object')
 })
 
 test('Should get all LTC utxo given an address', async () => {

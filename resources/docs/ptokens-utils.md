@@ -246,9 +246,9 @@ Returns a boolean indicating the pToken name correctness
 
 ### Example
 ```js
-utils.helpers.pTokenNameIsValid('peos') //true
-utils.helpers.pTokenNameIsValid('pEOS') //true
-utils.helpers.pTokenNameIsValid('pEdOS') //false
+utils.helpers.pTokenNameIsValid('pbtc') //true
+utils.helpers.pTokenNameIsValid('pBTC') //true
+utils.helpers.pTokenNameIsValid('pBTCSS') //false
 ```
 
 &nbsp;
@@ -271,7 +271,7 @@ Returns a pToken name normalized (lower case)
 
 ### Example
 ```js
-utils.helpers.pTokenNameNormalized('pEOS') //peos
+utils.helpers.pTokenNameNormalized('pBTC') //pbtc
 ```
 
 &nbsp;
@@ -523,149 +523,6 @@ Allow to wait for a ETH transaction confirmation
 ### Example
 ```js
 const tx = await utils.eth.waitForTransactionConfirmation(web3, '0x8cc2e8f07ac6ae2fab2fbcdb6f8b985383eec42f9ecb589377bdbe60d85bcae1', 2000)
-```
-
-&nbsp;
-
-***
-
-&nbsp;
-
-## utils.eos
-
-* __`getApi`__
-* __`getAccountName`__
-* __`getAvailablePublicKeys`__
-* __`isValidAccountName`__
-* __`transferNativeToken`__
-
-***
-
-## eos.getApi
-
-```js
-ptokens.utils.eos.getApi(privateKey, rpc)
-```
-
-Returns an instance of `eosjs`
-
-### Parameters
-
-- __`String`__ - __`privateKey`__: EOS account private key
-- __`String`__ - __`rpc`__: EOS provider rpc
-- __`String`__ - __`signatureProvider`__: EOS Signature Provider (can be null if `privateKey` is used)
-
-### Returns
-
-- __`Object`__ : an instance of `eosjs`
-
-### Example
-```js
-const eosjs = utils.eos.getApi('private key', 'rpc url', signatureProvider = null)
-```
-
-&nbsp;
-
-## eos.getAccountName
-
-```js
-ptokens.utils.eos.getAccountName(eosjs, pubkeys)
-```
-
-Returns the current account name given an instance of `eosjs` and a list of public keys
-
-### Parameters
-
-- __`String`__ - __`eosjs`__: initialized instance of `eosjs`
-- __`String`__ - __`pubkeys`__: list of EOS public keys
-
-
-### Returns
-
-- __`Promise`__ : when resolved return the current EOS account name
-
-### Example
-```js
-const accountName = await utils.eos.getAccountName(eosjs, ['pubk1', 'pubk2'])
-```
-
-&nbsp;
-
-## eos.getAvailablePublicKeys
-
-```js
-ptokens.utils.eos.getAvailablePublicKeys(eosjs)
-```
-
-Returns the available public keys given an instance of `eosjs`
-
-### Parameters
-
-- __`String`__ - __`eosjs`__: initialized instance of `eosjs`
-
-
-### Returns
-
-- __`Promise`__ : when resolved it return a list of public keys
-
-### Example
-```js
-const publicKeys = await utils.eos.getAvailablePublicKeys(eosjs)
-```
-
-&nbsp;
-
-## eos.isValidAccountName
-
-```js
-ptokens.utils.eos.isValidAccountName(accountName)
-```
-
-Check if the provided EOS `accountName` is valid 
-
-### Parameters
-
-- __`String`__ - __`accountName`__: EOS account name
-
-
-### Returns
-
-- __`Boolean`__ : EOS account name validity
-
-### Example
-```js
-const isValid = utils.eos.isValidAccountName('all3manfr3di') //true
-```
-
-&nbsp;
-
-
-## eos.transferNativeToken
-
-```js
-ptokens.utils.eos.transferNativeToken(eosjs, to, accountName, amount, memo, blocksBehind, expireSeconds)
-```
-
-Sends an amount of EOS native token (`eosio.token`)
-
-### Parameters
-
-- __`Object`__ - __`eosjs`__: initialized instance of `eosjs`
-- __`String`__ - __`to`__: EOS account where to send EOS
-- __`String`__ - __`accountName`__: EOS sender account name
-- __`Number`__ - __`amount`__: amount of EOS to send
-- __`String`__ - __`memo`__: EOS memo
-- __`Number`__ - __`blocksBehind`__: how many blocks the head block is behind 
-- __`Number`__ - __`expireSeconds`__: time after which the transaction can never be included in a block, in seconds
-
-
-### Returns
-
-- __`Promise`__ : when resolved it returns the EOS transaction receipt
-
-### Example
-```js
-const receipt = utils.eos.transferNativeToken(eosjs, 'eos account receiver', 'eos account sender', 100, 'memo', 3, 60)
 ```
 
 &nbsp;
