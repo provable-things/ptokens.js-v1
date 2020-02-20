@@ -17,5 +17,5 @@ nodeSelector.getApi()
 // $ExpectType Promise<Node>
 nodeSelector.select()
 
-// $ExpectType Promise<Node>
+// $ExpectType Node
 nodeSelector.set('https://unreachable-node.io')

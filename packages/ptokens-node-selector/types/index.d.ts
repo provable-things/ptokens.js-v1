@@ -27,5 +27,5 @@ export class NodeSelector {
 
   select(): Promise<Node>
 
-  set(_endpoint: string): Promise<Node>
+  set(_endpoint: string): Node
 }
