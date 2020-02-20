@@ -2,6 +2,7 @@
   "name": "ptokens-utils",
   "version": "0.2.0",
   "description": "repo holding some utils needed by other packages",
+  "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-utils",
   "main": "dist/ptokens-utils.cjs.js",
   "module": "dist/ptokens-utils.esm.js",
   "browser": "dist/ptokens-utils.umd.js",

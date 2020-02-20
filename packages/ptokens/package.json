@@ -2,6 +2,7 @@
   "name": "ptokens",
   "version": "0.2.0",
   "description": "ptokens main package",
+  "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens",
   "main": "dist/ptokens.cjs.js",
   "module": "dist/ptokens.esm.js",
   "browser": "dist/ptokens.umd.js",

@@ -2,6 +2,7 @@
   "name": "ptokens-node-selector",
   "version": "0.2.0",
   "description": "repo holding the code for selecting validator nodes",
+  "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-node-selector",
   "main": "dist/ptokens-node-selector.cjs.js",
   "module": "dist/ptokens-node-selector.esm.js",
   "browser": "dist/ptokens-node-selector.umd.js",
