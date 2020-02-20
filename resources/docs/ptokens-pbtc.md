@@ -274,7 +274,7 @@ ptokens.pbtc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ## redeem
 
 ```js
-ptokens.pbtc.redeem(amount, eosAccount)
+ptokens.pbtc.redeem(amount, btcAddress)
 ```
 
 Redeem a specified number of pBTC to the specified BTC account.
@@ -282,7 +282,7 @@ Redeem a specified number of pBTC to the specified BTC account.
 ### Parameters
 
 - __`Number`__ - __`amount`__: amount of pBTC to redeem
-- __`String`__ - __`ethAddress`__: BTC account on which receive back the deposited BTC
+- __`String`__ - __`btcAddress`__: BTC account on which receive back the deposited BTC
 
 ### Returns
 
@@ -290,7 +290,7 @@ Redeem a specified number of pBTC to the specified BTC account.
 
 ### Example
 ```js
-ptokens.pbtc.redeem(1, 'btc account')
+ptokens.pbtc.redeem(1, 'btc address')
   .once('onEthTxConfirmed', e => { console.log(e) }) 
   .once('onEnclaveReceivedTx', e => { console.log(e) })
   .once('onEnclaveBroadcastedTx', e => { console.log(e) })

@@ -6,7 +6,6 @@ This is the main module that allows you to instantiate an instance of all availa
 ### Structure
 - __`Object`__ - __`pbtc`__: class for interacting with pBTC token
 - __`Object`__ - __`pltc`__: class for interacting with pLTC token
-- __`Object`__ - __`peos`__: class for interacting with pEOS token
 - __`Object`__ - __`utils`__: some usefull utilities
 
 ### Constructor parameters
@@ -21,13 +20,6 @@ This is the main module that allows you to instantiate an instance of all availa
           - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
           - __`String`__ - __`ltcNetwork`__: Can be `litecoin` or `testnet`
           - __`String`__ - __`defaultNode`__: (Optional)
-    - __`Object`__ - __`peos`__: options for initializing pEOS
-        - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens
-        - __`String`__ - __`ethProvider`__: an Ethereum provider
-        - __`String`__ - __`eosPrivateKey`__: an Eos private key used for signing transactions for minting pTokens
-        - __`String`__ - __`eosRpc`__: an EOS provider
-        - __`Object`__ - __`eosSignatureProvider`__: an instance of an already initialized EOS Signature Provider (Optional)
-        - __`String`__ - __`defaultNode`__: (Optional)
 
 &nbsp;
 
@@ -37,13 +29,6 @@ This is the main module that allows you to instantiate an instance of all availa
 const pTokens = require('ptokens')
 
 const ptokens = new pTokens({
-  peos: {
-    ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
-    eosPrivateKey: 'EOS private key',
-    eosRpc: 'EOS RPC Address'
-    eosSignatureProvider: 'An EOS Signature Provider'  //if the private key is not passed
-  },
   pbtc: {
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
@@ -65,13 +50,13 @@ const pTokens = require('ptokens')
 if (window.web3) {
   
   const ptokens = new pTokens({
-    peos: {
-      ethProvider: window.web3.currentProvider,
-      ....
-    },
     pbtc: {
       ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'
+    },
+    pltc: {
+      ethProvider: window.web3.currentProvider,
+      ltcNetwork: 'litecoin'
     }
   })
 } else {

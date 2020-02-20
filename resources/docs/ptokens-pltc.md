@@ -278,7 +278,7 @@ ptokens.pltc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed)
 ## redeem
 
 ```js
-ptokens.pltc.redeem(amount, eosAccount)
+ptokens.pltc.redeem(amount, ltcAddress)
 ```
 
 Redeem a specified number of pLTC to the specified LTC account.
@@ -286,7 +286,7 @@ Redeem a specified number of pLTC to the specified LTC account.
 ### Parameters
 
 - __`Number`__ - __`amount`__: amount of pLTC to redeem
-- __`String`__ - __`ethAddress`__: LTC account on which receive back the deposited LTC
+- __`String`__ - __`ltcAddress`__: LTC address on which receive back the deposited LTC
 
 ### Returns
 

@@ -48,7 +48,7 @@ const node = new Node({
 ptokens.node.getBroadcastTransactionStatus(hash)
 ```
 
-Gets the status of a broadcasted transaction by the Node. It's possible to pass to the function both an Ethereum transaction hash and an EOS transaction id.
+Gets the status of a broadcasted transaction by the Node.
 
 ### Parameters
 
@@ -71,7 +71,7 @@ ptokens.node.getBroadcastTransactionStatus('0x80b97c8d9676915a0c51c66468eeb1745a
 ptokens.node.getIncomingTransactionStatus(hash)
 ```
 
-Gets the status of an incoming transaction to the Node. It's possible to pass to the function both an Ethereum transaction hash and an EOS transaction id
+Gets the status of an incoming transaction to the Node.
 
 ### Parameters
 
@@ -145,7 +145,7 @@ ptokens.node.getLastProcessedBlock('host').then(block => console.log(block))
 ptokens.node.getReports(type, limit)
 ```
 
-Gets a report of the transactions relating to the `type` signature nonce supplied. A report is a list of the last `limit` minting/burning transactions. For example in case of `pEOS`, a report of `host` type consists of a list of all burning transactions.
+Gets a report of the transactions relating to the `type` signature nonce supplied. A report is a list of the last `limit` minting/burning transactions. For example in case of `pBTC`, a report of `host` type consists of a list of all burning transactions.
 
 ### Parameters
 
