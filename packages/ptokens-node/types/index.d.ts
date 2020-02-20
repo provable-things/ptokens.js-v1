@@ -1,4 +1,3 @@
-import { NodeSelector } from 'ptokens-node-selector'
 import { EventEmitter } from 'events'
 
 export interface NodeConfigs {
