@@ -18,7 +18,7 @@ In the situation where no default node is in use, the library randomly selects a
 ```js
 import { NodeSelector } from 'ptokens-node-selector'
 
-const node = new Node({
+const node = new NodeSelector({
   pToken: {
     name: 'pToken name',
     redeemFrom: 'ETH' //for now
