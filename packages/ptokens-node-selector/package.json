@@ -1,6 +1,6 @@
 {
   "name": "ptokens-node-selector",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "repo holding the code for selecting validator nodes",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-node-selector",
   "main": "dist/ptokens-node-selector.cjs.js",
@@ -21,8 +21,8 @@
     "@types/node": "^12.6.1",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
-    "ptokens-node": "^0.3.0",
-    "ptokens-utils": "^0.3.0"
+    "ptokens-node": "^0.3.1",
+    "ptokens-utils": "^0.3.1"
   },
   "devDependencies": {
     "dtslint": "0.4.2",
