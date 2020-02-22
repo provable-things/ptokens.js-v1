@@ -78,7 +78,7 @@ depositAddress.waitForDeposit()
   .once('onBtcTxBroadcasted', tx => ... )
   .once('onBtcTxConfirmed', tx => ...)
   .once('onNodeReceivedTx', tx => ...)
-  .once('onNodeReceivedTx', tx => ...)
+  .once('onNodeBroadcastedTx', tx => ...)
   .once('onEthTxConfirmed', tx => ...)
   .then(res => ...))
 ```
