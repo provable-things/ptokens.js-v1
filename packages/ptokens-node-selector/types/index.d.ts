@@ -5,7 +5,8 @@ export interface NodeSelectorConfigs {
     name: string,
     redeemFrom: string
   },
-  defaultEndpoint?: string
+  defaultEndpoint?: string,
+  networkType: string | Promise<String>
 }
 
 export interface NodeList extends Array<Node> {}
@@ -20,6 +21,8 @@ export class NodeSelector {
   info: object
 
   defaultEndpoint: string | null
+
+  networkType: string
 
   checkConnection(_endpoint: string, _timeout?: number): Promise<boolean>
 

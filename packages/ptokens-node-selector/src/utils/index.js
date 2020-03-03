@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const NODE_CONNECTION_TIMEOUT = 5000
 const DEFAULT_TIMEOUT = 10000
-const BOOT_ENDPOINT = 'https://testnet_bootnode-eu-1.p.network/'
+const BOOT_TESTNET_ENDPOINT = 'https://testnet_bootnode-eu-1.p.network/'
+const BOOT_MAINNET_ENDPOINT = 'https://mainnet_bootnode-eu-1.p.network'
 
 /**
  * @param {String} _pToken
@@ -20,8 +21,13 @@ const createApi = _endpoint => {
   })
 }
 
-const getBootNodeApi = () => {
-  return createApi(BOOT_ENDPOINT)
+/**
+ * @param {String} _network
+ */
+const getBootNodeApi = _network => {
+  return _network === 'mainnet'
+    ? createApi(BOOT_MAINNET_ENDPOINT)
+    : createApi(BOOT_TESTNET_ENDPOINT)
 }
 
 /**

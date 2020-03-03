@@ -12,7 +12,7 @@ export class NodeSelector {
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, defaultEndpoint } = configs
+    const { pToken, defaultEndpoint, networkType } = configs
 
     if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
@@ -23,6 +23,15 @@ export class NodeSelector {
     this.selectedNode = null
     this.nodes = []
     this.defaultEndpoint = defaultEndpoint
+
+    if (
+      networkType !== 'testnet' &&
+      networkType !== 'mainnet' &&
+      !networkType.then
+    )
+      throw new Error('Invalid Network')
+
+    this.networkType = networkType
   }
 
   /**
@@ -54,9 +63,11 @@ export class NodeSelector {
 
   async select() {
     try {
+      const networkType = await this._getNetworkType()
+
       if (this.nodes.length === 0) {
         const res = await makeApiCallWithTimeout(
-          getBootNodeApi(),
+          getBootNodeApi(networkType),
           'GET',
           '/peers'
         )
@@ -120,5 +131,23 @@ export class NodeSelector {
     })
 
     return this.selectedNode
+  }
+
+  async _getNetworkType() {
+    const networksMap = {
+      ropsten: 'testnet',
+      main: 'mainnet'
+    }
+
+    if (this.networkType.then) {
+      const network = await this.networkType
+      this.networkType = networksMap[network]
+
+      if (!this.networkType) {
+        throw new Error('Unsupported Network')
+      }
+    }
+
+    return this.networkType
   }
 }

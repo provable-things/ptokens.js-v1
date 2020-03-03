@@ -5,7 +5,8 @@ const nodeSelector = new NodeSelector({
     name: 'pBTC',
     redeemFrom: 'ETH'
   },
-  defaultEndpoint: 'https://nuc-bridge-2.ngrok.io'
+  defaultEndpoint: 'https://nuc-bridge-2.ngrok.io',
+  networkType: 'mainnet'
 })
 
 // $ExpectType Promise<boolean>
