@@ -9,7 +9,7 @@ const PING_RETURN_VALUE = 'pBTC pong!'
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const BTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Btc block submitted to the enclave!'
 const HASH_INCOMING_TX =
-  'a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
+  '0x9a5e4e3d90f6d35b7c2bef461f840ecd581be552b741e1a00072257a73e5a791'
 const HASH_BROADCASTED_TX =
   '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
 
@@ -38,7 +38,7 @@ test('Should get the node info', async () => {
     endpoint: 'https://nuc-bridge-2.ngrok.io'
   })
 
-  const info = await node.getInfo('testnet', 'ropsten')
+  const info = await node.getInfo()
   expect(info).to.have.property('public-key')
   expect(info).to.have.property('smart-contract-address')
 })

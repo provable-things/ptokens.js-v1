@@ -22,7 +22,7 @@ export class Node {
 
   ping(): Promise<string>
 
-  getInfo(_issueFromNetwork: string, _redeemFromNetwork: string): Promise<NodeInfo>
+  getInfo(): Promise<NodeInfo>
 
   getReports(_type: string, _limit?: number): Promise<ReportList>
 
@@ -43,7 +43,9 @@ export class Node {
 
 export interface NodeInfo {
   "public-key": string,
-  "smart-contract-address": string
+  "smart-contract-address": string,
+  host_network: string,
+  native_network: string
 }
 
 export interface ReportList extends Array<Report> {}

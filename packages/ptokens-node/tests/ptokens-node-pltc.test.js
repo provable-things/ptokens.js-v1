@@ -37,7 +37,7 @@ test('Should get the Node Info', async () => {
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
-  const info = await node.getInfo('testnet', 'ropsten')
+  const info = await node.getInfo()
   expect(info).to.have.property('public-key')
   expect(info).to.have.property('smart-contract-address')
 })
