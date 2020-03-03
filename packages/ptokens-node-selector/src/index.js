@@ -136,7 +136,10 @@ export class NodeSelector {
   async _getNetworkType() {
     const networksMap = {
       ropsten: 'testnet',
-      main: 'mainnet'
+      main: 'mainnet',
+      bitcoin: 'mainnet',
+      testnet: 'testnet',
+      mainnet: 'mainnet'
     }
 
     if (this.networkType.then) {
@@ -148,6 +151,7 @@ export class NodeSelector {
       }
     }
 
+    this.networkType = networksMap[network]
     return this.networkType
   }
 }
