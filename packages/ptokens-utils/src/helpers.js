@@ -1,6 +1,5 @@
 const availables = {
-  pbtc: ['ETH'],
-  pltc: ['ETH']
+  pbtc: ['ETH']
 }
 
 /**
@@ -8,7 +7,6 @@ const availables = {
  */
 const pTokenNameIsValid = _pTokenName => {
   if (_pTokenName.toLowerCase() === 'pbtc') return true
-  if (_pTokenName.toLowerCase() === 'pltc') return true
   return false
 }
 

@@ -22,7 +22,7 @@ pbtc.redeem(10, BTC_TESTING_ADDRESS)
 
 const node = new Node({
   pToken: {
-    name: 'pLTC',
+    name: 'pBTC',
     redeemFrom: 'ETH'
   },
   endpoint: 'https://..'

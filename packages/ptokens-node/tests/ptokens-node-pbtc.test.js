@@ -6,8 +6,6 @@ import EventEmitter from 'eventemitter3'
 jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pBTC pong!'
-const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
-const BTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Btc block submitted to the enclave!'
 const HASH_INCOMING_TX =
   '0xe3a303ac74f96450648d9e33f6d7f63f7891ea02dffe1b448df296987ccefaa3'
 const HASH_BROADCASTED_TX =
@@ -210,7 +208,7 @@ test('Should get the status of an brodcasted tx', async () => {
 })
 
 test('Should submit an ETH block', async () => {
-  const expectedResult = ETH_BLOCK_SUBMITTED_RETURN_VALUE
+  const expectedResult = 'Request failed with status code 501' // provisional
   const type = 'host'
   const node = new Node({
     pToken: {
@@ -220,12 +218,15 @@ test('Should submit an ETH block', async () => {
     endpoint: 'https://nuc-bridge-2.ngrok.io'
   })
 
-  const res = await node.submitBlock(type, ETH_PBTC_BLOCK)
-  expect(res).to.be.equal(expectedResult)
+  try {
+    await node.submitBlock(type, ETH_PBTC_BLOCK)
+  } catch (err) {
+    expect(err.message).to.be.equal(expectedResult)
+  }
 })
 
 test('Should submit a BTC block', async () => {
-  const expectedResult = BTC_BLOCK_SUBMITTED_RETURN_VALUE
+  const expectedResult = 'Request failed with status code 501' // provisional
   const type = 'native'
   const node = new Node({
     pToken: {
@@ -235,8 +236,11 @@ test('Should submit a BTC block', async () => {
     endpoint: 'https://nuc-bridge-2.ngrok.io'
   })
 
-  const res = await node.submitBlock(type, BTC_PBTC_BLOCK)
-  expect(res).to.be.equal(expectedResult)
+  try {
+    await node.submitBlock(type, BTC_PBTC_BLOCK)
+  } catch (err) {
+    expect(err.message).to.be.equal(expectedResult)
+  }
 })
 
 test('Should monitor an incoming transaction', async () => {

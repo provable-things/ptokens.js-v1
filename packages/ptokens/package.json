@@ -19,7 +19,6 @@
     "@types/node": "^12.6.1",
     "chai": "^4.2.0",
     "ptokens-pbtc": "^0.3.1",
-    "ptokens-pltc": "^0.3.1",
     "ptokens-utils": "^0.3.1"
   },
   "devDependencies": {

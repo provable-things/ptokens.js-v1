@@ -85,10 +85,10 @@ test('Should generate an error when an unsupported network is provided', async (
   }
 })
 
-test('Should select a pLTC node on Ethereum Testnet', async () => {
+test('Should select a pBTC node on Ethereum Testnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: {
-      name: 'pLTC',
+      name: 'pBTC',
       redeemFrom: 'ETH'
     },
     networkType: 'testnet'
@@ -102,7 +102,7 @@ test('Should not be connected if a node is unreachable', async () => {
   const unreachableNode = 'https://unreachable-node.io'
   const nodeSelector = new NodeSelector({
     pToken: {
-      name: 'pLTC',
+      name: 'pBTC',
       redeemFrom: 'ETH'
     },
     networkType: 'testnet'
@@ -133,7 +133,7 @@ test('Should generate an error when an invalid node is set', async () => {
   const unreachableNode = 'https://unreachable-node.io'
   const nodeSelector = new NodeSelector({
     pToken: {
-      name: 'pLTC',
+      name: 'pBTC',
       redeemFrom: 'ETH'
     },
     networkType: 'testnet'
@@ -147,11 +147,11 @@ test('Should generate an error when an invalid node is set', async () => {
 })
 
 test('Should not select a different node on Testnet when a valid one is set as default and it is compatibile with the selected pToken', async () => {
-  const reachableNode = 'https://nuc-bridge-3.ngrok.io'
+  const reachableNode = 'https://nuc-bridge-2.ngrok.io'
 
   const nodeSelector = new NodeSelector({
     pToken: {
-      name: 'pLTC',
+      name: 'pBTC',
       redeemFrom: 'ETH'
     },
     networkType: 'testnet',
@@ -178,11 +178,11 @@ test('Should not select a different node on Mainnet when a valid one is set as d
 
 test('Should select a different node on Testnet when a valid one is set as default but it is not compatibile with the selected pToken', async () => {
   const reachableNodeButNotCompatibleWithSelectedpToken =
-    'https://nuc-bridge-2.ngrok.io'
+    'https://nuc-bridge-3.ngrok.io'
 
   const nodeSelector = new NodeSelector({
     pToken: {
-      name: 'pLTC',
+      name: 'pBTC',
       redeemFrom: 'ETH'
     },
     networkType: 'testnet',
@@ -217,7 +217,7 @@ test('Should select a different node on Testnet when an invalid one is set as de
 
   const nodeSelector = new NodeSelector({
     pToken: {
-      name: 'pLTC',
+      name: 'pBTC',
       redeemFrom: 'ETH'
     },
     networkType: 'testnet',

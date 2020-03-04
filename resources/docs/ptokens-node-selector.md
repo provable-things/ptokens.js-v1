@@ -23,7 +23,8 @@ const node = new NodeSelector({
     name: 'pToken name',
     redeemFrom: 'ETH' //for now
   },
-  defaultEndpoint: 'https://...' //optional
+  defaultEndpoint: 'https://...' //optional,
+  networkType:  //possible values are mainnet, testnet, ropsten, main
 })
 ```
 
