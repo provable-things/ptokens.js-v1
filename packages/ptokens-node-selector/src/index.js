@@ -151,7 +151,7 @@ export class NodeSelector {
       }
     }
 
-    this.networkType = networksMap[network]
+    this.networkType = networksMap[this.networkType]
     return this.networkType
   }
 }
