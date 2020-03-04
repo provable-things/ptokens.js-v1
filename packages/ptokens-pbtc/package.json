@@ -14,6 +14,13 @@
     "lint": "npx eslint ./src --fix && npx eslint ./tests --fix",
     "dtslint": "dtslint types --onlyTestTsNext"
   },
+  "keywords": [
+    "ptokens",
+    "javaScript",
+    "ethereum",
+    "bitcoin",
+    "pnetwork"
+  ],
   "author": "alle.manfredi@gmail.com @provable-things",
   "license": "LGPL-3.0",
   "dependencies": {
