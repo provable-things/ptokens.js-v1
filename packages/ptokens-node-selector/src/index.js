@@ -146,9 +146,7 @@ export class NodeSelector {
       const network = await this.networkType
       this.networkType = networksMap[network]
 
-      if (!this.networkType) {
-        throw new Error('Unsupported Network')
-      }
+      if (!this.networkType) throw new Error('Unsupported Network')
     }
 
     this.networkType = networksMap[this.networkType]

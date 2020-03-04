@@ -18,7 +18,7 @@ export class BtcDepositAddress {
     this.network = network
     this.node = node
     this._web3 = web3
-    this.decimals = decimals ? decimals : DEFAULT_DECIMALS
+    this.decimals = decimals || DEFAULT_DECIMALS
   }
 
   /**
