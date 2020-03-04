@@ -42,10 +42,12 @@ export class Node {
 }
 
 export interface NodeInfo {
-  "public-key": string,
-  "smart-contract-address": string,
+  public_key: string,
+  smart_contract_address: string,
   host_network: string,
-  native_network: string
+  native_network: string,
+  last_processed_host_block: number,
+  last_processed_native_block: number,
 }
 
 export interface ReportList extends Array<Report> {}

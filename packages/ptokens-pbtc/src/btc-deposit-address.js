@@ -5,7 +5,7 @@ import { btc, eth, converters } from 'ptokens-utils'
 import {
   BTC_ESPLORA_POLLING_TIME,
   ETH_NODE_POLLING_TIME_INTERVAL,
-  PBTC_TOKEN_DECIMALS
+  DEFAULT_DECIMALS
 } from './utils/constants'
 
 export class BtcDepositAddress {
@@ -13,11 +13,12 @@ export class BtcDepositAddress {
    * @param {Object} _params
    */
   constructor(_params) {
-    const { network, node, web3 } = _params
+    const { network, node, web3, decimals } = _params
 
     this.network = network
     this.node = node
     this._web3 = web3
+    this.decimals = decimals ? decimals : DEFAULT_DECIMALS
   }
 
   /**
@@ -30,7 +31,7 @@ export class BtcDepositAddress {
     try {
       const deposit = await this.node.generic(
         'GET',
-        `get-native-deposit-address/${this.network}/${_ethAddress}`
+        `get-native-deposit-address/${_ethAddress}`
       )
 
       this.nonce = deposit.nonce
@@ -117,7 +118,7 @@ export class BtcDepositAddress {
         tx: broadcastedEthTxReport.host_tx_hash,
         amount: eth.correctFormat(
           broadcastedEthTxReport.host_tx_amount,
-          PBTC_TOKEN_DECIMALS,
+          this.decimals,
           '/'
         )
       })

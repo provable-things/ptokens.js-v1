@@ -20,6 +20,10 @@ jest.setTimeout(3000000)
 
 test('Should get a BTC deposit address', async () => {
   const pbtc = new pBTC({
+    ethPrivateKey:
+      '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
+    ethProvider:
+      'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6',
     btcNetwork: 'testnet'
   })
 
@@ -29,6 +33,10 @@ test('Should get a BTC deposit address', async () => {
 
 test('Should not get a BTC deposit address because of invalid Eth address', async () => {
   const pbtc = new pBTC({
+    ethPrivateKey:
+      '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
+    ethProvider:
+      'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6',
     btcNetwork: 'testnet'
   })
 
@@ -41,10 +49,10 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
   }
 })
 
-test('Should monitor an issuing of 1 pBTC', async () => {
+test('Should monitor an issuing of 1.01e-14 pBTC', async () => {
   const pbtc = new pBTC(configs)
 
-  const amountToIssue = 500
+  const amountToIssue = 10100
   const minerFees = 1000
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -92,11 +100,10 @@ test('Should monitor an issuing of 1 pBTC', async () => {
   expect(ethTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 1 pBTC', async () => {
+test('Should redeem 0.000051 pBTC', async () => {
   const pbtc = new pBTC(configs)
 
-  // minimum amount to redeem = 1000 sats (0.00001 * 10^8)
-  const amountToRedeem = 0.00001
+  const amountToRedeem = 0.000051
 
   let ethTxIsConfirmed = false
   let nodeHasReceivedTx = false

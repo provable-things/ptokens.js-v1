@@ -9,11 +9,11 @@ const PING_RETURN_VALUE = 'pBTC pong!'
 const ETH_BLOCK_SUBMITTED_RETURN_VALUE = 'Eth block submitted to the enclave!'
 const BTC_BLOCK_SUBMITTED_RETURN_VALUE = 'Btc block submitted to the enclave!'
 const HASH_INCOMING_TX =
-  '0x9a5e4e3d90f6d35b7c2bef461f840ecd581be552b741e1a00072257a73e5a791'
+  '0xe3a303ac74f96450648d9e33f6d7f63f7891ea02dffe1b448df296987ccefaa3'
 const HASH_BROADCASTED_TX =
-  '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
+  '0x39e09502da6eab6e518bc35755261f094fcf2afc3ed46aeff45218a52e0214fa'
 
-const BTC_TESTING_ADDRESS = '2NFLTr9nFbnexQgRP3hpEH5NKduvqpiAUpw'
+const BTC_TESTING_ADDRESS = '2N91WkHJxTwM43d7eeA1ArjutoBvKk3iiE5'
 
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
@@ -39,8 +39,12 @@ test('Should get the node info', async () => {
   })
 
   const info = await node.getInfo()
-  expect(info).to.have.property('public-key')
-  expect(info).to.have.property('smart-contract-address')
+  expect(info).to.have.property('public_key')
+  expect(info).to.have.property('smart_contract_address')
+  expect(info).to.have.property('last_processed_native_block')
+  expect(info).to.have.property('last_processed_host_block')
+  expect(info).to.have.property('native_network')
+  expect(info).to.have.property('host_network')
 })
 
 test('Should get one ETH report', async () => {

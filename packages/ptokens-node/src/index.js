@@ -26,7 +26,7 @@ export class Node {
     )
   }
 
-  async getInfo(_issueFromNetwork, _redeemFromNetwork) {
+  async getInfo() {
     if (!this.info) {
       this.info = await makeApiCall(
         this.endpoint,

@@ -6,7 +6,6 @@ import Web3Utils from 'web3-utils'
 import { BtcDepositAddress } from './btc-deposit-address'
 import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 import {
-  PBTC_TOKEN_DECIMALS,
   MINIMUN_SATS_REDEEMABLE,
   BTC_ESPLORA_POLLING_TIME
 } from './utils/constants'
@@ -19,14 +18,6 @@ export class pBTC {
     const { ethPrivateKey, ethProvider, btcNetwork, defaultEndpoint } = _configs
 
     this._web3 = new Web3(ethProvider)
-
-    this.nodeSelector = new NodeSelector({
-      pToken: {
-        name: 'pBTC',
-        redeemFrom: 'ETH'
-      },
-      defaultEndpoint
-    })
 
     if (ethPrivateKey) {
       this._isWeb3Injected = false
@@ -46,7 +37,17 @@ export class pBTC {
       this._btcNetwork = btcNetwork
     else this._btcNetwork = 'testnet'
 
+    this.nodeSelector = new NodeSelector({
+      pToken: {
+        name: 'pBTC',
+        redeemFrom: 'ETH'
+      },
+      defaultEndpoint,
+      networkType: this._btcNetwork
+    })
+
     this._contractAddress = null
+    this._decimals = null
   }
 
   /**
@@ -58,10 +59,13 @@ export class pBTC {
 
     if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
+    const decimals = await this._getDecimals()
+
     const depositAddress = new BtcDepositAddress({
       network: this._btcNetwork,
       node: this.nodeSelector.selectedNode,
-      web3: this._web3
+      web3: this._web3,
+      decimals
     })
 
     await depositAddress.generate(_ethAddress)
@@ -95,17 +99,20 @@ export class pBTC {
       try {
         if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
 
+        const decimals = await this._getDecimals()
+        const contractAddress = await this._getContractAddress()
+
         const ethTxReceipt = await eth.makeContractSend(
           this._web3,
-          'burn',
+          'redeem',
           {
             isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
-            contractAddress: this._getContractAddress(),
+            contractAddress,
             privateKey: this._ethPrivateKey,
             value: eth.zeroEther
           },
-          [eth.correctFormat(_amount, PBTC_TOKEN_DECIMALS, '*'), _btcAddress]
+          [eth.correctFormat(_amount, decimals, '*'), _btcAddress]
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
@@ -122,7 +129,7 @@ export class pBTC {
         promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTx)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(PBTC_TOKEN_DECIMALS),
+          amount: _amount.toFixed(decimals),
           to: _btcAddress,
           tx: broadcastedBtcTxReport.native_tx_hash
         })
@@ -135,208 +142,24 @@ export class pBTC {
     return promiEvent.eventEmitter
   }
 
-  getTotalIssued() {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(this._web3, 'totalMinted', {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: pbtcAbi,
-          contractAddress: this._getContractAddress()
-        })
-        .then(totalIssued =>
-          resolve(
-            eth.correctFormat(parseInt(totalIssued), PBTC_TOKEN_DECIMALS, '/')
-          )
-        )
-        .catch(err => reject(err))
-    })
-  }
-
-  getTotalRedeemed() {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(this._web3, 'totalBurned', {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: pbtcAbi,
-          contractAddress: this._getContractAddress()
-        })
-        .then(totalRedeemed =>
-          resolve(
-            eth.correctFormat(parseInt(totalRedeemed), PBTC_TOKEN_DECIMALS, '/')
-          )
-        )
-        .catch(err => reject(err))
-    })
-  }
-
-  getCirculatingSupply() {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(this._web3, 'totalSupply', {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: pbtcAbi,
-          contractAddress: this._getContractAddress()
-        })
-        .then(totalSupply =>
-          resolve(
-            eth.correctFormat(parseInt(totalSupply), PBTC_TOKEN_DECIMALS, '/')
-          )
-        )
-        .catch(err => reject(err))
-    })
-  }
-
-  /**
-   * @param {String} _ethAddress
-   */
-  getBalance(_ethAddress) {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(
-          this._web3,
-          'balanceOf',
-          {
-            isWeb3Injected: this._isWeb3Injected,
-            abi: pbtcAbi,
-            contractAddress: this._getContractAddress()
-          },
-          [_ethAddress]
-        )
-        .then(balance =>
-          resolve(
-            eth.correctFormat(parseInt(balance), PBTC_TOKEN_DECIMALS, '/')
-          )
-        )
-        .catch(err => reject(err))
-    })
-  }
-
-  /**
-   * @param {String} _to
-   * @param {Number} _amount
-   */
-  transfer(_to, _amount) {
-    return eth.makeContractSend(
-      this._web3,
-      'transfer',
-      {
-        isWeb3Injected: this._isWeb3Injected,
-        abi: pbtcAbi,
-        contractAddress: this._getContractAddress(),
-        privateKey: this._ethPrivateKey,
-        value: eth.zeroEther
-      },
-      [_to, eth.correctFormat(parseInt(_amount), PBTC_TOKEN_DECIMALS, '*')]
-    )
-  }
-
-  /**
-   * @param {String} _spender
-   * @param {Number} _amount
-   */
-  approve(_spender, _amount) {
-    return eth.makeContractSend(
-      this._web3,
-      'approve',
-      {
-        isWeb3Injected: this._isWeb3Injected,
-        abi: pbtcAbi,
-        contractAddress: this._getContractAddress(),
-        privateKey: this._ethPrivateKey,
-        value: eth.zeroEther
-      },
-      [_spender, eth.correctFormat(parseInt(_amount), PBTC_TOKEN_DECIMALS, '*')]
-    )
-  }
-
-  /**
-   * @param {String} _from
-   * @param {String} _to
-   * @param {Number} _amount
-   */
-  transferFrom(_from, _to, _amount) {
-    return eth.makeContractSend(
-      this._web3,
-      'transferFrom',
-      {
-        isWeb3Injected: this._isWeb3Injected,
-        abi: pbtcAbi,
-        contractAddress: this._getContractAddress(),
-        privateKey: this._ethPrivateKey,
-        value: eth.zeroEther
-      },
-      [
-        _from,
-        _to,
-        eth.correctFormat(parseInt(_amount), PBTC_TOKEN_DECIMALS, '*')
-      ]
-    )
-  }
-
-  getBurnNonce() {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(this._web3, 'burnNonce', {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: pbtcAbi,
-          contractAddress: this._getContractAddress()
-        })
-        .then(burnNonce => resolve(parseInt(burnNonce)))
-        .catch(err => reject(err))
-    })
-  }
-
-  getMintNonce() {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(this._web3, 'mintNonce', {
-          isWeb3Injected: this._isWeb3Injected,
-          abi: pbtcAbi,
-          contractAddress: this._getContractAddress()
-        })
-        .then(mintNonce => resolve(parseInt(mintNonce)))
-        .catch(err => reject(err))
-    })
-  }
-
-  /**
-   * @param {String} _owner
-   * @param {Address} _spender
-   */
-  getAllowance(_owner, _spender) {
-    return new Promise((resolve, reject) => {
-      eth
-        .makeContractCall(
-          this._web3,
-          'allowance',
-          {
-            isWeb3Injected: this._isWeb3Injected,
-            abi: pbtcAbi,
-            contractAddress: this._getContractAddress()
-          },
-          [_owner, _spender]
-        )
-        .then(allowance =>
-          resolve(
-            eth.correctFormat(parseInt(allowance), PBTC_TOKEN_DECIMALS, '/')
-          )
-        )
-        .catch(err => reject(err))
-    })
-  }
-
   async _getContractAddress() {
     if (!this._contractAddress) {
       if (!this.nodeSelector.selectedNode) await this.nodeSelector.select()
-
-      const ethNetwork = await this._web3.eth.net.getNetworkType()
-      const info = await this.nodeSelector.selectedNode.getInfo(
-        this._btcNetwork,
-        ethNetwork
-      )
-      this._contractAddress = info['smart-contract-address']
+      const info = await this.nodeSelector.selectedNode.getInfo()
+      this._contractAddress = info.smart_contract_address
     }
 
     return this._contractAddress
+  }
+
+  async _getDecimals() {
+    if (!this.decimals) {
+      this.decimals = await eth.makeContractCall(this._web3, 'decimals', {
+        isWeb3Injected: this._isWeb3Injected,
+        abi: pbtcAbi,
+        contractAddress: this._getContractAddress()
+      })
+    }
+    return this.decimals
   }
 }
