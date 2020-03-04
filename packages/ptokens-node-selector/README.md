@@ -31,6 +31,6 @@ const nodeSelector = new NodeSelector({
     redeemFrom: 'ETH' //for now
   },
   defaultEndpoint: 'https://.....' //optional,
-  networkType: 'testnet' //possible values are mainnet, testnet, ropsten, main
+  networkType: 'testnet' //possible values are mainnet, testnet, ropsten, main, bitcoin
 })
 ```
