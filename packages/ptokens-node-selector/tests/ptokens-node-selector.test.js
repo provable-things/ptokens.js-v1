@@ -147,7 +147,7 @@ test('Should generate an error when an invalid node is set', async () => {
 })
 
 test('Should not select a different node on Testnet when a valid one is set as default and it is compatibile with the selected pToken', async () => {
-  const reachableNode = 'https://nuc-bridge-2.ngrok.io'
+  const reachableNode = 'https://nuc-bridge-3.ngrok.io'
 
   const nodeSelector = new NodeSelector({
     pToken: {
@@ -178,7 +178,7 @@ test('Should not select a different node on Mainnet when a valid one is set as d
 
 test('Should select a different node on Testnet when a valid one is set as default but it is not compatibile with the selected pToken', async () => {
   const reachableNodeButNotCompatibleWithSelectedpToken =
-    'https://nuc-bridge-3.ngrok.io'
+    'https://nuc-bridge-2.ngrok.io'
 
   const nodeSelector = new NodeSelector({
     pToken: {
@@ -196,7 +196,7 @@ test('Should select a different node on Testnet when a valid one is set as defau
 
 test('Should select a different node on Mainnet when a valid one is set as default but it is not compatibile with the selected pToken', async () => {
   const reachableNodeButNotCompatibleWithSelectedpToken =
-    'https://nuc-bridge-2.ngrok.io'
+    'https://nuc-bridge-3.ngrok.io'
 
   const nodeSelector = new NodeSelector({
     pToken: {
