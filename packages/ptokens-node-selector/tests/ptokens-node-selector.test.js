@@ -68,7 +68,7 @@ test('Should select a pBTC node on Ethereum Mainnet when network type is a promi
 })
 
 test('Should generate an error when an unsupported network is provided', async () => {
-  const expectedError = 'Unsupported Network'
+  const expectedError = 'Invalid Network Type'
   const web3 = new Web3(ETH_UNSUPPORTED_TESTNET_PROVIDER)
 
   try {
@@ -140,7 +140,7 @@ test('Should generate an error when an invalid node is set', async () => {
   })
 
   try {
-    await nodeSelector.set(unreachableNode)
+    await nodeSelector.setEndpoint(unreachableNode)
   } catch (err) {
     expect(err.message).to.be.equal(expectedError)
   }
@@ -240,4 +240,62 @@ test('Should select a different node on Mainnet when an invalid one is set as de
   })
   const selectedNode = await nodeSelector.select()
   expect(selectedNode.endpoint).to.be.not.equal(unreachableNode)
+})
+
+test('Should always return network type equal to Mainnet', async () => {
+  const expectedNetworkType = 'mainnet'
+  const nodeSelector = new NodeSelector({
+    pToken: {
+      name: 'pBTC',
+      redeemFrom: 'ETH'
+    },
+    networkType: 'mainnet'
+  })
+  let networkType = await nodeSelector.getNetworkType()
+  expect(networkType).to.be.equal(expectedNetworkType)
+
+  nodeSelector.setNetworkType('bitcoin')
+  networkType = await nodeSelector.getNetworkType()
+  expect(networkType).to.be.equal(expectedNetworkType)
+
+  nodeSelector.setNetworkType('mainnet')
+  networkType = await nodeSelector.getNetworkType()
+  expect(networkType).to.be.equal(expectedNetworkType)
+})
+
+test('Should always return network type equal to Testnet', async () => {
+  const expectedNetworkType = 'testnet'
+  const nodeSelector = new NodeSelector({
+    pToken: {
+      name: 'pBTC',
+      redeemFrom: 'ETH'
+    },
+    networkType: 'testnet'
+  })
+  let networkType = await nodeSelector.getNetworkType()
+  expect(networkType).to.be.equal(expectedNetworkType)
+
+  nodeSelector.setNetworkType('ropsten')
+  networkType = await nodeSelector.getNetworkType()
+  expect(networkType).to.be.equal(expectedNetworkType)
+
+  nodeSelector.setNetworkType('testnet')
+  networkType = await nodeSelector.getNetworkType()
+  expect(networkType).to.be.equal(expectedNetworkType)
+})
+
+test('Should generate an error when an invalid network type is set', async () => {
+  const expectedError = 'Invalid Network Type'
+  const nodeSelector = new NodeSelector({
+    pToken: {
+      name: 'pBTC',
+      redeemFrom: 'ETH'
+    },
+    networkType: 'testnet'
+  })
+  try {
+    nodeSelector.setNetworkType('invalid')
+  } catch (err) {
+    expect(err.message).to.be.equal(expectedError)
+  }
 })

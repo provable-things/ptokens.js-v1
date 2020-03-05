@@ -39,7 +39,9 @@ const node = new NodeSelector({
 * __`checkConnection`__
 * __`getApi`__
 * __`select`__
-* __`set`__
+* __`setEndpoint`__
+* __`getNetworkType`__
+* __`setNetworkType`__
 
 ***
 
@@ -111,10 +113,10 @@ nodeSelector.select().then(selectedNode => {
 &nbsp;
 
 
-## set
+## setEndpoint
 
 ```js
-nodeSelector.set(endpoint)
+nodeSelector.setEndpoint(endpoint)
 ```
 
 A function that manually sets a specific node.
@@ -129,7 +131,51 @@ A function that manually sets a specific node.
 
 ### Example
 ```js
-const selectedNode = nodeSelector.set('https://..')
+const selectedNode = nodeSelector.setEndpoint('https://..')
 console.log(selectedNode.endpoint)
 selectedNode.api.get('https://...')
+```
+
+&nbsp;
+
+
+## setNetworkType
+
+```js
+nodeSelector.setNetworkType(type)
+```
+
+A function that manually sets the network type
+
+### Parameters
+
+- __`String`__ - __`type`__: network type
+
+### Returns
+
+- __`Promise`__ : when resolved it returns a string
+
+### Example
+```js
+const selectedNode = nodeSelector.setNetworkType('testnet')
+```
+
+&nbsp;
+
+
+## getNetworkType
+
+```js
+nodeSelector.getNetworkType()
+```
+
+A function return the current network type 
+
+### Returns
+
+- __`String`__ : network type (__mainnet__ or __testnet__)
+
+### Example
+```js
+const selectedNode = nodeSelector.getNetworkType()
 ```

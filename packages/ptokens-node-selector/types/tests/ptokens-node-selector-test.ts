@@ -19,4 +19,10 @@ nodeSelector.getApi()
 nodeSelector.select()
 
 // $ExpectType Node
-nodeSelector.set('https://unreachable-node.io')
+nodeSelector.setEndpoint('https://unreachable-node.io')
+
+// $ExpectType Promise<string>
+nodeSelector.getNetworkType()
+
+// $ExpectType string
+nodeSelector.setNetworkType('testnet')

@@ -30,5 +30,9 @@ export class NodeSelector {
 
   select(): Promise<Node>
 
-  set(_endpoint: string): Node
+  setEndpoint(_endpoint: string): Node
+
+  getNetworkType(): Promise<string>
+
+  setNetworkType(_type: string): string
 }

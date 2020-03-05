@@ -7,6 +7,14 @@ import {
 import { helpers } from 'ptokens-utils'
 import { Node } from 'ptokens-node'
 
+const networksToType = {
+  ropsten: 'testnet',
+  main: 'mainnet',
+  bitcoin: 'mainnet',
+  testnet: 'testnet',
+  mainnet: 'mainnet'
+}
+
 export class NodeSelector {
   /**
    * @param {Object} configs
@@ -63,7 +71,7 @@ export class NodeSelector {
 
   async select() {
     try {
-      const networkType = await this._getNetworkType()
+      const networkType = await this.getNetworkType()
 
       if (this.nodes.length === 0) {
         const res = await makeApiCallWithTimeout(
@@ -87,7 +95,7 @@ export class NodeSelector {
           node &&
           (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
         )
-          return this.set(node.webapi)
+          return this.setEndpoint(node.webapi)
       }
 
       const filteredNodesByFeature = this.nodes.filter(node =>
@@ -109,7 +117,7 @@ export class NodeSelector {
           )) &&
           !nodesNotReachable.includes(selectedNode)
         )
-          return this.set(selectedNode.webapi)
+          return this.setEndpoint(selectedNode.webapi)
         else if (!nodesNotReachable.includes(selectedNode))
           nodesNotReachable.push(selectedNode)
 
@@ -124,7 +132,7 @@ export class NodeSelector {
   /**
    * @param {String} _endpoint
    */
-  set(_endpoint) {
+  setEndpoint(_endpoint) {
     this.selectedNode = new Node({
       pToken: this.pToken,
       endpoint: _endpoint
@@ -133,23 +141,23 @@ export class NodeSelector {
     return this.selectedNode
   }
 
-  async _getNetworkType() {
-    const networksMap = {
-      ropsten: 'testnet',
-      main: 'mainnet',
-      bitcoin: 'mainnet',
-      testnet: 'testnet',
-      mainnet: 'mainnet'
-    }
-
+  async getNetworkType() {
     if (this.networkType.then) {
-      const network = await this.networkType
-      this.networkType = networksMap[network]
-
-      if (!this.networkType) throw new Error('Unsupported Network')
+      const networkType = await this.networkType
+      return this.setNetworkType(networkType)
     }
 
-    this.networkType = networksMap[this.networkType]
+    return this.setNetworkType(this.networkType)
+  }
+
+  /**
+   * @param {String} _type
+   */
+  setNetworkType(_type) {
+    this.networkType = networksToType[_type]
+
+    if (!this.networkType) throw new Error('Invalid Network Type')
+
     return this.networkType
   }
 }
