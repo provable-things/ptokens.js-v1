@@ -17,10 +17,11 @@
     "prepare": "npm run build && npm run bootstrap && npm run dtslint"
   },
   "keywords": [
-    "pTokens",
-    "JavaScript",
-    "Ethereum",
-    "EOS"
+    "ptokens",
+    "javaScript",
+    "ethereum",
+    "bitcoin",
+    "pnetwork"
   ],
   "author": "alle.manfredi@gmail.com @provable-things",
   "repository": {

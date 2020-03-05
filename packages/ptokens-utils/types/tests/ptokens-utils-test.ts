@@ -2,8 +2,7 @@ import {
   btc,
   converters,
   eth,
-  helpers,
-  ltc
+  helpers
 } from 'ptokens-utils'
 import { EventEmitter } from 'events'
 import Web3 from 'web3'
@@ -98,26 +97,3 @@ helpers.pTokenNameIsValid('pBTC')
 
 // $ExpectType boolean
 helpers.pTokenIsValid({ name: 'pBTC', redeemFrom: 'ETH'})
-
-// litecoin
-const LTC_RAW_TX = "0200000001c266c9f18cf5fe20cdbf107230e838f363b307d399fa4c29e8fd31dfda9cbf88000000006b483045022100bd9d134bc09c8a9760b3f62e768958cf82dcd3c556057f07113c18df2448b07c02206d16246c08a262e6c0d4a8e24be6135ba2d84583af9c0fdd36b633e22b6374a3012103571c595ea1b39832d33ebcf519b551b056298654229e67ed8964ba1ecf388402ffffffff02f40100000000000017a914e1c311b8a6584fde5b55292d8ef44addf1c9134487a4909800000000001976a914329d43938a947149be392f93f152da34ef32a49a88ac00000000"
-const LTC_TESTING_ADDRESS = 'n1qkF2NzY1v5Jj41zSJZRVJE1rJDRyoFzs'
-const LTC_UTXO = '6ccb55376f6615ddbc9dca91187f2e3fe9fcd4a3aa2a8a88ca0c5ccb30b891f6'
-
-// $ExpectType Promise<LitecoinBroadcastedTx>
-ltc.broadcastTransaction('testnet', LTC_RAW_TX)
-
-// $ExpectType Promise<LitecoinUtxoList>
-ltc.getUtxoByAddress('testnet', LTC_TESTING_ADDRESS)
-
-// $ExpectType Promise<string>
-ltc.getTransactionHexById('testnet', LTC_UTXO)
-
-// $ExpectType boolean
-ltc.isValidAddress('testnet', LTC_TESTING_ADDRESS)
-
-// $ExpectType Promise<string>
-ltc.monitorUtxoByAddress('testnet', LTC_TESTING_ADDRESS, new EventEmitter(), 1000)
-
-// $ExpectType Promise<LitecoinTransactionReceipt>
-ltc.waitForTransactionConfirmation('testnet', LTC_UTXO, 10000)

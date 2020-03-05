@@ -36,7 +36,7 @@ const node = new Node({
 node.ping()
 
 // $ExpectType Promise<NodeInfo>
-node.getInfo('testnet', 'ropsten')
+node.getInfo()
 
 // $ExpectType Promise<ReportList>
 node.getReports('native', 10)

@@ -7,12 +7,20 @@ import {
 import { helpers } from 'ptokens-utils'
 import { Node } from 'ptokens-node'
 
+const networksToType = {
+  ropsten: 'testnet',
+  main: 'mainnet',
+  bitcoin: 'mainnet',
+  testnet: 'testnet',
+  mainnet: 'mainnet'
+}
+
 export class NodeSelector {
   /**
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, defaultEndpoint } = configs
+    const { pToken, defaultEndpoint, networkType } = configs
 
     if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
@@ -23,6 +31,15 @@ export class NodeSelector {
     this.selectedNode = null
     this.nodes = []
     this.defaultEndpoint = defaultEndpoint
+
+    if (
+      networkType !== 'testnet' &&
+      networkType !== 'mainnet' &&
+      !networkType.then
+    )
+      throw new Error('Invalid Network')
+
+    this.networkType = networkType
   }
 
   /**
@@ -54,9 +71,11 @@ export class NodeSelector {
 
   async select() {
     try {
+      const networkType = await this.getNetworkType()
+
       if (this.nodes.length === 0) {
         const res = await makeApiCallWithTimeout(
-          getBootNodeApi(),
+          getBootNodeApi(networkType),
           'GET',
           '/peers'
         )
@@ -76,7 +95,7 @@ export class NodeSelector {
           node &&
           (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
         )
-          return this.set(node.webapi)
+          return this.setEndpoint(node.webapi)
       }
 
       const filteredNodesByFeature = this.nodes.filter(node =>
@@ -98,7 +117,7 @@ export class NodeSelector {
           )) &&
           !nodesNotReachable.includes(selectedNode)
         )
-          return this.set(selectedNode.webapi)
+          return this.setEndpoint(selectedNode.webapi)
         else if (!nodesNotReachable.includes(selectedNode))
           nodesNotReachable.push(selectedNode)
 
@@ -113,12 +132,32 @@ export class NodeSelector {
   /**
    * @param {String} _endpoint
    */
-  set(_endpoint) {
+  setEndpoint(_endpoint) {
     this.selectedNode = new Node({
       pToken: this.pToken,
       endpoint: _endpoint
     })
 
     return this.selectedNode
+  }
+
+  async getNetworkType() {
+    if (this.networkType.then) {
+      const networkType = await this.networkType
+      return this.setNetworkType(networkType)
+    }
+
+    return this.setNetworkType(this.networkType)
+  }
+
+  /**
+   * @param {String} _type
+   */
+  setNetworkType(_type) {
+    this.networkType = networksToType[_type]
+
+    if (!this.networkType) throw new Error('Invalid Network Type')
+
+    return this.networkType
   }
 }

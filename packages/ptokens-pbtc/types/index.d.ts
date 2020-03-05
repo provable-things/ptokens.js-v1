@@ -22,26 +22,6 @@ export class pBTC {
   getDepositAddress(_ethAddress: string): Promise<BtcDepositAddress>
 
   redeem(_amount: number, _btcAddress: string): PromiEvent<EthereumTransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
-
-  getTotalIssued(): Promise<number>
-
-  getTotalRedeemed(): Promise<number>
-
-  getCirculatingSupply(): Promise<number>
-
-  getBalance(_ethAddress: string): Promise<number>
-
-  transfer(_to: string, _amount: number): Promise<boolean>
-
-  approve(_spender: string, _amount: number): Promise<boolean>
-
-  transferFrom(_from: string, _to: string, _amount: number): Promise<boolean>
-
-  getBurnNonce(): Promise<number>
-
-  getMintNonce(): Promise<number>
-
-  getAllowance(_owner: string, _spender: string): Promise<number>
 }
 
 export interface RedeemResult {

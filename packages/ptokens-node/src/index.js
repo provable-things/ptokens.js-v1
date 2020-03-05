@@ -26,17 +26,12 @@ export class Node {
     )
   }
 
-  /**
-   *
-   * @param {String} _issueFromNetwork
-   * @param {String} _redeemFromNetwork
-   */
-  async getInfo(_issueFromNetwork, _redeemFromNetwork) {
+  async getInfo() {
     if (!this.info) {
       this.info = await makeApiCall(
         this.endpoint,
         'GET',
-        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info/${_issueFromNetwork}/${_redeemFromNetwork}`
+        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info`
       )
     }
     return this.info

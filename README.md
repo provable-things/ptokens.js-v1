@@ -33,12 +33,6 @@ const ptokens = new pTokens({
     ethProvider: 'Eth provider',
     btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
     defaultEndpoint: 'https://......' //optional
-  },
-  pltc: {
-    ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
-    ltcNetwork: 'testnet',  //'testnet' or 'litecoin', default 'testnet'
-    defaultEndpoint: 'https://......' //optional
   }
 })
 ```
@@ -54,10 +48,6 @@ if (window.web3) {
     pbtc: {
       ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'
-    },
-    pltc: {
-      ethProvider: window.web3.currentProvider,
-      ltcNetwork: 'litecoin'
     }
   })
 } else {
@@ -78,7 +68,7 @@ depositAddress.waitForDeposit()
   .once('onBtcTxBroadcasted', tx => ... )
   .once('onBtcTxConfirmed', tx => ...)
   .once('onNodeReceivedTx', tx => ...)
-  .once('onNodeReceivedTx', tx => ...)
+  .once('onNodeBroadcastedTx', tx => ...)
   .once('onEthTxConfirmed', tx => ...)
   .then(res => ...))
 ```
