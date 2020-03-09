@@ -6,7 +6,7 @@ import Web3Utils from 'web3-utils'
 import { BtcDepositAddress } from './btc-deposit-address'
 import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 import {
-  MINIMUN_SATS_REDEEMABLE,
+  MINIMUM_BTC_REDEEMABLE,
   BTC_ESPLORA_POLLING_TIME
 } from './utils/constants'
 
@@ -84,9 +84,9 @@ export class pBTC {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
-      if (_amount < MINIMUN_SATS_REDEEMABLE) {
+      if (_amount < MINIMUM_BTC_REDEEMABLE) {
         promiEvent.reject(
-          `Impossible to burn less than ${MINIMUN_SATS_REDEEMABLE} pBTC`
+          `Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`
         )
         return
       }
@@ -112,7 +112,7 @@ export class pBTC {
             privateKey: this._ethPrivateKey,
             value: eth.zeroEther
           },
-          [eth.correctFormat(_amount, decimals, '*'), _btcAddress]
+          [eth.correctFormat(_amount, decimals, '*').toString(), _btcAddress]
         )
         promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
 
