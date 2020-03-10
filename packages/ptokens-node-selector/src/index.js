@@ -33,8 +33,8 @@ export class NodeSelector {
     this.defaultEndpoint = defaultEndpoint
 
     if (
-      networkType !== 'testnet' &&
-      networkType !== 'mainnet' &&
+      networksToType[networkType] !== 'testnet' &&
+      networksToType[networkType] !== 'mainnet' &&
       !networkType.then
     )
       throw new Error('Invalid Network')

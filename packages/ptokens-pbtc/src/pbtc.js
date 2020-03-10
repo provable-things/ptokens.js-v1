@@ -43,7 +43,7 @@ export class pBTC {
         redeemFrom: 'ETH'
       },
       defaultEndpoint,
-      networkType: this._web3.eth.net.getNetworkType()
+      networkType: this._btcNetwork
     })
 
     this._contractAddress = null
