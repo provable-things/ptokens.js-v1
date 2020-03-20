@@ -2,10 +2,13 @@ import {
   btc,
   converters,
   eth,
+  eos,
   helpers
 } from 'ptokens-utils'
 import { EventEmitter } from 'events'
 import Web3 from 'web3'
+import { Api, JsonRpc } from 'eosjs'
+import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 
 // btc
 const BTC_RAW_TX = "020000000001011333183ddf384da83ed49296136c70d206ad2b19331bf25d390e69b222165e370000000017160014b93f973eb2bf0b614bddc0f47286788c98c535b4feffffff0200e1f5050000000017a914a860f76561c85551594c18eecceffaee8c4822d787f0c1a4350000000017a914d8b6fcc85a383261df05423ddf068a8987bf028787024730440220434caf5bb442cb6a251e8bce0ec493f9a1a9c4423bcfc029e542b0e8a89d1b3f022011090d4e98f79c62b188245a4aa4eb77e912bfd57e0a9b9a1c5e65f2b39f3ab401210223bec70d670d29a30d9bcee197910e37cf2a10f0dc3c5ac44d865aec0d7052fb8c000000"
@@ -65,7 +68,7 @@ eth.getGasLimit(new Web3())
 // $ExpectType boolean
 eth.isHexPrefixed('hello')
 
-// $ExpectType Promise<EthereumTransactionReceipt>
+// $ExpectType Promise<TransactionReceipt>
 eth.makeContractCall(
   new Web3(),
   'get',
@@ -76,7 +79,7 @@ eth.makeContractCall(
   []
 )
 
-// $ExpectType Promise<EthereumTransactionReceipt>
+// $ExpectType Promise<TransactionReceipt>
 eth.makeContractSend(
   new Web3(),
   'write',
@@ -87,8 +90,41 @@ eth.makeContractSend(
   ['hello']
 )
 
-// $ExpectType Promise<EthereumTransactionReceipt>
+// $ExpectType Promise<TransactionReceipt>
 eth.waitForTransactionConfirmation(new Web3(), ETH_TESTING_TX, 1000)
+
+// eos
+
+const jsonRpc = new JsonRpc('endpoint')
+const signatureProvider = new JsSignatureProvider(['privK1, privK2'])
+
+const eosApi = new Api({
+  rpc: jsonRpc,
+  signatureProvider,
+  textDecoder: new TextDecoder(),
+  textEncoder: new TextEncoder()
+})
+
+// $ExpectType Api
+eos.getApi('private key', jsonRpc, signatureProvider)
+
+// $ExpectType Promise<string>
+eos.getAccountName(eosApi, ['pubK1, pubK2'])
+
+// $ExpectType Promise<string[]>
+eos.getAvailablePublicKeys(eosApi)
+
+// $ExpectType number
+eos.getAmountInEosFormat(20000, 4)
+
+// $ExpectType boolean
+eos.isValidAccountName('all3manfr3di')
+
+// $ExpectType Promise<any>
+eos.transferNativeToken(eosApi, 'to', 'all3manfr3di', 200, 'memo', 3, 4)
+
+// $ExpectType Promise<any>
+eos.waitForTransactionConfirmation(eosApi, 'txId')
 
 // helpers
 

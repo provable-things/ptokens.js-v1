@@ -26,7 +26,7 @@ const correctFormat = (_amount, _decimals, _operation) =>
     : parseInt(_amount * Math.pow(10, _decimals))
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {Boolean=} false - _isWeb3Injected
  */
 const getAccount = (_web3, _isWeb3Injected = false) =>
@@ -42,7 +42,7 @@ const getAccount = (_web3, _isWeb3Injected = false) =>
   })
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {Object} _abi
  * @param {String} _contractAddress
  * @param {String} _account
@@ -81,7 +81,7 @@ const getGasLimit = _web3 =>
 const isHexPrefixed = _string => _string.slice(0, 2) === HEX_PREFIX
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {String} _method
  * @param {Object} _options
  * @param {Array=} [] - _params
@@ -100,7 +100,7 @@ const makeContractCall = async (_web3, _method, _options, _params = []) => {
 }
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {String} _method
  * @param {Object} _options
  * @param {Array=} [] - _params
@@ -109,30 +109,30 @@ const makeContractSend = (_web3, _method, _options, _params = []) =>
   new Promise((resolve, reject) => {
     _options.isWeb3Injected
       ? _makeContractSend(
-          _web3,
-          _method,
-          _options.abi,
-          _options.contractAddress,
-          _options.value,
-          _params
-        )
-          .then(_status => resolve(_status))
-          .catch(_err => reject(_err))
+        _web3,
+        _method,
+        _options.abi,
+        _options.contractAddress,
+        _options.value,
+        _params
+      )
+        .then(_status => resolve(_status))
+        .catch(_err => reject(_err))
       : _sendSignedMethodTx(
-          _web3,
-          _options.privateKey,
-          _method,
-          _options.abi,
-          _options.contractAddress,
-          _options.value,
-          _params
-        )
-          .then(_receipt => resolve(_receipt))
-          .catch(_err => reject(_err))
+        _web3,
+        _options.privateKey,
+        _method,
+        _options.abi,
+        _options.contractAddress,
+        _options.value,
+        _params
+      )
+        .then(_receipt => resolve(_receipt))
+        .catch(_err => reject(_err))
   })
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {String} _method
  * @param {Boolean} _isWeb3Injected
  * @param {Object} _abi
@@ -163,7 +163,7 @@ const _makeContractSend = async (
 }
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {String} _privateKey
  * @param {String} _method
  * @param {Object} _abi
@@ -214,7 +214,7 @@ const _sendSignedMethodTx = (
   })
 
 /**
- * @param {Object} _web3
+ * @param {Web3} _web3
  * @param {String} _tx
  * @param {Number} _pollingTime
  */

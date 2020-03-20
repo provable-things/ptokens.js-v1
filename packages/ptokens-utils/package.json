@@ -31,11 +31,14 @@
     "bitcoin-address-validation": "^1.0.0",
     "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
+    "eosjs": "^20.0.3",
     "eventemitter3": "^4.0.0",
     "light-async-polling": "^1.0.2",
+    "text-encoding": "^0.7.0",
     "web3": "^1.2.2"
   },
   "devDependencies": {
+    "@types/text-encoding": "0.0.35",
     "dtslint": "0.4.2",
     "jest": "^24.8.0"
   },

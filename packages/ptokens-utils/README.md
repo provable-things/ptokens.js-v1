@@ -23,7 +23,7 @@ npm install ptokens-utils
 ### Usage
 
 ```js
-const utils = require('ptokens-utils')
+import * as utils from 'ptokens-utils'
 
 { eth:
    [Object: null prototype] {

@@ -1,5 +1,5 @@
 const availables = {
-  pbtc: ['ETH']
+  pbtc: ['ETH', 'EOS']
 }
 
 /**

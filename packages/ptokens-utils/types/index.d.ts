@@ -1,4 +1,8 @@
 import { EventEmitter } from 'events'
+import { TransactionReceipt } from 'web3-core'
+import { Api, JsonRpc } from 'eosjs'
+import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+import Web3 from 'web3'
 
 // btc
 export interface BitcoinUtxoList extends Array<BitcoinUtxo> {}
@@ -25,11 +29,11 @@ export interface BitcoinVin {
   txid: string,
   vout: number,
   prevout: {
-      scriptpubkey: string,
-      scriptpubkey_asm: string,
-      scriptpubkey_type: string,
-      scriptpubkey_address: string,
-      value: number
+    scriptpubkey: string,
+    scriptpubkey_asm: string,
+    scriptpubkey_type: string,
+    scriptpubkey_address: string,
+    value: number
   },
   scriptsig: string,
   scriptsig_asm: string,
@@ -93,20 +97,6 @@ export interface convertersInterface {
 export const converters: convertersInterface
 
 // eth
-export interface EthereumTransactionReceipt {
-  hash: string,
-  nonce: number,
-  blockHash: string | null,
-  blockNumber: number | null,
-  transactionIndex: number | null,
-  from: string,
-  to: string | null,
-  value: string,
-  gasPrice: string,
-  gas: number,
-  input: string
-}
-
 export interface ContractCallParam {
   abi: any, // difficult to get abi interface
   contractAddress: string,
@@ -117,16 +107,29 @@ export interface ethInterface {
   addHexPrefix(_string: string): string
   removeHexPrefix(_string: string): string
   correctFormat(_amount: number, _decimals: number, _operation: string): number
-  getAccount(_web3: object, _isWeb3Injected: boolean): string
-  getContract(_web3: object, _abi: any, _contractAddress: string, _account: string): object
-  getGasLimit(_web3: object): number
+  getAccount(_web3: Web3, _isWeb3Injected: boolean): string
+  getContract(_web3: Web3, _abi: any, _contractAddress: string, _account: string): object
+  getGasLimit(_web3: Web3): number
   isHexPrefixed(_string: string): boolean
-  makeContractCall(_web3: object, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<EthereumTransactionReceipt>
-  makeContractSend(_web3: object, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<EthereumTransactionReceipt>
-  waitForTransactionConfirmation(_web3: object, _tx: string, _pollingTime: number): Promise <EthereumTransactionReceipt>
+  makeContractCall(_web3: Web3, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<TransactionReceipt>
+  makeContractSend(_web3: Web3, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<TransactionReceipt>
+  waitForTransactionConfirmation(_web3: Web3, _tx: string, _pollingTime: number): Promise <TransactionReceipt>
 }
 
 export const eth: ethInterface
+
+// eos
+export interface eosInterface {
+  getApi(_privateKey: string, _rpc: JsonRpc, _signatureProvider: JsSignatureProvider | null): Api
+  getAccountName(_api: Api, _pubkeys: string[]): Promise<string>
+  getAvailablePublicKeys(_api: Api): Promise<string[]>
+  getAmountInEosFormat(_amount: number, _decimals: number): number
+  isValidAccountName(_accountName: string): boolean
+  transferNativeToken(_api: Api, _to: string, _accountName: string, _amount: number, _memo: string, _blocksBehind: number, _expireSeconds: number): Promise<any>
+  waitForTransactionConfirmation(_api: Api, _tx: string): Promise<any>
+}
+
+export const eos: eosInterface
 
 // helpers
 export interface pToken {
