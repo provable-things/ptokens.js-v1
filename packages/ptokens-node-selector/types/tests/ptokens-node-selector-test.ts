@@ -3,7 +3,7 @@ import { NodeSelector } from 'ptokens-node-selector'
 const nodeSelector = new NodeSelector({
   pToken: {
     name: 'pBTC',
-    redeemFrom: 'ETH'
+    hostBlockchain: 'ETH'
   },
   defaultEndpoint: 'https://nuc-bridge-2.ngrok.io',
   networkType: 'mainnet'

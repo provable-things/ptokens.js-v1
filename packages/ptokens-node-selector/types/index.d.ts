@@ -3,7 +3,7 @@ import { Node, Report } from 'ptokens-node'
 export interface NodeSelectorConfigs {
   pToken: {
     name: string,
-    redeemFrom: string
+    hostBlockchain: string
   },
   defaultEndpoint?: string,
   networkType: string | Promise<string>

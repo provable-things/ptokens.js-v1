@@ -26,7 +26,7 @@ export class NodeSelector {
 
     this.pToken = pToken
     this.pToken.name = pToken.name.toLowerCase()
-    this.pToken.redeemFrom = pToken.redeemFrom.toLowerCase()
+    this.pToken.hostBlockchain = pToken.hostBlockchain.toLowerCase()
 
     this.selectedNode = null
     this.nodes = []
@@ -50,7 +50,7 @@ export class NodeSelector {
       await makeApiCallWithTimeout(
         createApi(_endpoint),
         'GET',
-        `/${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`,
+        `/${this.pToken.name}-on-${this.pToken.hostBlockchain}/ping`,
         null,
         _timeout
       )
@@ -81,7 +81,7 @@ export class NodeSelector {
         this.nodes = res.peers
       }
 
-      const feature = `${this.pToken.name}-on-${this.pToken.redeemFrom}`
+      const feature = `${this.pToken.name}-on-${this.pToken.hostBlockchain}`
 
       if (this.defaultEndpoint) {
         const node = this.nodes.find(
