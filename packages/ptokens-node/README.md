@@ -28,7 +28,7 @@ import { Node } from 'ptokens-node'
 const node = new Node({
   pToken: {
     name: 'pToken name',
-    redeemFrom: 'ETH' //for now
+    hostBlockchain: 'ETH' //for now
   },
   endpoint: 'https://...' //optional
 })

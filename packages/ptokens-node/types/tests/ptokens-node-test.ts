@@ -27,7 +27,7 @@ const BTC_PBTC_BLOCK = {
 const node = new Node({
   pToken: {
     name: 'pBTC',
-    redeemFrom: 'ETH'
+    hostBlockchain: 'ETH'
   },
   endpoint: 'https://nuc-bridge-3.ngrok.io'
 })
@@ -55,9 +55,6 @@ node.getIncomingTransactionStatus(HASH_INCOMING_TX)
 
 // $ExpectType Promise<Report>
 node.getBroadcastTransactionStatus(HASH_BROADCASTED_TX)
-
-// $ExpectType Promise<string>
-node.submitBlock('native', BTC_PBTC_BLOCK)
 
 // $ExpectType Promise<Report>
 node.monitorIncomingTransaction(HASH_INCOMING_TX, new EventEmitter())

@@ -22,18 +22,16 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/ping`
     )
   }
 
   async getInfo() {
-    if (!this.info) {
-      this.info = await makeApiCall(
-        this.endpoint,
-        'GET',
-        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info`
-      )
-    }
+    this.info = await makeApiCall(
+      this.endpoint,
+      'GET',
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/get-info`
+    )
     return this.info
   }
 
@@ -45,7 +43,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-reports/limit/${_limit}`
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/${_type}-reports/limit/${_limit}`
     )
   }
 
@@ -58,7 +56,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-address/${_address}/limit/${_limit}`
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/${_type}-address/${_address}/limit/${_limit}`
     )
   }
 
@@ -70,7 +68,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/report/${_type}/nonce/${_nonce}`
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/report/${_type}/nonce/${_nonce}`
     )
   }
 
@@ -81,7 +79,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/last-processed-${_type}-block`
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/last-processed-${_type}-block`
     )
   }
 
@@ -92,7 +90,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/incoming-tx-hash/${_hash}`
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/incoming-tx-hash/${_hash}`
     )
   }
 
@@ -103,20 +101,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/broadcast-tx-hash/${_hash}`
-    )
-  }
-
-  /**
-   * @param {Object} _type
-   * @param {String} _block
-   */
-  submitBlock(_type, _block) {
-    return makeApiCall(
-      this.endpoint,
-      'POST',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/submit-${_type}-block`,
-      _block
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/broadcast-tx-hash/${_hash}`
     )
   }
 
@@ -129,7 +114,7 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       _type,
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_path}`,
+      `${this.pToken.name}-on-${this.pToken.hostBlockchain}/${_path}`,
       _data
     )
   }

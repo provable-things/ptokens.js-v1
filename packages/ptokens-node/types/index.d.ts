@@ -3,14 +3,14 @@ import { EventEmitter } from 'events'
 export interface NodeConfigs {
   pToken: {
     name: string,
-    redeemFrom: string
+    hostBlockchain: string
   },
   endpoint: string
 }
 
 export interface pToken {
   name: string
-  redeemFrom: string
+  hostBlockchain: string
 }
 
 export class Node {
@@ -35,8 +35,6 @@ export class Node {
   getIncomingTransactionStatus(_hash: string): Promise<Report>
 
   getBroadcastTransactionStatus(_hash: string): Promise<Report>
-
-  submitBlock(_type: string, _block: object): Promise<string>
 
   monitorIncomingTransaction(_hash: string, _eventEmitter: EventEmitter): Promise<Report>
 }
