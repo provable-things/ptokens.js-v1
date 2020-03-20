@@ -21,6 +21,7 @@ test('Should select a pBTC node on Ethereum Testnet', async () => {
   })
 
   const node = await nodeSelector.select()
+  // eslint-disable-next-line
   expect(node.endpoint).to.be.not.null
 })
 
@@ -34,36 +35,7 @@ test('Should select a pBTC node on Ethereum Mainnet', async () => {
   })
 
   const node = await nodeSelector.select()
-  expect(node.endpoint).to.be.not.null
-})
-
-test('Should select a pBTC node on Ethereum Testnet when network type is a promise returning an Ethereum Testnet chain name', async () => {
-  const web3 = new Web3(ETH_TESTNET_PROVIDER)
-
-  const nodeSelector = new NodeSelector({
-    pToken: {
-      name: 'pBTC',
-      redeemFrom: 'ETH'
-    },
-    networkType: web3.eth.net.getNetworkType()
-  })
-
-  const node = await nodeSelector.select()
-  expect(node.endpoint).to.be.not.null
-})
-
-test('Should select a pBTC node on Ethereum Mainnet when network type is a promise returning an Ethereum Mainnet chain name', async () => {
-  const web3 = new Web3(ETH_MAINNET_PROVIDER)
-
-  const nodeSelector = new NodeSelector({
-    pToken: {
-      name: 'pBTC',
-      redeemFrom: 'ETH'
-    },
-    networkType: web3.eth.net.getNetworkType()
-  })
-
-  const node = await nodeSelector.select()
+  // eslint-disable-next-line
   expect(node.endpoint).to.be.not.null
 })
 
@@ -95,6 +67,7 @@ test('Should select a pBTC node on Ethereum Testnet', async () => {
   })
 
   const node = await nodeSelector.select()
+  // eslint-disable-next-line
   expect(node.endpoint).to.be.not.null
 })
 
@@ -112,10 +85,11 @@ test('Should not be connected if a node is unreachable', async () => {
   expect(isConnected).to.be.equal(false)
 })
 
-test('Should generate an error when an invalid pToken name is set', async () => {
+test('Should generate an error when an invalid pToken name is set', () => {
   const expectedError = 'Invalid pToken'
 
   try {
+    // eslint-disable-next-line
     new NodeSelector({
       pToken: {
         name: 'invalid name',
@@ -284,7 +258,7 @@ test('Should always return network type equal to Testnet', async () => {
   expect(networkType).to.be.equal(expectedNetworkType)
 })
 
-test('Should generate an error when an invalid network type is set', async () => {
+test('Should generate an error when an invalid network type is set', () => {
   const expectedError = 'Invalid Network Type'
   const nodeSelector = new NodeSelector({
     pToken: {

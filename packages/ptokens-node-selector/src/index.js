@@ -34,10 +34,9 @@ export class NodeSelector {
 
     if (
       networksToType[networkType] !== 'testnet' &&
-      networksToType[networkType] !== 'mainnet' &&
-      !networkType.then
+      networksToType[networkType] !== 'mainnet'
     )
-      throw new Error('Invalid Network')
+      throw new Error('Invalid Network Type')
 
     this.networkType = networkType
   }
@@ -93,7 +92,7 @@ export class NodeSelector {
 
         if (
           node &&
-          (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
+          await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT)
         )
           return this.setEndpoint(node.webapi)
       }
@@ -111,10 +110,10 @@ export class NodeSelector {
         const selectedNode = filteredNodesByFeature[index]
 
         if (
-          (await this.checkConnection(
+          await this.checkConnection(
             selectedNode.webapi,
             NODE_CONNECTION_TIMEOUT
-          )) &&
+          ) &&
           !nodesNotReachable.includes(selectedNode)
         )
           return this.setEndpoint(selectedNode.webapi)

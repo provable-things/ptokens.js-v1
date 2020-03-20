@@ -53,17 +53,17 @@ const makeApiCallWithTimeout = async (
     const options = {
       cancelToken: _timeout
         ? new CancelToken(_cancel =>
-            setTimeout(
-              () => _cancel(`timeout of ${_timeout}ms exceeded`),
-              _timeout
-            )
+          setTimeout(
+            () => _cancel(`timeout of ${_timeout}ms exceeded`),
+            _timeout
           )
+        )
         : undefined
     }
 
     const details = [
       _apiPath,
-      ...(_callType === 'GET' ? [options] : [_params, options])
+      ..._callType === 'GET' ? [options] : [_params, options]
     ]
 
     const res = await api[_callType.toLowerCase()](...details)
