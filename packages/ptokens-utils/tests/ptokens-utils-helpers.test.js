@@ -4,7 +4,7 @@ import { expect } from 'chai'
 test('Should return true because of valid pToken', () => {
   const pToken = {
     name: 'pBTC',
-    redeemFrom: 'ETH'
+    hostBlockchain: 'ETH'
   }
   const exptectedResult = true
   const result = utils.helpers.pTokenIsValid(pToken)
@@ -14,7 +14,7 @@ test('Should return true because of valid pToken', () => {
 test('Should return false because of invalid pTokenName', () => {
   const pToken = {
     name: 'pBTCccc',
-    redeemFrom: 'eth'
+    hostBlockchain: 'eth'
   }
   const exptectedResult = false
   const result = utils.helpers.pTokenIsValid(pToken)

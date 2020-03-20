@@ -14,11 +14,11 @@ const pTokenNameIsValid = _pTokenName => {
  * @param {Object} _pToken
  */
 const pTokenIsValid = _pToken => {
-  const { name, redeemFrom } = _pToken
+  const { name, hostBlockchain } = _pToken
 
   if (!pTokenNameIsValid(name)) return false
 
-  if (!availables[name.toLowerCase()].includes(redeemFrom.toUpperCase()))
+  if (!availables[name.toLowerCase()].includes(hostBlockchain.toUpperCase()))
     return false
 
   return true
