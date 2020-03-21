@@ -88,9 +88,10 @@ const waitForTransactionConfirmation = async (_api, _tx) => {
     try {
       receipt = await _api.rpc.history_get_transaction(_tx)
 
-      if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
+      if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED)
+        return true
       else return false
-    } catch(err) {
+    } catch (err) {
       return false
     }
   }, EOS_NODE_POLLING_TIME_INTERVAL)
