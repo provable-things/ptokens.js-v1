@@ -170,12 +170,12 @@ export class pBTC {
           const eosPublicKeys = await eos.getAvailablePublicKeys(
             eos.getApi(
               this.hostPrivateKey,
-              'https://ptoken-eos.provable.xyz:443',
+              this.hostProvider,
               null
             )
           )
           const eosAccountName = await eos.getAccountName(
-            eos.getApi(null, 'https://ptoken-eos.provable.xyz:443', null),
+            this.hostProvider,
             eosPublicKeys
           )
 
