@@ -167,13 +167,8 @@ export class pBTC {
 
         // NOTE redeem from eos
         if (this.hostBlockchain === 'eos') {
-          const eosPublicKeys = await eos.getAvailablePublicKeys(
-            eos.getApi(
-              this.hostPrivateKey,
-              this.hostProvider,
-              null
-            )
-          )
+          const eosPublicKeys = await eos.getAvailablePublicKeys(this.hostProvider)
+          
           const eosAccountName = await eos.getAccountName(
             this.hostProvider,
             eosPublicKeys
