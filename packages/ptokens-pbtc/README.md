@@ -26,6 +26,7 @@ npm install ptokens-pbtc
 import { pBTC } from 'ptokens-pbtc'
 
 const pbtc = new pBTC({
+  hostBlockchain: 'ETH' //or EOS
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
   btcNetwork: 'testnet', //'testnet' or 'bitcoin', default 'testnet'
@@ -41,6 +42,7 @@ import { pBTC } from 'ptokens-pbtc'
 if (window.web3) {
   
   const pbtc = new pBTC({
+    hostBlockchain: 'ETH' //or EOS
     ethProvider: window.web3.currentProvider,
     btcNetwork: 'testnet',
     defaultEndpoint: 'https://...' //optional
