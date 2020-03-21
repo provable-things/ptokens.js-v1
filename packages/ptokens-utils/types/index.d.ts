@@ -120,7 +120,7 @@ export const eth: ethInterface
 
 // eos
 export interface eosInterface {
-  getApi(_privateKey: string, _rpc: JsonRpc, _signatureProvider: JsSignatureProvider | null): Api
+  getApi(_privateKey: string, _rpc: string, _signatureProvider: JsSignatureProvider | null): Api
   getAccountName(_api: Api, _pubkeys: string[]): Promise<string>
   getAvailablePublicKeys(_api: Api): Promise<string[]>
   getAmountInEosFormat(_amount: number, _decimals: number): number
@@ -134,7 +134,7 @@ export const eos: eosInterface
 // helpers
 export interface pToken {
   name: string,
-  redeemFrom: string
+  hostBlockchain: string
 }
 
 export interface helpersInterface {

@@ -109,26 +109,26 @@ const makeContractSend = (_web3, _method, _options, _params = []) =>
   new Promise((resolve, reject) => {
     _options.isWeb3Injected
       ? _makeContractSend(
-        _web3,
-        _method,
-        _options.abi,
-        _options.contractAddress,
-        _options.value,
-        _params
-      )
-        .then(_status => resolve(_status))
-        .catch(_err => reject(_err))
+          _web3,
+          _method,
+          _options.abi,
+          _options.contractAddress,
+          _options.value,
+          _params
+        )
+          .then(_status => resolve(_status))
+          .catch(_err => reject(_err))
       : _sendSignedMethodTx(
-        _web3,
-        _options.privateKey,
-        _method,
-        _options.abi,
-        _options.contractAddress,
-        _options.value,
-        _params
-      )
-        .then(_receipt => resolve(_receipt))
-        .catch(_err => reject(_err))
+          _web3,
+          _options.privateKey,
+          _method,
+          _options.abi,
+          _options.contractAddress,
+          _options.value,
+          _params
+        )
+          .then(_receipt => resolve(_receipt))
+          .catch(_err => reject(_err))
   })
 
 /**

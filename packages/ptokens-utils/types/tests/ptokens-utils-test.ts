@@ -106,7 +106,7 @@ const eosApi = new Api({
 })
 
 // $ExpectType Api
-eos.getApi('private key', jsonRpc, signatureProvider)
+eos.getApi('private key', 'node endpoint', signatureProvider)
 
 // $ExpectType Promise<string>
 eos.getAccountName(eosApi, ['pubK1, pubK2'])
@@ -132,4 +132,4 @@ eos.waitForTransactionConfirmation(eosApi, 'txId')
 helpers.pTokenNameIsValid('pBTC')
 
 // $ExpectType boolean
-helpers.pTokenIsValid({ name: 'pBTC', redeemFrom: 'ETH'})
+helpers.pTokenIsValid({ name: 'pBTC', hostBlockchain: 'ETH'})

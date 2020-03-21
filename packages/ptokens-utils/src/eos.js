@@ -66,8 +66,8 @@ const getAvailablePublicKeys = _api =>
 /**
  * @param {Number} _amount
  */
-const getAmountInEosFormat = (_amount, _decimals = 4) => {
-  return _amount.toFixed(EOS_NATIVE_TOKEN_DECIMALS).toString() + ' EOS'
+const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
+  return _amount.toFixed(_decimals).toString() + ' ' + symbol
 }
 
 /**
@@ -80,65 +80,19 @@ const isValidAccountName = _accountName => {
 
 /**
  * @param {Api} _api
- * @param {Object} _to
- * @param {String} _eosAccountName
- * @param {Number} _amount
- * @param {String} _memo
- * @param {String} _blocksBehind
- * @param {String} _expireSeconds
- */
-const transferNativeToken = (
-  _api,
-  _to,
-  _accountName,
-  _amount,
-  _memo,
-  _blocksBehind,
-  _expireSeconds
-) =>
-  new Promise((resolve, reject) => {
-    _api
-      .transact(
-        {
-          actions: [
-            {
-              account: EOS_NATIVE_TOKEN,
-              name: 'transfer',
-              authorization: [
-                {
-                  actor: _accountName,
-                  permission: 'active'
-                }
-              ],
-              data: {
-                from: _accountName,
-                to: _to,
-                quantity: getAmountInEosFormat(_amount),
-                memo: _memo
-              }
-            }
-          ]
-        },
-        {
-          blocksBehind: _blocksBehind,
-          expireSeconds: _expireSeconds
-        }
-      )
-      .then(receipt => resolve(receipt))
-      .catch(err => reject(err))
-  })
-
-/**
- * @param {Api} _api
  * @param {String} _tx
  */
 const waitForTransactionConfirmation = async (_api, _tx) => {
   let receipt = null
   await polling(async () => {
-    receipt = await _api.rpc.history_get_transaction(_tx)
+    try {
+      receipt = await _api.rpc.history_get_transaction(_tx)
 
-    if (receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
-    else return false
+      if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
+      else return false
+    } catch(err) {
+      return false
+    }
   }, EOS_NODE_POLLING_TIME_INTERVAL)
   return receipt
 }
@@ -149,6 +103,5 @@ export {
   getAvailablePublicKeys,
   getAmountInEosFormat,
   isValidAccountName,
-  transferNativeToken,
   waitForTransactionConfirmation
 }
