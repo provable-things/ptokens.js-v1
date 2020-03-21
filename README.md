@@ -29,6 +29,7 @@ import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
   pbtc: {
+    hostBlockchain: 'ETH' //can be ETH or EOS
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
     btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
@@ -46,6 +47,7 @@ if (window.web3) {
   
   const ptokens = new pTokens({
     pbtc: {
+      hostBlockchain: 'ETH'
       ethProvider: window.web3.currentProvider,
       btcNetwork: 'bitcoin'
     }
