@@ -1,5 +1,8 @@
 import utils from '../src'
 import { expect } from 'chai'
+import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+import { JsonRpc } from 'eosjs'
+import fetch from 'node-fetch'
 
 const eosPrivateKey = '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv'
 const eosProvider = 'https://ptoken-eos.provable.xyz:443'
@@ -7,17 +10,12 @@ const eosProvider = 'https://ptoken-eos.provable.xyz:443'
 jest.setTimeout(30000)
 
 test('Should get the correct EOS account name', async () => {
-  const eosjs = utils.eos.getApi(eosPrivateKey, eosProvider)
+  const signatureProvider = new JsSignatureProvider([eosPrivateKey])
+  const rpc =  new JsonRpc(eosProvider, { fetch })
   const expectedAccountName = 'all3manfr4di'
-  const publicKeys = await utils.eos.getAvailablePublicKeys(eosjs)
-  const accountName = await utils.eos.getAccountName(eosjs, publicKeys)
+  const publicKeys = await signatureProvider.getAvailableKeys()
+  const accountName = await utils.eos.getAccountName(rpc, publicKeys)
   expect(accountName).to.be.equal(expectedAccountName)
-})
-
-test('Should get the list of public keys', async () => {
-  const eosjs = utils.eos.getApi(eosPrivateKey, eosProvider)
-  const publicKeys = await utils.eos.getAvailablePublicKeys(eosjs)
-  expect(publicKeys).to.be.an('array')
 })
 
 test('Should be a valid EOS account name', () => {

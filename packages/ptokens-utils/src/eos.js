@@ -51,17 +51,6 @@ const getAccountName = (_rpc, _pubkeys) =>
   })
 
 /**
- * @param {JsSignatureProvider} _signatureProvider
- */
-const getAvailablePublicKeys = _signatureProvider =>
-  new Promise((resolve, reject) => {
-    _signatureProvider
-      .getAvailableKeys()
-      .then(publicKeys => resolve(publicKeys))
-      .catch(err => reject(err))
-  })
-
-/**
  * @param {Number} _amount
  */
 const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
@@ -99,7 +88,6 @@ const waitForTransactionConfirmation = async (_api, _tx) => {
 export {
   getApi,
   getAccountName,
-  getAvailablePublicKeys,
   getAmountInEosFormat,
   isValidAccountName,
   waitForTransactionConfirmation
