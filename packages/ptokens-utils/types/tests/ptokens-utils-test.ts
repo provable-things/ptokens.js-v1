@@ -148,5 +148,5 @@ helpers.getNetworkType('testnet_ropsten')
 // $ExpectType string
 helpers.getNativeBlockchainFromPtokenName('pBTC')
 
-// $ExpectType bool
+// $ExpectType boolean
 helpers.isValidPTokenName('pBTC')
