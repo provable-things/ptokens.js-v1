@@ -44,7 +44,7 @@ const getNativeBlockchainFromPtokenName = _name => {
  * @param {String} _name
  */
 const isValidPTokenName = _name => {
-  return pTokensAvailables.includes(_name.toLowerCase()) ? true : false
+  return Boolean(pTokensAvailables.includes(_name.toLowerCase()))
 }
 
 /**
@@ -70,15 +70,13 @@ const parseParams = (_params, _nativeBlockchain) => {
   if (
     Boolean(hostBlockchain) === Boolean(blockchain) ||
     Boolean(hostNetwork) === Boolean(network)
-  ) {
+  )
     throw new Error('Bad initialization')
-  }
 
-  if (hostBlockchain) {
+  if (hostBlockchain)
     parsedHostBlockchain = blockchainTypes[hostBlockchain.toLowerCase()]
-  } else if (blockchain) {
+  else if (blockchain)
     parsedHostBlockchain = blockchainTypes[blockchain.toLowerCase()]
-  }
 
   if (!parsedHostBlockchain) throw new Error('Invalid hostBlockchain value')
 

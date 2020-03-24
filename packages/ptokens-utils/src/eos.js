@@ -15,7 +15,6 @@ const EOS_NODE_POLLING_TIME_INTERVAL = 300
  */
 const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
   if (_rpc && !_privateKey && !_signatureProvider) {
-    
     const rpc = typeof _rpc === 'string' ? new JsonRpc(_rpc, { fetch }) : _rpc
 
     return new Api({
@@ -28,7 +27,7 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
   const signatureProvider =
     _signatureProvider || new JsSignatureProvider([_privateKey])
 
-    const rpc = typeof _rpc === 'string' ? new JsonRpc(_rpc, { fetch }) : _rpc
+  const rpc = typeof _rpc === 'string' ? new JsonRpc(_rpc, { fetch }) : _rpc
 
   return new Api({
     rpc,

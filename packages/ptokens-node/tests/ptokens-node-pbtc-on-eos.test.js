@@ -133,7 +133,7 @@ test('Should get native report by nonce', async () => {
   expect(res._id).to.be.equal(`pBTC_BTC ${nonce}`)
 })
 
-/*test('Should get last EOS processed block', async () => {
+/* test('Should get last EOS processed block', async () => {
   const type = 'host'
   const node = new Node({
     pToken: 'pBTC',
@@ -143,7 +143,7 @@ test('Should get native report by nonce', async () => {
 
   const res = await node.getLastProcessedBlock(type)
   expect(res).to.be.an.instanceof(Object)
-})*/
+}) */
 
 test('Should get last BTC processed block', async () => {
   const type = 'native'
