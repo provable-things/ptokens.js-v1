@@ -27,7 +27,7 @@ import { Node } from 'ptokens-node'
 
 const node = new Node({
   pToken: 'pToken name'
-  hostBlockchain: 'ex ETH, EOS',
+  blockchain: 'ex ETH, EOS',
   endpoint: 'https://...'
 })
 ```
