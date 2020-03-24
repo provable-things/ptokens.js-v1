@@ -121,8 +121,8 @@ export const eth: EthUtilsInterface
 // eos
 export interface EosUtilsInterface {
   getApi(_privateKey: string, _rpc: string | JsonRpc, _signatureProvider: JsSignatureProvider | null): Api
-  getAccountName(_api: Api, _pubkeys: string[]): Promise<string>
-  getAvailablePublicKeys(_api: Api): Promise<string[]>
+  getAccountName(_rpc: JsonRpc, _pubkeys: string[]): Promise<string>
+  getAvailablePublicKeys(_signatureProvider: JsSignatureProvider): Promise<string[]>
   getAmountInEosFormat(_amount: number, _decimals: number): number
   isValidAccountName(_accountName: string): boolean
   transferNativeToken(_api: Api, _to: string, _accountName: string, _amount: number, _memo: string, _blocksBehind: number, _expireSeconds: number): Promise<any>

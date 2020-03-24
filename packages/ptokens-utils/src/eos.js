@@ -39,24 +39,24 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
 }
 
 /**
- * @param {Api} _api
+ * @param {JsonRpc} _rpc
  * @param {Array} _pubkeys
  */
-const getAccountName = (_api, _pubkeys) =>
+const getAccountName = (_rpc, _pubkeys) =>
   new Promise((resolve, reject) => {
     const currentPublicKey = _pubkeys[0]
-    _api.rpc
+    _rpc
       .history_get_key_accounts(currentPublicKey)
       .then(accounts => resolve(accounts.account_names[0]))
       .catch(err => reject(err))
   })
 
 /**
- * @param {Object} _api
+ * @param {JsSignatureProvider} _signatureProvider
  */
-const getAvailablePublicKeys = _api =>
+const getAvailablePublicKeys = _signatureProvider =>
   new Promise((resolve, reject) => {
-    _api.signatureProvider
+    _signatureProvider
       .getAvailableKeys()
       .then(publicKeys => resolve(publicKeys))
       .catch(err => reject(err))
