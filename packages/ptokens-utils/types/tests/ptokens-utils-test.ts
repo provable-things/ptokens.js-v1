@@ -135,3 +135,18 @@ helpers.parseParams({
   nativeBlockchain: 'BTC',
   nativeNetwork: 'testnet'
 }, 'btc')
+
+// $ExpectType string
+helpers.getBlockchainType('eth')
+
+// $ExpectType string
+helpers.getBlockchainShortType('ethereum')
+
+// $ExpectType string
+helpers.getNetworkType('testnet_ropsten')
+
+// $ExpectType string
+helpers.getNativeBlockchainFromPtokenName('pBTC')
+
+// $ExpectType bool
+helpers.isValidPTokenName('pBTC')

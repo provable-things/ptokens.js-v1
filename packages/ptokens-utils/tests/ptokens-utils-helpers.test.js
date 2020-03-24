@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { parseParams } from '../src/helpers'
+import { parseParams, getNetworkType } from '../src/helpers'
 
 test('Should generate an error because it is not possible to initialize with both blockchain and hostBlockchain', async () => {
   const expectedErrorMessage = 'Bad initialization'
@@ -11,7 +11,7 @@ test('Should generate an error because it is not possible to initialize with bot
         hostBlockchain: 'ETH',
         network: 'testnet'
       },
-      'btc'
+      'bitcoin'
     )
   } catch (err) {
     expect(err.message).to.be.equal(expectedErrorMessage)
@@ -28,7 +28,7 @@ test('Should generate an error because it is not possible to use both network an
         network: 'testnet',
         hostNetwork: 'testnet_ropsten'
       },
-      'btc'
+      'bitcoin'
     )
   } catch (err) {
     expect(err.message).to.be.equal(expectedErrorMessage)
@@ -36,9 +36,9 @@ test('Should generate an error because it is not possible to use both network an
 })
 
 test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = Ethereum Ropsten', async () => {
-  const expectedHostBlockchain = 'eth'
+  const expectedHostBlockchain = 'ethereum'
   const expectedHostNetwork = 'testnet_ropsten'
-  const expectedNativeBlockchain = 'btc'
+  const expectedNativeBlockchain = 'bitcoin'
   const expectedNativeNetwork = 'testnet'
 
   const parsed = parseParams(
@@ -46,7 +46,7 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
       blockchain: 'ETH',
       network: 'testnet'
     },
-    'btc'
+    'bitcoin'
   )
 
   expect(parsed.hostBlockchain).to.be.equal(expectedHostBlockchain)
@@ -58,7 +58,7 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
 test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = EOS Jungle2', async () => {
   const expectedHostBlockchain = 'eos'
   const expectedHostNetwork = 'testnet_jungle2'
-  const expectedNativeBlockchain = 'btc'
+  const expectedNativeBlockchain = 'bitcoin'
   const expectedNativeNetwork = 'testnet'
 
   const parsed = parseParams(
@@ -66,7 +66,7 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
       blockchain: 'EOS',
       network: 'testnet'
     },
-    'btc'
+    'bitcoin'
   )
 
   expect(parsed.hostBlockchain).to.be.equal(expectedHostBlockchain)
@@ -78,7 +78,7 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
 test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = EOS Jungle2 specifyng hostBlockchain and hostNetwork', async () => {
   const expectedHostBlockchain = 'eos'
   const expectedHostNetwork = 'testnet_jungle2'
-  const expectedNativeBlockchain = 'btc'
+  const expectedNativeBlockchain = 'bitcoin'
   const expectedNativeNetwork = 'testnet'
 
   const parsed = parseParams(
@@ -86,7 +86,7 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
       hostBlockchain: 'EOS',
       hostNetwork: 'testnet_jungle2'
     },
-    'btc'
+    'bitcoin'
   )
 
   expect(parsed.hostBlockchain).to.be.equal(expectedHostBlockchain)
@@ -96,9 +96,9 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
 })
 
 test('Should parse with native blockchain = Bitcoin Mainnet and host blockchain = Ethereum Mainnet', async () => {
-  const expectedHostBlockchain = 'eth'
+  const expectedHostBlockchain = 'ethereum'
   const expectedHostNetwork = 'mainnet'
-  const expectedNativeBlockchain = 'btc'
+  const expectedNativeBlockchain = 'bitcoin'
   const expectedNativeNetwork = 'mainnet'
 
   const parsed = parseParams(
@@ -106,11 +106,23 @@ test('Should parse with native blockchain = Bitcoin Mainnet and host blockchain 
       blockchain: 'ETH',
       network: 'mainnet'
     },
-    'btc'
+    'bitcoin'
   )
 
   expect(parsed.hostBlockchain).to.be.equal(expectedHostBlockchain)
   expect(parsed.hostNetwork).to.be.equal(expectedHostNetwork)
   expect(parsed.nativeBlockchain).to.be.equal(expectedNativeBlockchain)
   expect(parsed.nativeNetwork).to.be.equal(expectedNativeNetwork)
+})
+
+test('Should be (testnet_ropsten) a Testnet network', async () => {
+  const expectedNetworkType = 'testnet'
+  const type = getNetworkType('testnet_ropsten')
+  expect(type).to.be.equal(expectedNetworkType)
+})
+
+test('Should be (testnet_jungle2) a Testnet network', async () => {
+  const expectedNetworkType = 'testnet'
+  const type = getNetworkType('testnet_jungle2')
+  expect(type).to.be.equal(expectedNetworkType)
 })

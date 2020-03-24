@@ -150,6 +150,11 @@ export interface ParsedParams {
 
 export interface HelpersInterface {
   parseParams(_params: object, _nativeBlockchain: string): ParsedParams
+  getBlockchainType(_blockchain: string): string
+  getBlockchainShortType(_blockchain: string): string
+  getNetworkType(_network: string): string
+  getNativeBlockchainFromPtokenName(_name: string): string
+  isValidPTokenName(_name: string): boolean
 }
 
 export const helpers: HelpersInterface
