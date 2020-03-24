@@ -128,8 +128,10 @@ eos.waitForTransactionConfirmation(eosApi, 'txId')
 
 // helpers
 
-// $ExpectType boolean
-helpers.pTokenNameIsValid('pBTC')
-
-// $ExpectType boolean
-helpers.pTokenIsValid({ name: 'pBTC', hostBlockchain: 'ETH'})
+// $ExpectType ParsedParams
+helpers.parseParams({
+  hostBlockchain: 'ETH',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'BTC',
+  nativeNetwork: 'testnet'
+}, 'btc')

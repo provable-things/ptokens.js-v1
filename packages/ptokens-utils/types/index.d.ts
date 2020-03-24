@@ -72,7 +72,7 @@ export interface BitcoinTransactionReceipt {
   status: BitcoinTransactionStatus
 }
 
-export interface btcInterface {
+export interface BtcUtilsInterface {
   broadcastTransaction(_network: string, _tx: string): Promise<BitcoinBroadcastedTx>
   getUtxoByAddress(_network: string, _address: string): Promise<BitcoinUtxoList>
   getTransactionHexById(_network: string, _txId: string): Promise<string>
@@ -86,15 +86,15 @@ export interface btcInterface {
   waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<BitcoinTransactionReceipt>
 }
 
-export const btc: btcInterface
+export const btc: BtcUtilsInterface
 
 // converters
-export interface convertersInterface {
+export interface ConvertersInterface {
   decodeUint64le(_buffer: Buffer): number
   encodeUint64le(_number: number): Buffer
 }
 
-export const converters: convertersInterface
+export const converters: ConvertersInterface
 
 // eth
 export interface ContractCallParam {
@@ -103,7 +103,7 @@ export interface ContractCallParam {
   value?: number,
 }
 
-export interface ethInterface {
+export interface EthUtilsInterface {
   addHexPrefix(_string: string): string
   removeHexPrefix(_string: string): string
   correctFormat(_amount: number, _decimals: number, _operation: string): number
@@ -116,10 +116,10 @@ export interface ethInterface {
   waitForTransactionConfirmation(_web3: Web3, _tx: string, _pollingTime: number): Promise <TransactionReceipt>
 }
 
-export const eth: ethInterface
+export const eth: EthUtilsInterface
 
 // eos
-export interface eosInterface {
+export interface EosUtilsInterface {
   getApi(_privateKey: string, _rpc: string, _signatureProvider: JsSignatureProvider | null): Api
   getAccountName(_api: Api, _pubkeys: string[]): Promise<string>
   getAvailablePublicKeys(_api: Api): Promise<string[]>
@@ -129,17 +129,27 @@ export interface eosInterface {
   waitForTransactionConfirmation(_api: Api, _tx: string): Promise<any>
 }
 
-export const eos: eosInterface
+export const eos: EosUtilsInterface
 
-// helpers
-export interface pToken {
-  name: string,
-  hostBlockchain: string
+// params parser
+export interface Params {
+  network?: string,
+  hostNetwork?: string,
+  blockchain?: string,
+  hostBlockchain?: string,
+  nativeNetwork?: string,
+  nativeBlockchain?: string,
 }
 
-export interface helpersInterface {
-  pTokenNameIsValid(_pTokenName: string): boolean
-  pTokenIsValid(_pToken: pToken): boolean
+export interface ParsedParams {
+  hostNetwork: string,
+  hostBlockchain: string,
+  nativeNetwork: string,
+  nativeBlockchain: string,
 }
 
-export const helpers: helpersInterface
+export interface HelpersInterface {
+  parseParams(_params: object, _nativeBlockchain: string): ParsedParams
+}
+
+export const helpers: HelpersInterface

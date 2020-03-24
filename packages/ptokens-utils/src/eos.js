@@ -4,8 +4,6 @@ import fetch from 'node-fetch'
 import encoding from 'text-encoding'
 import polling from 'light-async-polling'
 
-const EOS_NATIVE_TOKEN = 'eosio.token'
-const EOS_NATIVE_TOKEN_DECIMALS = 4
 const EOS_ACCOUNT_LENGTH = 12
 const EOS_TRANSACTION_EXECUTED = 'executed'
 const EOS_NODE_POLLING_TIME_INTERVAL = 300
