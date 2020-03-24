@@ -15,10 +15,8 @@ const BTC_TESTING_ADDRESS = '2N91WkHJxTwM43d7eeA1ArjutoBvKk3iiE5'
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -28,10 +26,8 @@ test('Should ping a node with one as default', async () => {
 
 test('Should get the node info', async () => {
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -44,15 +40,13 @@ test('Should get the node info', async () => {
   expect(info).to.have.property('host_network')
 })
 
-test('Should get one ETH report', async () => {
+test('Should get one host report', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'host'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -62,15 +56,13 @@ test('Should get one ETH report', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one BTC report', async () => {
+test('Should get one native report', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'native'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -80,16 +72,14 @@ test('Should get one BTC report', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one ETH reports by address', async () => {
+test('Should get one host reports by address', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'host'
   const ethAddress = BTC_TESTING_ADDRESS
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -99,16 +89,14 @@ test('Should get one ETH reports by address', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one BTC report by address', async () => {
+test('Should get one native report by address', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'native'
   const btcAddress = BTC_TESTING_ADDRESS
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -118,14 +106,12 @@ test('Should get one BTC report by address', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get ETH report by nonce', async () => {
+test('Should get host report by nonce', async () => {
   const nonce = 1
   const type = 'host'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -134,14 +120,12 @@ test('Should get ETH report by nonce', async () => {
   expect(res._id).to.be.equal(`pBTC_ETH ${nonce}`)
 })
 
-test('Should get BTC report by nonce', async () => {
+test('Should get native report by nonce', async () => {
   const nonce = 1
   const type = 'native'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -153,10 +137,8 @@ test('Should get BTC report by nonce', async () => {
 test('Should get last ETH processed block', async () => {
   const type = 'host'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -167,10 +149,8 @@ test('Should get last ETH processed block', async () => {
 test('Should get last BTC processed block', async () => {
   const type = 'native'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -181,10 +161,8 @@ test('Should get last BTC processed block', async () => {
 test('Should get the status of an incoming tx', async () => {
   const hash = HASH_INCOMING_TX
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -195,10 +173,8 @@ test('Should get the status of an incoming tx', async () => {
 test('Should get the status of an brodcasted tx', async () => {
   const hash = HASH_BROADCASTED_TX
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 
@@ -208,10 +184,8 @@ test('Should get the status of an brodcasted tx', async () => {
 
 test('Should monitor an incoming transaction', async () => {
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'ETH'
-    },
+    pToken: 'pBTC',
+    blockchain: 'ETH',
     endpoint: 'https://nuc-bridge-3.ngrok.io'
   })
 

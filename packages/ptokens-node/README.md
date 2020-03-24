@@ -26,10 +26,8 @@ npm install ptokens-node
 import { Node } from 'ptokens-node'
 
 const node = new Node({
-  pToken: {
-    name: 'pToken name',
-    hostBlockchain: 'ETH' //for now
-  },
-  endpoint: 'https://...' //optional
+  pToken: 'pToken name'
+  hostBlockchain: 'ex ETH, EOS',
+  endpoint: 'https://...'
 })
 ```

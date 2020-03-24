@@ -1,22 +1,17 @@
 import { EventEmitter } from 'events'
 
 export interface NodeConfigs {
-  pToken: {
-    name: string,
-    hostBlockchain: string
-  },
+  pToken: string,
+  blockchain: string
   endpoint: string
-}
-
-export interface pToken {
-  name: string
-  hostBlockchain: string
 }
 
 export class Node {
   constructor(_configs: NodeConfigs)
 
-  pToken: pToken
+  pToken: string
+
+  blockchain: string
 
   endpoint: string
 
@@ -44,6 +39,8 @@ export interface NodeInfo {
   smart_contract_address: string,
   host_network: string,
   native_network: string,
+  host_blockchain: string,
+  native_blockchain: string,
   last_processed_host_block: number,
   last_processed_native_block: number,
 }

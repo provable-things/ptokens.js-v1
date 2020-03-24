@@ -6,19 +6,18 @@ jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pToken pong!'
 const HASH_INCOMING_TX =
-  'a7f13767d53a7c62c1531680ef8e20528be879167547cd2c3013bf342563d938'
+  '6e0dd8bcc729817462d28b650911059a380d4423f6549d4441c8c45666d3f083'
 const HASH_BROADCASTED_TX =
-  '35e5c5925396dffc578e8bb4dc3b9f708a730e932aca2f696e70ee4a82df3ccf'
+  'a6ee83f6e92f5fa5717a1c13f7ad0ef40d1a6cd394c02ad196ee2c0b05ebe2c9'
 
-const BTC_TESTING_ADDRESS = '2NBhZuu8t2cb2K7VivUyXXLGfS5uQzrW1Bx'
+// deposit address
+const BTC_TESTING_ADDRESS = '2N2uQzRAsfouFc86d3xRrsVPcSuZuXdLLs4'
 
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -28,10 +27,8 @@ test('Should ping a node with one as default', async () => {
 
 test('Should get the node info', async () => {
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -44,15 +41,13 @@ test('Should get the node info', async () => {
   expect(info).to.have.property('host_network')
 })
 
-test('Should get one EOS report', async () => {
+test('Should get one host report', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'host'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -62,15 +57,13 @@ test('Should get one EOS report', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one BTC report', async () => {
+test('Should get one native report', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'native'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -80,68 +73,58 @@ test('Should get one BTC report', async () => {
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one EOS reports by address', async () => {
+test('Should get one host reports by address', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'host'
-  const ethAddress = BTC_TESTING_ADDRESS
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
-  const res = await node.getReportsByAddress(type, ethAddress, limit)
+  const res = await node.getReportsByAddress(type, BTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one BTC report by address', async () => {
+test('Should get one native report by address', async () => {
   const expectedResultLength = 1
   const limit = 1
   const type = 'native'
-  const btcAddress = BTC_TESTING_ADDRESS
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
-  const res = await node.getReportsByAddress(type, btcAddress, limit)
+  const res = await node.getReportsByAddress(type, BTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get EOS report by nonce', async () => {
+test('Should get host report by nonce', async () => {
   const nonce = 1
   const type = 'host'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getReportByNonce(type, nonce)
   expect(res).to.be.an.instanceof(Object)
-  expect(res._id).to.be.equal(`pBTC_ETH ${nonce}`)
+  expect(res._id).to.be.equal(`pBTC_EOS ${nonce}`)
 })
 
-test('Should get BTC report by nonce', async () => {
+test('Should get native report by nonce', async () => {
   const nonce = 1
   const type = 'native'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -150,27 +133,23 @@ test('Should get BTC report by nonce', async () => {
   expect(res._id).to.be.equal(`pBTC_BTC ${nonce}`)
 })
 
-test('Should get last EOS processed block', async () => {
+/*test('Should get last EOS processed block', async () => {
   const type = 'host'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
   const res = await node.getLastProcessedBlock(type)
   expect(res).to.be.an.instanceof(Object)
-})
+})*/
 
 test('Should get last BTC processed block', async () => {
   const type = 'native'
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -181,10 +160,8 @@ test('Should get last BTC processed block', async () => {
 test('Should get the status of an incoming tx', async () => {
   const hash = HASH_INCOMING_TX
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -195,10 +172,8 @@ test('Should get the status of an incoming tx', async () => {
 test('Should get the status of an brodcasted tx', async () => {
   const hash = HASH_BROADCASTED_TX
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 
@@ -208,10 +183,8 @@ test('Should get the status of an brodcasted tx', async () => {
 
 test('Should monitor an incoming transaction', async () => {
   const node = new Node({
-    pToken: {
-      name: 'pBTC',
-      hostBlockchain: 'EOS'
-    },
+    pToken: 'pBTC',
+    blockchain: 'EOS',
     endpoint: 'https://nuc-bridge-1.ngrok.io'
   })
 

@@ -8,27 +8,9 @@ const HASH_BROADCASTED_TX =
 
 const BTC_TESTING_ADDRESS = '2NFLTr9nFbnexQgRP3hpEH5NKduvqpiAUpw'
 
-const BTC_PBTC_BLOCK = {
-  id: '00000000000013068675dc3694319815bef985de15deb505541d70387a193e69',
-  height: 1657098,
-  version: 536928256,
-  timestamp: 1578591247,
-  tx_count: 5,
-  size: 1297,
-  weight: 4099,
-  merkle_root:
-    'd7e2095d95a0174bbe4503181b80d5d4136d088123e4057401f5ca7bdcc36718',
-  previousblockhash:
-    '00000000000068cfcbcc8023d97b0900d6c905f2dbf5fffef34c6b7dfb07d254',
-  nonce: 729798261,
-  bits: 453023995
-}
-
 const node = new Node({
-  pToken: {
-    name: 'pBTC',
-    hostBlockchain: 'ETH'
-  },
+  pToken: 'pBTC',
+  blockchain: 'ETH',
   endpoint: 'https://nuc-bridge-3.ngrok.io'
 })
 
