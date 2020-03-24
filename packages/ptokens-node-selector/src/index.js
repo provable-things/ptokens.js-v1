@@ -4,41 +4,41 @@ import {
   makeApiCallWithTimeout,
   NODE_CONNECTION_TIMEOUT
 } from './utils/index'
-import { helpers } from 'ptokens-utils'
 import { Node } from 'ptokens-node'
-
-const networksToType = {
-  ropsten: 'testnet',
-  main: 'mainnet',
-  bitcoin: 'mainnet',
-  testnet: 'testnet',
-  mainnet: 'mainnet'
-}
+import { helpers } from 'ptokens-utils'
 
 export class NodeSelector {
   /**
    * @param {Object} configs
    */
-  constructor(configs) {
-    const { pToken, defaultEndpoint, networkType } = configs
+  constructor(_configs) {
+    const { pToken, defaultEndpoint } = _configs
 
-    if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
+    if (!helpers.isValidPTokenName(pToken))
+      throw new Error('Invalid pToken name')
 
-    this.pToken = pToken
-    this.pToken.name = pToken.name.toLowerCase()
-    this.pToken.hostBlockchain = pToken.hostBlockchain.toLowerCase()
+    this.pToken = pToken.toLowerCase()
+
+    const {
+      hostBlockchain,
+      hostNetwork,
+      nativeBlockchain,
+      nativeNetwork
+    } = helpers.parseParams(
+      _configs,
+      _configs.nativeBlockchain
+        ? helpers.getBlockchainType[_configs.nativeBlockchain]
+        : helpers.getNativeBlockchainFromPtokenName(this.pToken)
+    )
+
+    this.hostBlockchain = hostBlockchain
+    this.hostNetwork = hostNetwork
+    this.nativeBlockchain = nativeBlockchain
+    this.nativeNetwork = nativeNetwork
 
     this.selectedNode = null
     this.nodes = []
     this.defaultEndpoint = defaultEndpoint
-
-    if (
-      networksToType[networkType] !== 'testnet' &&
-      networksToType[networkType] !== 'mainnet'
-    )
-      throw new Error('Invalid Network Type')
-
-    this.networkType = networkType
   }
 
   /**
@@ -47,14 +47,26 @@ export class NodeSelector {
    */
   async checkConnection(_endpoint, _timeout = NODE_CONNECTION_TIMEOUT) {
     try {
-      await makeApiCallWithTimeout(
+      const info = await makeApiCallWithTimeout(
         createApi(_endpoint),
         'GET',
-        `/${this.pToken.name}-on-${this.pToken.hostBlockchain}/ping`,
+        `/${this.pToken}-on-${helpers.getBlockchainShortType(
+          this.hostBlockchain
+        )}/get-info`,
         null,
         _timeout
       )
-      return true
+
+      // NOTE: check that the node params match
+      if (
+        info.host_blockchain === this.hostBlockchain &&
+        info.host_network === this.hostNetwork &&
+        info.native_blockchain === this.nativeBlockchain &&
+        info.native_network === this.nativeNetwork
+      )
+        return true
+
+      return false
     } catch (err) {
       return false
     }
@@ -70,18 +82,17 @@ export class NodeSelector {
 
   async select() {
     try {
-      const networkType = await this.getNetworkType()
-
-      if (this.nodes.length === 0) {
-        const res = await makeApiCallWithTimeout(
-          getBootNodeApi(networkType),
+      this.nodes = (
+        await makeApiCallWithTimeout(
+          getBootNodeApi(helpers.getNetworkType(this.hostNetwork)),
           'GET',
           '/peers'
         )
-        this.nodes = res.peers
-      }
+      ).peers
 
-      const feature = `${this.pToken.name}-on-${this.pToken.hostBlockchain}`
+      const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(
+        this.hostBlockchain
+      )}`
 
       if (this.defaultEndpoint) {
         const node = this.nodes.find(
@@ -134,29 +145,10 @@ export class NodeSelector {
   setEndpoint(_endpoint) {
     this.selectedNode = new Node({
       pToken: this.pToken,
-      endpoint: _endpoint
+      endpoint: _endpoint,
+      blockchain: this.hostBlockchain
     })
 
     return this.selectedNode
-  }
-
-  async getNetworkType() {
-    if (this.networkType.then) {
-      const networkType = await this.networkType
-      return this.setNetworkType(networkType)
-    }
-
-    return this.setNetworkType(this.networkType)
-  }
-
-  /**
-   * @param {String} _type
-   */
-  setNetworkType(_type) {
-    this.networkType = networksToType[_type]
-
-    if (!this.networkType) throw new Error('Invalid Network Type')
-
-    return this.networkType
   }
 }

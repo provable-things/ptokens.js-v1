@@ -26,11 +26,17 @@ npm install ptokens-node-selector
 import { NodeSelector } from 'ptokens-node-selector'
 
 const nodeSelector = new NodeSelector({
-  pToken: {
-    name: 'pToken name',
-    hostBlockchain: 'ETH' //for now
-  },
-  defaultEndpoint: 'https://.....' //optional,
-  networkType: 'testnet' //possible values are mainnet, testnet, ropsten, main, bitcoin
+  name: 'pToken name',
+  
+  blockchain: 'ETH', //or EOS
+  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+
+  //if you want to be more detailed
+  hostBlockchain: 'ETH',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'BTC'
+  nativeNetwork: 'testnet'
+
+  defaultEndpoint: 'https://.....' //optional
 })
 ```
