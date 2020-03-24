@@ -1,8 +1,8 @@
 import {
-  btcInterface,
-  ethInterface,
-  helpersInterface,
-  convertersInterface,
+  BtcUtilsInterface,
+  EthUtilsInterface,
+  HelpersInterface,
+  ConvertersInterface,
 } from 'ptokens-utils'
 import { pBTC } from 'ptokens-pbtc'
 
@@ -16,10 +16,10 @@ export interface pTokensConfigs {
 }
 
 export interface Utils {
-  btc: btcInterface,
-  eth: ethInterface,
-  helpers: helpersInterface,
-  converters: convertersInterface
+  btc: BtcUtilsInterface,
+  eth: EthUtilsInterface,
+  helpers: HelpersInterface,
+  converters: ConvertersInterface
 }
 
 export class pTokens {

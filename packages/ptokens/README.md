@@ -27,15 +27,27 @@ import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
   pbtc: {
+    blockchain: 'ETH', //or EOS
+    network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+
+    //if you want to be more detailed
+    hostBlockchain: 'ETH',
+    hostNetwork: 'testnet_ropsten', //possible values are testnet_jungle2, testnet_ropsten and mainnet
+    nativeBlockchain: 'BTC'
+    nativeNetwork: 'testnet'
+
+    //optionals
     ethPrivateKey: 'Eth private key',
     ethProvider: 'Eth provider',
-    btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
-    defaultNode: 'https://......' //optional
+    eosPrivateKey: 'Eos Private Key',
+    eosRpc: 'https:/...' //or also an instance of JsonRpc
+    eosSignatureProvider: ..
   }
 })
 ```
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
+Instead in case the __`hostBlockchain`__ field is equal to __`EOS`__, it is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignatureProvider`__
 
 ```js
 const pTokens = require('ptokens')
@@ -44,8 +56,9 @@ if (window.web3) {
   
   const ptokens = new pTokens({
     pbtc: {
-      ethProvider: window.web3.currentProvider,
-      btcNetwork: 'bitcoin'
+      blockchain: 'ETH',
+      network: 'mainnet',
+      ethProvider: window.web3.currentProvider
     }
   })
 } else {
