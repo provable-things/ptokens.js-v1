@@ -97,8 +97,8 @@ pbtc.redeem(amount, btcAddress)
 
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
-Instead in case the __`hostBlockchain`__ field is equal to __`EOS`__, 
-it is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignatureProvider`__.
+Instead in case the __`hostBlockchain`__ field is equal to __`EOS`__.
+It is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignatureProvider`__ and
 __`eosRpc`__  can be a __`JsonRpc`__ or a string containing an rpc endpoint.
 
 ```js
