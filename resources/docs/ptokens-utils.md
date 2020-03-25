@@ -21,7 +21,7 @@ npm install ptokens-utils
 ## btc.broadcastTransaction
 
 ```js
-ptokens.utils.btc.broadcastTransaction(network, transaction)
+utils.btc.broadcastTransaction(network, transaction)
 ```
 
 Broadcasts a Bitcoin transaction using Blockstream Esplora API
@@ -45,7 +45,7 @@ const isBroadcasted = await utils.btc.broadcastTransaction('testnet', 'tx hex')
 ## btc.getUtxoByAddress
 
 ```js
-ptokens.utils.btc.getUtxoByAddress(network, address)
+utils.btc.getUtxoByAddress(network, address)
 ```
 
 Returns all UTXOs belonging to a Bitcoin address 
@@ -69,7 +69,7 @@ const utxos = await utils.btc.getUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck5oQ
 ## btc.getTransactionHexById
 
 ```js
-ptokens.utils.btc.getTransactionHexById(network, transactionId)
+utils.btc.getTransactionHexById(network, transactionId)
 ```
 
 Returns a transaction in hex format
@@ -93,7 +93,7 @@ const txHex = await utils.btc.getTransactionHexById('testnet', '3eccff684a63d764
 ## btc.isValidAddress
 
 ```js
-ptokens.utils.btc.isValidAddress(address)
+utils.btc.isValidAddress(address)
 ```
 
 Returns a boolean indicating the address validity
@@ -116,7 +116,7 @@ utils.btc.isValidAddress('mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP') //true
 ## btc.monitorUtxoByAddress
 
 ```js
-ptokens.utils.btc.monitorUtxoByAddress(network, address, eventEmitter, pollingTime)
+utils.btc.monitorUtxoByAddress(network, address, eventEmitter, pollingTime)
 ```
 
 Allows to monitor if an address is receving a transaction
@@ -146,7 +146,7 @@ const utxo = await utils.btc.monitorUtxoByAddress('testnet', 'mk8aUY9DgFMx7VfDck
 ## btc.waitForTransactionConfirmation
 
 ```js
-ptokens.utils.btc.waitForTransactionConfirmation(network, transaction, pollingTime)
+utils.btc.waitForTransactionConfirmation(network, transaction, pollingTime)
 ```
 
 Allow to wait for a BTC transaction confirmation
@@ -179,7 +179,7 @@ const tx = await utils.btc.waitForTransactionConfirmation('testnet', '3eccff684a
 ## converters.decodeUint64le
 
 ```js
-ptokens.utils.converters.decodeUint64le(buffer)
+utils.converters.decodeUint64le(buffer)
 ```
 
 Returns an Unsigned 64 bit Integer from a Buffer representing an Unsigned 64 bit Integer in Little Endian format
@@ -202,7 +202,7 @@ utils.converters.decodeUint64le(new Buffer('0x456'))
 ## converters.encodeUint64le
 
 ```js
-ptokens.utils.converters.encodeUint64le(value)
+utils.converters.encodeUint64le(value)
 ```
 
 Returns an Unsigned 64 bit Integer decoded in Little Endian format represented by a Buffer
@@ -226,61 +226,176 @@ utils.converters.encodeUint64le(0x05)
 
 # utils.helpers
 
-* __`pTokenNameIsValid`__
-* __`pTokenNameNormalized`__
+* __`getNetworkType`__
+* __`getBlockchainType`__
+* __`getBlockchainShortType`__
+* __`getNativeBlockchainFromPtokenName`__
+* __`isValidPTokenName`__
+* __`parseParams`__
 
 ***
 
 
-## helpers.pTokenNameIsValid
+## helpers.getNetworkType
 
 ```js
-ptokens.utils.helpers.pTokenNameIsValid(pTokenName)
+utils.helpers.getNetworkType(network)
 ```
 
-Returns a boolean indicating the pToken name correctness
+Returns a string (__mainnet__ or __testnet__) inditicating the network type
+of a given network label (ex: __testnet_ropsten__)
 
 ### Parameters
 
-- __`String`__ - __`pTokenName`__: pToken name
+- __`String`__ - __`network`__: network label
 
 ### Returns
 
-- __`Boolean`__ : pToken name correctness
+- __`String`__ : network type
 
 ### Example
 ```js
-utils.helpers.pTokenNameIsValid('pbtc') //true
-utils.helpers.pTokenNameIsValid('pBTC') //true
-utils.helpers.pTokenNameIsValid('pBTCSS') //false
+utils.helpers.getNetworkType('testnet_ropsten') //testnet
 ```
 
 &nbsp;
 
-## helpers.pTokenNameNormalized
+## helpers.getBlockchainType
 
 ```js
-ptokens.utils.helpers.pTokenNameNormalized(pTokenName)
+utils.helpers.getBlockchainType(blockchain)
 ```
 
-Returns a pToken name normalized (lower case)
+Normalizes acronyms of blockchain names in order to keep consistency among them. 
+(ex: __'eth'__ is trasnformed into __ethereum__)
 
 ### Parameters
 
-- __`String`__ - __`pTokenName`__: pToken name
+- __`String`__ - __`blockchain`__: blockchain name
 
 ### Returns
 
-- __`Boolean`__ : pToken name normalized
+- __`String`__ : blockchain normalized name
 
 ### Example
 ```js
-utils.helpers.pTokenNameNormalized('pBTC') //pbtc
+utils.helpers.getBlockchainType('eth') //ethereum
+utils.helpers.getBlockchainType('ethereum') //ethereum
+utils.helpers.getBlockchainType('btc') //bitcoin
 ```
 
 &nbsp;
 
 ***
+
+## helpers.getBlockchainShortType
+
+```js
+utils.helpers.getBlockchainShortType(blockchain)
+```
+
+Returns blockchain name composed of 3 character (ex. __ethereum__ is transformed into __eth__).
+
+### Parameters
+
+- __`String`__ - __`blockchain`__: blockchain name
+
+### Returns
+
+- __`String`__ : blockchain short name
+
+### Example
+```js
+utils.helpers.getBlockchainShortType('eth') //eth
+utils.helpers.getBlockchainShortType('ethereum') //eth
+utils.helpers.getBlockchainShortType('bitcoin') //btc
+```
+
+&nbsp;
+
+## helpers.getNativeBlockchainFromPtokenName
+
+```js
+utils.helpers.getNativeBlockchainFromPtokenName(name)
+```
+
+Returns the (full) native blockchain name give a pToken name.
+
+### Parameters
+
+- __`String`__ - __`name`__: pToken name
+
+### Returns
+
+- __`String`__ : blockchain shor name
+
+### Example
+```js
+utils.helpers.getNativeBlockchainFromPtokenName('pBTC') //bitcoin
+```
+
+&nbsp;
+
+## helpers.isValidPTokenName
+
+```js
+utils.helpers.isValidPTokenName(name)
+```
+
+Checks if a given string is a valid pToken name.
+
+### Parameters
+
+- __`String`__ - __`name`__: pToken name
+
+### Returns
+
+- __`Boolean`__ : pToken name validity
+
+### Example
+```js
+utils.helpers.isValidPTokenName('pBTC') //true
+utils.helpers.isValidPTokenName('pbtc') //true
+utils.helpers.isValidPTokenName('pbtc2') //false
+```
+
+&nbsp;
+
+## helpers.parseParams
+
+```js
+utils.helpers.parseParams(params, nativeBlockchain = null)
+```
+
+Function used to return a consistent object (object containing __hostBlockchain__, __hostNetwork__, 
+__nativeBlockchain__ and __nativeNetwork__) from the initialization params.
+
+### Parameters
+
+- __`String`__ - __`name`__: pToken name
+
+### Returns
+
+- __`Boolean`__ : pToken name validity
+
+### Example
+```js
+utils.helpers.parseParams({
+  network: 'testnet',
+  blockchain: 'eth'
+}, 'bitcoin')
+
+/*{ 
+  hostBlockchain: 'ethereum',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'bitcoin',
+  nativeNetwork: 'testnet'
+}*/
+}
+
+```
+
+&nbsp;
 
 ## utils.eth
 
@@ -301,7 +416,7 @@ utils.helpers.pTokenNameNormalized('pBTC') //pbtc
 ## eth.addHexPrefix
 
 ```js
-ptokens.utils.eth.addHexPrefix(text)
+utils.eth.addHexPrefix(text)
 ```
 
 Returns a string always `0x` prefixed
@@ -324,7 +439,7 @@ const res = utils.eth.addHexPrefix('hello') //0xhello
 ## eth.correctFormat
 
 ```js
-ptokens.utils.eth.addHexPrefix(amount, decimals, operation)
+utils.eth.addHexPrefix(amount, decimals, operation)
 ```
 
 Returns a number equal to the `amount` divied/multiplied (`operation`) by `decimals` (useful for erc20 tokens).
@@ -349,7 +464,7 @@ const res = utils.eth.correctFormat(1000, 4, '/') //0.1
 ## eth.getAccount
 
 ```js
-ptokens.utils.eth.getAccount(web3, isWeb3Injected)
+utils.eth.getAccount(web3, isWeb3Injected)
 ```
 
 Returns the current Ethereum address given an instance of Web3 and specifying if it's injected (i.e.: a Web3 instance injected by Metamask)
@@ -374,7 +489,7 @@ const account = await utils.eth.getAccount(web3, true)
 ## eth.getContract
 
 ```js
-ptokens.utils.eth.getContract(web3, abi, contractAddress, account)
+utils.eth.getContract(web3, abi, contractAddress, account)
 ```
 
 Returns a [Web3.eth.Contract](https://web3js.readthedocs.io/en/v1.2.0/Web3-eth-contract.html) instance given a Web3 one, the contract abi, its address (`contractAddress`) and the address (`account`) where transactions should be made from
@@ -399,7 +514,7 @@ const contract = utils.eth.getContract(web3, true)
 ## eth.getGasLimit
 
 ```js
-ptokens.utils.eth.getGasLimit(web3)
+utils.eth.getGasLimit(web3)
 ```
 
 Returns the gas limit of the latest Ethereum block.
@@ -422,7 +537,7 @@ const gasLimit = await utils.eth.getGasLimit(web3)
 ## eth.isHexPrefixed
 
 ```js
-ptokens.utils.eth.isHexPrefixed(text)
+utils.eth.isHexPrefixed(text)
 ```
 
 Check if a given string (`text`) is `0x` prefixed
@@ -445,7 +560,7 @@ const isHexPrefixed = await utils.eth.isHexPrefixed('0xhello') //true
 ## eth.makeContractCall
 
 ```js
-ptokens.utils.eth.makeContractCall(web3, method, options, params = [])
+utils.eth.makeContractCall(web3, method, options, params = [])
 ```
 
 Performs a contract `call` given a Web3 instance and the Smart Contract details.
@@ -478,7 +593,7 @@ const value = await utils.eth.makeContractCall(web3, 'balanceOf', true, abi, '' 
 ## eth.makeContractSend
 
 ```js
-ptokens.utils.eth.makeContractSend(web3, method, options, params = [])
+utils.eth.makeContractSend(web3, method, options, params = [])
 ```
 
 Performs a contract `send` given a Web3 instance and the Smart Contract details.
@@ -509,7 +624,7 @@ const receipt = await utils.eth.makeContractSend(web3, 'transfer', true, abi, 'e
 ## eth.waitForTransactionConfirmation
 
 ```js
-ptokens.utils.eth.waitForTransactionConfirmation(web3, transaction, pollingTime)
+utils.eth.waitForTransactionConfirmation(web3, transaction, pollingTime)
 ```
 
 Allow to wait for a ETH transaction confirmation
@@ -532,5 +647,136 @@ const tx = await utils.eth.waitForTransactionConfirmation(web3, '0x8cc2e8f07ac6a
 &nbsp;
 
 ***
+
+
+## utils.eos
+
+* __`getApi`__
+* __`getAccountName`__
+* __`getAmountInEosFormat`__
+* __`isValidAccountName`__
+* __`waitForTransactionConfirmation`__
+
+***
+
+## eos.getApi
+
+```js
+utils.eos.getApi(privateKey, rpc, eosSignatureProvider)
+```
+
+Returns an initialized EOS __`Api`__ object
+
+### Parameters
+
+- __`String`__ - __`privateKey`__: an EOS private key
+- __`String`__ - __`rpc`__: an EOS node rpc address
+- __`JsSignatureProvider`__ - __`eosSignatureProvider`__: an already initialized JsSignatureProvider
+
+### Returns
+
+- __`Api`__ : Returns an initialized EOS __`Api`__ object
+
+### Example
+```js
+const api = utils.eos.getApi('provate key', 'https://', null)
+```
+
+&nbsp;
+
+## eos.getAccountName
+
+```js
+utils.eos.getAccountName(api, publicKeys)
+```
+
+Returns an EOS account name given a list of public keys
+
+### Parameters
+
+- __`Api`__ - __`api`__: An EOS Api instance
+- __`Array`__ - __`publicKeys`__: list of public keys
+
+### Returns
+
+- __`Promise`__ : when resolved returns the account name
+
+### Example
+```js
+const api = utils.eos.getAccountName(api, ['EOS5....'])
+```
+
+&nbsp;
+
+## eos.getAmountInEosFormat
+
+```js
+utils.eos.getAmountInEosFormat(amount, decimals, symbol)
+```
+
+Returns an amount value formatted for using __`.transact`__ function
+
+### Parameters
+
+- __`Number`__ - __`amount`__:  amount
+- __`Number`__ - __`decimals`__:  number of decimales
+- __`String`__ - __`symbol`__:  token symbol
+
+### Returns
+
+- __`String`__ : string formatted for using __`.transact`__ function
+
+### Example
+```js
+const amount = utils.eos.getAmountInEosFormat(0.23, 8, 'PBTC') //0.23000000 PBTC
+```
+
+&nbsp;
+
+## eos.isValidAccountName
+
+```js
+utils.eos.isValidAccountName(accountName)
+```
+
+Returns a boolean indicating an account name correctness
+
+### Parameters
+
+- __`String`__ - __`accountName`__:  EOS account name
+
+### Returns
+
+- __`Boolean`__ : a boolean indicating an account name correctness
+
+### Example
+```js
+const isValid = utils.eos.isValidAccountName('allemanfredi') //true
+const isValid = utils.eos.isValidAccountName('alleman33fredi') //false
+```
+
+&nbsp;
+
+## eos.waitForTransactionConfirmation
+
+```js
+utils.eos.waitForTransactionConfirmation(api, transactionId)
+```
+
+Returns a boolean indicating the status of a transaction (true = confirmed, false = not confirmed).
+
+### Parameters
+
+- __`Api`__ - __`api`__:  an EOS Api instance
+- __`String`__ - __`transactionId`__:  an EOS transaction id
+
+### Returns
+
+- __`Boolean`__ : a boolean indicating the status of a transaction
+
+### Example
+```js
+const isValid = utils.eos.waitForTransactionConfirmation(api, 'tx id') //true
+```
 
 &nbsp;

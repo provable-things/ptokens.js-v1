@@ -26,9 +26,21 @@ npm install ptokens-pbtc
 import { pBTC } from 'ptokens-pbtc'
 
 const pbtc = new pBTC({
+  blockchain: 'ETH', //or EOS
+  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+
+  //if you want to be more detailed
+  hostBlockchain: 'ETH',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'BTC'
+  nativeNetwork: 'testnet'
+
+  //optionals
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
-  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+  eosPrivateKey: 'Eos Private Key',
+  eosRpc: 'https:/...'
+  eosSignatureProvider: ..
 })
 
 const depositAddress = await pbtc.getDepositAddress()
@@ -56,13 +68,25 @@ depositAddress.waitForDeposit()
 import { pBTC } from 'ptokens-pbtc'
 
 const pbtc = new pBTC({
+  blockchain: 'ETH', //or EOS
+  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+
+  //if you want to be more detailed
+  hostBlockchain: 'ETH',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'BTC'
+  nativeNetwork: 'testnet'
+
+  //optionals
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider',
-  btcNetwork: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
+  eosPrivateKey: 'Eos Private Key',
+  eosRpc: 'https:/...'
+  eosSignatureProvider: ..
 })
 
 pbtc.redeem(amount, btcAddress)
-  .once('onEthTxConfirmed', tx => ...) 
+  .once('onEthTxConfirmed', tx => ...) //in case of eos, onEosTxConfirmed
   .once('onNodeReceivedTx', report => ...)
   .once('onNodeBroadcastedTx', report => ...)
   .once('onBtcTxConfirmed', tx => ...)
@@ -73,6 +97,9 @@ pbtc.redeem(amount, btcAddress)
 
 It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
 into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
+Instead in case the __`hostBlockchain`__ field is equal to __`EOS`__, 
+it is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignatureProvider`__.
+__`eosRpc`__  can be a __`JsonRpc`__ or a string containing an rpc endpoint.
 
 ```js
 import { pBTC } from 'ptokens-pbtc'
@@ -80,8 +107,9 @@ import { pBTC } from 'ptokens-pbtc'
 if (window.web3) {
   
   const pbtc = new pBTC({
+    blockchain: 'ETH'
     ethProvider: window.web3.currentProvider,
-    btcNetwork: 'testnet'
+    network: 'testnet'
   })
 } else {
   console.log('No web3 detected')
@@ -95,113 +123,10 @@ if (window.web3) {
 
 ## Class Methods
 
-* __`approve`__
-* __`getAllowance`__
-* __`getBalance`__
-* __`getBurnNonce`__
 * __`getDepositAddress`__
-* __`getCirculatingSupply`__
-* __`getMintNonce`__
-* __`getTotalIssued`__
-* __`getTotalRedeemed`__
 * __`redeem`__
-* __`transfer`__
-* __`transferFrom`__
 
 ***
-
-## approve
-
-```js
-ptokens.pbtc.approve(spender, amount)
-```
-
-### Parameters
-
-- __`String`__ - __`spender`__: spender Ethereum address
-- __`Number`__ - __`amount`__: amount to transfer
-
-Approves to send the specified amount of pBTC to the provided Ethereum address by setting the allowance of spender address
-
-### Returns
-
-- __`Boolean`__ : boolean value indicating whether the approve operation succeeded
-
-### Example
-```js
-ptokens.pbtc.approve('eth address', 1.3452).then(status => console.log(status))
-```
-
-&nbsp;
-
-## getAllowance
-
-```js
-ptokens.pbtc.getAllowance(owner, spender)
-```
-
-Get the remaining number of pBTC that `spender` can spend on behalf of `owner` through `transferFrom`
-
-### Parameters
-
-- __`String`__ - __`owner`__: Owner Ethereum address
-- __`String`__ - __`spender`__: Spender Ethereum address
-
-### Returns
-
-- __`Number`__ : number of pBTC that `spender` can spend on behalf of `owner` through `transferFrom`
-
-### Example
-```js
-ptokens.pbtc.getAllowance('owner eth address', 'spender eth address').then(allowance => console.log(status))
-```
-
-&nbsp;
-
-## getBalance
-
-```js
-ptokens.pbtc.getBalance(address)
-```
-Get the current pBTC balance of the provided address
-
-
-### Parameters
-
-- __`String`__ - __`address`__: Ethereum address
-
-
-### Returns
-
-- __`Number`__ : current balance of the provided Ethereum address
-
-### Example
-```js
-ptokens.pbtc.getBalance(address).then(balance => console.log(balance))
-```
-
-&nbsp;
-
-
-## getBurnNonce
-
-```js
-ptokens.pbtc.getBurnNonce()
-```
-Get the total number of Burn events
-
-
-### Returns
-
-- __`Number`__ : current number of burn events
-
-### Example
-```js
-ptokens.pbtc.getBurnNonce().then(burnNonce => console.log(burnNonce))
-```
-
-&nbsp;
-
 
 ## getDepositAddress
 
@@ -229,93 +154,11 @@ depositAddress.waitForDeposit()
   .once('onBtcTxConfirmed', tx => ...)
   .once('onNodeReceivedTx', tx => ...)
   .once('onNodeBroadcastedTx', tx => ...)
-  .once('onEthTxConfirmed', tx => ...)
+  .once('onEthTxConfirmed', tx => ...) //or onEosTxConfirmed
   .then(res => ...))
 ```
 
 &nbsp;
-
-## getCirculatingSupply
-
-```js
-ptokens.pbtc.getCirculatingSupply()
-```
-
-Get the current pBTC circulating supply
-
-### Returns
-
-- __`Number`__ : current pBTC circulating supply 
-
-### Example
-```js
-ptokens.pbtc.getCirculatingSupply().then(circulatingSupply => console.log(circulatingSupply))
-```
-
-&nbsp;
-
-
-## getMintNonce
-
-```js
-ptokens.pbtc.getMintNonce()
-```
-
-Get the total number of Mint events
-
-### Returns
-
-- __`Number`__ : current number of minting events
-
-### Example
-
-```js
-ptokens.pbtc.getMintNonce().then(mintNonce => console.log(mintNonce))
-```
-
-&nbsp;
-
-## getTotalIssued
-
-```js
-ptokens.pbtc.getTotalIssued()
-```
-
-Get the total number of total issued pBTC.
-
-
-### Returns
-
-- __`Number`__ : total number of issued pBTC
-
-### Example
-```js
-ptokens.pbtc.getTotalIssued().then(totalIssued => console.log(totalIssued))
-```
-
-&nbsp;
-
-## getTotalRedeemed
-
-```js
-ptokens.pbtc.getTotalRedeemed()
-```
-
-Get the total number of total redeemed pBTC.
-
-
-### Returns
-
-- __`Number`__ : total number of redeemed pBTC
-
-### Example
-```js
-ptokens.pbtc.getTotalRedeemed().then(totalRedeemed => console.log(totalRedeemed))
-```
-
-&nbsp;
-
-
 
 ## redeem
 
@@ -337,64 +180,12 @@ Redeem a specified number of pBTC to the specified BTC address.
 ### Example
 ```js
 ptokens.pbtc.redeem(1, 'btc address')
-  .once('onEthTxConfirmed', tx =>. ...) 
+  .once('onEthTxConfirmed', tx =>. ...) //or onEosTxConfirmed
   .once('onNodeReceivedTx', report => ...)
   .once('onNodeBroadcastedTx', report => ...)
   .once('onBtcTxConfirmed', tx => ...)
   .then(res => ...)
 ```
-
-&nbsp;
-
-## transfer
-
-```js
-ptokens.pbtc.transfer(to, amount)
-```
-
-Transfer a specified amount of pBTC to the provided Ethereum address
-
-### Parameters
-
-- __`String`__ - __`to`__: receiver Ethereum address
-- __`Number`__ - __`amount`__: amount to transfer
-
-
-### Returns
-
-- __`Boolean`__ : boolean value indicating whether the transfer operation succeeded
-
-### Example
-```js
-ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
-```
-
-&nbsp;
-
-
-## transferFrom
-
-```js
-ptokens.pbtc.transferFrom(from, to, amount)
-```
-
-Move the specified amount of pBTC from `from` to `to` using the allowance mechanism
-
-
-### Parameters
-
-- __`String`__ - __`from`__: sender Ethereum address
-- __`Number`__ - __`amount`__: amount to transfer
-
-### Returns
-
-- __`Boolean`__ : boolean value indicating whether transferFrom operation succeeded
-
-### Example
-```js
-ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
-```
-
 
 &nbsp;
 
@@ -410,9 +201,17 @@ ptokens.pbtc.transfer('eth address', 1.3452).then(status => console.log(status))
 import { BtcDepositAddress } from 'ptokens-pbtc'
 
 const depositAddress = new BtcDepositAddress({
-  web3: new Web3(...)
+  blockchain: 'ETH', //or EOS
+  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+
+  //if you want to be more detailed
+  hostBlockchain: 'ETH',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'BTC'
+  nativeNetwork: 'testnet'
+
+  hostApi: new Web3() // new Api
   node: new Node({...})
-  network: 'testnet' //'testnet' or 'bitcoin', default 'testnet'
 })
 ```
 
@@ -443,7 +242,7 @@ Generate a new BTC deposit address
 
 ### Example
 ```js
-depositAddress.generate('eth address').then(addr => console.log(addr))
+depositAddress.generate('eth address or eos account').then(addr => console.log(addr))
 ```
 
 ***
@@ -505,6 +304,6 @@ depositAddress.waitForDeposit(
   .once('onBtcTxConfirmed', tx => ...) 
   .once('onNodeReceivedTx', report => ...)
   .once('onNodeBroadcastedTx', report => ...)
-  .once('onEthTxConfirmed', tx => ...)
+  .once('onEthTxConfirmed', tx => ...) //or onEosTxConfirmed
   .then(res => res => ...)
 ```

@@ -19,12 +19,18 @@ In the situation where no default node is in use, the library randomly selects a
 import { NodeSelector } from 'ptokens-node-selector'
 
 const node = new NodeSelector({
-  pToken: {
-    name: 'pToken name',
-    redeemFrom: 'ETH' //for now
-  },
-  defaultEndpoint: 'https://...' //optional,
-  networkType:  //possible values are mainnet, testnet, ropsten, main
+  name: 'pToken name',
+  
+  blockchain: 'ETH', //or EOS
+  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+
+  //if you want to be more detailed
+  hostBlockchain: 'ETH',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'BTC'
+  nativeNetwork: 'testnet'
+
+  defaultEndpoint: 'https://.....' //optional
 })
 ```
 
@@ -40,8 +46,6 @@ const node = new NodeSelector({
 * __`getApi`__
 * __`select`__
 * __`setEndpoint`__
-* __`getNetworkType`__
-* __`setNetworkType`__
 
 ***
 
@@ -137,45 +141,3 @@ selectedNode.api.get('https://...')
 ```
 
 &nbsp;
-
-
-## setNetworkType
-
-```js
-nodeSelector.setNetworkType(type)
-```
-
-A function that manually sets the network type
-
-### Parameters
-
-- __`String`__ - __`type`__: network type
-
-### Returns
-
-- __`Promise`__ : when resolved it returns a string
-
-### Example
-```js
-const selectedNode = nodeSelector.setNetworkType('testnet')
-```
-
-&nbsp;
-
-
-## getNetworkType
-
-```js
-nodeSelector.getNetworkType()
-```
-
-A function return the current network type 
-
-### Returns
-
-- __`String`__ : network type (__mainnet__ or __testnet__)
-
-### Example
-```js
-const selectedNode = nodeSelector.getNetworkType()
-```
