@@ -1,5 +1,6 @@
 import { pBTC, BtcDepositAddress } from 'ptokens-pbtc'
 import { Node } from 'ptokens-node'
+import {  } from 'eosjs'
 import Web3 from 'web3'
 
 const web3 = new Web3()
@@ -8,8 +9,8 @@ const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
 const pbtc = new pBTC({
-  btcNetwork: 'mainnet',
-  hostBlockchain: 'ETH'
+  network: 'mainnet',
+  blockchain: 'eth'
 })
 
 // $ExpectType Promise<BtcDepositAddress>
@@ -19,17 +20,16 @@ pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
 pbtc.redeem(10, BTC_TESTING_ADDRESS)
 
 const node = new Node({
-  pToken: {
-    name: 'pBTC',
-    hostBlockchain: 'ETH'
-  },
+  pToken: 'pBTC',
+  blockchain: 'eth',
   endpoint: 'https://..'
 })
 
 const btcDepositAddress = new BtcDepositAddress({
-  network: 'testnet',
-  node,
-  hostProvider: web3
+  hostNetwork: 'ropsten_testnet',
+  hostApi: web3,
+  hostBlockchain: 'eth',
+  node
 })
 
 // $ExpectType Promise<string>

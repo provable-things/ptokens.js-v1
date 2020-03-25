@@ -5,46 +5,46 @@ import * as utils from 'ptokens-utils'
 import {
   BTC_ESPLORA_POLLING_TIME,
   HOST_NODE_POLLING_TIME_INTERVAL,
+  BTC_DECIMALS,
   hostBlockchainEvents
 } from './utils/constants'
 
 export class BtcDepositAddress {
   /**
-   * @param {Object} _params
+   * @param {Object} _configs
    */
-  constructor(_params) {
+  constructor(_configs) {
+    const { hostApi, node } = _configs
+
     const {
-      network,
-      node,
-      hostProvider,
-      hostTokenDecimals,
+      nativeBlockchain,
+      nativeNetwork,
+      hostNetwork,
       hostBlockchain
-    } = _params
+    } = utils.helpers.parseParams(
+      _configs,
+      _configs.nativeBlockchain
+        ? utils.helpers.getBlockchainType[_configs.nativeBlockchain]
+        : 'bitcoin'
+    )
 
-    if (!hostBlockchain)
-      throw new Error('Bad Initialization. hostBlockchain is nedeed')
+    this.hostBlockchain = hostBlockchain
+    this.hostNetwork = hostNetwork
+    this.nativeBlockchain = nativeBlockchain
+    this.nativeNetwork = nativeNetwork
 
-    this.hostBlockchain = hostBlockchain.toLowerCase()
-    if (this.hostBlockchain !== 'eth' && this.hostBlockchain !== 'eos')
-      throw new Error(
-        'Bad Initialization. Please provide a valid hostBlockchain value'
-      )
-
-    this.network = network
     this.node = node
-    this.hostProvider = hostProvider
-    this.hostBlockchain = hostBlockchain.toLowerCase()
-
-    this.hostBlockchain === 'eth'
-      ? (this.hostTokenDecimals = hostTokenDecimals || 18)
-      : (this.hostTokenDecimals = hostTokenDecimals || 8)
+    this.hostApi = hostApi
   }
 
   /**
    * @param {String} _hostAddress
    */
   async generate(_hostAddress) {
-    if (this.hostBlockchain === 'eth' && !Web3Utils.isAddress(_hostAddress))
+    if (
+      this.hostBlockchain === 'ethereum' &&
+      !Web3Utils.isAddress(_hostAddress)
+    )
       throw new Error('Eth Address is not valid')
 
     if (
@@ -75,13 +75,13 @@ export class BtcDepositAddress {
 
   verify() {
     const network =
-      this.network === 'bitcoin'
+      this.hostNetwork === 'mainnet'
         ? bitcoin.networks.bitcoin
         : bitcoin.networks.testnet
 
     const hostAddressBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.hostAddress),
-      this.hostBlockchain === 'eth' ? 'hex' : 'utf-8'
+      this.hostBlockchain === 'ethereum' ? 'hex' : 'utf-8'
     )
     const nonceBuf = utils.converters.encodeUint64le(this.nonce)
     const enclavePublicKeyBuf = Buffer.from(
@@ -116,7 +116,7 @@ export class BtcDepositAddress {
   waitForDeposit() {
     const promiEvent = Web3PromiEvent()
 
-    if (!this.hostProvider) {
+    if (!this.hostApi) {
       promiEvent.reject('Provider not specified. Impossible to monitor the tx')
       return
     }
@@ -125,7 +125,7 @@ export class BtcDepositAddress {
       if (!this.value) promiEvent.reject('Please provide a deposit address')
 
       const utxoToMonitor = await utils.btc.monitorUtxoByAddress(
-        this.network,
+        this.hostNetwork,
         this.value,
         promiEvent.eventEmitter,
         BTC_ESPLORA_POLLING_TIME
@@ -139,7 +139,7 @@ export class BtcDepositAddress {
       const hostTxReceipt = await utils[
         this.hostBlockchain
       ].waitForTransactionConfirmation(
-        this.hostProvider,
+        this.hostApi,
         broadcastedHostTxReport.broadcast_tx_hash,
         HOST_NODE_POLLING_TIME_INTERVAL
       )
@@ -151,15 +151,11 @@ export class BtcDepositAddress {
       promiEvent.resolve({
         to: this.hostAddress,
         tx: broadcastedHostTxReport.broadcast_tx_hash,
-        amount:
-          //NOTE: provisional check because of different amounts format
-          this.hostBlockchain === 'eth'
-            ? utils.eth.correctFormat(
-                broadcastedHostTxReport.host_tx_amount,
-                this.hostTokenDecimals,
-                '/'
-              )
-            : broadcastedHostTxReport.host_tx_amount
+        amount: utils.eth.correctFormat(
+          broadcastedHostTxReport.host_tx_amount,
+          BTC_DECIMALS, // NOTE amount returned by the api is in sats
+          '/'
+        )
       })
     }
 

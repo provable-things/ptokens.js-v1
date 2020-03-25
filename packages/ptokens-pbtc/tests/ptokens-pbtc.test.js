@@ -1,20 +1,22 @@
 import { pBTC } from '../src/index'
 import { expect } from 'chai'
 import { sendBitcoin } from './utils'
+import { JsonRpc } from 'eosjs'
+import fetch from 'node-fetch'
 
 const pbtcOnEthConfigs = {
-  hostBlockchain: 'ETH',
+  blockchain: 'ETH',
   ethPrivateKey:
     '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
   ethProvider: 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-  btcNetwork: 'testnet'
+  network: 'testnet'
 }
 
 const pbtcOnEosConfigs = {
-  hostBlockchain: 'EOS',
-  eosRpc: 'https://eosjunglehttps.ptokens.io:443',
-  eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv',
-  btcNetwork: 'testnet'
+  blockchain: 'EOS',
+  network: 'testnet',
+  eosRpc: new JsonRpc('https://eosjunglehttps.ptokens.io:443', { fetch }),
+  eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv'
 }
 
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
@@ -28,19 +30,35 @@ jest.setTimeout(3000000)
 
 // pbtc on eth
 test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
+  const expectedHostNetwork = 'mainnet'
+
   const pbtc = new pBTC({
-    hostBlockchain: 'ETH',
-    btcNetwork: 'bitcoin'
+    blockchain: 'ETH',
+    network: 'mainnet'
   })
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
   expect(depositAddress.toString()).to.be.a('string')
+  expect(pbtc.hostNetwork).to.be.equal(expectedHostNetwork)
+})
+
+test('Should get a BTC deposit address on Ethereum Ropsten', async () => {
+  const expectedHostNetwork = 'testnet_ropsten'
+
+  const pbtc = new pBTC({
+    blockchain: 'ETH',
+    network: 'testnet'
+  })
+
+  const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
+  expect(depositAddress.toString()).to.be.a('string')
+  expect(pbtc.hostNetwork).to.be.equal(expectedHostNetwork)
 })
 
 test('Should not get a BTC deposit address because of invalid Eth address', async () => {
   const pbtc = new pBTC({
-    hostBlockchain: 'ETH',
-    btcNetwork: 'testnet'
+    blockchain: 'ETH',
+    network: 'mainnet'
   })
 
   const invalidEthAddress = 'Invalid Eth Address'
@@ -51,7 +69,6 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
     expect(err.message).to.be.equal('Eth Address is not valid')
   }
 })
-
 test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async () => {
   const pbtc = new pBTC(pbtcOnEthConfigs)
 
@@ -138,11 +155,11 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
   expect(btcTxIsConfirmed).to.equal(true)
 })
 
-//pbtc on eos
+// pbtc on eos
 test('Should get a BTC deposit address on EOS Testnet', async () => {
   const pbtc = new pBTC({
-    hostBlockchain: 'EOS',
-    btcNetwork: 'testnet'
+    blockchain: 'EOS',
+    network: 'testnet'
   })
 
   const depositAddress = await pbtc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
@@ -151,8 +168,8 @@ test('Should get a BTC deposit address on EOS Testnet', async () => {
 
 test('Should not get a BTC deposit address because of invalid EOS address', async () => {
   const pbtc = new pBTC({
-    hostBlockchain: 'EOS',
-    btcNetwork: 'testnet'
+    blockchain: 'EOS',
+    network: 'testnet'
   })
 
   const invalidEosAddress = 'Invalid EOS Address'

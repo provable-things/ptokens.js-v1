@@ -5,35 +5,43 @@ import {
 } from 'ptokens-utils'
 import { TransactionReceipt, PromiEvent } from 'web3-core'
 import Web3 from 'web3'
-import { Api } from 'eosjs'
+import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { NodeSelector } from 'ptokens-node-selector'
 
-export interface Configs {
-  hostBlockchain: string,
-  btcNetwork: string,
+export interface pBTCConfigs {
+  network?: string,
+  hostNetwork?: string,
+  blockchain?: string,
+  hostBlockchain?: string,
+  nativeNetwork?: string,
+  nativeBlockchain?: string,
   ethPrivateKey?: string,
   ethProvider?: string | object,
   eosPrivateKey?: string,
-  eosRpc?: string,
+  eosRpc?: string | JsonRpc,
   eosSignatureProvider?: JsSignatureProvider
   defaultEndpoint?: string
 }
 
-export class pBTC {
-  constructor(configs: Configs)
+/*
+  NOTE: EOS transaction receipt has been declared as "any" so it
+  is not possible to use it here because would overwrite other types
+  causing errors
+*/
+
+export class pBTC extends NodeSelector {
+  constructor(configs: pBTCConfigs)
 
   nodeSelector: NodeSelector
-
-  hostBlockchain: string
 
   decimals: string | null
 
   contractAddress: string | null
 
-  hostPrivatekey: string | null
+  hostPrivatekey?: string | null
 
-  hostProvider: Web3 | Api
+  hostApi?: Web3 | Api
 
   getDepositAddress(_hostAddress: string): Promise<BtcDepositAddress>
 
@@ -53,13 +61,26 @@ export interface IssueResult {
 }
 
 export interface BtcDepositAddressConfigs {
-  network: string,
-  node: Node,
-  hostProvider: Web3
+  hostNetwork: string,
+  hostApi?: Web3 | Api
+  hostBlockchain: string,
+  node: Node
 }
 
 export class BtcDepositAddress {
   constructor(configs: BtcDepositAddressConfigs)
+
+  hostBlockchain: string
+
+  hostNetwork: string
+
+  nativeBlockchain: string
+
+  nativeNetwork: string
+
+  node: Node
+
+  hostApi?: Web3 | Api
 
   hostAddress: string | null
 
