@@ -26,7 +26,7 @@ npm install ptokens-node-selector
 import { NodeSelector } from 'ptokens-node-selector'
 
 const nodeSelector = new NodeSelector({
-  name: 'pToken name',
+  pToken: 'pToken name',
   
   blockchain: 'ETH', //or EOS
   network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
