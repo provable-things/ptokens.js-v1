@@ -23,8 +23,9 @@ export const networkLabels = {
     mainnet: 'mainnet'
   },
   eos: {
-    testnet: 'testnet_jungle2',
-    testnet_jungle2: 'testnet_jungle2'
+    testnet: 'testnet_jungle3',
+    testnet_jungle3: 'testnet_jungle3',
+    mainnet: 'mainnet'
   },
   bitcoin: {
     testnet: 'testnet',
