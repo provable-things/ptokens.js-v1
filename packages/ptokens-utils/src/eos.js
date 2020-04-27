@@ -61,7 +61,7 @@ const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
  * @param {String} _accountName
  */
 const isValidAccountName = _accountName => {
-  const regex = new RegExp('([a-z]|[1-5]|\.){12}')
+  const regex = new RegExp('([a-z]|[1-5]|.){12}')
   return regex.test(_accountName) && _accountName.length === EOS_ACCOUNT_LENGTH
 }
 

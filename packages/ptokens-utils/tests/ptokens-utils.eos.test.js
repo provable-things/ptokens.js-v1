@@ -11,7 +11,7 @@ jest.setTimeout(30000)
 
 test('Should get the correct EOS account name', async () => {
   const signatureProvider = new JsSignatureProvider([eosPrivateKey])
-  const rpc =  new JsonRpc(eosProvider, { fetch })
+  const rpc = new JsonRpc(eosProvider, { fetch })
   const expectedAccountName = 'all3manfr4di'
   const publicKeys = await signatureProvider.getAvailableKeys()
   const accountName = await utils.eos.getAccountName(rpc, publicKeys)
