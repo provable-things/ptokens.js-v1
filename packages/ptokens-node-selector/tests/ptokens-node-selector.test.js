@@ -3,7 +3,7 @@ import { expect } from 'chai'
 
 jest.setTimeout(300000)
 
-test('Should select a pBTC node on EOS Jungle2 Testnet', async () => {
+test('Should select a pBTC node on EOS Jungle3 Testnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: 'pBTC',
     blockchain: 'EOS',
@@ -13,24 +13,24 @@ test('Should select a pBTC node on EOS Jungle2 Testnet', async () => {
   const node = await nodeSelector.select()
   const info = await node.getInfo()
 
-  expect(info.host_network).to.be.equal('testnet_jungle2')
-  expect(info.host_blockchain).to.be.equal('eos')
+  expect(info.host_network).to.be.equal('testnet_jungle3')
+  expect(info.host_blockchain).to.be.equal('eosio')
   expect(info.native_blockchain).to.be.equal('bitcoin')
   expect(info.native_network).to.be.equal('testnet')
 })
 
-test('Should select a pBTC node on EOS Jungle2 Testnet with detailed initialization', async () => {
+test('Should select a pBTC node on EOS Jungle3 Testnet with detailed initialization', async () => {
   const nodeSelector = new NodeSelector({
     pToken: 'pBTC',
-    hostBlockchain: 'EOS',
-    hostNetwork: 'testnet_jungle2'
+    hostBlockchain: 'EOSIO',
+    hostNetwork: 'testnet_jungle3'
   })
 
   const node = await nodeSelector.select()
   const info = await node.getInfo()
 
-  expect(info.host_network).to.be.equal('testnet_jungle2')
-  expect(info.host_blockchain).to.be.equal('eos')
+  expect(info.host_network).to.be.equal('testnet_jungle3')
+  expect(info.host_blockchain).to.be.equal('eosio')
   expect(info.native_blockchain).to.be.equal('bitcoin')
   expect(info.native_network).to.be.equal('testnet')
 })
