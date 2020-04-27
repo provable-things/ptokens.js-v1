@@ -1,14 +1,15 @@
 export const blockchainTypes = {
   ethereum: 'ethereum',
   eth: 'ethereum',
-  eos: 'eos',
+  eosio: 'eosio',
+  eos: 'eosio',
   bitcoin: 'bitcoin',
   btc: 'bitcoin'
 }
 
 export const blockchainShortTypes = {
   ethereum: 'eth',
-  eos: 'eos',
+  eosio: 'eos',
   bitcoin: 'btc'
 }
 
@@ -22,7 +23,7 @@ export const networkLabels = {
     testnet_ropsten: 'testnet_ropsten',
     mainnet: 'mainnet'
   },
-  eos: {
+  eosio: {
     testnet: 'testnet_jungle3',
     testnet_jungle3: 'testnet_jungle3',
     mainnet: 'mainnet'
