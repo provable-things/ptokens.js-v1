@@ -127,7 +127,7 @@ export class BtcDepositAddress {
       if (!this.value) promiEvent.reject('Please provide a deposit address')
 
       const utxoToMonitor = await utils.btc.monitorUtxoByAddress(
-        this.hostNetwork,
+        this.nativeNetwork,
         this.value,
         promiEvent.eventEmitter,
         BTC_ESPLORA_POLLING_TIME
