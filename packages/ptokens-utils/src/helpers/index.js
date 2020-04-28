@@ -6,6 +6,51 @@ import {
   pTokenNativeBlockchain,
   pTokensAvailables
 } from './maps'
+import {
+  Bitcoin,
+  BitcoinMainnet,
+  BitcoinTestnet,
+  Ethereum,
+  EthereumMainnet,
+  EthereumRopsten,
+  Eosio,
+  EosioMainnet,
+  EosioJungle3,
+  Mainnet,
+  Testnet,
+  pBTC
+} from './names'
+
+/**
+ *
+ * Blockchain used by pTokens
+ */
+const blockchains = {
+  Bitcoin,
+  Eosio,
+  Ethereum
+}
+
+/**
+ *
+ * Networks compatible with pTokens
+ */
+const networks = {
+  BitcoinMainnet,
+  BitcoinTestnet,
+  EthereumMainnet,
+  EthereumRopsten,
+  EosioMainnet,
+  EosioJungle3
+}
+
+/**
+ *
+ * pTokens list
+ */
+const pTokens = {
+  pBTC
+}
 
 /**
  *
@@ -93,9 +138,9 @@ const parseParams = (_params, _nativeBlockchain) => {
   parsedNativeNetwork = nativeNetwork
     ? networkLabels[nativeNetwork.toLowerCase()]
     : null
-  if (!parsedNativeNetwork && parsedHostNetwork.includes('testnet'))
-    parsedNativeNetwork = 'testnet'
-  else parsedNativeNetwork = 'mainnet'
+  if (!parsedNativeNetwork && parsedHostNetwork.includes(Testnet))
+    parsedNativeNetwork = Testnet
+  else parsedNativeNetwork = Mainnet
 
   parsedNativeBlockchain = nativeBlockchain
     ? blockchainTypes[nativeBlockchain.toLowerCase()]
@@ -115,5 +160,8 @@ export {
   getBlockchainShortType,
   getNativeBlockchainFromPtokenName,
   isValidPTokenName,
-  parseParams
+  parseParams,
+  blockchains,
+  networks,
+  pTokens
 }

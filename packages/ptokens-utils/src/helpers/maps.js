@@ -1,10 +1,25 @@
+import {
+  Bitcoin,
+  BitcoinMainnet,
+  BitcoinTestnet,
+  Ethereum,
+  EthereumMainnet,
+  EthereumRopsten,
+  Eosio,
+  EosioMainnet,
+  EosioJungle3,
+  Mainnet,
+  Testnet,
+  pBTC
+} from './names'
+
 export const blockchainTypes = {
-  ethereum: 'ethereum',
-  eth: 'ethereum',
-  eosio: 'eosio',
-  eos: 'eosio',
-  bitcoin: 'bitcoin',
-  btc: 'bitcoin'
+  ethereum: Ethereum,
+  eth: Ethereum,
+  eosio: Eosio,
+  eos: Eosio,
+  bitcoin: Bitcoin,
+  btc: Bitcoin
 }
 
 export const blockchainShortTypes = {
@@ -14,32 +29,32 @@ export const blockchainShortTypes = {
 }
 
 export const pTokenNativeBlockchain = {
-  pbtc: 'bitcoin'
+  pbtc: Bitcoin
 }
 
 export const networkLabels = {
   ethereum: {
-    testnet: 'testnet_ropsten',
-    testnet_ropsten: 'testnet_ropsten',
-    mainnet: 'mainnet'
+    testnet: EthereumRopsten,
+    testnet_ropsten: EthereumRopsten,
+    mainnet: EthereumMainnet
   },
   eosio: {
-    testnet: 'testnet_jungle3',
-    testnet_jungle3: 'testnet_jungle3',
-    mainnet: 'mainnet'
+    testnet: EosioJungle3,
+    testnet_jungle3: EosioJungle3,
+    mainnet: EosioMainnet
   },
   bitcoin: {
-    testnet: 'testnet',
-    mainnet: 'mainnet',
-    bitcoin: 'mainnet'
+    testnet: Bitcoin,
+    mainnet: BitcoinMainnet,
+    bitcoin: BitcoinTestnet
   }
 }
 
 export const networkLabelType = {
-  testnet_ropsten: 'testnet',
-  testnet_jungle2: 'testnet',
-  testnet: 'testnet',
-  mainnet: 'mainnet'
+  testnet_ropsten: Testnet,
+  testnet_jungle3: Testnet,
+  testnet: Testnet,
+  mainnet: Mainnet
 }
 
-export const pTokensAvailables = ['pbtc']
+export const pTokensAvailables = [pBTC]

@@ -148,13 +148,35 @@ export interface ParsedParams {
   nativeBlockchain: string,
 }
 
+export interface Blockchains {
+  Bitcoin: string,
+  Ethereum: string,
+  Eosio: string
+}
+
+export interface Networks {
+  BitcoinMainnet: string,
+  BitcoinTestnet: string,
+  EthereumMainnet: string,
+  EthereumRopsten: string,
+  EosioMainnet: string,
+  EosioJungle: string
+}
+
+export interface pTokens {
+  pBTC: string
+}
+
 export interface HelpersInterface {
   parseParams(_params: object, _nativeBlockchain: string): ParsedParams
   getBlockchainType(_blockchain: string): string
   getBlockchainShortType(_blockchain: string): string
   getNetworkType(_network: string): string
   getNativeBlockchainFromPtokenName(_name: string): string
-  isValidPTokenName(_name: string): boolean
+  isValidPTokenName(_name: string): boolean,
+  blockchains: Blockchains
+  networks: Networks,
+  pTokens: pTokens
 }
 
 export const helpers: HelpersInterface
