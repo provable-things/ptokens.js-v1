@@ -7,6 +7,6 @@ export const EOS_EXPIRE_SECONDS = 60
 export const BTC_DECIMALS = 8
 
 export const hostBlockchainEvents = {
-  eth: 'onEthTxConfirmed',
-  eos: 'onEosTxConfirmed'
+  ethereum: 'onEthTxConfirmed',
+  eosio: 'onEosTxConfirmed'
 }

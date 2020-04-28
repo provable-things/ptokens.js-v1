@@ -4,13 +4,11 @@ import { NodeSelector } from 'ptokens-node-selector'
 import { eth, eos, btc, helpers } from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import { BtcDepositAddress } from './btc-deposit-address'
-import pbtcAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
-import peosAbi from './utils/contractAbi/pBTCTokenEOSContractAbi.json'
+import { redeemFromEthereum } from './lib/redeem-from-ethereum'
+import { redeemFromEosio } from './lib/redeem-from-eosio'
 import {
   MINIMUM_BTC_REDEEMABLE,
   BTC_ESPLORA_POLLING_TIME,
-  EOS_BLOCKS_BEHIND,
-  EOS_EXPIRE_SECONDS,
   BTC_DECIMALS,
   hostBlockchainEvents
 } from './utils/constants'
@@ -25,10 +23,10 @@ export class pBTC extends NodeSelector {
       hostNetwork,
       nativeBlockchain,
       nativeNetwork
-    } = helpers.parseParams(_configs, 'bitcoin')
+    } = helpers.parseParams(_configs, helpers.blockchains.Bitcoin)
 
     super({
-      pToken: 'pBTC',
+      pToken: helpers.pTokens.pBTC,
       hostBlockchain,
       hostNetwork,
       nativeBlockchain,
@@ -50,8 +48,8 @@ export class pBTC extends NodeSelector {
     )
       throw new Error('Bad Initialization. Impossible to use Both ETH and EOS')
 
+    // NOTE: parse eth params
     if (ethProvider) this.hostApi = new Web3(ethProvider)
-
     if (ethPrivateKey) {
       this._ishostApiInjected = false
       const account = this.hostApi.eth.accounts.privateKeyToAccount(
@@ -66,6 +64,7 @@ export class pBTC extends NodeSelector {
       this.hostPrivateKey = null
     }
 
+    // NOTE: parse eos params
     if (eosSignatureProvider) {
       this.hostApi = eos.getApi(null, eosRpc, eosSignatureProvider)
     } else if (eosPrivateKey && eosRpc) {
@@ -84,13 +83,16 @@ export class pBTC extends NodeSelector {
    */
   async getDepositAddress(_hostAddress) {
     if (
-      this.hostBlockchain === 'ethereum' &&
+      this.hostBlockchain === helpers.blockchains.Ethereum &&
       !Web3Utils.isAddress(_hostAddress)
     )
       throw new Error('Eth Address is not valid')
 
-    if (this.hostBlockchain === 'eos' && !eos.isValidAccountName(_hostAddress))
-      throw new Error('EOS Address is not valid')
+    if (
+      this.hostBlockchain === helpers.blockchains.Eosio &&
+      !eos.isValidAccountName(_hostAddress)
+    )
+      throw new Error('EOS Account is not valid')
 
     const depositAddress = new BtcDepositAddress({
       nativeNetwork: helpers.getNetworkType(this.nativeNetwork),
@@ -136,75 +138,38 @@ export class pBTC extends NodeSelector {
 
         let hostTxReceiptId = null
 
-        if (this.hostBlockchain === 'ethereum') {
-          const hostTxReceipt = await eth.makeContractSend(
+        if (this.hostBlockchain === helpers.blockchains.Ethereum) {
+          const ethTxReceipt = await redeemFromEthereum(
             this.hostApi,
-            'redeem',
-            {
-              isWeb3Injected: this._ishostApiInjected,
-              abi: pbtcAbi,
-              contractAddress,
-              privateKey: this.hostPrivateKey,
-              value: eth.zeroEther
-            },
-            [eth.correctFormat(_amount, decimals, '*').toString(), _btcAddress]
+            _amount,
+            decimals,
+            _btcAddress,
+            contractAddress,
+            this.hostPrivateKey,
+            this._ishostApiInjected
           )
+
           promiEvent.eventEmitter.emit(
             hostBlockchainEvents[this.hostBlockchain],
-            hostTxReceipt
+            ethTxReceipt
           )
-          hostTxReceiptId = hostTxReceipt.transactionHash
+          hostTxReceiptId = ethTxReceipt.transactionHash
         }
 
-        // NOTE redeem from eos
-        if (this.hostBlockchain === 'eos') {
-          const eosPublicKeys = await this.hostApi.signatureProvider.getAvailableKeys()
-
-          const eosAccountName = await eos.getAccountName(
-            this.hostApi.rpc,
-            eosPublicKeys
-          )
-
-          this.hostApi.cachedAbis.set(contractAddress, {
-            abi: peosAbi,
-            rawAbi: null
-          })
-
-          const hostTxReceipt = await this.hostApi.transact(
-            {
-              actions: [
-                {
-                  account: contractAddress,
-                  name: 'redeem',
-                  authorization: [
-                    {
-                      actor: eosAccountName,
-                      permission: 'active'
-                    }
-                  ],
-                  data: {
-                    sender: eosAccountName,
-                    quantity: eos.getAmountInEosFormat(
-                      _amount,
-                      decimals,
-                      'PBTC'
-                    ),
-                    memo: _btcAddress
-                  }
-                }
-              ]
-            },
-            {
-              blocksBehind: EOS_BLOCKS_BEHIND,
-              expireSeconds: EOS_EXPIRE_SECONDS
-            }
+        if (this.hostBlockchain === helpers.blockchains.Eosio) {
+          const eosTxReceipt = await redeemFromEosio(
+            this.hostApi,
+            _amount,
+            _btcAddress,
+            decimals,
+            contractAddress
           )
 
           promiEvent.eventEmitter.emit(
             hostBlockchainEvents[this.hostBlockchain],
-            hostTxReceipt
+            eosTxReceipt
           )
-          hostTxReceiptId = hostTxReceipt.transaction_id
+          hostTxReceiptId = eosTxReceipt.transaction_id
         }
 
         const broadcastedBtcTxReport = await this.selectedNode.monitorIncomingTransaction(
@@ -213,7 +178,7 @@ export class pBTC extends NodeSelector {
         )
 
         const broadcastedBtcTx = await btc.waitForTransactionConfirmation(
-          this.this.nativeNetwork,
+          this.nativeNetwork,
           broadcastedBtcTxReport.broadcast_tx_hash,
           BTC_ESPLORA_POLLING_TIME
         )
@@ -245,14 +210,15 @@ export class pBTC extends NodeSelector {
 
   async _getDecimals() {
     if (!this.decimals) {
-      if (this.hostBlockchain === 'eth') {
+      if (this.hostBlockchain === helpers.blockchains.Ethereum) {
         this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
           isWeb3Injected: this._ishostApiInjected,
           abi: pbtcAbi,
           contractAddress: this._getContractAddress()
         })
       }
-      if (this.hostBlockchain === 'eos') this.decimals = BTC_DECIMALS
+      if (this.hostBlockchain === helpers.blockchains.Eosio)
+        this.decimals = BTC_DECIMALS
     }
     return this.decimals
   }

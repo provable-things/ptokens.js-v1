@@ -15,8 +15,8 @@ const pbtcOnEthConfigs = {
 const pbtcOnEosConfigs = {
   blockchain: 'EOS',
   network: 'testnet',
-  eosRpc: new JsonRpc('https://eosjunglehttps.ptokens.io:443', { fetch }),
-  eosPrivateKey: '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv'
+  eosRpc: new JsonRpc('http://23.97.190.44:8888', { fetch }),
+  eosPrivateKey: '5JFPd8Kvhf7zSrxKCrMvhK22WKbh1jFw5TLeLjyPpp2yh4SvReS'
 }
 
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
@@ -69,6 +69,7 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
     expect(err.message).to.be.equal('Eth Address is not valid')
   }
 })
+
 test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async () => {
   const pbtc = new pBTC(pbtcOnEthConfigs)
 
@@ -157,31 +158,28 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
 
 // pbtc on eos
 test('Should get a BTC deposit address on EOS Testnet', async () => {
-  const pbtc = new pBTC({
-    blockchain: 'EOS',
-    network: 'testnet'
-  })
+  const pbtc = new pBTC(pbtcOnEosConfigs)
 
   const depositAddress = await pbtc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
   expect(depositAddress.toString()).to.be.a('string')
 })
 
-test('Should not get a BTC deposit address because of invalid EOS address', async () => {
+test('Should not get a BTC deposit address because of invalid EOS account', async () => {
   const pbtc = new pBTC({
-    blockchain: 'EOS',
+    blockchain: 'EOSIO',
     network: 'testnet'
   })
 
-  const invalidEosAddress = 'Invalid EOS Address'
+  const invalidEosAddress = 'invalid test account'
 
   try {
     await pbtc.getDepositAddress(invalidEosAddress)
   } catch (err) {
-    expect(err.message).to.be.equal('EOS Address is not valid')
+    expect(err.message).to.be.equal('EOS Account is not valid')
   }
 })
 
-test('Should monitor an issuing of 0.00050100 pBTC on EOS Testnet', async () => {
+test('Should monitor an issuing of 0.00050100 pBTC on EOS Jungle3 Testnet', async () => {
   const pbtc = new pBTC(pbtcOnEosConfigs)
 
   const amountToIssue = 50100
@@ -232,7 +230,7 @@ test('Should monitor an issuing of 0.00050100 pBTC on EOS Testnet', async () => 
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.000051 pBTC on EOS Testnet', async () => {
+test('Should redeem 0.000051 pBTC on EOS Jungle3 Testnet', async () => {
   const pbtc = new pBTC(pbtcOnEosConfigs)
 
   const amountToRedeem = 0.000051

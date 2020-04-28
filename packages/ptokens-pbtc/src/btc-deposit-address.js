@@ -25,7 +25,7 @@ export class BtcDepositAddress {
       _configs,
       _configs.nativeBlockchain
         ? utils.helpers.getBlockchainType[_configs.nativeBlockchain]
-        : 'bitcoin'
+        : utils.helpers.blockchains.Bitcoin
     )
 
     this.hostBlockchain = hostBlockchain
@@ -42,16 +42,16 @@ export class BtcDepositAddress {
    */
   async generate(_hostAddress) {
     if (
-      this.hostBlockchain === 'ethereum' &&
+      this.hostBlockchain === utils.helpers.blockchains.Ethereum &&
       !Web3Utils.isAddress(_hostAddress)
     )
       throw new Error('Eth Address is not valid')
 
     if (
-      this.hostBlockchain === 'eos' &&
+      this.hostBlockchain === utils.helpers.blockchains.Eosio &&
       !utils.eos.isValidAccountName(_hostAddress)
     )
-      throw new Error('EOS Address is not valid')
+      throw new Error('EOS Account is not valid')
 
     try {
       const deposit = await this.node.generic(
@@ -75,13 +75,15 @@ export class BtcDepositAddress {
 
   verify() {
     const network =
-      this.hostNetwork === 'mainnet'
+      this.hostNetwork === utils.helpers.networks.BitcoinMainnet
         ? bitcoin.networks.bitcoin
         : bitcoin.networks.testnet
 
     const hostAddressBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.hostAddress),
-      this.hostBlockchain === 'ethereum' ? 'hex' : 'utf-8'
+      this.hostBlockchain === utils.helpers.blockchains.Ethereum
+        ? 'hex'
+        : 'utf-8'
     )
     const nonceBuf = utils.converters.encodeUint64le(this.nonce)
     const enclavePublicKeyBuf = Buffer.from(
