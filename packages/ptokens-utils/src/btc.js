@@ -1,6 +1,7 @@
 import validate from 'bitcoin-address-validation'
 import axios from 'axios'
 import polling from 'light-async-polling'
+import { Mainnet } from './helpers/names'
 
 const BLOCKSTREAM_BASE_TESTNET_ENDPOINT =
   'https://blockstream.info/testnet/api/'
@@ -9,7 +10,7 @@ const BLOCKSTREAM_BASE_MAINNET_ENDPOINT = 'https://blockstream.info/api/'
 const _getEsploraApi = _network =>
   axios.create({
     baseURL:
-      _network === 'bitcoin'
+      _network === Mainnet
         ? BLOCKSTREAM_BASE_MAINNET_ENDPOINT
         : BLOCKSTREAM_BASE_TESTNET_ENDPOINT,
     timeout: 50000,
