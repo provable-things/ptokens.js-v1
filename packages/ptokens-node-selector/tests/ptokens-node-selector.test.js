@@ -19,6 +19,22 @@ test('Should select a pBTC node on EOS Jungle3 Testnet', async () => {
   expect(info.native_network).to.be.equal('testnet')
 })
 
+test('Should select a pBTC node on EOS Mainnet', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: 'pBTC',
+    blockchain: 'EOS',
+    network: 'mainnet'
+  })
+
+  const node = await nodeSelector.select()
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal('mainnet')
+  expect(info.host_blockchain).to.be.equal('eosio')
+  expect(info.native_blockchain).to.be.equal('bitcoin')
+  expect(info.native_network).to.be.equal('mainnet')
+})
+
 test('Should select a pBTC node on EOS Jungle3 Testnet with detailed initialization', async () => {
   const nodeSelector = new NodeSelector({
     pToken: 'pBTC',
@@ -33,6 +49,22 @@ test('Should select a pBTC node on EOS Jungle3 Testnet with detailed initializat
   expect(info.host_blockchain).to.be.equal('eosio')
   expect(info.native_blockchain).to.be.equal('bitcoin')
   expect(info.native_network).to.be.equal('testnet')
+})
+
+test('Should select a pBTC node on EOS Mainnet with detailed initialization', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: 'pBTC',
+    hostBlockchain: 'EOSIO',
+    hostNetwork: 'mainnet'
+  })
+
+  const node = await nodeSelector.select()
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal('mainnet')
+  expect(info.host_blockchain).to.be.equal('eosio')
+  expect(info.native_blockchain).to.be.equal('bitcoin')
+  expect(info.native_network).to.be.equal('mainnet')
 })
 
 test('Should select a pBTC node on Ethereum Mainnet', async () => {
