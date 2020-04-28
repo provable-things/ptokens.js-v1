@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import encoding from 'text-encoding'
 import polling from 'light-async-polling'
 
-const EOS_ACCOUNT_LENGTH = 12
+const EOS_MAX_ACCOUNT_LENGTH = 12
 const EOS_TRANSACTION_EXECUTED = 'executed'
 const EOS_NODE_POLLING_TIME_INTERVAL = 300
 
@@ -61,8 +61,10 @@ const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
  * @param {String} _accountName
  */
 const isValidAccountName = _accountName => {
-  const regex = new RegExp('([a-z]|[1-5]|.){12}')
-  return regex.test(_accountName) && _accountName.length === EOS_ACCOUNT_LENGTH
+  const regex = new RegExp('(([a-z]|[1-5]|.){0,12})$')
+  return (
+    regex.test(_accountName) && _accountName.length <= EOS_MAX_ACCOUNT_LENGTH
+  )
 }
 
 /**
