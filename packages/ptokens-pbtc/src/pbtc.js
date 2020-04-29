@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import { eth, eos, btc, helpers } from 'ptokens-utils'
+import { constants, eth, eos, btc, helpers } from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import { BtcDepositAddress } from './btc-deposit-address'
 import { redeemFromEthereum } from './lib/redeem-from-ethereum'
@@ -23,10 +23,10 @@ export class pBTC extends NodeSelector {
       hostNetwork,
       nativeBlockchain,
       nativeNetwork
-    } = helpers.parseParams(_configs, helpers.blockchains.Bitcoin)
+    } = helpers.parseParams(_configs, constants.blockchains.Bitcoin)
 
     super({
-      pToken: helpers.pTokens.pBTC,
+      pToken: constants.pTokens.pBTC,
       hostBlockchain,
       hostNetwork,
       nativeBlockchain,
@@ -83,20 +83,25 @@ export class pBTC extends NodeSelector {
    */
   async getDepositAddress(_hostAddress) {
     if (
-      this.hostBlockchain === helpers.blockchains.Ethereum &&
+      this.hostBlockchain === constants.blockchains.Ethereum &&
       !Web3Utils.isAddress(_hostAddress)
     )
       throw new Error('Eth Address is not valid')
 
     if (
-      this.hostBlockchain === helpers.blockchains.Eosio &&
+      this.hostBlockchain === constants.blockchains.Eosio &&
       !eos.isValidAccountName(_hostAddress)
     )
       throw new Error('EOS Account is not valid')
 
+    const selectedNode = this.selectedNode
+      ? this.selectedNode
+      : await this.select()
+    if (!selectedNode) throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
+
     const depositAddress = new BtcDepositAddress({
       nativeNetwork: helpers.getNetworkType(this.nativeNetwork),
-      node: this.selectedNode ? this.selectedNode : await this.select(),
+      node: selectedNode,
       hostBlockchain: this.hostBlockchain,
       hostNetwork: this.hostNetwork,
       hostApi: this.hostApi
@@ -138,7 +143,7 @@ export class pBTC extends NodeSelector {
 
         let hostTxReceiptId = null
 
-        if (this.hostBlockchain === helpers.blockchains.Ethereum) {
+        if (this.hostBlockchain === constants.blockchains.Ethereum) {
           const ethTxReceipt = await redeemFromEthereum(
             this.hostApi,
             _amount,
@@ -156,7 +161,7 @@ export class pBTC extends NodeSelector {
           hostTxReceiptId = ethTxReceipt.transactionHash
         }
 
-        if (this.hostBlockchain === helpers.blockchains.Eosio) {
+        if (this.hostBlockchain === constants.blockchains.Eosio) {
           const eosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
@@ -210,14 +215,14 @@ export class pBTC extends NodeSelector {
 
   async _getDecimals() {
     if (!this.decimals) {
-      if (this.hostBlockchain === helpers.blockchains.Ethereum) {
+      if (this.hostBlockchain === constants.blockchains.Ethereum) {
         this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
           isWeb3Injected: this._ishostApiInjected,
           abi: pbtcAbi,
           contractAddress: this._getContractAddress()
         })
       }
-      if (this.hostBlockchain === helpers.blockchains.Eosio)
+      if (this.hostBlockchain === constants.blockchains.Eosio)
         this.decimals = BTC_DECIMALS
     }
     return this.decimals

@@ -1,13 +1,14 @@
 import { pBTC } from '../src/index'
 import { expect } from 'chai'
 import { sendBitcoin } from './utils'
+import { constants } from 'ptokens-utils'
 
 const pbtcOnEthConfigs = {
-  blockchain: 'ETH',
+  blockchain: constants.blockchains.Ethereum,
+  network: constants.networks.Mainnet,
   ethPrivateKey:
     '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
-  ethProvider: 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6',
-  network: 'testnet'
+  ethProvider: 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
 }
 
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
@@ -23,8 +24,8 @@ test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
   const expectedHostNetwork = 'mainnet'
 
   const pbtc = new pBTC({
-    blockchain: 'ETH',
-    network: 'mainnet'
+    blockchain: constants.blockchains.Ethereum,
+    network: constants.networks.Testnet
   })
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -36,8 +37,8 @@ test('Should get a BTC deposit address on Ethereum Ropsten', async () => {
   const expectedHostNetwork = 'testnet_ropsten'
 
   const pbtc = new pBTC({
-    blockchain: 'ETH',
-    network: 'testnet'
+    blockchain: constants.blockchains.Ethereum,
+    network: constants.networks.EthereumRopsten
   })
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -47,8 +48,8 @@ test('Should get a BTC deposit address on Ethereum Ropsten', async () => {
 
 test('Should not get a BTC deposit address because of invalid Eth address', async () => {
   const pbtc = new pBTC({
-    blockchain: 'ETH',
-    network: 'mainnet'
+    blockchain: constants.blockchains.Ethereum,
+    network: constants.networks.Mainnet
   })
 
   const invalidEthAddress = 'Invalid Eth Address'

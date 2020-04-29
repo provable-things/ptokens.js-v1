@@ -3,10 +3,11 @@ import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 import { JsonRpc } from 'eosjs'
 import fetch from 'node-fetch'
+import { constants } from 'ptokens-utils'
 
 const pbtcOnEosConfigs = {
-  blockchain: 'EOS',
-  network: 'testnet',
+  blockchain: constants.blockchains.Eosio,
+  network: constants.networks.Testnet,
   eosRpc: new JsonRpc('http://23.97.190.44:8888', { fetch }),
   eosPrivateKey: '5JFPd8Kvhf7zSrxKCrMvhK22WKbh1jFw5TLeLjyPpp2yh4SvReS'
 }
@@ -28,8 +29,8 @@ test('Should get a BTC deposit address on EOS Jungle3 Testnet', async () => {
 
 test('Should get a BTC deposit address on EOS Mainnet', async () => {
   const pbtc = new pBTC({
-    blockchain: 'EOS',
-    network: 'mainnet'
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
   })
 
   const depositAddress = await pbtc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
@@ -38,8 +39,8 @@ test('Should get a BTC deposit address on EOS Mainnet', async () => {
 
 test('Should not get a BTC deposit address because of invalid EOS account', async () => {
   const pbtc = new pBTC({
-    blockchain: 'EOSIO',
-    network: 'testnet'
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Testnet
   })
 
   const invalidEosAddress = 'invalid test account'
