@@ -65,7 +65,9 @@ const monitorUtxoByAddress = async (
   _network,
   _address,
   _eventEmitter,
-  _pollingTime
+  _pollingTime,
+  _broadcastEventName,
+  _confirmationEventName
 ) => {
   let isBroadcasted = false
   let utxo = null
@@ -81,13 +83,19 @@ const monitorUtxoByAddress = async (
 
     if (utxos.length > 0) {
       if (utxos[0].status.confirmed) {
-        if (!isBroadcasted) _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+        if (!isBroadcasted) {
+          _eventEmitter.emit(_broadcastEventName, utxos[0])
+          _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+        }
 
+        _eventEmitter.emit(_confirmationEventName, utxos[0])
         _eventEmitter.emit('onBtcTxConfirmed', utxos[0])
+
         utxo = utxos[0].txid
         return true
       } else if (!isBroadcasted) {
         isBroadcasted = true
+        _eventEmitter.emit(_broadcastEventName, utxos[0])
         _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
         return false
       }

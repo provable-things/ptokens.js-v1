@@ -32,7 +32,7 @@ btc.isValidAddress(BTC_TESTING_ADDRESS)
 btc.monitorUtxoByAddress('testnet', BTC_TESTING_ADDRESS, new EventEmitter(), 1000)
 
 // $ExpectType Promise<BitcoinTransactionReceipt>
-btc.waitForTransactionConfirmation('testnet', BTC_UTXO, 10000)
+btc.waitForTransactionConfirmation('testnet', BTC_UTXO, 10000, 'nativeTxBroadcasted', 'nativeTxConfirmed')
 
 // converters
 

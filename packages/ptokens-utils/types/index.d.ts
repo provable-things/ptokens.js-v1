@@ -83,7 +83,7 @@ export interface BtcUtilsInterface {
     _eventEmitter: EventEmitter,
     _pollingTime: number
   ): Promise<string>
-  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number): Promise<BitcoinTransactionReceipt>
+  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number, _broadcastEventName: string, _confirmationEventName: string): Promise<BitcoinTransactionReceipt>
 }
 
 export const btc: BtcUtilsInterface
