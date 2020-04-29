@@ -130,12 +130,17 @@ export class Node {
       incomingTx = await this.getIncomingTransactionStatus(_hash)
 
       if (incomingTx.broadcast === false && !isSeen) {
+        _eventEmitter.emit('nodeReceivedTx', incomingTx)
         _eventEmitter.emit('onNodeReceivedTx', incomingTx)
         isSeen = true
         return false
       } else if (incomingTx.broadcast === true) {
-        if (!isSeen) _eventEmitter.emit('onNodeReceivedTx', incomingTx)
+        if (!isSeen) {
+          _eventEmitter.emit('nodeReceivedTx', incomingTx)
+          _eventEmitter.emit('onNodeReceivedTx', incomingTx)
+        }
 
+        _eventEmitter.emit('nodeBroadcastedTx', incomingTx)
         _eventEmitter.emit('onNodeBroadcastedTx', incomingTx)
         return true
       } else {

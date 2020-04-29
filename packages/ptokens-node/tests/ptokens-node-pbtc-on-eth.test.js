@@ -1,23 +1,28 @@
 import { Node } from '../src/index'
 import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'
+import { constants } from 'ptokens-utils'
+
+const { blockchains, pTokens } = constants
 
 jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pBTC pong!'
 const HASH_INCOMING_TX =
-  '0xb26837dbe016a8b58bc3fa3986bd72db58d730b0292120246b6670aafab7c9ed'
+  'e761f59d6b43eb37463538be7587000e9d3617ba090c17ff2bf7718354d43053'
 const HASH_BROADCASTED_TX =
-  '0x1db16d88ebe12701f75e8c17d9bb6ec26a4190e80eab7d0e25439c2bc0e02730'
+  '28c9945d1f1277c781bbeffa9b379b4336b10368f441c2d0334a6a9d6b8cea6e'
 
-const BTC_TESTING_ADDRESS = '2N91WkHJxTwM43d7eeA1ArjutoBvKk3iiE5'
+const BTC_TESTING_ADDRESS = '2N1whkbqCb4G74tor4ovo38kb5TaH73MMHT'
+
+const ENDPOINT = 'https://nuc-bridge-3.ngrok.io'
 
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.ping()
@@ -26,9 +31,9 @@ test('Should ping a node with one as default', async () => {
 
 test('Should get the node info', async () => {
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const info = await node.getInfo()
@@ -45,9 +50,9 @@ test('Should get one host report', async () => {
   const limit = 1
   const type = 'host'
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getReports(type, limit)
@@ -61,9 +66,9 @@ test('Should get one native report', async () => {
   const limit = 1
   const type = 'native'
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getReports(type, limit)
@@ -78,9 +83,9 @@ test('Should get one host reports by address', async () => {
   const type = 'host'
   const ethAddress = BTC_TESTING_ADDRESS
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getReportsByAddress(type, ethAddress, limit)
@@ -95,9 +100,9 @@ test('Should get one native report by address', async () => {
   const type = 'native'
   const btcAddress = BTC_TESTING_ADDRESS
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getReportsByAddress(type, btcAddress, limit)
@@ -110,9 +115,9 @@ test('Should get host report by nonce', async () => {
   const nonce = 1
   const type = 'host'
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getReportByNonce(type, nonce)
@@ -124,9 +129,9 @@ test('Should get native report by nonce', async () => {
   const nonce = 1
   const type = 'native'
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getReportByNonce(type, nonce)
@@ -137,9 +142,9 @@ test('Should get native report by nonce', async () => {
 test('Should get last ETH processed block', async () => {
   const type = 'host'
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -149,9 +154,9 @@ test('Should get last ETH processed block', async () => {
 test('Should get last BTC processed block', async () => {
   const type = 'native'
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -161,9 +166,9 @@ test('Should get last BTC processed block', async () => {
 test('Should get the status of an incoming tx', async () => {
   const hash = HASH_INCOMING_TX
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getIncomingTransactionStatus(hash)
@@ -173,9 +178,9 @@ test('Should get the status of an incoming tx', async () => {
 test('Should get the status of an brodcasted tx', async () => {
   const hash = HASH_BROADCASTED_TX
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
   const res = await node.getBroadcastTransactionStatus(hash)
@@ -184,23 +189,29 @@ test('Should get the status of an brodcasted tx', async () => {
 
 test('Should monitor an incoming transaction', async () => {
   const node = new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    endpoint: 'https://nuc-bridge-3.ngrok.io'
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
   })
 
-  let nodeHasReceivedTx = false
-  let nodeHasBroadcastedTx = false
+  let nodeHasReceivedTx = 0
+  let nodeHasBroadcastedTx = 0
 
   const eventEmitter = new EventEmitter()
 
   const start = () =>
     new Promise(resolve => {
       eventEmitter.once('onNodeReceivedTx', () => {
-        nodeHasReceivedTx = true
+        nodeHasReceivedTx += 1
+      })
+      eventEmitter.once('nodeReceivedTx', () => {
+        nodeHasReceivedTx += 1
       })
       eventEmitter.once('onNodeBroadcastedTx', () => {
-        nodeHasBroadcastedTx = true
+        nodeHasBroadcastedTx += 1
+      })
+      eventEmitter.once('nodeBroadcastedTx', () => {
+        nodeHasBroadcastedTx += 1
       })
       node
         .monitorIncomingTransaction(HASH_INCOMING_TX, eventEmitter)
@@ -209,6 +220,6 @@ test('Should monitor an incoming transaction', async () => {
         })
     })
   await start()
-  expect(nodeHasReceivedTx).to.be.equal(true)
-  expect(nodeHasBroadcastedTx).to.be.equal(true)
+  expect(nodeHasReceivedTx).to.be.equal(2)
+  expect(nodeHasBroadcastedTx).to.be.equal(2)
 })
