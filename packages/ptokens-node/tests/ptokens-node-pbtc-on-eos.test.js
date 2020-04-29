@@ -3,10 +3,7 @@ import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'
 import { constants } from 'ptokens-utils'
 
-const {
-  blockchains,
-  pTokens
-} = constants
+const { blockchains, pTokens } = constants
 
 jest.setTimeout(300000)
 
