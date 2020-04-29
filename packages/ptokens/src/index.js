@@ -8,7 +8,9 @@ class pTokens {
   constructor(_configs) {
     const { pbtc } = _configs
 
-    if (pbtc) this.pbtc = new pBTC(pbtc)
+    this.pbtc = !Array.isArray(pbtc)
+      ? new pBTC(pbtc)
+      : pbtc.map(_el => new pBTC(_el))
 
     this.utils = utils
   }
