@@ -1,6 +1,7 @@
 import {
   btc,
   converters,
+  constants,
   eth,
   eos,
   helpers
@@ -150,3 +151,44 @@ helpers.getNativeBlockchainFromPtokenName('pBTC')
 
 // $ExpectType boolean
 helpers.isValidPTokenName('pBTC')
+
+// constants
+
+// $ExpectType string
+constants.blockchains.Bitcoin
+
+// $ExpectType string
+constants.blockchains.Eosio
+
+// $ExpectType string
+constants.blockchains.Ethereum
+
+// $ExpectType string
+constants.networks.BitcoinMainnet
+
+// $ExpectType string
+constants.networks.BitcoinTestnet
+
+// $ExpectType string
+constants.networks.EosioMainnet
+
+// $ExpectType string
+constants.networks.EosioJungle3
+
+// $ExpectType string
+constants.networks.EthereumMainnet
+
+// $ExpectType string
+constants.networks.EthereumRopsten
+
+// $ExpectType string
+constants.networks.EthereumMainnet
+
+// $ExpectType string
+constants.networks.Mainnet
+
+// $ExpectType string
+constants.networks.Testnet
+
+// $ExpectType string
+constants.pTokens.pBTC

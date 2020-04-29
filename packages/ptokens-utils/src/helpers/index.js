@@ -6,51 +6,7 @@ import {
   pTokenNativeBlockchain,
   pTokensAvailables
 } from './maps'
-import {
-  Bitcoin,
-  BitcoinMainnet,
-  BitcoinTestnet,
-  Ethereum,
-  EthereumMainnet,
-  EthereumRopsten,
-  Eosio,
-  EosioMainnet,
-  EosioJungle3,
-  Mainnet,
-  Testnet,
-  pBTC
-} from './names'
-
-/**
- *
- * Blockchain used by pTokens
- */
-const blockchains = {
-  Bitcoin,
-  Eosio,
-  Ethereum
-}
-
-/**
- *
- * Networks compatible with pTokens
- */
-const networks = {
-  BitcoinMainnet,
-  BitcoinTestnet,
-  EthereumMainnet,
-  EthereumRopsten,
-  EosioMainnet,
-  EosioJungle3
-}
-
-/**
- *
- * pTokens list
- */
-const pTokens = {
-  pBTC
-}
+import { Mainnet, Testnet } from './names'
 
 /**
  *
@@ -160,8 +116,5 @@ export {
   getBlockchainShortType,
   getNativeBlockchainFromPtokenName,
   isValidPTokenName,
-  parseParams,
-  blockchains,
-  networks,
-  pTokens
+  parseParams
 }
