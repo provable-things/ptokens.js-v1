@@ -96,9 +96,9 @@ export class NodeSelector {
 
       if (this.defaultEndpoint) {
         const node = this.nodes.find(
-          node =>
-            node.webapi === this.defaultEndpoint &&
-            node.features.includes(feature)
+          _node =>
+            _node.webapi === this.defaultEndpoint &&
+            _node.features.includes(feature)
         )
 
         if (
