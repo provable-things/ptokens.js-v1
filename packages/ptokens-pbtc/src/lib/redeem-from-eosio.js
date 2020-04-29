@@ -1,5 +1,5 @@
 import { eos } from 'ptokens-utils'
-import peosAbi from '../utils/contractAbi/pBTCTokenEOSContractAbi.json'
+import pbtcOnEosAbi from '../utils/contractAbi/pBTCTokenEOSContractAbi.json'
 import { EOS_BLOCKS_BEHIND, EOS_EXPIRE_SECONDS } from '../utils/constants'
 
 const redeemFromEosio = async (
@@ -13,13 +13,14 @@ const redeemFromEosio = async (
 
   const eosAccountName = await eos.getAccountName(_api.rpc, eosPublicKeys)
 
-  if (!eosAccountName)
+  if (!eosAccountName) {
     throw new Error(
       'Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin'
     )
+  }
 
   _api.cachedAbis.set(_contractAddress, {
-    abi: peosAbi,
+    abi: pbtcOnEosAbi,
     rawAbi: null
   })
 

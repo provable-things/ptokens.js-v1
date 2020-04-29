@@ -12,6 +12,7 @@ import {
   BTC_DECIMALS,
   hostBlockchainEvents
 } from './utils/constants'
+import pbtcOnEthAbi from '../utils/contractAbi/pBTCTokenETHContractAbi.json'
 
 export class pBTC extends NodeSelector {
   /**
@@ -97,7 +98,11 @@ export class pBTC extends NodeSelector {
     const selectedNode = this.selectedNode
       ? this.selectedNode
       : await this.select()
-    if (!selectedNode) throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
+    if (!selectedNode) {
+      throw new Error(
+        'No node selected. Impossible to generate a BTC deposit Address.'
+      )
+    }
 
     const depositAddress = new BtcDepositAddress({
       nativeNetwork: helpers.getNetworkType(this.nativeNetwork),
@@ -218,7 +223,7 @@ export class pBTC extends NodeSelector {
       if (this.hostBlockchain === constants.blockchains.Ethereum) {
         this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
           isWeb3Injected: this._ishostApiInjected,
-          abi: pbtcAbi,
+          abi: pbtcOnEthAbi,
           contractAddress: this._getContractAddress()
         })
       }

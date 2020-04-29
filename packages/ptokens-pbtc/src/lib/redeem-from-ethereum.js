@@ -1,5 +1,5 @@
 import { eth } from 'ptokens-utils'
-import pbtcAbi from '../utils/contractAbi/pBTCTokenETHContractAbi.json'
+import pbtcOnEthAbi from '../utils/contractAbi/pBTCTokenETHContractAbi.json'
 
 const redeemFromEthereum = (
   _web3,
@@ -10,22 +10,22 @@ const redeemFromEthereum = (
   _hostPrivateKey,
   _isWeb3injected
 ) =>
-  new Promise((_resolve, _reject) => {
+  new Promise((resolve, reject) => {
     eth
       .makeContractSend(
         _web3,
         'redeem',
         {
           isWeb3Injected: _isWeb3injected,
-          abi: pbtcAbi,
+          abi: pbtcOnEthAbi,
           contractAddress: _contractAddress,
           privateKey: _hostPrivateKey,
           value: eth.zeroEther
         },
         [eth.correctFormat(_amount, _decimals, '*').toString(), _btcAddress]
       )
-      .then(_receipt => _resolve(_receipt))
-      .catch(_err => _reject(_err))
+      .then(_receipt => resolve(_receipt))
+      .catch(_err => reject(_err))
   })
 
 export { redeemFromEthereum }
