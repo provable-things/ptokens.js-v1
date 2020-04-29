@@ -12,7 +12,7 @@ import {
   BTC_DECIMALS,
   hostBlockchainEvents
 } from './utils/constants'
-import pbtcOnEthAbi from '../utils/contractAbi/pBTCTokenETHContractAbi.json'
+import pbtcOnEthAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 
 export class pBTC extends NodeSelector {
   /**
