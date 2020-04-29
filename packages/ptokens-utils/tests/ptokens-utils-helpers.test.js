@@ -55,9 +55,9 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
   expect(parsed.nativeNetwork).to.be.equal(expectedNativeNetwork)
 })
 
-test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = EOS Jungle2', () => {
-  const expectedHostBlockchain = 'eos'
-  const expectedHostNetwork = 'testnet_jungle2'
+test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = EOS Jungle3', () => {
+  const expectedHostBlockchain = 'eosio'
+  const expectedHostNetwork = 'testnet_jungle3'
   const expectedNativeBlockchain = 'bitcoin'
   const expectedNativeNetwork = 'testnet'
 
@@ -75,16 +75,16 @@ test('Should parse with native blockchain = Bitcoin Testnet and host blockchain 
   expect(parsed.nativeNetwork).to.be.equal(expectedNativeNetwork)
 })
 
-test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = EOS Jungle2 specifyng hostBlockchain and hostNetwork', () => {
-  const expectedHostBlockchain = 'eos'
-  const expectedHostNetwork = 'testnet_jungle2'
+test('Should parse with native blockchain = Bitcoin Testnet and host blockchain = EOS Jungle3 specifyng hostBlockchain and hostNetwork', () => {
+  const expectedHostBlockchain = 'eosio'
+  const expectedHostNetwork = 'testnet_jungle3'
   const expectedNativeBlockchain = 'bitcoin'
   const expectedNativeNetwork = 'testnet'
 
   const parsed = parseParams(
     {
       hostBlockchain: 'EOS',
-      hostNetwork: 'testnet_jungle2'
+      hostNetwork: 'testnet_jungle3'
     },
     'bitcoin'
   )
@@ -121,8 +121,8 @@ test('Should be (testnet_ropsten) a Testnet network', () => {
   expect(type).to.be.equal(expectedNetworkType)
 })
 
-test('Should be (testnet_jungle2) a Testnet network', () => {
+test('Should be (testnet_jungle3) a Testnet network', () => {
   const expectedNetworkType = 'testnet'
-  const type = getNetworkType('testnet_jungle2')
+  const type = getNetworkType('testnet_jungle3')
   expect(type).to.be.equal(expectedNetworkType)
 })

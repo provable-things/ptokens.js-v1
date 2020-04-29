@@ -4,8 +4,8 @@ import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { JsonRpc } from 'eosjs'
 import fetch from 'node-fetch'
 
-const eosPrivateKey = '5J9J3VWdCEQsShpsQScedL1debcBoecuSzfzUsvuJB14f77tiGv'
-const eosProvider = 'https://ptoken-eos.provable.xyz:443'
+const eosPrivateKey = '5JFPd8Kvhf7zSrxKCrMvhK22WKbh1jFw5TLeLjyPpp2yh4SvReS'
+const eosProvider = 'http://23.97.190.44:8888'
 
 jest.setTimeout(30000)
 
@@ -18,8 +18,20 @@ test('Should get the correct EOS account name', async () => {
   expect(accountName).to.be.equal(expectedAccountName)
 })
 
-test('Should be a valid EOS account name', () => {
+test('all3manfr3di should be a valid EOS account name', () => {
   const validEosAccountName = 'all3manfr3di'
+  const isValid = utils.eos.isValidAccountName(validEosAccountName)
+  expect(isValid).to.be.equal(true)
+})
+
+test('all3manfr.di should be a valid EOS account name', () => {
+  const validEosAccountName = 'all3manfr.di'
+  const isValid = utils.eos.isValidAccountName(validEosAccountName)
+  expect(isValid).to.be.equal(true)
+})
+
+test('btc.ptokens should be a valid EOS account name', () => {
+  const validEosAccountName = 'btc.ptokens'
   const isValid = utils.eos.isValidAccountName(validEosAccountName)
   expect(isValid).to.be.equal(true)
 })
