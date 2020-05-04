@@ -130,7 +130,9 @@ export class BtcDepositAddress {
         this.nativeNetwork,
         this.value,
         promiEvent.eventEmitter,
-        BTC_ESPLORA_POLLING_TIME
+        BTC_ESPLORA_POLLING_TIME,
+        'nativeTxBroadcasted',
+        'nativeTxConfirmed'
       )
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(
@@ -139,7 +141,7 @@ export class BtcDepositAddress {
       )
 
       const hostTxReceipt = await utils[
-        this.hostBlockchain
+        utils.helpers.getBlockchainShortType(this.hostBlockchain)
       ].waitForTransactionConfirmation(
         this.hostApi,
         broadcastedHostTxReport.broadcast_tx_hash,
@@ -150,6 +152,8 @@ export class BtcDepositAddress {
         hostBlockchainEvents[this.hostBlockchain],
         hostTxReceipt
       )
+      promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+
       promiEvent.resolve({
         to: this.hostAddress,
         tx: broadcastedHostTxReport.broadcast_tx_hash,

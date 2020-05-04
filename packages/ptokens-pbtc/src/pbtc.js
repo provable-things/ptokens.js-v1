@@ -9,8 +9,7 @@ import { redeemFromEosio } from './lib/redeem-from-eosio'
 import {
   MINIMUM_BTC_REDEEMABLE,
   BTC_ESPLORA_POLLING_TIME,
-  BTC_DECIMALS,
-  hostBlockchainEvents
+  BTC_DECIMALS
 } from './utils/constants'
 import pbtcOnEthAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 
@@ -159,10 +158,9 @@ export class pBTC extends NodeSelector {
             this._ishostApiInjected
           )
 
-          promiEvent.eventEmitter.emit(
-            hostBlockchainEvents[this.hostBlockchain],
-            ethTxReceipt
-          )
+          promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+          promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
+
           hostTxReceiptId = ethTxReceipt.transactionHash
         }
 
@@ -175,10 +173,9 @@ export class pBTC extends NodeSelector {
             contractAddress
           )
 
-          promiEvent.eventEmitter.emit(
-            hostBlockchainEvents[this.hostBlockchain],
-            eosTxReceipt
-          )
+          promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+          promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
+
           hostTxReceiptId = eosTxReceipt.transaction_id
         }
 
@@ -192,6 +189,7 @@ export class pBTC extends NodeSelector {
           broadcastedBtcTxReport.broadcast_tx_hash,
           BTC_ESPLORA_POLLING_TIME
         )
+        promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedBtcTx)
         promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTx)
 
         promiEvent.resolve({

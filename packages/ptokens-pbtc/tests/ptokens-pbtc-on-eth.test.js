@@ -77,39 +77,54 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async (
     depositAddress.toString()
   )
 
-  let btcTxIsBroadcasted = false
-  let btcTxIsConfirmed = false
-  let nodeHasReceivedTx = false
-  let nodeHasBroadcastedTx = false
-  let ethTxIsConfirmed = false
+  let btcTxIsBroadcasted = 0
+  let btcTxIsConfirmed = 0
+  let nodeHasReceivedTx = 0
+  let nodeHasBroadcastedTx = 0
+  let ethTxIsConfirmed = 0
   const start = () =>
     new Promise(resolve => {
       depositAddress
         .waitForDeposit()
         .once('onBtcTxBroadcasted', () => {
-          btcTxIsBroadcasted = true
+          btcTxIsBroadcasted += 1
+        })
+        .once('nativeTxBroadcasted', () => {
+          btcTxIsBroadcasted += 1
         })
         .once('onBtcTxConfirmed', () => {
-          btcTxIsConfirmed = true
+          btcTxIsConfirmed += 1
+        })
+        .once('nativeTxConfirmed', () => {
+          btcTxIsConfirmed += 1
         })
         .once('onNodeReceivedTx', () => {
-          nodeHasReceivedTx = true
+          nodeHasReceivedTx += 1
+        })
+        .once('nodeReceivedTx', () => {
+          nodeHasReceivedTx += 1
         })
         .once('onNodeBroadcastedTx', () => {
-          nodeHasBroadcastedTx = true
+          nodeHasBroadcastedTx += 1
+        })
+        .once('nodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx += 1
         })
         .once('onEthTxConfirmed', () => {
-          ethTxIsConfirmed = true
+          ethTxIsConfirmed += 1
+        })
+        .once('hostTxConfirmed', () => {
+          ethTxIsConfirmed += 1
         })
         .then(() => resolve())
     })
   await start()
 
-  expect(btcTxIsBroadcasted).to.equal(true)
-  expect(btcTxIsConfirmed).to.equal(true)
-  expect(nodeHasReceivedTx).to.equal(true)
-  expect(nodeHasBroadcastedTx).to.equal(true)
-  expect(ethTxIsConfirmed).to.equal(true)
+  expect(btcTxIsBroadcasted).to.equal(2)
+  expect(btcTxIsConfirmed).to.equal(2)
+  expect(nodeHasReceivedTx).to.equal(2)
+  expect(nodeHasBroadcastedTx).to.equal(2)
+  expect(ethTxIsConfirmed).to.equal(2)
 })
 
 test('Should redeem 0.000051 pBTC on Ethereum', async () => {
@@ -117,32 +132,44 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
 
   const amountToRedeem = 0.000051
 
-  let ethTxIsConfirmed = false
-  let nodeHasReceivedTx = false
-  let nodeHasBroadcastedTx = false
-  let btcTxIsConfirmed = false
+  let ethTxIsConfirmed = 0
+  let nodeHasReceivedTx = 0
+  let nodeHasBroadcastedTx = 0
+  let btcTxIsConfirmed = 0
   const start = () =>
     new Promise(resolve => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
         .once('onEthTxConfirmed', () => {
-          ethTxIsConfirmed = true
+          ethTxIsConfirmed += 1
+        })
+        .once('hostTxConfirmed', () => {
+          ethTxIsConfirmed += 1
         })
         .once('onNodeReceivedTx', () => {
-          nodeHasReceivedTx = true
+          nodeHasReceivedTx += 1
+        })
+        .once('nodeReceivedTx', () => {
+          nodeHasReceivedTx += 1
         })
         .once('onNodeBroadcastedTx', () => {
-          nodeHasBroadcastedTx = true
+          nodeHasBroadcastedTx += 1
+        })
+        .once('nodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx += 1
         })
         .once('onBtcTxConfirmed', () => {
-          btcTxIsConfirmed = true
+          btcTxIsConfirmed += 1
+        })
+        .once('nativeTxConfirmed', () => {
+          btcTxIsConfirmed += 1
         })
         .then(() => resolve())
     })
   await start()
 
-  expect(ethTxIsConfirmed).to.equal(true)
-  expect(nodeHasReceivedTx).to.equal(true)
-  expect(nodeHasBroadcastedTx).to.equal(true)
-  expect(btcTxIsConfirmed).to.equal(true)
+  expect(ethTxIsConfirmed).to.equal(2)
+  expect(nodeHasReceivedTx).to.equal(2)
+  expect(nodeHasBroadcastedTx).to.equal(2)
+  expect(btcTxIsConfirmed).to.equal(2)
 })
