@@ -36,6 +36,7 @@ module.exports = {
     'space-before-function-paren': ['error', {
       'named': 'never',
     }],
+    'standard/computed-property-even-spacing': 0, //prettier compatibility
     'dot-location': [2, 'property'],
     'no-empty-function': 1,
     'no-empty': 1,
