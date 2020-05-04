@@ -29,46 +29,47 @@ import pTokens from 'ptokens'
 
 const ptokens = new pTokens({
   pbtc: {
-    blockchain: 'ETH', //or EOS
-    network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+    blockchain: 'ETH', // or EOS
+    network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 
-    //if you want to be more detailed
+    // if you want to be more detailed
     hostBlockchain: 'ETH',
-    hostNetwork: 'testnet_ropsten',
+    hostNetwork: 'testnet_ropsten', // possible values are testnet_jungle2, testnet_ropsten and mainnet
     nativeBlockchain: 'BTC'
     nativeNetwork: 'testnet'
 
-    //optionals
+    // optionals
     ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
+    ethProvider: 'Eth provider', // or instance of Web3 provider
     eosPrivateKey: 'Eos Private Key',
-    eosRpc: 'https:/...'
-    eosSignatureProvider: ..
+    eosRpc: 'https:/...' // or also an instance of JsonRpc
+    eosSignatureProvider: '....' // instance of JsSignatureProvider
   }
 })
 ```
-It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
-into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
-Instead in case the __`hostBlockchain`__ field is equal to __`EOS`__.
-It is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignatureProvider`__ and
-__`eosRpc`__  can be a __`JsonRpc`__ or a string containing an rpc endpoint.
+
+&nbsp;
+
+It's possible to have more instances of __`pBTC`__:
 
 ```js
 import pTokens from 'ptokens'
 
-if (window.web3) {
-  
-  const ptokens = new pTokens({
-    pbtc: {
-      blockchain: 'ETH'
+const ptokens = new pTokens({
+  pbtc: [
+    {
+      blockchain: 'ETH',
       network: 'mainnet'
-      ethProvider: window.web3.currentProvider,
+    },
+    {
+      blockchain: 'EOS',
+      network: 'mainnet'
     }
-  })
-} else {
-  console.log('No web3 detected')
-}
+  ]
+})
 ```
+
+&nbsp;
 
 ### Example of generating a pBTC Deposit Address on Ethereum
 
