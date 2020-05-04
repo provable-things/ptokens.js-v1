@@ -114,10 +114,14 @@ const monitorUtxoByAddress = async (
 const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
   let transaction = null
   await polling(async () => {
-    transaction = await _makeEsploraApiCall(_network, 'GET', `/tx/${_tx}`)
+    try {
+      transaction = await _makeEsploraApiCall(_network, 'GET', `/tx/${_tx}`)
 
-    if (transaction.status.confirmed) return true
-    else return false
+      if (transaction.status.confirmed) return true
+      else return false
+    } catch (err) {
+      return false
+    }
   }, _pollingTime)
   return transaction
 }
