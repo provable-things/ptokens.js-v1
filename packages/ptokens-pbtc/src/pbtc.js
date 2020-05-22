@@ -214,7 +214,6 @@ export class pBTC extends NodeSelector {
   async _getContractAddress() {
     if (!this.contractAddress) {
       if (!this.selectedNode) {
-        console.log(await this.select())
         await this.select()
       }
       const info = await this.selectedNode.getInfo()
