@@ -3,6 +3,7 @@ import { TransactionReceipt } from 'web3-core'
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import Web3 from 'web3'
+import { BigNumber } from 'bignumber.js'
 
 // btc
 export interface BitcoinUtxoList extends Array<BitcoinUtxo> {}
@@ -103,6 +104,15 @@ export interface ContractCallParam {
   value?: number,
 }
 
+export interface ContractSendParam {
+  abi: any, // difficult to get abi interface
+  contractAddress: string,
+  value?: number,
+  privateKey?: string,
+  gas?: number,
+  gasPrice?: number | string | BigNumber
+}
+
 export interface EthUtilsInterface {
   addHexPrefix(_string: string): string
   removeHexPrefix(_string: string): string
@@ -112,7 +122,7 @@ export interface EthUtilsInterface {
   getGasLimit(_web3: Web3): number
   isHexPrefixed(_string: string): boolean
   makeContractCall(_web3: Web3, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<TransactionReceipt>
-  makeContractSend(_web3: Web3, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<TransactionReceipt>
+  makeContractSend(_web3: Web3, _method: string, _options: ContractSendParam, _params: Array<number | string>): Promise<TransactionReceipt>
   waitForTransactionConfirmation(_web3: Web3, _tx: string, _pollingTime: number): Promise <TransactionReceipt>
 }
 

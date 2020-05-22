@@ -136,6 +136,63 @@ test('Should make an ETH contract send correctly', async () => {
   expect(parseInt(number)).to.be.equal(expectedNumber)
 })
 
+test('Should make an ETH contract send correctly specifying the gas', async () => {
+  const web3 = new Web3(TEST_ETH_PROVIDER)
+  const account = web3.eth.accounts.privateKeyToAccount(
+    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
+  )
+  web3.eth.defaultAccount = account.address
+  const expectedNumber = 10
+
+  await utils.eth.makeContractSend(
+    web3,
+    'setNumber',
+    {
+      isWeb3Injected: false,
+      abi,
+      gas: 30000,
+      contractAddress: TEST_CONTRACT_ADDRESS,
+      privateKey: utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
+    },
+    [expectedNumber]
+  )
+  const number = await utils.eth.makeContractCall(web3, 'number', {
+    isWeb3Injected: false,
+    abi,
+    contractAddress: TEST_CONTRACT_ADDRESS
+  })
+  expect(parseInt(number)).to.be.equal(expectedNumber)
+})
+
+test('Should fail to send a tx because of gas limit', async () => {
+  const GAS_TO_LOW = 10
+
+  const web3 = new Web3(TEST_ETH_PROVIDER)
+  const account = web3.eth.accounts.privateKeyToAccount(
+    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
+  )
+  web3.eth.defaultAccount = account.address
+
+  try {
+    await utils.eth.makeContractSend(
+      web3,
+      'setNumber',
+      {
+        isWeb3Injected: false,
+        abi,
+        gas: GAS_TO_LOW,
+        contractAddress: TEST_CONTRACT_ADDRESS,
+        privateKey: utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
+      },
+      [0]
+    )
+  } catch (err) {
+    expect(err.message).to.includes(
+      'Signer Error: gas limit is too low. Need at least'
+    )
+  }
+})
+
 test('Should wait for an ETH transaction confirmation', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
   const receipt = await utils.eth.waitForTransactionConfirmation(
