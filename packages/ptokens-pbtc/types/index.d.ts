@@ -8,6 +8,7 @@ import Web3 from 'web3'
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { NodeSelector } from 'ptokens-node-selector'
+import { BigNumber } from 'bignumber.js'
 
 export interface pBTCConfigs {
   network?: string,
@@ -30,6 +31,11 @@ export interface pBTCConfigs {
   causing errors
 */
 
+export interface RedeemOptions {
+  gas?: number,
+  gasPrice?: number | string | BigNumber
+}
+
 export class pBTC extends NodeSelector {
   constructor(configs: pBTCConfigs)
 
@@ -45,7 +51,7 @@ export class pBTC extends NodeSelector {
 
   getDepositAddress(_hostAddress: string): Promise<BtcDepositAddress>
 
-  redeem(_amount: number, _btcAddress: string): PromiEvent<TransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
+  redeem(_amount: number, _btcAddress: string, _options: RedeemOptions): PromiEvent<TransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
 }
 
 export interface RedeemResult {

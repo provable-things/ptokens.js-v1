@@ -4,9 +4,11 @@ import pbtcOnEthAbi from '../utils/contractAbi/pBTCTokenETHContractAbi.json'
 const redeemFromEthereum = (
   _web3,
   _amount,
-  _btcAddress,
   _decimals,
+  _btcAddress,
   _contractAddress,
+  _gas,
+  _gasPrice,
   _hostPrivateKey,
   _isWeb3injected
 ) =>
@@ -18,6 +20,8 @@ const redeemFromEthereum = (
         {
           isWeb3Injected: _isWeb3injected,
           abi: pbtcOnEthAbi,
+          gas: _gas,
+          gasPrice: _gasPrice,
           contractAddress: _contractAddress,
           privateKey: _hostPrivateKey,
           value: eth.zeroEther

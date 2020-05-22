@@ -20,7 +20,7 @@ const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 jest.setTimeout(3000000)
 
 // pbtc on eth
-test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
+/*test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
   const expectedHostNetwork = 'mainnet'
 
   const pbtc = new pBTC({
@@ -140,6 +140,56 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
     new Promise(resolve => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
+        .once('onEthTxConfirmed', () => {
+          ethTxIsConfirmed += 1
+        })
+        .once('hostTxConfirmed', () => {
+          ethTxIsConfirmed += 1
+        })
+        .once('onNodeReceivedTx', () => {
+          nodeHasReceivedTx += 1
+        })
+        .once('nodeReceivedTx', () => {
+          nodeHasReceivedTx += 1
+        })
+        .once('onNodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx += 1
+        })
+        .once('nodeBroadcastedTx', () => {
+          nodeHasBroadcastedTx += 1
+        })
+        .once('onBtcTxConfirmed', () => {
+          btcTxIsConfirmed += 1
+        })
+        .once('nativeTxConfirmed', () => {
+          btcTxIsConfirmed += 1
+        })
+        .then(() => resolve())
+    })
+  await start()
+
+  expect(ethTxIsConfirmed).to.equal(2)
+  expect(nodeHasReceivedTx).to.equal(2)
+  expect(nodeHasBroadcastedTx).to.equal(2)
+  expect(btcTxIsConfirmed).to.equal(2)
+})
+*/
+test('Should redeem 0.000051 pBTC on Ethereum with gas = 25000', async () => {
+  const pbtc = new pBTC(pbtcOnEthConfigs)
+  const GAS = 25000
+
+  const amountToRedeem = 0.000051
+
+  let ethTxIsConfirmed = 0
+  let nodeHasReceivedTx = 0
+  let nodeHasBroadcastedTx = 0
+  let btcTxIsConfirmed = 0
+  const start = () =>
+    new Promise(resolve => {
+      pbtc
+        .redeem(amountToRedeem, BTC_TESTING_ADDRESS, {
+          gas: GAS
+        })
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed += 1
         })

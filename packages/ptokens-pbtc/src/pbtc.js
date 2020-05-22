@@ -122,9 +122,12 @@ export class pBTC extends NodeSelector {
   /**
    * @param {Number} _amount
    * @param {String} _btcAddress
+   * @param {RedeemOptions} _options
    */
-  redeem(_amount, _btcAddress) {
+  redeem(_amount, _btcAddress, _options = {}) {
     const promiEvent = Web3PromiEvent()
+
+    const { gas, gasPrice } = _options
 
     const start = async () => {
       if (_amount < MINIMUM_BTC_REDEEMABLE) {
@@ -154,6 +157,8 @@ export class pBTC extends NodeSelector {
             decimals,
             _btcAddress,
             contractAddress,
+            gas,
+            gasPrice,
             this.hostPrivateKey,
             this._ishostApiInjected
           )
@@ -208,7 +213,10 @@ export class pBTC extends NodeSelector {
 
   async _getContractAddress() {
     if (!this.contractAddress) {
-      if (!this.selectedNode) await this.select()
+      if (!this.selectedNode) {
+        console.log(await this.select())
+        await this.select()
+      }
       const info = await this.selectedNode.getInfo()
       this.contractAddress = info.smart_contract_address
     }
@@ -219,10 +227,14 @@ export class pBTC extends NodeSelector {
   async _getDecimals() {
     if (!this.decimals) {
       if (this.hostBlockchain === constants.blockchains.Ethereum) {
+        const contractAddress = !this.contractAddress
+          ? await this._getContractAddress()
+          : this._contractAddress
+
         this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
           isWeb3Injected: this._ishostApiInjected,
           abi: pbtcOnEthAbi,
-          contractAddress: this._getContractAddress()
+          contractAddress
         })
       }
       if (this.hostBlockchain === constants.blockchains.Eosio)
