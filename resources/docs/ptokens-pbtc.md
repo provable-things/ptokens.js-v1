@@ -137,7 +137,7 @@ depositAddress.waitForDeposit()
 ## redeem
 
 ```js
-ptokens.pbtc.redeem(amount, btcAddress)
+ptokens.pbtc.redeem(amount, btcAddress, options)
 ```
 
 Redeem a specified number of pBTC to the specified BTC address.
@@ -146,6 +146,9 @@ Redeem a specified number of pBTC to the specified BTC address.
 
 - __`Number`__ - __`amount`__: amount of pBTC to redeem
 - __`String`__ - __`btcAddress`__: BTC address where to receive the BTC redeemed
+- __`Object`__ - __`options`__: redeem option (optional)
+    - __`Number|String|BigNumber`__ - __`gasPrice`__: The price of gas for this transaction in wei
+    - __`Number`__ - __`gas`__:  The amount of gas to use for the transaction (unused gas is refunded)
 
 ### Returns
 

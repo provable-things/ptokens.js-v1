@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import BigNumber from 'bignumber.js'
 
 // btc
 export interface BitcoinUtxoList extends Array<BitcoinUtxo> {}
@@ -113,6 +114,15 @@ export interface ContractCallParam {
   value?: number,
 }
 
+export interface ContractSendParam {
+  abi: any, // difficult to get abi interface
+  contractAddress: string,
+  value?: number,
+  privateKey?: string,
+  gas?: number,
+  gasPrice?: number | string | BigNumber
+}
+
 export interface ethInterface {
   addHexPrefix(_string: string): string
   removeHexPrefix(_string: string): string
@@ -122,7 +132,7 @@ export interface ethInterface {
   getGasLimit(_web3: object): number
   isHexPrefixed(_string: string): boolean
   makeContractCall(_web3: object, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<EthereumTransactionReceipt>
-  makeContractSend(_web3: object, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<EthereumTransactionReceipt>
+  makeContractSend(_web3: object, _method: string, _options: ContractSendParam, _params: Array<number | string>): Promise<EthereumTransactionReceipt>
   waitForTransactionConfirmation(_web3: object, _tx: string, _pollingTime: number): Promise <EthereumTransactionReceipt>
 }
 

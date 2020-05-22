@@ -6,12 +6,18 @@ import {
 } from 'ptokens-utils'
 import { PromiEvent } from 'web3-core'
 import { NodeSelector } from 'ptokens-node-selector'
+import BigNumber from 'bignumber.js'
 
 export interface Configs {
   ethPrivateKey?: string,
   ethProvider: string,
   btcNetwork: string,
   defaultEndpoint?: string
+}
+
+export interface RedeemOptions {
+  gas?: number,
+  gasPrice?: number | string | BigNumber
 }
 
 export class pBTC {
@@ -21,7 +27,7 @@ export class pBTC {
 
   getDepositAddress(_ethAddress: string): Promise<BtcDepositAddress>
 
-  redeem(_amount: number, _btcAddress: string): PromiEvent<EthereumTransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
+  redeem(_amount: number, _btcAddress: string, _options?: RedeemOptions): PromiEvent<EthereumTransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
 }
 
 export interface RedeemResult {

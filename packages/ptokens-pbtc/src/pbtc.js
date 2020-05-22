@@ -79,9 +79,12 @@ export class pBTC {
   /**
    * @param {Number} _amount
    * @param {String} _btcAddress
+   * @param {RedeemOptions} _options
    */
-  redeem(_amount, _btcAddress) {
+  redeem(_amount, _btcAddress, _options = {}) {
     const promiEvent = Web3PromiEvent()
+
+    const { gas, gasPrice } = _options
 
     const start = async () => {
       if (_amount < MINIMUM_BTC_REDEEMABLE) {
@@ -108,6 +111,8 @@ export class pBTC {
           {
             isWeb3Injected: this._isWeb3Injected,
             abi: pbtcAbi,
+            gas,
+            gasPrice,
             contractAddress,
             privateKey: this._ethPrivateKey,
             value: eth.zeroEther
@@ -153,13 +158,17 @@ export class pBTC {
   }
 
   async _getDecimals() {
-    if (!this.decimals) {
-      this.decimals = await eth.makeContractCall(this._web3, 'decimals', {
+    if (!this._decimals) {
+      const contractAddress = !this._contractAddress
+        ? await this._getContractAddress()
+        : this._contractAddress
+
+      this._decimals = await eth.makeContractCall(this._web3, 'decimals', {
         isWeb3Injected: this._isWeb3Injected,
         abi: pbtcAbi,
-        contractAddress: this._getContractAddress()
+        contractAddress
       })
     }
-    return this.decimals
+    return this._decimals
   }
 }
