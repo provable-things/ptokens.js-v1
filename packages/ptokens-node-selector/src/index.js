@@ -113,7 +113,7 @@ export class NodeSelector {
       )
 
       if (filteredNodesByFeature.length === 0)
-        throw new Error('No Nodes Available')
+        throw new Error('No nodes available relating to the selected pToken')
 
       const nodesNotReachable = []
       for (;;) {
@@ -132,7 +132,9 @@ export class NodeSelector {
           nodesNotReachable.push(selectedNode)
 
         if (nodesNotReachable.length === filteredNodesByFeature.length)
-          return null
+          throw new Error(
+            'All nodes relating to the selected pToken appear to be unavailable'
+          )
       }
     } catch (err) {
       throw new Error(err.message)
