@@ -29,8 +29,10 @@
     "axios": "^0.19.0",
     "chai": "^4.2.0",
     "eventemitter3": "^4.0.0",
+    "jsonrpc-lite": "^2.1.0",
     "light-async-polling": "^1.0.2",
     "ptokens-utils": "^0.4.2",
+    "uuid": "^8.1.0",
     "web3-core-promievent": "^1.2.5-rc.0"
   },
   "devDependencies": {

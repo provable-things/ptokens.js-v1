@@ -7,15 +7,16 @@ const { blockchains, pTokens } = constants
 
 jest.setTimeout(300000)
 
-const PING_RETURN_VALUE = 'pBTC pong!'
+const PING_RETURN_VALUE = 'pong'
 const HASH_INCOMING_TX =
   'e761f59d6b43eb37463538be7587000e9d3617ba090c17ff2bf7718354d43053'
 const HASH_BROADCASTED_TX =
   '28c9945d1f1277c781bbeffa9b379b4336b10368f441c2d0334a6a9d6b8cea6e'
 
-const BTC_TESTING_ADDRESS = '2N1whkbqCb4G74tor4ovo38kb5TaH73MMHT'
+const BTC_TESTING_ADDRESS = '2N4g72pPnrBxTriwrmkKR8yzxyehMscLMnh'
+const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
-const ENDPOINT = 'https://nuc-bridge-3.ngrok.io'
+const ENDPOINT = 'http://5a501f7a.ngrok.io/'
 
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
@@ -45,149 +46,177 @@ test('Should get the node info', async () => {
   expect(info).to.have.property('host_network')
 })
 
-test('Should get one host report', async () => {
-  const expectedResultLength = 1
-  const limit = 1
-  const type = 'host'
+test('Should get all peers', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getReports(type, limit)
+  const info = await node.peers()
+  expect(info).to.be.instanceof(Array)
+})
+
+test('Should get all pbtc-on-eth reports given a sender address', async () => {
+  const expectedResultLength = 1
+  const limit = 1
+  const node = new Node({
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
+  })
+
+  const res = await node.getReportsBySenderAddress(BTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one native report', async () => {
+test('Should get all pbtc-on-eth reports given a recipient address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'native'
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getReports(type, limit)
+  const res = await node.getReportsByRecipientAddress(
+    BTC_TESTING_ADDRESS,
+    limit
+  )
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one host reports by address', async () => {
+test('Should get pbtc-on-eth reports given a native address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'host'
-  const ethAddress = BTC_TESTING_ADDRESS
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getReportsByAddress(type, ethAddress, limit)
+  const res = await node.getReportsByNativeAddress(BTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get one native report by address', async () => {
+test('Should get pbtc-on-eth reports given an host address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const type = 'native'
-  const btcAddress = BTC_TESTING_ADDRESS
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getReportsByAddress(type, btcAddress, limit)
+  const res = await node.getReportsByHostAddress(BTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get host report by nonce', async () => {
-  const nonce = 1
-  const type = 'host'
+test('Should get all pbtc-on-eth native reports', async () => {
+  const expectedResultLength = 1
+  const limit = 1
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getReportByNonce(type, nonce)
-  expect(res).to.be.an.instanceof(Object)
-  expect(res._id).to.be.equal(`pBTC_ETH ${nonce}`)
+  const res = await node.getNativeReports(BTC_TESTING_ADDRESS, limit)
+  expect(res)
+    .to.be.an.instanceof(Array)
+    .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get native report by nonce', async () => {
-  const nonce = 1
-  const type = 'native'
+test('Should get all pbtc-on-eth host reports', async () => {
+  const expectedResultLength = 1
+  const limit = 1
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getReportByNonce(type, nonce)
-  expect(res).to.be.an.instanceof(Object)
-  expect(res._id).to.be.equal(`pBTC_BTC ${nonce}`)
+  const res = await node.getHostReports(BTC_TESTING_ADDRESS, limit)
+  expect(res)
+    .to.be.an.instanceof(Array)
+    .to.have.lengthOf(expectedResultLength)
 })
 
-test('Should get last ETH processed block', async () => {
-  const type = 'host'
+test('Should get a pbtc-on-eth report given an incoming tx hash', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getLastProcessedBlock(type)
+  const res = await node.getReportByIncomingTxHash(HASH_INCOMING_TX)
   expect(res).to.be.an.instanceof(Object)
 })
 
-test('Should get last BTC processed block', async () => {
-  const type = 'native'
+test('Should get a pbtc-on-eth report given a broadcasted tx hash', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getLastProcessedBlock(type)
+  const res = await node.getReportByIncomingTxHash(HASH_BROADCASTED_TX)
   expect(res).to.be.an.instanceof(Object)
 })
 
-test('Should get the status of an incoming tx', async () => {
-  const hash = HASH_INCOMING_TX
+test('Should get a pbtc-on-eth native deposit address', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getIncomingTransactionStatus(hash)
+  const res = await node.getNativeDepositAddress(ETH_TESTING_ADDRESS)
   expect(res).to.be.an.instanceof(Object)
 })
 
-test('Should get the status of an brodcasted tx', async () => {
-  const hash = HASH_BROADCASTED_TX
+test('Should get all pbtc-on-eth deposit addresses', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
     endpoint: ENDPOINT
   })
 
-  const res = await node.getBroadcastTransactionStatus(hash)
-  expect(res).to.be.an.instanceof(Object)
+  const res = await node.getDepositAddresses(BTC_TESTING_ADDRESS)
+  expect(res).to.be.an.instanceof(Array)
 })
 
-test('Should monitor an incoming transaction', async () => {
+test('Should get last pbtc-on-eth processed native block', async () => {
+  const node = new Node({
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
+  })
+
+  const res = await node.getLastProcessedNativeBlock()
+  expect(res).to.be.a('number')
+})
+
+test('Should get last pbtc-on-eth processed host block', async () => {
+  const node = new Node({
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    endpoint: ENDPOINT
+  })
+
+  const res = await node.getLastProcessedHostBlock()
+  expect(res).to.be.a('number')
+})
+
+test('Should monitor an incoming pbtc-on-eth transaction', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,

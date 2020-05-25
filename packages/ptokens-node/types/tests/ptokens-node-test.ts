@@ -7,6 +7,7 @@ const HASH_BROADCASTED_TX =
   '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
 
 const BTC_TESTING_ADDRESS = '2NFLTr9nFbnexQgRP3hpEH5NKduvqpiAUpw'
+const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
 const node = new Node({
   pToken: 'pBTC',
@@ -20,23 +21,38 @@ node.ping()
 // $ExpectType Promise<NodeInfo>
 node.getInfo()
 
-// $ExpectType Promise<ReportList>
-node.getReports('native', 10)
+// $ExpectType Promise<PeerList>
+node.peers()
 
 // $ExpectType Promise<ReportList>
-node.getReportsByAddress('native', BTC_TESTING_ADDRESS, 10)
+node.getNativeReports(10)
+
+// $ExpectType Promise<ReportList>
+node.getHostReports(1)
+
+// $ExpectType Promise<ReportList>
+node.getReportsBySenderAddress(BTC_TESTING_ADDRESS)
+
+// $ExpectType Promise<ReportList>
+node.getReportsByRecipientAddress(BTC_TESTING_ADDRESS)
+
+// $ExpectType Promise<ReportList>
+node.getReportsByHostAddress(BTC_TESTING_ADDRESS)
 
 // $ExpectType Promise<Report>
-node.getReportByNonce('native', 1)
+node.getReportByIncomingTxHash(HASH_INCOMING_TX)
+
+// $ExpectType Promise<Report>
+node.getReportByBroadcastTxHash(HASH_BROADCASTED_TX)
+
+// $ExpectType Promise<DepositAddress>
+node.getNativeDepositAddress(ETH_TESTING_ADDRESS)
 
 // $ExpectType Promise<number>
-node.getLastProcessedBlock('native')
+node.getLastProcessedNativeBlock()
 
-// $ExpectType Promise<Report>
-node.getIncomingTransactionStatus(HASH_INCOMING_TX)
-
-// $ExpectType Promise<Report>
-node.getBroadcastTransactionStatus(HASH_BROADCASTED_TX)
+// $ExpectType Promise<number>
+node.getLastProcessedHostBlock()
 
 // $ExpectType Promise<Report>
 node.monitorIncomingTransaction(HASH_INCOMING_TX, new EventEmitter())

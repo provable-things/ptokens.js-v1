@@ -1,3 +1,4 @@
+// TODO: changes tests with new node fxs
 import { Node } from '../src/index'
 import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'
@@ -141,7 +142,7 @@ test('Should get native report by nonce', async () => {
   expect(res._id).to.be.equal(`pBTC_BTC ${nonce}`)
 })
 
-/* test('Should get last EOS processed block', async () => {
+test('Should get last EOS processed block', async () => {
   const type = 'host'
   const node = new Node({
     pToken: pTokens.pBTC,
@@ -151,7 +152,7 @@ test('Should get native report by nonce', async () => {
 
   const res = await node.getLastProcessedBlock(type)
   expect(res).to.be.an.instanceof(Object)
-}) */
+}) 
 
 test('Should get last BTC processed block', async () => {
   const type = 'native'

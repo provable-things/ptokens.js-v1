@@ -1,4 +1,6 @@
 import axios from 'axios'
+import jsonrpc from 'jsonrpc-lite'
+import { v4 as uuidv4 } from 'uuid'
 
 const REPORT_LIMIT = 100
 
@@ -12,7 +14,7 @@ const createApi = (_endpoint, _timeout = 50000) => {
     timeout: _timeout,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Origin, Content-Type',
       'Content-Type': 'application/json'
     }
@@ -26,15 +28,41 @@ const createApi = (_endpoint, _timeout = 50000) => {
  * @param {Object} _params
  */
 const makeApiCall = async (_endpoint, _callType, _apiPath, _params = null) => {
-  try {
-    const res = await createApi(_endpoint)[_callType.toLowerCase()](
-      _apiPath,
-      _params
-    )
-    return res.data
-  } catch (err) {
-    throw new Error(err.message)
-  }
+  const { data } = await createApi(_endpoint)[_callType.toLowerCase()](
+    _apiPath,
+    _params
+  )
+  return data
 }
 
-export { createApi, makeApiCall, REPORT_LIMIT }
+/**
+ *
+ * @param {String} _endpoint
+ * @param {String} _type
+ * @param {String} _apiPath
+ * @param {String} _call
+ * @param {any} _body
+ */
+const makeJsonRpcSafeCall = async (
+  _endpoint,
+  _type,
+  _apiPath,
+  _call,
+  _body = {}
+) => {
+  const uuid = uuidv4()
+
+  const { result, id } = await makeApiCall(
+    _endpoint,
+    _type,
+    _apiPath,
+    jsonrpc.request(uuid, _call, _body)
+  )
+
+  if (uuid !== id)
+    throw new Error('Returned json-rpc id does not match expected id')
+
+  return result
+}
+
+export { createApi, makeApiCall, makeJsonRpcSafeCall, REPORT_LIMIT }
