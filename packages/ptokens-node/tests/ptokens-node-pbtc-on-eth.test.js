@@ -9,12 +9,12 @@ jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pong'
 const HASH_INCOMING_TX =
-  'e761f59d6b43eb37463538be7587000e9d3617ba090c17ff2bf7718354d43053'
+  '8e698c0e6df8a8405b62b536146920026659fe7f4312935efd55b4b2ceaf84b2'
 const HASH_BROADCASTED_TX =
   '28c9945d1f1277c781bbeffa9b379b4336b10368f441c2d0334a6a9d6b8cea6e'
 
-const BTC_TESTING_ADDRESS = '2N4g72pPnrBxTriwrmkKR8yzxyehMscLMnh'
-const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+const BTC_TESTING_ADDRESS = '2N8HTvZVrg12EeQDfsuMCavnhSbWV2NifNE'
+const ETH_TESTING_ADDRESS = '0x4b2ac8a5728e08ce71e64287dcbda859d691cf56'
 
 const ENDPOINT = 'http://5a501f7a.ngrok.io/'
 
@@ -82,7 +82,7 @@ test('Should get all pbtc-on-eth reports given a recipient address', async () =>
   })
 
   const res = await node.getReportsByRecipientAddress(
-    BTC_TESTING_ADDRESS,
+    ETH_TESTING_ADDRESS,
     limit
   )
   expect(res)
