@@ -81,11 +81,11 @@ console.log(depositAddress.toString())
 //fund the BTC address just generated (not ptokens.js stuff)
 
 depositAddress.waitForDeposit()
-  .once('onBtcTxBroadcasted', tx => ... )
-  .once('onBtcTxConfirmed', tx => ...)
-  .once('onNodeReceivedTx', tx => ...)
-  .once('onNodeBroadcastedTx', tx => ...)
-  .once('onEthTxConfirmed', tx => ...)
+  .once('nativeTxBroadcasted', tx => ... )
+  .once('nativeTxConfirmed', tx => ...)
+  .once('nodeReceivedTx', tx => ...)
+  .once('nodeBroadcastedTx', tx => ...)
+  .once('hostTxConfirmed', tx => ...)
   .then(res => ...))
 ```
 
