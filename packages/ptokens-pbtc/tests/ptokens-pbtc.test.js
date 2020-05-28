@@ -123,7 +123,7 @@ test('Should redeem 0.000051 pBTC', async () => {
   let nodeHasBroadcastedTx = false
   let btcTxIsConfirmed = false
   const start = () =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
         .once('onEthTxConfirmed', () => {
@@ -139,6 +139,7 @@ test('Should redeem 0.000051 pBTC', async () => {
           btcTxIsConfirmed = true
         })
         .then(() => resolve())
+        .catch(_err => reject(_err))
     })
   await start()
 

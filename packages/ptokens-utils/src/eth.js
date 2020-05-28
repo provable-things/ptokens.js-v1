@@ -173,6 +173,9 @@ const _sendSignedMethodTx = (_web3, _method, _options, _params) =>
         .on('receipt', _receipt => {
           resolve(_receipt)
         })
+        .on('error', _error => {
+          reject(_error)
+        })
     } catch (_err) {
       reject(_err)
     }
