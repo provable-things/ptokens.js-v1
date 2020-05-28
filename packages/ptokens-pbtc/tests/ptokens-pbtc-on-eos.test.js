@@ -113,7 +113,7 @@ test('Should redeem 0.000051 pBTC on EOS Jungle3 Testnet', async () => {
   let nodeHasBroadcastedTx = false
   let btcTxIsConfirmed = false
   const start = () =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
         .once('onEosTxConfirmed', () => {
@@ -129,6 +129,7 @@ test('Should redeem 0.000051 pBTC on EOS Jungle3 Testnet', async () => {
           btcTxIsConfirmed = true
         })
         .then(() => resolve())
+        .catch(_err => reject(_err))
     })
   await start()
 
