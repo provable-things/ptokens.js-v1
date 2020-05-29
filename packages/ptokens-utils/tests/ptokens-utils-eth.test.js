@@ -52,14 +52,13 @@ test('Should return the correct Ethereum onchain format', () => {
 
 test('Should return the current Ethereum account with non injected Web3 instance', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
-  const isWeb3Injected = false
   const expectedEthereumAccount = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
   const account = web3.eth.accounts.privateKeyToAccount(
     utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
   )
   web3.eth.defaultAccount = account.address
-  const ethereumAccount = await utils.eth.getAccount(web3, isWeb3Injected)
+  const ethereumAccount = await utils.eth.getAccount(web3)
   expect(ethereumAccount).to.be.equal(expectedEthereumAccount)
 })
 
@@ -101,7 +100,6 @@ test('Should return false since hello is not 0x prefixed', () => {
 test('Should call an ETH contract call', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
   const number = await utils.eth.makeContractCall(web3, 'number', {
-    isWeb3Injected: false,
     abi,
     contractAddress: TEST_CONTRACT_ADDRESS
   })
@@ -117,11 +115,10 @@ test('Should make an ETH contract send correctly', async () => {
   web3.eth.defaultAccount = account.address
   const expectedNumber = 10
 
-  await utils.eth.makeContractSend(
+  await utils.eth.sendSignedMethodTx(
     web3,
     'setNumber',
     {
-      isWeb3Injected: false,
       abi,
       contractAddress: TEST_CONTRACT_ADDRESS,
       privateKey: utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
@@ -129,7 +126,6 @@ test('Should make an ETH contract send correctly', async () => {
     [expectedNumber]
   )
   const number = await utils.eth.makeContractCall(web3, 'number', {
-    isWeb3Injected: false,
     abi,
     contractAddress: TEST_CONTRACT_ADDRESS
   })
@@ -144,11 +140,10 @@ test('Should make an ETH contract send correctly specifying the gas', async () =
   web3.eth.defaultAccount = account.address
   const expectedNumber = 10
 
-  await utils.eth.makeContractSend(
+  await utils.eth.sendSignedMethodTx(
     web3,
     'setNumber',
     {
-      isWeb3Injected: false,
       abi,
       gas: 30000,
       contractAddress: TEST_CONTRACT_ADDRESS,
@@ -157,7 +152,6 @@ test('Should make an ETH contract send correctly specifying the gas', async () =
     [expectedNumber]
   )
   const number = await utils.eth.makeContractCall(web3, 'number', {
-    isWeb3Injected: false,
     abi,
     contractAddress: TEST_CONTRACT_ADDRESS
   })
@@ -165,7 +159,7 @@ test('Should make an ETH contract send correctly specifying the gas', async () =
 })
 
 test('Should fail to send a tx because of gas limit', async () => {
-  const GAS_TO_LOW = 10
+  const GAS_TOO_LOW = 10
 
   const web3 = new Web3(TEST_ETH_PROVIDER)
   const account = web3.eth.accounts.privateKeyToAccount(
@@ -174,13 +168,12 @@ test('Should fail to send a tx because of gas limit', async () => {
   web3.eth.defaultAccount = account.address
 
   try {
-    await utils.eth.makeContractSend(
+    await utils.eth.sendSignedMethodTx(
       web3,
       'setNumber',
       {
-        isWeb3Injected: false,
         abi,
-        gas: GAS_TO_LOW,
+        gas: GAS_TOO_LOW,
         contractAddress: TEST_CONTRACT_ADDRESS,
         privateKey: utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
       },

@@ -51,16 +51,13 @@ export class pBTC extends NodeSelector {
     // NOTE: parse eth params
     if (ethProvider) this.hostApi = new Web3(ethProvider)
     if (ethPrivateKey) {
-      this._ishostApiInjected = false
       const account = this.hostApi.eth.accounts.privateKeyToAccount(
         eth.addHexPrefix(ethPrivateKey)
       )
 
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
-      this._ishostApiInjected = false
     } else {
-      this._ishostApiInjected = true
       this.hostPrivateKey = null
     }
 
@@ -159,8 +156,7 @@ export class pBTC extends NodeSelector {
             contractAddress,
             gas,
             gasPrice,
-            this.hostPrivateKey,
-            this._ishostApiInjected
+            this.hostPrivateKey
           )
 
           promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
@@ -230,7 +226,6 @@ export class pBTC extends NodeSelector {
           : this._contractAddress
 
         this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
-          isWeb3Injected: this._ishostApiInjected,
           abi: pbtcOnEthAbi,
           contractAddress
         })

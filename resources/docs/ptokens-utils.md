@@ -464,7 +464,7 @@ const res = utils.eth.correctFormat(1000, 4, '/') //0.1
 ## eth.getAccount
 
 ```js
-utils.eth.getAccount(web3, isWeb3Injected)
+utils.eth.getAccount(web3)
 ```
 
 Returns the current Ethereum address given an instance of Web3 and specifying if it's injected (i.e.: a Web3 instance injected by Metamask)
@@ -472,7 +472,6 @@ Returns the current Ethereum address given an instance of Web3 and specifying if
 ### Parameters
 
 - __`Object`__ - __`Web3`__: Web3 instance
-- __`Boolean`__ - __`isWeb3Injected`__: specifies if it's an injected Web3 instance
 
 
 ### Returns
@@ -481,7 +480,7 @@ Returns the current Ethereum address given an instance of Web3 and specifying if
 
 ### Example
 ```js
-const account = await utils.eth.getAccount(web3, true)
+const account = await utils.eth.getAccount(web3)
 ```
 
 &nbsp;
@@ -572,7 +571,6 @@ Performs a contract `call` given a Web3 instance and the Smart Contract details.
 - __`Object`__ - __`options`__
     - __`Object`__ - __`abi`__: Smart Contract json interface
     - __`String`__ - __`contractAddress`__: Smart Contract address
-    - __`Boolean`__ - __`isWeb3Injected`__: status of the provided Web3 instance (injected or not)
 - __`Array`__ - __`params`__: parameters nedeed for calling the method specified
 
 ### Returns
@@ -585,7 +583,44 @@ const options = {
   abi,
   contractAddess: 'eth contract address',
 }
-const value = await utils.eth.makeContractCall(web3, 'balanceOf', true, abi, '' , ['eth address']) //true
+const value = await utils.eth.makeContractCall(web3, 'balanceOf', { abi, contractAddress: '' } , ['eth address']) //true
+```
+
+&nbsp;
+
+## eth.sendSignedMethodTx
+
+```js
+utils.eth.sendSignedMethodTx(web3, method, options, params = [])
+```
+
+Performs a contract `send` given a Web3 instance and the Smart Contract details.
+
+### Parameters
+
+- __`Object`__ - __`web3`__: Web3 instance
+- __`String`__ - __`method`__: Smart Contract method to call
+- __`Object`__ - __`options`__
+    - __`Object`__ - __`abi`__: Smart Contract json interface
+    - __`String`__ - __`contractAddress`__: Smart Contract address
+    - __`Object`__ - __`privateKey`__: current Account private key (use when `isWeb3Injected = false` otherwise `null`)
+    - __`String`__ - __`value`__: value to send to the Smart Contract
+    - __`Number|BigNumber|String`__ - __`gas`__: Ethereum transaction Gas limit
+    - __`Number|BigNumber|String`__ - __`gasLimit`__: Ethereum transaction Gas price
+- __`Array`__ - __`params`__: parameters nedeed for calling the method specified
+
+### Returns
+
+- __`Promise`__ : when resolved it returns the receipt of the transaction performed
+
+### Example
+```js
+const receipt = await utils.eth.sendSignedMethodTx(
+  web3,
+  'transfer',
+  { abi, contractAddress: 'eth contract address', privateKey: 'provate key', value: 0, gas, gasPrice }, 
+  ['eth address']
+)
 ```
 
 &nbsp;
@@ -605,9 +640,9 @@ Performs a contract `send` given a Web3 instance and the Smart Contract details.
 - __`Object`__ - __`options`__
     - __`Object`__ - __`abi`__: Smart Contract json interface
     - __`String`__ - __`contractAddress`__: Smart Contract address
-    - __`Object`__ - __`privateKey`__: current Account private key (use when `isWeb3Injected = false` otherwise `null`)
     - __`String`__ - __`value`__: value to send to the Smart Contract
-    - __`Boolean`__ - __`isWeb3Injected`__: status of the provided Web3 instance (injected or not)
+    - __`Number|BigNumber|String`__ - __`gas`__: Ethereum transaction Gas limit
+    - __`Number|BigNumber|String`__ - __`gasLimit`__: Ethereum transaction Gas price
 - __`Array`__ - __`params`__: parameters nedeed for calling the method specified
 
 ### Returns
@@ -616,7 +651,12 @@ Performs a contract `send` given a Web3 instance and the Smart Contract details.
 
 ### Example
 ```js
-const receipt = await utils.eth.makeContractSend(web3, 'transfer', true, abi, 'eth contract address' , ['eth address']) //true
+const receipt = await utils.eth.makeContractSend(
+  web3,
+  'transfer',
+  { abi, contractAddress: 'eth contract address', value: 0, gas, gasPrice }, 
+  ['eth address']
+)
 ```
 
 &nbsp;
