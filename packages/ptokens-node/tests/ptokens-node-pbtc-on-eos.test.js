@@ -152,7 +152,7 @@ test('Should get last EOS processed block', async () => {
 
   const res = await node.getLastProcessedBlock(type)
   expect(res).to.be.an.instanceof(Object)
-}) 
+})
 
 test('Should get last BTC processed block', async () => {
   const type = 'native'
