@@ -11,7 +11,7 @@
     "dtslint": "lerna run dtslint",
     "lint": "lerna run lint",
     "publish": "npm run prepare && lerna publish --dist-tag latest --skip-git",
-    "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\"",
+    "format": "prettier --config ./.prettierrc --write  \"./packages/**/src/*.+(js|json)\"",
     "update-version": "lerna publish --skip-git --skip-npm --force-publish '*'",
     "test": "lerna run test",
     "prepare": "npm run build && npm run bootstrap && npm run dtslint"
