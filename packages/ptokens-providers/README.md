@@ -1,6 +1,6 @@
 # ptokens-providers
 
-Module for interacting with a Node.
+Generic module for doing network calls.
 
 &nbsp;
 

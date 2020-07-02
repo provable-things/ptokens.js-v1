@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios'
 
 export class HttpProvider {
-  constructor(_endpoint: string)
+  constructor(_endpoint: string, _headers?: object)
 
   api: AxiosInstance
 

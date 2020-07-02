@@ -1,21 +1,23 @@
 import axios from 'axios'
 
 const DEFAULT_TIMEOUT = 10000
+const DEFAULT_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Origin, Content-Type',
+  'Content-Type': 'application/json'
+}
 
 export class HttpProvider {
   /**
    *
    * @param {String} _endpoint
+   * @param {Object} _headers
    */
-  constructor(_endpoint) {
+  constructor(_endpoint, _headers) {
     this.api = axios.create({
       baseURL: _endpoint,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type',
-        'Content-Type': 'application/json'
-      }
+      headers: _headers ? _headers : DEFAULT_HEADERS
     })
   }
 

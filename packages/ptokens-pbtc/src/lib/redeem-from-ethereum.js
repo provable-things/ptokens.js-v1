@@ -37,7 +37,8 @@ const redeemFromEthereum = (
           )
           .then(_receipt => resolve(_receipt))
           .catch(_err => reject(_err))
-      : eth.makeContractSend(_web3, 'redeem', options, params)
+      : eth
+          .makeContractSend(_web3, 'redeem', options, params)
           .then(_receipt => resolve(_receipt))
           .catch(_err => reject(_err))
   })
