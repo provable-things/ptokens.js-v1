@@ -12,7 +12,8 @@ export interface Configs {
   ethPrivateKey?: string,
   ethProvider: string,
   btcNetwork: string,
-  defaultEndpoint?: string
+  defaultEndpoint?: string,
+  appName?: string
 }
 
 export interface RedeemOptions {

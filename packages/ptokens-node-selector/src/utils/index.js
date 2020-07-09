@@ -1,33 +1,39 @@
 import axios from 'axios'
+import app from '../../package.json'
 
 const NODE_CONNECTION_TIMEOUT = 5000
 const DEFAULT_TIMEOUT = 10000
 const BOOT_TESTNET_ENDPOINT = 'https://testnet_bootnode-eu-1.p.network/'
 const BOOT_MAINNET_ENDPOINT = 'https://mainnet_bootnode-eu-1.p.network'
+const DEFAULT_USER_AGENT = `ptokens.js/${app.version}`
 
 /**
  * @param {String} _pToken
  * @param {Number} _timeout
+ * @param {String} _appName
  */
-const createApi = _endpoint => {
+const createApi = (_endpoint, _timeout = DEFAULT_TIMEOUT, _appName) => {
   return axios.create({
     baseURL: _endpoint,
+    timeout: _timeout,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Origin, Content-Type',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'User-Agent': _appName
+        ? `${DEFAULT_USER_AGENT} ${_appName}`
+        : DEFAULT_USER_AGENT
     }
   })
 }
-
 /**
  * @param {String} _network
  */
-const getBootNodeApi = _network => {
+const getBootNodeApi = (_network, _appName) => {
   return _network === 'mainnet'
-    ? createApi(BOOT_MAINNET_ENDPOINT)
-    : createApi(BOOT_TESTNET_ENDPOINT)
+    ? createApi(BOOT_MAINNET_ENDPOINT, DEFAULT_TIMEOUT, _appName)
+    : createApi(BOOT_TESTNET_ENDPOINT, DEFAULT_TIMEOUT, _appName)
 }
 
 /**
@@ -74,6 +80,7 @@ const makeApiCallWithTimeout = async (
 }
 
 export {
+  DEFAULT_TIMEOUT,
   NODE_CONNECTION_TIMEOUT,
   createApi,
   getBootNodeApi,

@@ -9,20 +9,23 @@ export class Node {
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, endpoint } = configs
+    const { pToken, endpoint, appName } = configs
 
     if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
     this.info = null
     this.pToken = pToken
     this.endpoint = endpoint
+    this.appName = appName
   }
 
   ping() {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`,
+      null,
+      this.appName
     )
   }
 
@@ -31,7 +34,9 @@ export class Node {
       this.info = await makeApiCall(
         this.endpoint,
         'GET',
-        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info`
+        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info`,
+        null,
+        this.appName
       )
     }
     return this.info
@@ -45,7 +50,9 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-reports/limit/${_limit}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-reports/limit/${_limit}`,
+      null,
+      this.appName
     )
   }
 
@@ -58,7 +65,9 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-address/${_address}/limit/${_limit}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-address/${_address}/limit/${_limit}`,
+      null,
+      this.appName
     )
   }
 
@@ -70,7 +79,9 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/report/${_type}/nonce/${_nonce}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/report/${_type}/nonce/${_nonce}`,
+      null,
+      this.appName
     )
   }
 
@@ -81,7 +92,9 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/last-processed-${_type}-block`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/last-processed-${_type}-block`,
+      null,
+      this.appName
     )
   }
 
@@ -93,6 +106,8 @@ export class Node {
       this.endpoint,
       'GET',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/incoming-tx-hash/${_hash}`
+        .null,
+      this.appName
     )
   }
 
@@ -103,7 +118,9 @@ export class Node {
     return makeApiCall(
       this.endpoint,
       'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/broadcast-tx-hash/${_hash}`
+      `${this.pToken.name}-on-${this.pToken.redeemFrom}/broadcast-tx-hash/${_hash}`,
+      null,
+      this.appName
     )
   }
 
@@ -116,7 +133,8 @@ export class Node {
       this.endpoint,
       'POST',
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/submit-${_type}-block`,
-      _block
+      _block,
+      this.appName
     )
   }
 
@@ -130,7 +148,8 @@ export class Node {
       this.endpoint,
       _type,
       `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_path}`,
-      _data
+      _data,
+      this.appName
     )
   }
 

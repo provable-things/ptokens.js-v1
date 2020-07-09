@@ -2,7 +2,8 @@ import {
   createApi,
   getBootNodeApi,
   makeApiCallWithTimeout,
-  NODE_CONNECTION_TIMEOUT
+  NODE_CONNECTION_TIMEOUT,
+  DEFAULT_TIMEOUT
 } from './utils/index'
 import { helpers } from 'ptokens-utils'
 import { Node } from 'ptokens-node'
@@ -20,7 +21,7 @@ export class NodeSelector {
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, defaultEndpoint, networkType } = configs
+    const { pToken, defaultEndpoint, networkType, appName } = configs
 
     if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
 
@@ -40,6 +41,7 @@ export class NodeSelector {
       throw new Error('Invalid Network')
 
     this.networkType = networkType
+    this.appName = appName
   }
 
   /**
@@ -49,7 +51,7 @@ export class NodeSelector {
   async checkConnection(_endpoint, _timeout = NODE_CONNECTION_TIMEOUT) {
     try {
       await makeApiCallWithTimeout(
-        createApi(_endpoint),
+        createApi(_endpoint, DEFAULT_TIMEOUT, this.appName),
         'GET',
         `/${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`,
         null,
@@ -75,7 +77,7 @@ export class NodeSelector {
 
       if (this.nodes.length === 0) {
         const res = await makeApiCallWithTimeout(
-          getBootNodeApi(networkType),
+          getBootNodeApi(networkType, this.appName),
           'GET',
           '/peers'
         )
@@ -135,7 +137,8 @@ export class NodeSelector {
   setEndpoint(_endpoint) {
     this.selectedNode = new Node({
       pToken: this.pToken,
-      endpoint: _endpoint
+      endpoint: _endpoint,
+      appName: this.appName
     })
 
     return this.selectedNode

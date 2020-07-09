@@ -5,7 +5,8 @@ export interface NodeConfigs {
     name: string,
     redeemFrom: string
   },
-  endpoint: string
+  endpoint: string,
+  appName?: string,
 }
 
 export interface pToken {

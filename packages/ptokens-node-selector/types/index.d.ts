@@ -6,7 +6,8 @@ export interface NodeSelectorConfigs {
     redeemFrom: string
   },
   defaultEndpoint?: string,
-  networkType: string | Promise<string>
+  networkType: string | Promise<string>,
+  appName?: string
 }
 
 export interface NodeList extends Array<Node> {}

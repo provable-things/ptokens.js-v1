@@ -15,7 +15,13 @@ export class pBTC {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { ethPrivateKey, ethProvider, btcNetwork, defaultEndpoint } = _configs
+    const {
+      ethPrivateKey,
+      ethProvider,
+      btcNetwork,
+      defaultEndpoint,
+      appName
+    } = _configs
 
     this._web3 = new Web3(ethProvider)
 
@@ -43,11 +49,13 @@ export class pBTC {
         redeemFrom: 'ETH'
       },
       defaultEndpoint,
-      networkType: this._btcNetwork
+      networkType: this._btcNetwork,
+      appName
     })
 
     this._contractAddress = null
     this._decimals = null
+    this.appName = appName
   }
 
   /**
