@@ -1,4 +1,6 @@
 import { NodeSelector } from 'ptokens-node-selector'
+import { Node } from 'ptokens-node'
+import { HttpProvider } from 'ptokens-providers'
 
 const nodeSelector = new NodeSelector({
   pToken: 'pBTC',
@@ -25,4 +27,11 @@ nodeSelector.getApi()
 nodeSelector.select()
 
 // $ExpectType Node
-nodeSelector.setEndpoint('https://unreachable-node.io')
+nodeSelector.setSelectedNode('https://unreachable-node.io')
+
+// $ExpectType Node
+nodeSelector.setSelectedNode(new Node({
+  pToken: 'pbtc',
+  blockchain: 'eth',
+  provider: new HttpProvider('https://unreachable-node.io'),
+}))

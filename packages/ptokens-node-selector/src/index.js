@@ -97,7 +97,7 @@ export class NodeSelector {
         )
 
         if (node && (await this.checkConnection(node.webapi)))
-          return this.setEndpoint(node.webapi)
+          return this.setSelectedNode(node.webapi)
       }
 
       const filteredNodesByFeature = this.nodes.filter(node =>
@@ -116,7 +116,7 @@ export class NodeSelector {
           (await this.checkConnection(selectedNode.webapi)) &&
           !nodesNotReachable.includes(selectedNode)
         )
-          return this.setEndpoint(selectedNode.webapi)
+          return this.setSelectedNode(selectedNode.webapi)
         else if (!nodesNotReachable.includes(selectedNode))
           nodesNotReachable.push(selectedNode)
 
@@ -132,13 +132,18 @@ export class NodeSelector {
   }
 
   /**
-   * @param {String} _endpoint
+   * @param {String | Node} _node
    */
-  setEndpoint(_endpoint) {
+  setSelectedNode(_node) {
+    if (_node instanceof Node) {
+      this.selectedNode = _node
+      return this.selectedNode
+    }
+
     this.selectedNode = new Node({
       pToken: this.pToken,
-      endpoint: _endpoint,
-      blockchain: this.hostBlockchain
+      blockchain: this.hostBlockchain,
+      provider: new HttpProvider(_node)
     })
 
     return this.selectedNode

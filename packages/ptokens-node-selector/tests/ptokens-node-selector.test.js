@@ -1,9 +1,12 @@
 import { NodeSelector } from '../src/index'
 import { expect } from 'chai'
 import { constants } from 'ptokens-utils'
+import { Node } from 'ptokens-node'
 import { HttpProvider } from 'ptokens-providers'
 
 jest.setTimeout(300000)
+
+const PBTC_ON_EOS_ENDPOINT = 'https://pbtconeos-node-1a.ngrok.io'
 
 test('Should select a pBTC node on EOS Jungle3 Testnet', async () => {
   const nodeSelector = new NodeSelector({
@@ -37,23 +40,34 @@ test('Should select a pBTC node on EOS Mainnet', async () => {
   expect(info.native_network).to.be.equal('mainnet')
 })
 
-test('Should select a pBTC node on EOS Mainnet with a default provider', async () => {
-  // endpoint not needed since the endpoint is set by the class for node discovering
-  const provider = new HttpProvider(null, {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET',
-    'Access-Control-Allow-Headers': 'Origin, Content-Type',
-    'Content-Type': 'application/json',
-    'User-Agent': 'ptokens tests'
+test('Should setting a pBTC node on EOS Mainnet', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pBTC,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
   })
-  const nodeSelector = new NodeSelector(
-    {
+
+  const node = await nodeSelector.setSelectedNode(
+    new Node({
       pToken: constants.pTokens.pBTC,
       blockchain: constants.blockchains.Eosio,
-      network: constants.networks.Mainnet
-    },
-    provider
+      provider: new HttpProvider(PBTC_ON_EOS_ENDPOINT)
+    })
   )
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal('mainnet')
+  expect(info.host_blockchain).to.be.equal('eosio')
+  expect(info.native_blockchain).to.be.equal('bitcoin')
+  expect(info.native_network).to.be.equal('mainnet')
+})
+
+test('Should select a pBTC node on EOS Mainnet with a default provider', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pBTC,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
+  })
 
   const node = await nodeSelector.select()
   const info = await node.getInfo()
@@ -84,7 +98,7 @@ test('Should select a pBTC node on EOS Mainnet with detailed initialization', as
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
     hostBlockchain: constants.blockchains.Eosio,
-    hostNetwork: 'mainnet'
+    hostNetwork: constants.networks.Mainnet
   })
 
   const node = await nodeSelector.select()
@@ -193,7 +207,7 @@ test('Should generate an error when an invalid node is set', async () => {
   })
 
   try {
-    await nodeSelector.setEndpoint(unreachableNode)
+    await nodeSelector.setSelectedNode(unreachableNode)
   } catch (err) {
     expect(err.message).to.be.equal(expectedError)
   }
