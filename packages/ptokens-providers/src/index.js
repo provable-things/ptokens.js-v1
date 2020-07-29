@@ -17,7 +17,7 @@ export class HttpProvider {
   constructor(_endpoint, _headers) {
     this.api = axios.create({
       baseURL: _endpoint,
-      headers: _headers ? _headers : DEFAULT_HEADERS
+      headers: _headers || DEFAULT_HEADERS
     })
   }
 
