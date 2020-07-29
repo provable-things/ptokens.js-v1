@@ -2,6 +2,9 @@ import {
   Bitcoin,
   BitcoinMainnet,
   BitcoinTestnet,
+  Litecoin,
+  LitecoinTestnet,
+  LitecoinMainnet,
   Ethereum,
   EthereumMainnet,
   EthereumRopsten,
@@ -10,7 +13,8 @@ import {
   EosioJungle3,
   Mainnet,
   Testnet,
-  pBTC
+  pBTC,
+  pLTC
 } from './names'
 
 export const blockchainTypes = {
@@ -19,7 +23,8 @@ export const blockchainTypes = {
   eosio: Eosio,
   eos: Eosio,
   bitcoin: Bitcoin,
-  btc: Bitcoin
+  btc: Bitcoin,
+  ltc: Litecoin
 }
 
 export const blockchainShortTypes = {
@@ -47,6 +52,11 @@ export const networkLabels = {
     testnet: Bitcoin,
     mainnet: BitcoinMainnet,
     bitcoin: BitcoinTestnet
+  },
+  litecoin: {
+    testnet: LitecoinTestnet,
+    mainnet: LitecoinMainnet,
+    litecoin: LitecoinMainnet
   }
 }
 
@@ -57,4 +67,4 @@ export const networkLabelType = {
   mainnet: Mainnet
 }
 
-export const pTokensAvailables = [pBTC]
+export const pTokensAvailables = [pBTC, pLTC]

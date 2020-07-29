@@ -8,9 +8,13 @@ import {
   Eosio,
   EosioMainnet,
   EosioJungle3,
+  Litecoin,
+  LitecoinnMainnet,
+  LitecoinTestnet,
   Mainnet,
   Testnet,
-  pBTC
+  pBTC,
+  pLTC
 } from './helpers/names'
 
 /**
@@ -20,7 +24,8 @@ import {
 const blockchains = {
   Bitcoin,
   Eosio,
-  Ethereum
+  Ethereum,
+  Litecoin
 }
 
 /**
@@ -35,7 +40,9 @@ const networks = {
   EthereumMainnet,
   EthereumRopsten,
   EosioMainnet,
-  EosioJungle3
+  EosioJungle3,
+  LitecoinnMainnet,
+  LitecoinTestnet
 }
 
 /**
@@ -43,7 +50,8 @@ const networks = {
  * pTokens list
  */
 const pTokens = {
-  pBTC
+  pBTC,
+  pLTC
 }
 
 export { blockchains, networks, pTokens }

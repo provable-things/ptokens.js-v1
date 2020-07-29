@@ -5,7 +5,7 @@ import { JsonRpc } from 'eosjs'
 import fetch from 'node-fetch'
 
 const eosPrivateKey = '5JFPd8Kvhf7zSrxKCrMvhK22WKbh1jFw5TLeLjyPpp2yh4SvReS'
-const eosProvider = 'http://23.97.190.44:8888'
+const eosProvider = 'https://pbtc-on-eos-jungle-3.ptokens.io'
 
 jest.setTimeout(30000)
 
