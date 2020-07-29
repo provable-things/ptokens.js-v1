@@ -3,9 +3,9 @@
   "version": "0.4.2",
   "description": "repo holding the code related to network providers",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-providers",
-  "main": "dist/ptokens-node.cjs.js",
-  "module": "dist/ptokens-node.esm.js",
-  "browser": "dist/ptokens-node.umd.js",
+  "main": "dist/ptokens-providers.cjs.js",
+  "module": "dist/ptokens-providers.esm.js",
+  "browser": "dist/ptokens-providers.umd.js",
   "types": "types/index.d.ts",
   "scripts": {
     "build": "rollup -c",

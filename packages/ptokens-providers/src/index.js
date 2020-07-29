@@ -15,10 +15,15 @@ export class HttpProvider {
    * @param {Object} _headers
    */
   constructor(_endpoint, _headers) {
-    this.api = axios.create({
-      baseURL: _endpoint,
-      headers: _headers || DEFAULT_HEADERS
-    })
+    this.headers = _headers ? _headers : DEFAULT_HEADERS
+    this.endpoint = _endpoint ? _endpoint : null
+
+    this.api = _endpoint
+      ? axios.create({
+          baseURL: _endpoint,
+          headers: _headers || DEFAULT_HEADERS
+        })
+      : null
   }
 
   /**
@@ -53,5 +58,29 @@ export class HttpProvider {
     } catch (err) {
       throw new Error(err.message)
     }
+  }
+
+  /**
+   *
+   * @param {String} _endpoint
+   */
+  setEndpoint(_endpoint) {
+    this.endpoint = _endpoint
+    this.api = axios.create({
+      baseURL: _endpoint,
+      headers: this.headers
+    })
+  }
+
+  /**
+   *
+   * @param {Object} _headers
+   */
+  setHeaders(_headers) {
+    this.headers = _headers
+    this.api = axios.create({
+      baseURL: this.endpoint,
+      headers: _headers
+    })
   }
 }
