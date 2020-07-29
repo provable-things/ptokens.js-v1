@@ -1,11 +1,7 @@
-import {
-  createApi,
-  getBootNodeApi,
-  makeApiCallWithTimeout,
-  NODE_CONNECTION_TIMEOUT
-} from './utils/index'
+import { getBootNodeEndpoint } from './lib/index'
 import { Node } from 'ptokens-node'
 import { helpers } from 'ptokens-utils'
+import { HttpProvider } from 'ptokens-providers'
 
 export class NodeSelector {
   /**
@@ -39,16 +35,22 @@ export class NodeSelector {
     this.selectedNode = null
     this.nodes = []
     this.defaultEndpoint = defaultEndpoint
+    this.provider = new HttpProvider()
   }
 
   /**
    * @param {String} _endpoint
    * @param {Number} _timeout
    */
-  async checkConnection(_endpoint, _timeout = NODE_CONNECTION_TIMEOUT) {
+  async checkConnection(_endpoint, _timeout) {
     try {
-      const info = await makeApiCallWithTimeout(
-        createApi(_endpoint),
+      this.provider.setEndpoint(_endpoint)
+      const {
+        host_blockchain,
+        host_network,
+        native_blockchain,
+        native_network
+      } = await this.provider.call(
         'GET',
         `/${this.pToken}-on-${helpers.getBlockchainShortType(
           this.hostBlockchain
@@ -57,16 +59,12 @@ export class NodeSelector {
         _timeout
       )
 
-      // NOTE: check that the node params match
-      if (
-        info.host_blockchain === this.hostBlockchain &&
-        info.host_network === this.hostNetwork &&
-        info.native_blockchain === this.nativeBlockchain &&
-        info.native_network === this.nativeNetwork
-      )
-        return true
-
-      return false
+      return host_blockchain === this.hostBlockchain &&
+        host_network === this.hostNetwork &&
+        native_blockchain === this.nativeBlockchain &&
+        native_network === this.nativeNetwork
+        ? true
+        : false
     } catch (err) {
       return false
     }
@@ -82,13 +80,10 @@ export class NodeSelector {
 
   async select() {
     try {
-      this.nodes = (
-        await makeApiCallWithTimeout(
-          getBootNodeApi(helpers.getNetworkType(this.hostNetwork)),
-          'GET',
-          '/peers'
-        )
-      ).peers
+      this.provider.setEndpoint(
+        getBootNodeEndpoint(helpers.getNetworkType(this.hostNetwork))
+      )
+      this.nodes = (await this.provider.call('GET', '/peers')).peers
 
       const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(
         this.hostBlockchain
@@ -101,10 +96,7 @@ export class NodeSelector {
             _node.features.includes(feature)
         )
 
-        if (
-          node &&
-          (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
-        )
+        if (node && (await this.checkConnection(node.webapi)))
           return this.setEndpoint(node.webapi)
       }
 
@@ -121,10 +113,7 @@ export class NodeSelector {
         const selectedNode = filteredNodesByFeature[index]
 
         if (
-          (await this.checkConnection(
-            selectedNode.webapi,
-            NODE_CONNECTION_TIMEOUT
-          )) &&
+          (await this.checkConnection(selectedNode.webapi)) &&
           !nodesNotReachable.includes(selectedNode)
         )
           return this.setEndpoint(selectedNode.webapi)

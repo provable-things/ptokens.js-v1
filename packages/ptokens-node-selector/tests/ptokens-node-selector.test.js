@@ -1,6 +1,7 @@
 import { NodeSelector } from '../src/index'
 import { expect } from 'chai'
 import { constants } from 'ptokens-utils'
+import { HttpProvider } from 'ptokens-providers'
 
 jest.setTimeout(300000)
 
@@ -26,6 +27,33 @@ test('Should select a pBTC node on EOS Mainnet', async () => {
     blockchain: constants.blockchains.Eosio,
     network: constants.networks.Mainnet
   })
+
+  const node = await nodeSelector.select()
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal('mainnet')
+  expect(info.host_blockchain).to.be.equal('eosio')
+  expect(info.native_blockchain).to.be.equal('bitcoin')
+  expect(info.native_network).to.be.equal('mainnet')
+})
+
+test('Should select a pBTC node on EOS Mainnet with a default provider', async () => {
+  // endpoint not needed since the endpoint is set by the class for node discovering
+  const provider = new HttpProvider(null, {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type',
+    'Content-Type': 'application/json',
+    'User-Agent': 'ptokens tests'
+  })
+  const nodeSelector = new NodeSelector(
+    {
+      pToken: constants.pTokens.pBTC,
+      blockchain: constants.blockchains.Eosio,
+      network: constants.networks.Mainnet
+    },
+    provider
+  )
 
   const node = await nodeSelector.select()
   const info = await node.getInfo()
@@ -97,6 +125,22 @@ test('Should select a pBTC node on Ethereum Ropsten Testnet', async () => {
   expect(info.host_network).to.be.equal('testnet_ropsten')
   expect(info.host_blockchain).to.be.equal('ethereum')
   expect(info.native_blockchain).to.be.equal('bitcoin')
+  expect(info.native_network).to.be.equal('testnet')
+})
+
+test('Should select a pLTC node on Ethereum Mainnet', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pLTC,
+    blockchain: constants.blockchains.Ethereum,
+    network: constants.networks.Mainnet
+  })
+
+  const node = await nodeSelector.select()
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal('mainnet')
+  expect(info.host_blockchain).to.be.equal('ethereum')
+  expect(info.native_blockchain).to.be.equal('litecoin')
   expect(info.native_network).to.be.equal('testnet')
 })
 

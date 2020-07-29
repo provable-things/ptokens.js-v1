@@ -1,4 +1,5 @@
 import { Node, Report } from 'ptokens-node'
+import { HttpProvider } from 'ptokens-providers'
 
 export interface NodeSelectorConfigs {
   pToken: string,
@@ -7,8 +8,8 @@ export interface NodeSelectorConfigs {
   hostBlockchain?: string,
   hostNetwork?: string,
   nativeBlockchain?: string,
-  nativeNetwork?: string
-  defaultEndpoint?: string
+  nativeNetwork?: string,
+  defaultEndpoint?: string,
 }
 
 export interface NodeList extends Array<Node> {}
@@ -28,9 +29,11 @@ export class NodeSelector {
 
   nodes: NodeList
 
-  defaultEndpoint: string | null
-
   networkType: string
+
+  defaultEndpoint: string
+
+  provider: HttpProvider | null
 
   checkConnection(_endpoint: string, _timeout?: number): Promise<boolean>
 

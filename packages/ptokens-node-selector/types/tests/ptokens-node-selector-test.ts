@@ -3,8 +3,7 @@ import { NodeSelector } from 'ptokens-node-selector'
 const nodeSelector = new NodeSelector({
   pToken: 'pBTC',
   network: 'testnet',
-  blockchain: 'ETH',
-  defaultEndpoint: 'https://nuc-bridge-2.ngrok.io'
+  blockchain: 'ETH'
 })
 
 // if you want to be more detailed
@@ -13,8 +12,7 @@ const nodeSelector2 = new NodeSelector({
   hostBlockchain: 'ethereum',
   hostNetwork: 'testnet_ropsten',
   nativeBlockchain: 'bitcoin',
-  nativeNetwork: 'testnet',
-  defaultEndpoint: 'https://nuc-bridge-2.ngrok.io'
+  nativeNetwork: 'testnet'
 })
 
 // $ExpectType Promise<boolean>

@@ -22,7 +22,8 @@
     "axios": "^0.19.0",
     "chai": "^4.2.0",
     "ptokens-node": "^0.4.2",
-    "ptokens-utils": "^0.4.2"
+    "ptokens-utils": "^0.4.2",
+    "ptokens-providers": "^0.4.2"
   },
   "devDependencies": {
     "dtslint": "0.4.2",

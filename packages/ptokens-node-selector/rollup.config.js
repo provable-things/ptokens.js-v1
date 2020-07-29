@@ -3,5 +3,6 @@ import rollupConfig from '../../rollup.config'
 
 export default rollupConfig('NodeSelector', pkg.name, {
   'ptokens-node': 'ptokens-node',
-  'ptokens-utils': 'ptokens-utils'
+  'ptokens-utils': 'ptokens-utils',
+  'ptokens-providers': 'ptokens-providers'
 })
