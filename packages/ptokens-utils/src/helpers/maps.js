@@ -30,11 +30,13 @@ export const blockchainTypes = {
 export const blockchainShortTypes = {
   ethereum: 'eth',
   eosio: 'eos',
-  bitcoin: 'btc'
+  bitcoin: 'btc',
+  litecoin: 'ltc'
 }
 
 export const pTokenNativeBlockchain = {
-  pbtc: Bitcoin
+  pbtc: Bitcoin,
+  pltc: Litecoin
 }
 
 export const networkLabels = {
