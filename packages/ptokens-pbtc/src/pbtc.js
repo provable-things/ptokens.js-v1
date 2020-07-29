@@ -1,17 +1,22 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import { constants, eth, eos, btc, helpers } from 'ptokens-utils'
+import {
+  constants,
+  eth,
+  eos,
+  btc,
+  helpers,
+  redeemFrom,
+  abi
+} from 'ptokens-utils'
 import Web3Utils from 'web3-utils'
 import { BtcDepositAddress } from './btc-deposit-address'
-import { redeemFromEthereum } from './lib/redeem-from-ethereum'
-import { redeemFromEosio } from './lib/redeem-from-eosio'
 import {
   MINIMUM_BTC_REDEEMABLE,
   BTC_ESPLORA_POLLING_TIME,
   BTC_DECIMALS
 } from './utils/constants'
-import pbtcOnEthAbi from './utils/contractAbi/pBTCTokenETHContractAbi.json'
 
 export class pBTC extends NodeSelector {
   /**
@@ -148,7 +153,7 @@ export class pBTC extends NodeSelector {
         let hostTxReceiptId = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFromEthereum(
+          const ethTxReceipt = await redeemFrom.redeemFromEthereum(
             this.hostApi,
             _amount,
             decimals,
@@ -166,12 +171,13 @@ export class pBTC extends NodeSelector {
         }
 
         if (this.hostBlockchain === constants.blockchains.Eosio) {
-          const eosTxReceipt = await redeemFromEosio(
+          const eosTxReceipt = await redeemFrom.redeemFromEosio(
             this.hostApi,
             _amount,
             _btcAddress,
             decimals,
-            contractAddress
+            contractAddress,
+            constants.pTokens.pBTC
           )
 
           promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
@@ -226,7 +232,7 @@ export class pBTC extends NodeSelector {
           : this._contractAddress
 
         this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
-          abi: pbtcOnEthAbi,
+          abi: abi.pTokenOnEthAbi,
           contractAddress
         })
       }
