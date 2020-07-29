@@ -1,7 +1,7 @@
 import { pBTC, BtcDepositAddress } from 'ptokens-pbtc'
 import { Node } from 'ptokens-node'
-import {  } from 'eosjs'
 import Web3 from 'web3'
+import { HttpProvider } from '../../../ptokens-providers/types'
 
 const web3 = new Web3()
 
@@ -25,7 +25,7 @@ pbtc.redeem(10, BTC_TESTING_ADDRESS, {
 const node = new Node({
   pToken: 'pBTC',
   blockchain: 'eth',
-  endpoint: 'https://..'
+  provider: new HttpProvider()
 })
 
 const btcDepositAddress = new BtcDepositAddress({
