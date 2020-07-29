@@ -116,8 +116,7 @@ const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
   await polling(async () => {
     try {
       transaction = await _makeEsploraApiCall(_network, 'GET', `/tx/${_tx}`)
-      if (!transaction || !transaction.status)
-        return false
+      if (!transaction || !transaction.status) return false
 
       return transaction.status.confirmed
     } catch (err) {
