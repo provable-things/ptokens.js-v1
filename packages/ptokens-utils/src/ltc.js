@@ -5,7 +5,7 @@ import * as bitcoin from 'bitcoinjs-lib'
 import { Mainnet } from './helpers/names'
 
 const LTC_PTOKENS_NODE_TESTNET_API =
-  ' https://ltc-testnet-node-1.ptokens.io/insight-lite-api'
+  'https://ltc-testnet-node-1.ptokens.io/insight-lite-api'
 const LTC_PTOKENS_NODE_MAINNET_API =
   'https://ltc-node-1.ptokens.io/insight-lite-api'
 
