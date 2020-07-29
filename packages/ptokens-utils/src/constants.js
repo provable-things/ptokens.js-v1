@@ -9,7 +9,7 @@ import {
   EosioMainnet,
   EosioJungle3,
   Litecoin,
-  LitecoinnMainnet,
+  LitecoinMainnet,
   LitecoinTestnet,
   Mainnet,
   Testnet,
@@ -41,7 +41,7 @@ const networks = {
   EthereumRopsten,
   EosioMainnet,
   EosioJungle3,
-  LitecoinnMainnet,
+  LitecoinMainnet,
   LitecoinTestnet
 }
 
