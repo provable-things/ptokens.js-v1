@@ -2,6 +2,7 @@ import { Node } from '../src/index'
 import { expect } from 'chai'
 import EventEmitter from 'eventemitter3'
 import { constants } from 'ptokens-utils'
+import { HttpProvider } from 'ptokens-providers'
 
 const { blockchains, pTokens } = constants
 
@@ -9,20 +10,40 @@ jest.setTimeout(300000)
 
 const PING_RETURN_VALUE = 'pBTC pong!'
 const HASH_INCOMING_TX =
-  'e761f59d6b43eb37463538be7587000e9d3617ba090c17ff2bf7718354d43053'
+  '2099603a0ee85fce936430828af84fac3efa4fa9d34289f702c31c3de160a7ef'
 const HASH_BROADCASTED_TX =
-  '28c9945d1f1277c781bbeffa9b379b4336b10368f441c2d0334a6a9d6b8cea6e'
+  '0x4337e0ab72fe3a2329c8cb6fe666a2d11a9d8b4e4e47a293029cbf7487419165'
 
-const BTC_TESTING_ADDRESS = '2N1whkbqCb4G74tor4ovo38kb5TaH73MMHT'
+const BTC_TESTING_ADDRESS = '31wgV6Ld9Bd88KCd3V9ngkX9L22DZmrwfL'
 
-const ENDPOINT = 'https://nuc-bridge-3.ngrok.io'
+const ENDPOINT = 'https://pbtc-node-1a.ngrok.io'
 
 test('Should ping a node with one as default', async () => {
   const expectedResult = PING_RETURN_VALUE
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
+  })
+
+  const res = await node.ping()
+  expect(res).to.be.equal(expectedResult)
+})
+
+test('Should ping a node after having set the headers', async () => {
+  const expectedResult = PING_RETURN_VALUE
+  const node = new Node({
+    pToken: pTokens.pBTC,
+    blockchain: blockchains.Ethereum,
+    provider: new HttpProvider(ENDPOINT)
+  })
+
+  node.provider.setHeaders({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type',
+    'Content-Type': 'application/json',
+    'User-Agent': 'ptokens tests'
   })
 
   const res = await node.ping()
@@ -33,7 +54,7 @@ test('Should get the node info', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const info = await node.getInfo()
@@ -52,7 +73,7 @@ test('Should get one host report', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getReports(type, limit)
@@ -68,7 +89,7 @@ test('Should get one native report', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getReports(type, limit)
@@ -85,7 +106,7 @@ test('Should get one host reports by address', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getReportsByAddress(type, ethAddress, limit)
@@ -102,7 +123,7 @@ test('Should get one native report by address', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getReportsByAddress(type, btcAddress, limit)
@@ -117,12 +138,11 @@ test('Should get host report by nonce', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getReportByNonce(type, nonce)
   expect(res).to.be.an.instanceof(Object)
-  expect(res._id).to.be.equal(`pBTC_ETH ${nonce}`)
 })
 
 test('Should get native report by nonce', async () => {
@@ -131,12 +151,11 @@ test('Should get native report by nonce', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getReportByNonce(type, nonce)
   expect(res).to.be.an.instanceof(Object)
-  expect(res._id).to.be.equal(`pBTC_BTC ${nonce}`)
 })
 
 test('Should get last ETH processed block', async () => {
@@ -144,7 +163,7 @@ test('Should get last ETH processed block', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -156,7 +175,7 @@ test('Should get last BTC processed block', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getLastProcessedBlock(type)
@@ -168,7 +187,7 @@ test('Should get the status of an incoming tx', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getIncomingTransactionStatus(hash)
@@ -180,7 +199,7 @@ test('Should get the status of an brodcasted tx', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   const res = await node.getBroadcastTransactionStatus(hash)
@@ -191,7 +210,7 @@ test('Should monitor an incoming transaction', async () => {
   const node = new Node({
     pToken: pTokens.pBTC,
     blockchain: blockchains.Ethereum,
-    endpoint: ENDPOINT
+    provider: new HttpProvider(ENDPOINT)
   })
 
   let nodeHasReceivedTx = 0

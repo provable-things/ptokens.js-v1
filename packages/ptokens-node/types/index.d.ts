@@ -1,9 +1,10 @@
 import { EventEmitter } from 'events'
+import { HttpProvider } from 'ptokens-providers'
 
 export interface NodeConfigs {
   pToken: string,
   blockchain: string
-  endpoint: string
+  provider: HttpProvider
 }
 
 export class Node {
@@ -13,7 +14,7 @@ export class Node {
 
   blockchain: string
 
-  endpoint: string
+  provider: HttpProvider
 
   ping(): Promise<string>
 

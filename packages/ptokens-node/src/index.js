@@ -1,35 +1,33 @@
-import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
 import { helpers } from 'ptokens-utils'
 
 const NODE_POLLING_TIME = 200
+const REPORT_LIMIT = 100
 
 export class Node {
   /**
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, blockchain, endpoint } = configs
+    const { pToken, blockchain, provider } = configs
 
     if (!helpers.isValidPTokenName(pToken))
       throw new Error('Invalid pToken name')
 
     this.pToken = pToken.toLowerCase()
     this.blockchain = helpers.getBlockchainShortType(blockchain)
-    this.endpoint = endpoint
+    this.provider = provider
   }
 
   ping() {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/ping`
     )
   }
 
   getInfo() {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/get-info`
     )
@@ -40,8 +38,7 @@ export class Node {
    * @param {Integer} _limit
    */
   getReports(_type, _limit = REPORT_LIMIT) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/${_type}-reports/limit/${_limit}`
     )
@@ -53,8 +50,7 @@ export class Node {
    * @param {Integer} _limit
    */
   getReportsByAddress(_type, _address, _limit = REPORT_LIMIT) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/${_type}-address/${_address}/limit/${_limit}`
     )
@@ -65,8 +61,7 @@ export class Node {
    * @param {Integer} _nonce
    */
   getReportByNonce(_type, _nonce) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/report/${_type}/nonce/${_nonce}`
     )
@@ -76,8 +71,7 @@ export class Node {
    * @param {String} _type
    */
   getLastProcessedBlock(_type) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/last-processed-${_type}-block`
     )
@@ -87,8 +81,7 @@ export class Node {
    * @param {String} _hash
    */
   getIncomingTransactionStatus(_hash) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/incoming-tx-hash/${_hash}`
     )
@@ -98,8 +91,7 @@ export class Node {
    * @param {String} _hash
    */
   getBroadcastTransactionStatus(_hash) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       'GET',
       `${this.pToken}-on-${this.blockchain}/broadcast-tx-hash/${_hash}`
     )
@@ -111,8 +103,7 @@ export class Node {
    * @param {Object} [_data = null]
    */
   generic(_type, _path, _data = null) {
-    return makeApiCall(
-      this.endpoint,
+    return this.provider.call(
       _type,
       `${this.pToken}-on-${this.blockchain}/${_path}`,
       _data
