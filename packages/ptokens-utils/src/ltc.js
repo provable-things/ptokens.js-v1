@@ -2,15 +2,17 @@ import axios from 'axios'
 import polling from 'light-async-polling'
 import validate from 'bitcoin-address-validation'
 import * as bitcoin from 'bitcoinjs-lib'
+import { Mainnet } from './helpers/names'
 
 const LTC_PTOKENS_NODE_TESTNET_API =
-  'https://ltcnode.ptokens.io/insight-lite-api'
-const LTC_PTOKENS_NODE_MAINNET_API = 'Not available yet'
+  ' https://ltc-testnet-node-1.ptokens.io/insight-lite-api'
+const LTC_PTOKENS_NODE_MAINNET_API =
+  'https://ltc-node-1.ptokens.io/insight-lite-api'
 
 const _getInsightLiteApi = _network =>
   axios.create({
     baseURL:
-      _network === 'litecoin'
+      _network === Mainnet
         ? LTC_PTOKENS_NODE_MAINNET_API
         : LTC_PTOKENS_NODE_TESTNET_API,
     timeout: 50000,
