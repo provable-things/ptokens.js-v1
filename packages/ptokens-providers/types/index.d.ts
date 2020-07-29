@@ -9,5 +9,5 @@ export class HttpProvider {
 
   setEndpoint(_endpoint: string): any
 
-  setheaders(_headers: object): any
+  setHeaders(_headers: object): any
 }
