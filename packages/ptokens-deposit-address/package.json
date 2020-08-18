@@ -1,0 +1,47 @@
+{
+  "name": "ptokens-deposit-address",
+  "version": "0.4.2",
+  "description": "repo holding the code related to deposit addresses",
+  "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-deposit-address",
+  "main": "dist/ptokens-deposit-address.cjs.js",
+  "module": "dist/ptokens-deposit-address.esm.js",
+  "browser": "dist/ptokens-deposit-address.umd.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest --detectOpenHandles",
+    "lint": "npx eslint ./src --fix && npx eslint ./tests --fix",
+    "dtslint": "dtslint types --onlyTestTsNext"
+  },
+  "keywords": [
+    "ptokens",
+    "javaScript",
+    "ethereum",
+    "bitcoin",
+    "litecoin",
+    "eos",
+    "pnetwork"
+  ],
+  "author": "alle.manfredi@gmail.com @provable-things",
+  "license": "LGPL-3.0",
+  "dependencies": {
+    "@babel/runtime": "^7.3.1",
+    "@types/node": "^12.6.1",
+    "bitcoinjs-lib": "^5.1.6",
+    "chai": "^4.2.0",
+    "eosjs": "^20.0.3",
+    "ptokens-node": "^0.4.2",
+    "ptokens-providers": "^0.4.2",
+    "ptokens-utils": "^0.4.2",
+    "web3": "^1.2.2"
+  },
+  "devDependencies": {
+    "dtslint": "0.4.2",
+    "jest": "^24.8.0"
+  },
+  "files": [
+    "dist",
+    "types/index.d.ts"
+  ]
+}
