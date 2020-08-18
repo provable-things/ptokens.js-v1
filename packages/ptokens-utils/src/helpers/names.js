@@ -7,7 +7,7 @@ export const Testnet = 'testnet'
 export const Mainnet = 'mainnet'
 
 export const BitcoinMainnet = 'mainnet'
-export const BitcoinTestnet = 'testen'
+export const BitcoinTestnet = 'testnet'
 export const EthereumMainnet = 'mainnet'
 export const EthereumRopsten = 'testnet_ropsten'
 export const EosioMainnet = 'mainnet'
