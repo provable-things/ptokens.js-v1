@@ -1,6 +1,6 @@
 # ptokens-deposit-address
 
-Module for generate a deposit address
+Module to generate a deposit address
 
 &nbsp;
 
