@@ -1,5 +1,6 @@
 import Web3PromiEvent from 'web3-core-promievent'
 import Web3Utils from 'web3-utils'
+import BigNumber from 'bignumber.js'
 import * as bitcoin from 'bitcoinjs-lib'
 import * as utils from 'ptokens-utils'
 
@@ -169,7 +170,7 @@ export class DepositAddress {
 
     const start = async () => {
       if (!this.value) promiEvent.reject('Please generate a deposit address')
-      
+
       const utxoToMonitor = await utils[
         utils.helpers.getBlockchainShortType(this.nativeBlockchain)
       ].monitorUtxoByAddress(
@@ -204,7 +205,10 @@ export class DepositAddress {
         to: this.hostAddress,
         tx: broadcastedHostTxReport.broadcast_tx_hash,
         amount: utils.eth
-          .offChainFormat(broadcastedHostTxReport.host_tx_amount, 8)
+          .offChainFormat(
+            new BigNumber(broadcastedHostTxReport.host_tx_amount),
+            8
+          )
           .toFixed()
       })
     }
