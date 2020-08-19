@@ -168,7 +168,7 @@ export class DepositAddress {
     }
 
     const start = async () => {
-      if (!this.value) promiEvent.reject('Please provide a deposit address')
+      if (!this.value) promiEvent.reject('Please generate a deposit address')
 
       const utxoToMonitor = await utils[
         utils.helpers.getBlockchainShortType(this.hostBlockchain)

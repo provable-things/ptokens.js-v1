@@ -5,20 +5,40 @@ import { Node } from 'ptokens-node'
 import { HttpProvider } from 'ptokens-providers'
 import { constants } from 'ptokens-utils'
 
-const PBTC_ON_ETH_ENDPOINT = 'https://nuc-bridge-3.ngrok.io/'
-
-test('Should generate a pBTC deposit address on Ethereum Ropsten', async () => {
+test('Should generate correctly a pBTC deposit address on Ethereum Mainnet', async () => {
   const node = new Node({
     pToken: constants.pTokens.pBTC,
     blockchain: constants.blockchains.Ethereum,
-    provider: new HttpProvider(PBTC_ON_ETH_ENDPOINT)
+    provider: new HttpProvider('https://pbtc-node-1a.ngrok.io')
   })
 
   const depositAddress = new DepositAddress({
     nativeBlockchain: constants.blockchains.Bitcoin,
-    nativeNetwork: constants.networks.Testnet,
+    nativeNetwork: constants.networks.BitcoinMainnet,
     hostBlockchain: constants.blockchains.Ethereum,
-    hostNetwork: constants.networks.Testnet,
+    hostNetwork: constants.networks.EthereumMainnet,
+    hostApi: new Web3(
+      'https://mainnet.infura.io/v3/4762c881ac0c4938be76386339358ed6'
+    ),
+    node
+  })
+
+  await depositAddress.generate('0xdf3B180694aB22C577f7114D822D28b92cadFd75')
+  expect(depositAddress.verify()).to.be.eq(true)
+})
+
+test('Should generate correctly a pBTC deposit address on Ethereum Ropsten', async () => {
+  const node = new Node({
+    pToken: constants.pTokens.pBTC,
+    blockchain: constants.blockchains.Ethereum,
+    provider: new HttpProvider('https://nuc-bridge-3.ngrok.io/')
+  })
+
+  const depositAddress = new DepositAddress({
+    nativeBlockchain: constants.blockchains.Bitcoin,
+    nativeNetwork: constants.networks.BitcoinTestnet,
+    hostBlockchain: constants.blockchains.Ethereum,
+    hostNetwork: constants.networks.EthereumRopsten,
     hostApi: new Web3(
       'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
     ),

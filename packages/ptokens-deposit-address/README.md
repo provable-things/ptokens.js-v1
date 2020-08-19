@@ -34,5 +34,7 @@ const depositAddress = new DepositAddress({
 })
 
 await depositAddress.generate('host address')
-depositAddress.verify()
+if (!depositAddress.verify()) {
+  console.error('Node deposit address does not match expected address')
+}
 ```
