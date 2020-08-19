@@ -203,11 +203,9 @@ export class DepositAddress {
       promiEvent.resolve({
         to: this.hostAddress,
         tx: broadcastedHostTxReport.broadcast_tx_hash,
-        amount: utils.eth.correctFormat(
-          broadcastedHostTxReport.host_tx_amount,
-          8,
-          '/'
-        )
+        amount: utils.eth
+          .offChainFormat(broadcastedHostTxReport.host_tx_amount, 8)
+          .toFixed()
       })
     }
 
