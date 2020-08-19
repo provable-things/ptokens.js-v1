@@ -24,7 +24,8 @@ export const blockchainTypes = {
   eos: Eosio,
   bitcoin: Bitcoin,
   btc: Bitcoin,
-  ltc: Litecoin
+  ltc: Litecoin,
+  litecoin: Litecoin
 }
 
 export const blockchainShortTypes = {
