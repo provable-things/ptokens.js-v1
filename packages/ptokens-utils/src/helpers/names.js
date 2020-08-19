@@ -13,7 +13,7 @@ export const EthereumRopsten = 'testnet_ropsten'
 export const EosioMainnet = 'mainnet'
 export const EosioJungle3 = 'testnet_jungle3'
 export const LitecoinMainnet = 'mainnet'
-export const LitecoinTestnet = 'testen'
+export const LitecoinTestnet = 'testnet'
 
 export const pBTC = 'pbtc'
 export const pLTC = 'pltc'
