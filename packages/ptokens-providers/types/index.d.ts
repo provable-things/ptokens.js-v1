@@ -5,6 +5,10 @@ export class HttpProvider {
 
   api: AxiosInstance
 
+  endpoint: string
+
+  headers: any
+
   call(_callType: string, _apiPath: string, _params?: any[], _timeout?: number): Promise<any>
 
   setEndpoint(_endpoint: string): any
