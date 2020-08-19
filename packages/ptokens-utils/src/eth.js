@@ -1,4 +1,5 @@
 import polling from 'light-async-polling'
+import BigNumber from 'bignumber.js'
 
 const HEX_PREFIX = '0x'
 const zeroEther = '0x00'
@@ -17,14 +18,21 @@ const removeHexPrefix = _string =>
 
 /**
  *
- * @param {Number} _amount
- * @param {Number} _decimals
- * @param {String} _operation
+ * @param {BigNumber} _amount
+ * @param {integer} _decimals
  */
-const correctFormat = (_amount, _decimals, _operation) =>
-  _operation === '/'
-    ? _amount / Math.pow(10, _decimals)
-    : parseInt(_amount * Math.pow(10, _decimals))
+
+const onChainFormat = (_amount, _decimals) =>
+  _amount.multipliedBy(new BigNumber(Math.pow(10, _decimals)))
+
+/**
+ *
+ * @param {BigNumber} _amount
+ * @param {integer} _decimals
+ */
+
+const offChainFormat = (_amount, _decimals) =>
+  _amount.dividedBy(new BigNumber(Math.pow(10, _decimals)))
 
 /**
  * @param {Object} _web3
@@ -185,7 +193,8 @@ const waitForTransactionConfirmation = async (_web3, _tx, _pollingTime) => {
 export {
   addHexPrefix,
   removeHexPrefix,
-  correctFormat,
+  onChainFormat,
+  offChainFormat,
   getAccount,
   getContract,
   getGasLimit,

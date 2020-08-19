@@ -1,5 +1,5 @@
 import {
-  correctFormat,
+  onChainFormat,
   sendSignedMethodTx,
   makeContractSend,
   zeroEther
@@ -26,7 +26,7 @@ const redeemFromEthereum = (
     }
 
     const params = [
-      correctFormat(_amount, _decimals, '*').toString(),
+      onChainFormat(new BigNumber(_amount), _decimals).toFixed(),
       _nativeAddress
     ]
 

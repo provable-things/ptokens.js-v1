@@ -2,14 +2,15 @@ import utils from '../src'
 import { expect } from 'chai'
 import Web3 from 'web3'
 import abi from './utils/exampleContractABI.json'
+import BigNumber from 'bignumber.js'
 
 const TEST_CONTRACT_ADDRESS = '0x15FA11dFB23eae46Fda69fB6A148f41677B4a090'
-const TEST_ETH_PRIVATE_KEY =
-  '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742'
-const TEST_ETH_PROVIDER =
-  'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6'
-const ETH_TESTING_TX =
-  '0xcbda0526ef6f74583e0af541e3e8b25542130691bddea2fdf5956c8e1ea783e5'
+// prettier-ignore
+const TEST_ETH_PRIVATE_KEY = '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742'
+// prettier-ignore
+const TEST_ETH_PROVIDER = 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6'
+// prettier-ignore
+const ETH_TESTING_TX = '0xcbda0526ef6f74583e0af541e3e8b25542130691bddea2fdf5956c8e1ea783e5'
 
 jest.setTimeout(30000)
 
@@ -35,18 +36,22 @@ test('Should remove the 0x prefix', () => {
 })
 
 test('Should return the correct Ethereum offchain format', () => {
-  const onChainAmount = 10000
+  const onChainAmount = new BigNumber(10000)
   const decimals = 4
-  const expectedOffChainAmount = 1
-  const offChainAmount = utils.eth.correctFormat(onChainAmount, decimals, '/')
+  const expectedOffChainAmount = '1'
+  const offChainAmount = utils.eth
+    .offChainFormat(onChainAmount, decimals, '/')
+    .toFixed()
   expect(offChainAmount).to.be.equal(expectedOffChainAmount)
 })
 
 test('Should return the correct Ethereum onchain format', () => {
-  const offChainAmount = 1
+  const offChainAmount = new BigNumber(1)
   const decimals = 4
-  const expectedOnChainAmount = 10000
-  const onChainAmount = utils.eth.correctFormat(offChainAmount, decimals, '*')
+  const expectedOnChainAmount = '10000'
+  const onChainAmount = utils.eth
+    .onChainFormat(offChainAmount, decimals, '*')
+    .toFixed()
   expect(onChainAmount).to.be.equal(expectedOnChainAmount)
 })
 

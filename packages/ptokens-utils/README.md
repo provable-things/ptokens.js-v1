@@ -28,6 +28,6 @@ import * as utils from 'ptokens-utils'
 { eth:
    [Object: null prototype] {
      addHexPrefix: [Function: addHexPrefix],
-     correctFormat: [Function: correctFormat],
+     removeHexPrefix: [Function: removeHexPrefix],
      ....
 ```

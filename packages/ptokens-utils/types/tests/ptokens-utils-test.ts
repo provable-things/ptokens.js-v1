@@ -11,6 +11,7 @@ import { EventEmitter } from 'events'
 import Web3 from 'web3'
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+import BigNumber from 'bignumber.js'
 
 // btc
 const BTC_RAW_TX = "020000000001011333183ddf384da83ed49296136c70d206ad2b19331bf25d390e69b222165e370000000017160014b93f973eb2bf0b614bddc0f47286788c98c535b4feffffff0200e1f5050000000017a914a860f76561c85551594c18eecceffaee8c4822d787f0c1a4350000000017a914d8b6fcc85a383261df05423ddf068a8987bf028787024730440220434caf5bb442cb6a251e8bce0ec493f9a1a9c4423bcfc029e542b0e8a89d1b3f022011090d4e98f79c62b188245a4aa4eb77e912bfd57e0a9b9a1c5e65f2b39f3ab401210223bec70d670d29a30d9bcee197910e37cf2a10f0dc3c5ac44d865aec0d7052fb8c000000"
@@ -46,8 +47,8 @@ converters.encodeUint64le(10)
 // eth
 const ETH_TESTING_CONTRACT_ADDRESS = '0x15FA11dFB23eae46Fda69fB6A148f41677B4a090'
 const ETH_TESTING_ADDRESS = '0x1f0b6A3AC984B4c990d8Ce867103E9C384629747'
-const ETH_TESTING_TX =
-  '0xcbda0526ef6f74583e0af541e3e8b25542130691bddea2fdf5956c8e1ea783e5'
+// prettier-ignore
+const ETH_TESTING_TX ='0xcbda0526ef6f74583e0af541e3e8b25542130691bddea2fdf5956c8e1ea783e5'
 
 // $ExpectType string
 eth.addHexPrefix('hello')
@@ -55,8 +56,11 @@ eth.addHexPrefix('hello')
 // $ExpectType string
 eth.removeHexPrefix('0xhello')
 
-// $ExpectType number
-eth.correctFormat(10000, 3, '/')
+// $ExpectType BigNumber
+eth.onChainFormat(new BigNumber(10000), 3)
+
+// $ExpectType BigNumber
+eth.offChainFormat(new BigNumber(10000), 3)
 
 // $ExpectType string
 eth.getAccount(new Web3(), true)

@@ -116,7 +116,8 @@ export interface ContractSendParam {
 export interface EthUtils {
   addHexPrefix(_string: string): string
   removeHexPrefix(_string: string): string
-  correctFormat(_amount: number, _decimals: number, _operation: string): number
+  onChainFormat(_amount: BigNumber, _decimals: number): BigNumber,
+  offChainFormat(_amount: BigNumber, _decimals: number): BigNumber
   getAccount(_web3: Web3, _isWeb3Injected: boolean): string
   getContract(_web3: Web3, _abi: any, _contractAddress: string, _account: string): object
   getGasLimit(_web3: Web3): number
