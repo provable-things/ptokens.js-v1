@@ -9,7 +9,9 @@ import fetch from 'node-fetch'
 
 const PBTC_ON_ETH_MAINNET = 'https://pbtc-node-1a.ngrok.io'
 const PBTC_ON_EOS_MAINNET = 'https://pbtconeos-node-1a.ngrok.io'
+const PLTC_ON_ETH_MAINNET = 'https://pltconeth-node-1a.ngrok.io'
 const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io/'
+const PLTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-2.ngrok.io'
 
 // prettier-ignore
 const INFURA_MAINNET = 'https://mainnet.infura.io/v3/4762c881ac0c4938be76386339358ed6'
@@ -143,5 +145,89 @@ test('Should NOT generate correctly a pBTC deposit address on Eos Mainnet', asyn
   })
 
   await depositAddress.generate(EOS_TESTING_ACCOUNT)
+  expect(depositAddress.verify()).to.be.eq(false)
+})
+
+test('Should generate correctly a pLTC deposit address on Ethereum Mainnet', async () => {
+  const node = new Node({
+    pToken: constants.pTokens.pLTC,
+    blockchain: constants.blockchains.Ethereum,
+    provider: new HttpProvider(PLTC_ON_ETH_MAINNET)
+  })
+
+  const depositAddress = new DepositAddress({
+    nativeBlockchain: constants.blockchains.Litecoin,
+    nativeNetwork: constants.networks.LitecoinMainnet,
+    hostBlockchain: constants.blockchains.Ethereum,
+    hostNetwork: constants.networks.EthereumMainnet,
+    hostApi: new Web3(INFURA_MAINNET),
+    node
+  })
+
+  await depositAddress.generate(ETH_TESTING_ADDRESS)
+  expect(depositAddress.verify()).to.be.eq(true)
+})
+
+test('Should NOT generate correctly a pLTC deposit address on Ethereum Mainnet', async () => {
+  const wrongNativeNetwork = constants.networks.LitecoinTestnet
+
+  const node = new Node({
+    pToken: constants.pTokens.pLTC,
+    blockchain: constants.blockchains.Ethereum,
+    provider: new HttpProvider(PLTC_ON_ETH_MAINNET)
+  })
+
+  const depositAddress = new DepositAddress({
+    nativeBlockchain: constants.blockchains.Litecoin,
+    nativeNetwork: wrongNativeNetwork,
+    hostBlockchain: constants.blockchains.Ethereum,
+    hostNetwork: constants.networks.EthereumMainnet,
+    hostApi: new Web3(INFURA_MAINNET),
+    node
+  })
+
+  await depositAddress.generate(ETH_TESTING_ADDRESS)
+  expect(depositAddress.verify()).to.be.eq(false)
+})
+
+test('Should generate correctly a pLTC deposit address on Ethereum Ropsten', async () => {
+  const node = new Node({
+    pToken: constants.pTokens.pLTC,
+    blockchain: constants.blockchains.Ethereum,
+    provider: new HttpProvider(PLTC_ON_ETH_ROPSTEN)
+  })
+
+  const depositAddress = new DepositAddress({
+    nativeBlockchain: constants.blockchains.Litecoin,
+    nativeNetwork: constants.networks.LitecoinTestnet,
+    hostBlockchain: constants.blockchains.Ethereum,
+    hostNetwork: constants.networks.EthereumRopsten,
+    hostApi: new Web3(INFURA_ROPSTEN),
+    node
+  })
+
+  await depositAddress.generate(ETH_TESTING_ADDRESS)
+  expect(depositAddress.verify()).to.be.eq(true)
+})
+
+test('Should NOT generate correctly a pLTC deposit address on Ethereum Ropsten', async () => {
+  const wrongNativeNetwork = constants.networks.LitecoinMainnet
+
+  const node = new Node({
+    pToken: constants.pTokens.pLTC,
+    blockchain: constants.blockchains.Ethereum,
+    provider: new HttpProvider(PLTC_ON_ETH_ROPSTEN)
+  })
+
+  const depositAddress = new DepositAddress({
+    nativeBlockchain: constants.blockchains.Litecoin,
+    nativeNetwork: wrongNativeNetwork,
+    hostBlockchain: constants.blockchains.Ethereum,
+    hostNetwork: constants.networks.EthereumRopsten,
+    hostApi: new Web3(INFURA_ROPSTEN),
+    node
+  })
+
+  await depositAddress.generate(ETH_TESTING_ADDRESS)
   expect(depositAddress.verify()).to.be.eq(false)
 })
