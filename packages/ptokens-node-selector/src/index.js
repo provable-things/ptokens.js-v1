@@ -65,17 +65,22 @@ export class NodeSelector {
         native_network === this.nativeNetwork
         ? true
         : false
-    } catch (err) {
-      return false
+    } catch (_err) {
+      throw new Error(`Error during checking node connection: ${_err.message}`)
     }
   }
 
   async getApi() {
-    if (!this.selectedNode) {
-      const node = await this.select()
-      if (!node) throw new Error('No Nodes Available')
+    try {
+      if (!this.selectedNode) {
+        const node = await this.select()
+        if (!node) throw new Error('No Nodes Available')
+      }
+
+      return this.selectedNode.api
+    } catch (_err) {
+      throw new Error(`Error during getting node api: ${_err.message}`)
     }
-    return this.selectedNode.api
   }
 
   async select() {
