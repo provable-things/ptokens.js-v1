@@ -5,6 +5,7 @@ import {
   zeroEther
 } from '../eth'
 import pbtcOnEthAbi from '../abi/pTokenOnETHContractAbi.json'
+import BigNumber from 'bignumber.js'
 
 const redeemFromEthereum = (
   _web3,
