@@ -84,6 +84,7 @@ const isValidAddress = (_network, _address) => {
 const monitorUtxoByAddress = async (
   _network,
   _address,
+  _confirmations = 1,
   _eventEmitter,
   _pollingTime,
   _broadcastEventName,
@@ -106,12 +107,16 @@ const monitorUtxoByAddress = async (
         if (!isBroadcasted) {
           _eventEmitter.emit(_broadcastEventName, utxos[0])
           _eventEmitter.emit('onLtcTxBroadcasted', utxos[0])
+          isBroadcasted = true
         }
 
-        _eventEmitter.emit(_confirmationEventName, utxos[0])
-        _eventEmitter.emit('onLtcTxConfirmed', utxos[0])
-        utxo = utxos[0].txid
-        return true
+        if (utxos[0].confirmations >= _confirmations) {
+          _eventEmitter.emit(_confirmationEventName, utxos[0])
+          _eventEmitter.emit('onLtcTxConfirmed', utxos[0])
+          utxo = utxos[0].txid
+          return true
+        }
+        return false
       } else if (!isBroadcasted) {
         isBroadcasted = true
         _eventEmitter.emit(_broadcastEventName, utxos[0])
