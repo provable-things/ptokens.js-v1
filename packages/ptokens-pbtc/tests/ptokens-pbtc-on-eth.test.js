@@ -3,29 +3,31 @@ import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 import { constants } from 'ptokens-utils'
 
-const pbtcOnEthConfigs = {
-  blockchain: constants.blockchains.Ethereum,
-  network: constants.networks.Mainnet,
-  ethPrivateKey:
-    '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742',
-  ethProvider: 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
-}
+// prettier-ignore
+const INFURA_ROPSTEN = 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
 
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
-
-const BTC_TESTING_PRIVATE_KEY =
-  '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+// prettier-ignore
+const BTC_TESTING_PRIVATE_KEY = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+// prettier-ignore
+const ETH_TESTING_PRIVATE_KEY = '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742'
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
+
+const pbtcOnEthConfigs = {
+  blockchain: constants.blockchains.Ethereum,
+  network: constants.networks.Testnet,
+  ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
+  ethProvider: INFURA_ROPSTEN
+}
 
 jest.setTimeout(3000000)
 
-// pbtc on eth
 test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
   const expectedHostNetwork = 'mainnet'
 
   const pbtc = new pBTC({
     blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Testnet
+    network: constants.networks.Mainnet
   })
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
@@ -49,7 +51,7 @@ test('Should get a BTC deposit address on Ethereum Ropsten', async () => {
 test('Should not get a BTC deposit address because of invalid Eth address', async () => {
   const pbtc = new pBTC({
     blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Mainnet
+    network: constants.networks.Testnet
   })
 
   const invalidEthAddress = 'Invalid Eth Address'
@@ -152,7 +154,7 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
         .once('nodeReceivedTx', () => {
           nodeHasReceivedTx += 1
         })
-        .once('onNodeBroadcastedTx', () => {
+        .once('onNodeBroadcastedTx', e => {
           nodeHasBroadcastedTx += 1
         })
         .once('nodeBroadcastedTx', () => {

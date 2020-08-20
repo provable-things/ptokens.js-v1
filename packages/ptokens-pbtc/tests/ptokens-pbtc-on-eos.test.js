@@ -14,8 +14,8 @@ const pbtcOnEosConfigs = {
 
 const EOS_TESTING_ACCOUNT_NAME = 'all3manfr4di'
 
-const BTC_TESTING_PRIVATE_KEY =
-  '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+// prettier-ignore
+const BTC_TESTING_PRIVATE_KEY = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
 const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
 jest.setTimeout(3000000)
