@@ -84,11 +84,11 @@ const isValidAddress = (_network, _address) => {
 const monitorUtxoByAddress = async (
   _network,
   _address,
-  _confirmations = 1,
   _eventEmitter,
   _pollingTime,
   _broadcastEventName,
-  _confirmationEventName
+  _confirmationEventName,
+  _confirmations = 1
 ) => {
   let isBroadcasted = false
   let utxo = null
