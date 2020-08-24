@@ -7,6 +7,11 @@ import * as utils from 'ptokens-utils'
 const HOST_NODE_POLLING_TIME_INTERVAL = 3000
 const POLLING_TIME = 3000
 
+const confirmations = {
+  btc: 1,
+  ltc: 4
+}
+
 // NOTE: will be removed in versions > 1.0.0
 const hostBlockchainEvents = {
   ethereum: 'onEthTxConfirmed',
@@ -171,15 +176,23 @@ export class DepositAddress {
     const start = async () => {
       if (!this.value) promiEvent.reject('Please generate a deposit address')
 
+      const shortNativeBlockchain = utils.helpers.getBlockchainShortType(
+        this.nativeBlockchain
+      )
+      const shortHostBlockchain = utils.helpers.getBlockchainShortType(
+        this.hostBlockchain
+      )
+
       const utxoToMonitor = await utils[
-        utils.helpers.getBlockchainShortType(this.nativeBlockchain)
+        shortNativeBlockchain
       ].monitorUtxoByAddress(
         this.nativeNetwork,
         this.value,
         promiEvent.eventEmitter,
         POLLING_TIME,
         'nativeTxBroadcasted',
-        'nativeTxConfirmed'
+        'nativeTxConfirmed',
+        confirmations[shortNativeBlockchain]
       )
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(
@@ -188,7 +201,7 @@ export class DepositAddress {
       )
 
       const hostTxReceipt = await utils[
-        utils.helpers.getBlockchainShortType(this.hostBlockchain)
+        shortHostBlockchain
       ].waitForTransactionConfirmation(
         this.hostApi,
         broadcastedHostTxReport.broadcast_tx_hash,
