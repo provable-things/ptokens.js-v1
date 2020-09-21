@@ -3,8 +3,8 @@ import app from '../../package.json'
 
 const NODE_CONNECTION_TIMEOUT = 5000
 const DEFAULT_TIMEOUT = 10000
-const BOOT_TESTNET_ENDPOINT = 'https://testnet_bootnode-eu-1.p.network/'
-const BOOT_MAINNET_ENDPOINT = 'https://mainnet_bootnode-eu-1.p.network'
+const BOOT_TESTNET_ENDPOINT = 'https://testnet--bootnode-eu-1.p.network'
+const BOOT_MAINNET_ENDPOINT = 'https://mainnet--bootnode-eu-1.p.network'
 const DEFAULT_USER_AGENT = `ptokens.js/${app.version}`
 
 /**
