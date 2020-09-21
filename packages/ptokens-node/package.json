@@ -1,6 +1,6 @@
 {
   "name": "ptokens-node",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "repo holding the code for interacting with a Node",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-node",
   "main": "dist/ptokens-node.cjs.js",
