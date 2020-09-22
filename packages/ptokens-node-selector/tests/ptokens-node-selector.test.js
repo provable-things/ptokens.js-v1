@@ -108,8 +108,6 @@ test('Should select a pBTC node on Ethereum Mainnet', async () => {
   const node = await nodeSelector.select()
   const info = await node.getInfo()
 
-  console.log(info)
-
   expect(info.host_network).to.be.equal(constants.networks.EthereumMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Ethereum)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
@@ -210,7 +208,6 @@ test('Should not select a different node when a valid one is set as default and 
     defaultEndoint: reachableNode
   })
   const selectedNode = await nodeSelector.select()
-  console.log(selectedNode)
   expect(selectedNode.provider.endpoint).to.be.equal(reachableNode)
 })
 
