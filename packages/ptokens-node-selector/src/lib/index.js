@@ -1,7 +1,7 @@
 import { constants } from 'ptokens-utils'
 
-const BOOT_TESTNET_ENDPOINT = 'https://testnet_bootnode-eu-1.p.network/'
-const BOOT_MAINNET_ENDPOINT = 'https://mainnet_bootnode-eu-1.p.network'
+const BOOT_TESTNET_ENDPOINT = 'https://testnet--bootnode-eu-1.p.network'
+const BOOT_MAINNET_ENDPOINT = 'https://mainnet--bootnode-eu-1.p.network'
 
 /**
  * @param {String} _network
