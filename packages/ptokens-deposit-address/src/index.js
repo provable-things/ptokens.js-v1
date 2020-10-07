@@ -133,6 +133,7 @@ export class DepositAddress {
 
     const hostAddressBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.hostAddress),
+      // NOTE: eos account name are utf-8 encoded
       this.hostBlockchain === constants.blockchains.Ethereum ? 'hex' : 'utf-8'
     )
     const nonceBuf = utils.converters.encodeUint64le(this.nonce)
