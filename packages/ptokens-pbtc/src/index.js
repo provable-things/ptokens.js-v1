@@ -1,21 +1,12 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import {
-  constants,
-  eth,
-  eos,
-  btc,
-  helpers,
-  redeemFrom,
-  abi
-} from 'ptokens-utils'
+import { constants, eth, eos, btc, helpers, redeemFrom } from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
 
 const MINIMUM_BTC_REDEEMABLE = 0.00005
 const BTC_ESPLORA_POLLING_TIME = 3000
-const BTC_DECIMALS = 8
 
 export class pBTC extends NodeSelector {
   /**
@@ -147,7 +138,8 @@ export class pBTC extends NodeSelector {
       try {
         if (!this.selectedNode) await this.select()
 
-        const decimals = await this._getDecimals()
+        // prettier-ignore
+        const decimals = this.hostBlockchain === constants.blockchains.Ethereum ? 18 : 8
         const contractAddress = await this._getContractAddress()
 
         let hostTxReceiptId = null
@@ -228,28 +220,6 @@ export class pBTC extends NodeSelector {
       return this.contractAddress
     } catch (_err) {
       throw new Error(`Error during getting contract address: ${_err.message}`)
-    }
-  }
-
-  async _getDecimals() {
-    try {
-      if (!this.decimals) {
-        if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const contractAddress = !this.contractAddress
-            ? await this._getContractAddress()
-            : this._contractAddress
-
-          this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
-            abi: abi.pTokenOnEth,
-            contractAddress
-          })
-        }
-        if (this.hostBlockchain === constants.blockchains.Eosio)
-          this.decimals = BTC_DECIMALS
-      }
-      return this.decimals
-    } catch (_err) {
-      throw new Error(`Error during getting decimals: ${_err.message}`)
     }
   }
 }
