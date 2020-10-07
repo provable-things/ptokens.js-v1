@@ -142,10 +142,11 @@ export class pBTC extends NodeSelector {
         const decimals = this.hostBlockchain === constants.blockchains.Ethereum ? 18 : 8
         const contractAddress = await this._getContractAddress()
 
+        const { redeemFromEthereum, redeemFromEosio } = redeemFrom
         let hostTxReceiptId = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFrom.redeemFromEthereum(
+          const ethTxReceipt = await redeemFromEthereum(
             this.hostApi,
             _amount,
             decimals,
@@ -164,7 +165,7 @@ export class pBTC extends NodeSelector {
         }
 
         if (this.hostBlockchain === constants.blockchains.Eosio) {
-          const eosTxReceipt = await redeemFrom.redeemFromEosio(
+          const eosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
             _btcAddress,
