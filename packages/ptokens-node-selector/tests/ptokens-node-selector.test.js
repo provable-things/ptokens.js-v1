@@ -10,6 +10,7 @@ const PBTC_ON_EOS_MAINNET = 'https://pbtconeos-node-1a.ngrok.io'
 const PBTC_ON_ETH_MAINNET = 'https://pbtc-node-1a.ngrok.io'
 const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io'
 const PLTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-2.ngrok.io'
+const PLTC_ON_EOS_MAINNET = 'https://pltconeos-node-1a.ngrok.io/'
 const UNREACHABLE_NODE = 'https://unreachable-node.io'
 
 test('Should select a pBTC node on EOS Jungle3 Testnet', async () => {
@@ -64,6 +65,28 @@ test('Should select a pBTC node on EOS Mainnet with a default provider', async (
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
   expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
+})
+
+test('Should select a pLTC node on EOS Mainnet with a default provider', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pLTC,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
+  })
+
+  const node = await nodeSelector.setSelectedNode(
+    new Node({
+      pToken: constants.pTokens.pLTC,
+      blockchain: constants.blockchains.Eosio,
+      provider: new HttpProvider(PLTC_ON_EOS_MAINNET)
+    })
+  )
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
+  expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
+  expect(info.native_blockchain).to.be.equal(constants.blockchains.Litecoin)
+  expect(info.native_network).to.be.equal(constants.networks.LitecoinMainnet)
 })
 
 test('Should select a pBTC node on EOS Jungle3 Testnet with detailed initialization', async () => {
