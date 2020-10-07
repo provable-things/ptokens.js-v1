@@ -45,7 +45,7 @@ export class pLTC extends NodeSelector {
 
   getDepositAddress(_hostAddress: string): Promise<LtcDepositAddress>
 
-  redeem(_amount: number, _btcAddress: string, _options: RedeemOptions): PromiEvent<TransactionReceipt | Report | LitecoinTransactionReceipt | RedeemResult>
+  redeem(_amount: number, _ltcAddress: string, _options: RedeemOptions): PromiEvent<TransactionReceipt | Report | LitecoinTransactionReceipt | RedeemResult>
 }
 
 export interface RedeemResult {

@@ -1,7 +1,15 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import { constants, eth, ltc, helpers, abi, redeemFrom } from 'ptokens-utils'
+import {
+  constants,
+  eth,
+  eos,
+  ltc,
+  helpers,
+  abi,
+  redeemFrom
+} from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
 import * as bitcoin from 'bitcoinjs-lib'
@@ -30,9 +38,14 @@ export class pLTC extends NodeSelector {
       defaultEndpoint: _configs.defaultEndpoint
     })
 
-    const { ethPrivateKey, ethProvider } = _configs
+    const {
+      ethPrivateKey,
+      ethProvider,
+      eosPrivateKey,
+      eosRpc,
+      eosSignatureProvider
+    } = _configs
 
-    // NOTE: parse eth params
     if (ethProvider) this.hostApi = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(
@@ -43,6 +56,15 @@ export class pLTC extends NodeSelector {
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
     } else {
       this.hostPrivateKey = null
+    }
+
+    if (eosSignatureProvider) {
+      this.hostApi = eos.getApi(null, eosRpc, eosSignatureProvider)
+    } else if (eosPrivateKey && eosRpc) {
+      this.hostApi = eos.getApi(eosPrivateKey, eosRpc, null)
+      this.hostPrivateKey = eosPrivateKey
+    } else if (!eosSignatureProvider && !eosPrivateKey && eosRpc) {
+      this.hostApi = eos.getApi(null, eosRpc, null)
     }
 
     this.contractAddress = null
@@ -122,13 +144,15 @@ export class pLTC extends NodeSelector {
       try {
         if (!this.selectedNode) await this.select()
 
-        const decimals = await this._getDecimals()
+        // prettier-ignore
+        const decimals = this.hostBlockchain === constants.blockchains.Ethereum ? 18 : 8
         const contractAddress = await this._getContractAddress()
 
+        const { redeemFromEthereum, redeemFromEosio } = redeemFrom
         let hostTxReceiptId = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFrom.redeemFromEthereum(
+          const ethTxReceipt = await redeemFromEthereum(
             this.hostApi,
             _amount,
             decimals,
@@ -145,14 +169,31 @@ export class pLTC extends NodeSelector {
           hostTxReceiptId = ethTxReceipt.transactionHash
         }
 
-        const broadcastedBtcTxReport = await this.selectedNode.monitorIncomingTransaction(
+        if (this.hostBlockchain === constants.blockchains.Eosio) {
+          const eosTxReceipt = await redeemFromEosio(
+            this.hostApi,
+            _amount,
+            _btcAddress,
+            decimals,
+            contractAddress,
+            constants.pTokens.pLTC
+          )
+
+          // NOTE: 'onEosTxConfirmed' will be removed in version > 1.0.0
+          promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+          promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
+
+          hostTxReceiptId = eosTxReceipt.transaction_id
+        }
+
+        const broadcastedLtcTxReport = await this.selectedNode.monitorIncomingTransaction(
           hostTxReceiptId,
           promiEvent.eventEmitter
         )
 
         const broadcastedBtcTx = await ltc.waitForTransactionConfirmation(
           this.nativeNetwork,
-          broadcastedBtcTxReport.broadcast_tx_hash,
+          broadcastedLtcTxReport.broadcast_tx_hash,
           LTC_INSIGHT_POLLING_TIME
         )
         promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedBtcTx)
@@ -161,7 +202,7 @@ export class pLTC extends NodeSelector {
         promiEvent.resolve({
           amount: _amount.toFixed(decimals),
           to: _ltcAddress,
-          tx: broadcastedBtcTxReport.broadcast_tx_hash
+          tx: broadcastedLtcTxReport.broadcast_tx_hash
         })
       } catch (err) {
         promiEvent.reject(err)
@@ -184,26 +225,6 @@ export class pLTC extends NodeSelector {
       return this.contractAddress
     } catch (_err) {
       throw new Error(`Error during getting contract address: ${_err.message}`)
-    }
-  }
-
-  async _getDecimals() {
-    try {
-      if (!this.decimals) {
-        if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const contractAddress = !this.contractAddress
-            ? await this._getContractAddress()
-            : this._contractAddress
-
-          this.decimals = await eth.makeContractCall(this.hostApi, 'decimals', {
-            abi: abi.pTokenOnEth,
-            contractAddress
-          })
-        }
-      }
-      return this.decimals
-    } catch (_err) {
-      throw new Error(`Error during getting decimals: ${_err.message}`)
     }
   }
 }
