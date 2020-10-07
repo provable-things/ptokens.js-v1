@@ -1,5 +1,5 @@
 import { getAccountName, getAmountInEosFormat } from '../eos'
-import pbtcOnEosAbi from '../abi/pTokenOnEOSContractAbi.json'
+import pTokenOnEosAbi from '../abi/pTokenOnEOSContractAbi.json'
 
 const EOS_BLOCKS_BEHIND = 3
 const EOS_EXPIRE_SECONDS = 60
@@ -13,9 +13,7 @@ const redeemFromEosio = async (
   _pToken
 ) => {
   const eosPublicKeys = await _api.signatureProvider.getAvailableKeys()
-
   const eosAccountName = await getAccountName(_api.rpc, eosPublicKeys)
-
   if (!eosAccountName) {
     throw new Error(
       'Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin'
@@ -23,7 +21,7 @@ const redeemFromEosio = async (
   }
 
   _api.cachedAbis.set(_contractAddress, {
-    abi: pbtcOnEosAbi,
+    abi: pTokenOnEosAbi,
     rawAbi: null
   })
 
