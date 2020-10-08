@@ -42,3 +42,4 @@ const pbtc = new pBTC({
   eosRpc: 'https:/...' // or also an instance of JsonRpc
   eosSignatureProvider: '....' // instance of JsSignatureProvider
 })
+```
