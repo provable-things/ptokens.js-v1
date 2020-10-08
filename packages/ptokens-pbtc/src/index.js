@@ -124,9 +124,8 @@ export class pBTC extends NodeSelector {
         const { gas, gasPrice } = _options
 
         if (_amount < MINIMUM_BTC_REDEEMABLE) {
-          promiEvent.reject(
-            `Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`
-          )
+          // prettier-ignore
+          promiEvent.reject(`Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`)
           return
         }
 
@@ -142,7 +141,7 @@ export class pBTC extends NodeSelector {
         const contractAddress = await this._getContractAddress()
 
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
-        
+
         let hostTxHash = null
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
           hostTxHash = await redeemFromEthereum(
