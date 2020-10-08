@@ -10,7 +10,8 @@ const PBTC_ON_EOS_MAINNET = 'https://pbtconeos-node-1a.ngrok.io'
 const PBTC_ON_ETH_MAINNET = 'https://pbtc-node-1a.ngrok.io'
 const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io'
 const PLTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-2.ngrok.io'
-const PLTC_ON_EOS_MAINNET = 'https://pltconeos-node-1a.ngrok.io/'
+const PLTC_ON_EOS_MAINNET = 'https://pltconeos-node-1a.ngrok.io'
+const PETH_ON_EOS_MAINNET = 'https://pethoneos-node-1a.ngrok.io'
 const UNREACHABLE_NODE = 'https://unreachable-node.io'
 
 test('Should select a pBTC node on EOS Jungle3 Testnet', async () => {
@@ -87,6 +88,29 @@ test('Should select a pLTC node on EOS Mainnet with a default provider', async (
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Litecoin)
   expect(info.native_network).to.be.equal(constants.networks.LitecoinMainnet)
+})
+
+test('Should select a pWETH node on EOS Mainnet with a default provider', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pWETH,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
+  })
+
+  const node = await nodeSelector.setSelectedNode(
+    new Node({
+      pToken: constants.pTokens.pWETH,
+      blockchain: constants.blockchains.Eosio,
+      provider: new HttpProvider(PETH_ON_EOS_MAINNET)
+    })
+  )
+
+  const info = await node.getInfo()
+
+  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
+  expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
+  expect(info.native_blockchain).to.be.equal(constants.blockchains.Ethereum)
+  expect(info.native_network).to.be.equal(constants.networks.EthereumMainnet)
 })
 
 test('Should select a pBTC node on EOS Jungle3 Testnet with detailed initialization', async () => {
@@ -172,7 +196,7 @@ test('Should select a pLTC node on Ethereum Mainnet', async () => {
 test('Should not be connected if a node is unreachable', async () => {
   const unreachableNode = UNREACHABLE_NODE
   // prettier-ignore
-  const expectedErrorMessage = 'Error during checking node connection: getaddrinfo ENOTFOUND unreachable-node.io unreachable-node.io:443'
+  const expectedErrorMessage = 'Error during checking node connection: getaddrinfo ENOTFOUND unreachable-node.io'
 
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
@@ -181,10 +205,7 @@ test('Should not be connected if a node is unreachable', async () => {
   })
 
   try {
-    const isConnected = await nodeSelector.checkConnection(
-      unreachableNode,
-      2000
-    )
+    await nodeSelector.checkConnection(unreachableNode, 2000)
   } catch (_err) {
     expect(_err.message).to.be.equal(expectedErrorMessage)
   }
