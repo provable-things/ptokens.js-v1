@@ -74,7 +74,7 @@ export class pERC20 extends NodeSelector {
     }
 
     this.tokenAddress = tokenAddress
-    this.pToken
+    this.pToken = pToken
   }
   /**
    * @param {String|BigNumber|BN} _amount in wei
