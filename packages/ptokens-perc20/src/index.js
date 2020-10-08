@@ -42,7 +42,6 @@ export class pERC20 extends NodeSelector {
 
     if (!tokenAddress || !Web3Utils.isAddress(tokenAddress)) {
       throw new Error('Invalid token address')
-      return
     }
 
     if (
