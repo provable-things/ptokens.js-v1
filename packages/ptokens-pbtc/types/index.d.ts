@@ -57,6 +57,7 @@ export class pBTC extends NodeSelector {
 
 export interface RedeemResult {
   amount: number,
+  nativeTx: string,
+  hostTx: string,
   to: string,
-  tx: string
 }

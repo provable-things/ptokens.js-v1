@@ -201,8 +201,9 @@ export class pLTC extends NodeSelector {
 
         promiEvent.resolve({
           amount: _amount.toFixed(decimals),
-          to: _ltcAddress,
-          tx: broadcastedLtcTxReport.broadcast_tx_hash
+          hostTx: hostTxReceiptId,
+          nativeTx: broadcastedLtcTxReport.broadcast_tx_hash,
+          to: _ltcAddress
         })
       } catch (err) {
         promiEvent.reject(err)

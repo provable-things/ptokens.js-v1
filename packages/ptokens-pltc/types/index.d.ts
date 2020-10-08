@@ -9,6 +9,7 @@ import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { NodeSelector } from 'ptokens-node-selector'
 import { BigNumber } from 'bignumber.js'
+import { DepositAddress } from 'ptokens-deposit-address'
 
 export interface pLTCConfigs {
   network?: string,
@@ -43,58 +44,14 @@ export class pLTC extends NodeSelector {
 
   hostApi?: Web3 | Api
 
-  getDepositAddress(_hostAddress: string): Promise<LtcDepositAddress>
+  getDepositAddress(_hostAddress: string): Promise<DepositAddress>
 
   redeem(_amount: number, _ltcAddress: string, _options: RedeemOptions): PromiEvent<TransactionReceipt | Report | LitecoinTransactionReceipt | RedeemResult>
 }
 
 export interface RedeemResult {
   amount: number,
+  nativeTx: string,
+  hostTx: string,
   to: string,
-  tx: string
-}
-
-export interface IssueResult {
-  amount: number,
-  to: string,
-  tx: string
-}
-
-export interface BtcDepositAddressConfigs {
-  hostNetwork: string,
-  hostApi?: Web3 | Api
-  hostBlockchain: string,
-  node: Node
-}
-
-export class LtcDepositAddress {
-  constructor(configs: BtcDepositAddressConfigs)
-
-  hostBlockchain: string
-
-  hostNetwork: string
-
-  nativeBlockchain: string
-
-  nativeNetwork: string
-
-  node: Node
-
-  hostApi?: Web3 | Api
-
-  hostAddress: string | null
-
-  nonce: number | null
-
-  enclavePublicKey: string | null
-
-  value: string | null
-
-  generate(_hostAddress: string): Promise<string>
-
-  toString(): string
-
-  verify(): boolean
-
-  waitForDeposit(): PromiEvent<TransactionReceipt | Report | LitecoinUtxo | IssueResult>
 }

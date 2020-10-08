@@ -45,6 +45,7 @@ export class DepositAddress {
 
 export interface IssueResult {
   amount: number,
+  nativeTx: string,
+  hostTx: string,
   to: string,
-  tx: string
 }

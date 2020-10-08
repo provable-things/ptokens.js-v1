@@ -184,7 +184,7 @@ export class DepositAddress {
         this.hostBlockchain
       )
 
-      const utxoToMonitor = await utils[
+      const nativeTxId = await utils[
         shortNativeBlockchain
       ].monitorUtxoByAddress(
         this.nativeNetwork,
@@ -197,7 +197,7 @@ export class DepositAddress {
       )
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(
-        utxoToMonitor,
+        nativeTxId,
         promiEvent.eventEmitter
       )
 
@@ -216,14 +216,15 @@ export class DepositAddress {
       promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
 
       promiEvent.resolve({
-        to: this.hostAddress,
-        tx: broadcastedHostTxReport.broadcast_tx_hash,
         amount: utils.eth
           .offChainFormat(
             new BigNumber(broadcastedHostTxReport.host_tx_amount),
             8
           )
-          .toFixed()
+          .toFixed(),
+        nativeTx: nativeTxId,
+        hostTx: broadcastedHostTxReport.broadcast_tx_hash,
+        to: this.hostAddress
       })
     }
 

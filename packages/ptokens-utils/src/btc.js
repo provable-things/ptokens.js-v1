@@ -70,7 +70,7 @@ const monitorUtxoByAddress = async (
   _confirmationEventName
 ) => {
   let isBroadcasted = false
-  let utxo = null
+  let txId = null
   let utxos = []
   await polling(async () => {
     // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
@@ -91,7 +91,7 @@ const monitorUtxoByAddress = async (
         _eventEmitter.emit(_confirmationEventName, utxos[0])
         _eventEmitter.emit('onBtcTxConfirmed', utxos[0])
 
-        utxo = utxos[0].txid
+        txId = utxos[0].txid
         return true
       } else if (!isBroadcasted) {
         isBroadcasted = true
@@ -103,7 +103,7 @@ const monitorUtxoByAddress = async (
       return false
     }
   }, _pollingTime)
-  return utxo
+  return txId
 }
 
 /**

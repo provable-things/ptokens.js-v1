@@ -197,8 +197,9 @@ export class pBTC extends NodeSelector {
 
         promiEvent.resolve({
           amount: _amount.toFixed(decimals),
-          to: _btcAddress,
-          tx: broadcastedBtcTxReport.broadcast_tx_hash
+          hostTx: hostTxReceiptId,
+          nativeTx: broadcastedBtcTxReport.broadcast_tx_hash,
+          to: _btcAddress
         })
       } catch (err) {
         promiEvent.reject(err)

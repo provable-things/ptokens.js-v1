@@ -8,12 +8,15 @@ import * as constants from './constants'
 import { redeemFromEosio } from './redeem-from/redeem-from-eosio'
 import { redeemFromEthereum } from './redeem-from/redeem-from-ethereum'
 import pTokenOnEosAbi from './abi/pTokenOnEOSContractAbi.json'
+import pERC20ContractAbi from './abi/pERC20ContractAbi.json'
+import pTokenOnEosAbi from './abi/pTokenOnEOSContractAbi.json'
 import pTokenOnEthAbi from './abi/pTokenOnETHContractAbi.json'
 
 export default {
   abi: {
     pTokenOnEth: pTokenOnEthAbi,
-    pTokenOnEos: pTokenOnEosAbi
+    pTokenOnEos: pTokenOnEosAbi,
+    pERC20: pERC20ContractAbi
   },
   btc,
   converters,
