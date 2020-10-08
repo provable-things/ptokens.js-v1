@@ -52,7 +52,7 @@ export class pBTC extends NodeSelector {
 
   getDepositAddress(_hostAddress: string): Promise<DepositAddress>
 
-  redeem(_amount: number, _btcAddress: string, _options: RedeemOptions): PromiEvent<TransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
+  redeem(_amount: number, _btcAddress: string, _options: RedeemOptions): PromiEvent< string | TransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
 }
 
 export interface RedeemResult {

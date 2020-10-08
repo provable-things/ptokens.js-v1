@@ -11,7 +11,7 @@ const pltc = new pLTC({
 // $ExpectType Promise<DepositAddress>
 pltc.getDepositAddress(ETH_TESTING_ADDRESS)
 
-// $ExpectType PromiEvent<TransactionReceipt | Report | LitecoinTransactionReceipt | RedeemResult>
+// $ExpectType PromiEvent<string | TransactionReceipt | Report | LitecoinTransactionReceipt | RedeemResult>
 pltc.redeem(10, LTC_TESTING_ADDRESS, {
   gas: 10,
   gasPrice: 10

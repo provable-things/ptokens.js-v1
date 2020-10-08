@@ -134,6 +134,7 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
 
   const amountToRedeem = 0.000051
 
+  let ethTxBroadcasted
   let ethTxIsConfirmed = 0
   let nodeHasReceivedTx = 0
   let nodeHasBroadcastedTx = 0
@@ -142,6 +143,12 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
     new Promise((resolve, reject) => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
+        .once('onEthTxBroacasted', () => {
+          ethTxBroadcasted += 1
+        })
+        .once('nativeTxBroacasted', () => {
+          ethTxBroadcasted += 1
+        })
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed += 1
         })
@@ -171,6 +178,7 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
     })
   await start()
 
+  expect(ethTxBroadcasted).to.equal(2)
   expect(ethTxIsConfirmed).to.equal(2)
   expect(nodeHasReceivedTx).to.equal(2)
   expect(nodeHasBroadcastedTx).to.equal(2)

@@ -11,7 +11,7 @@ const pbtc = new pBTC({
 // $ExpectType Promise<DepositAddress>
 pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
 
-// $ExpectType PromiEvent<TransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
+// $ExpectType PromiEvent<string | TransactionReceipt | Report | BitcoinTransactionReceipt | RedeemResult>
 pbtc.redeem(10, BTC_TESTING_ADDRESS, {
   gas: 10,
   gasPrice: 10

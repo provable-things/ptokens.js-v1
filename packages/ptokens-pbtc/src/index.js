@@ -6,7 +6,6 @@ import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
 
 const MINIMUM_BTC_REDEEMABLE = 0.00005
-const BTC_ESPLORA_POLLING_TIME = 3000
 
 export class pBTC extends NodeSelector {
   /**
@@ -143,10 +142,10 @@ export class pBTC extends NodeSelector {
         const contractAddress = await this._getContractAddress()
 
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
-        let hostTxReceiptId = null
-
+        
+        let hostTxHash = null
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFromEthereum(
+          hostTxHash = await redeemFromEthereum(
             this.hostApi,
             _amount,
             decimals,
@@ -156,12 +155,19 @@ export class pBTC extends NodeSelector {
             gasPrice,
             this.hostPrivateKey
           )
+          // NOTE: 'onEthTxBroadcasted' will be removed in version > 1.0.0
+          promiEvent.eventEmitter.emit('onEthTxBroadcasted', hostTxHash)
+          promiEvent.eventEmitter.emit('nativeTxBroadcasted', hostTxHash)
+
+          const ethTxReceipt = await eth.waitForTransactionConfirmation(
+            this.hostApi,
+            hostTxHash,
+            5000
+          )
 
           // NOTE: 'onEthTxConfirmed' will be removed in version > 1.0.0
           promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
           promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
-
-          hostTxReceiptId = ethTxReceipt.transactionHash
         }
 
         if (this.hostBlockchain === constants.blockchains.Eosio) {
@@ -178,18 +184,18 @@ export class pBTC extends NodeSelector {
           promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
 
-          hostTxReceiptId = eosTxReceipt.transaction_id
+          hostTxHash = eosTxReceipt.transaction_id
         }
 
         const broadcastedBtcTxReport = await this.selectedNode.monitorIncomingTransaction(
-          hostTxReceiptId,
+          hostTxHash,
           promiEvent.eventEmitter
         )
 
         const broadcastedBtcTx = await btc.waitForTransactionConfirmation(
           this.nativeNetwork,
           broadcastedBtcTxReport.broadcast_tx_hash,
-          BTC_ESPLORA_POLLING_TIME
+          5000
         )
         // NOTE: 'onBtcTxConfirmed' will be removed in version > 1.0.0
         promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTx)
@@ -197,7 +203,7 @@ export class pBTC extends NodeSelector {
 
         promiEvent.resolve({
           amount: _amount.toFixed(decimals),
-          hostTx: hostTxReceiptId,
+          hostTx: hostTxHash,
           nativeTx: broadcastedBtcTxReport.broadcast_tx_hash,
           to: _btcAddress
         })

@@ -145,6 +145,7 @@ test('Should monitoring a redeem of 0.001 pLTC on Ethereum Ropsten', async () =>
 
   const amountToRedeem = 0.001
 
+  let ethTxBroadcasted = 0
   let ethTxIsConfirmed = 0
   let nodeHasReceivedTx = 0
   let nodeHasBroadcastedTx = 0
@@ -153,6 +154,12 @@ test('Should monitoring a redeem of 0.001 pLTC on Ethereum Ropsten', async () =>
     new Promise((resolve, reject) => {
       pltc
         .redeem(amountToRedeem, LTC_TESTING_ADDRESS)
+        .once('onEthTxBroacasted', () => {
+          ethTxBroadcasted += 1
+        })
+        .once('nativeTxBroacasted', () => {
+          ethTxBroadcasted += 1
+        })
         .once('onEthTxConfirmed', () => {
           ethTxIsConfirmed += 1
         })
@@ -182,6 +189,7 @@ test('Should monitoring a redeem of 0.001 pLTC on Ethereum Ropsten', async () =>
     })
   await start()
 
+  expect(ethTxBroadcasted).to.equal(2)
   expect(ethTxIsConfirmed).to.equal(2)
   expect(nodeHasReceivedTx).to.equal(2)
   expect(nodeHasBroadcastedTx).to.equal(2)
