@@ -77,7 +77,7 @@ test('Should issue 0.002 pETH using ETH', async () => {
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
-/*test('Should redeem 0.0005 pETH on EOS Jungle3 Testnet', async () => {
+test('Should redeem 0.0005 pETH on EOS Jungle3 Testnet', async () => {
   const peth = new pERC20(configs)
   peth.setSelectedNode('https://pethoneos-node-1a.ngrok.io')
   const amountToRedeem = 0.0005
@@ -111,4 +111,4 @@ test('Should issue 0.002 pETH using ETH', async () => {
   expect(nodeHasReceivedTx).to.equal(true)
   expect(nodeHasBroadcastedTx).to.equal(true)
   expect(ethTxIsConfirmed).to.equal(true)
-})*/
+})
