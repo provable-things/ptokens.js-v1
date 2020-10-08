@@ -17,3 +17,4 @@ export const LitecoinTestnet = 'testnet'
 
 export const pBTC = 'pbtc'
 export const pLTC = 'pltc'
+export const pWETH = 'pweth'

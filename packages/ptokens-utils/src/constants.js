@@ -14,7 +14,8 @@ import {
   Mainnet,
   Testnet,
   pBTC,
-  pLTC
+  pLTC,
+  pWETH
 } from './helpers/names'
 
 /**
@@ -51,7 +52,8 @@ const networks = {
  */
 const pTokens = {
   pBTC,
-  pLTC
+  pLTC,
+  pWETH
 }
 
 export { blockchains, networks, pTokens }

@@ -54,18 +54,15 @@ const getAccountName = (_rpc, _pubkeys) =>
  * @param {Number} _amount
  */
 const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
-  return _amount.toFixed(_decimals).toString() + ' ' + symbol
+  return `${parseFloat(_amount).toFixed(_decimals)} ${symbol}`
 }
 
 /**
  * @param {String} _accountName
  */
-const isValidAccountName = _accountName => {
-  const regex = new RegExp('(([a-z]|[1-5]|.){0,12})$')
-  return (
-    regex.test(_accountName) && _accountName.length <= EOS_MAX_ACCOUNT_LENGTH
-  )
-}
+const isValidAccountName = _accountName =>
+  // prettier-ignore
+  (new RegExp('(([a-z]|[1-5]|.){0,12})$')).test(_accountName) && _accountName.length <= EOS_MAX_ACCOUNT_LENGTH
 
 /**
  * @param {Api} _api

@@ -193,7 +193,8 @@ export interface Networks {
 
 export interface pTokens {
   pBTC: string,
-  pLTC: string
+  pLTC: string,
+  pWETH: string
 }
 
 export interface Constants {
