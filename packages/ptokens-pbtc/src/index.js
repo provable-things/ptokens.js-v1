@@ -120,22 +120,22 @@ export class pBTC extends NodeSelector {
   redeem(_amount, _btcAddress, _options = {}) {
     const promiEvent = Web3PromiEvent()
 
-    const { gas, gasPrice } = _options
-
     const start = async () => {
-      if (_amount < MINIMUM_BTC_REDEEMABLE) {
-        promiEvent.reject(
-          `Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`
-        )
-        return
-      }
-
-      if (!btc.isValidAddress(_btcAddress)) {
-        promiEvent.reject('Btc Address is not valid')
-        return
-      }
-
       try {
+        const { gas, gasPrice } = _options
+
+        if (_amount < MINIMUM_BTC_REDEEMABLE) {
+          promiEvent.reject(
+            `Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`
+          )
+          return
+        }
+
+        if (!btc.isValidAddress(_btcAddress)) {
+          promiEvent.reject('Btc Address is not valid')
+          return
+        }
+
         if (!this.selectedNode) await this.select()
 
         // prettier-ignore

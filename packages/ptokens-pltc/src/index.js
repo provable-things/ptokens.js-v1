@@ -115,33 +115,33 @@ export class pLTC extends NodeSelector {
   redeem(_amount, _ltcAddress, _options = {}) {
     const promiEvent = Web3PromiEvent()
 
-    const { gas, gasPrice } = _options
-
     const start = async () => {
-      if (_amount < MINIMUM_LTC_REDEEMABLE) {
-        promiEvent.reject(
-          `Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`
-        )
-        return
-      }
-
-      // NOTE: add support for p2sh testnet address (Q...)
-      let ltcAddressToCheck = _ltcAddress
-      const decoded = bitcoin.address.fromBase58Check(_ltcAddress)
-      if (decoded.version === 0xc4)
-        ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
-
-      if (
-        !ltc.isValidAddress(
-          helpers.getNetworkType(this.hostNetwork),
-          ltcAddressToCheck
-        )
-      ) {
-        promiEvent.reject('Ltc Address is not valid')
-        return
-      }
-
       try {
+        const { gas, gasPrice } = _options
+
+        if (_amount < MINIMUM_LTC_REDEEMABLE) {
+          promiEvent.reject(
+            `Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`
+          )
+          return
+        }
+
+        // NOTE: add support for p2sh testnet address (Q...)
+        let ltcAddressToCheck = _ltcAddress
+        const decoded = bitcoin.address.fromBase58Check(_ltcAddress)
+        if (decoded.version === 0xc4)
+          ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
+
+        if (
+          !ltc.isValidAddress(
+            helpers.getNetworkType(this.hostNetwork),
+            ltcAddressToCheck
+          )
+        ) {
+          promiEvent.reject('Ltc Address is not valid')
+          return
+        }
+
         if (!this.selectedNode) await this.select()
 
         // prettier-ignore
