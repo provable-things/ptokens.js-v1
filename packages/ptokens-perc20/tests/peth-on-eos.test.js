@@ -46,24 +46,19 @@ test('Should issue 0.002 pETH using ETH', async () => {
           gasPrice: 75e9,
           gas: 200000
         })
-        .once('nativeTxBroadcasted', e => {
-          console.log(e)
+        .once('nativeTxBroadcasted', () => {
           ethTxBrodcasted = true
         })
-        .once('nativeTxConfirmed', e => {
-          console.log(e)
+        .once('nativeTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
-        .once('nodeReceivedTx', e => {
-          console.log(e)
+        .once('nodeReceivedTx', () => {
           nodeHasReceivedTx = true
         })
-        .once('nodeBroadcastedTx', e => {
-          console.log(e)
+        .once('nodeBroadcastedTx', () => {
           nodeHasBroadcastedTx = true
         })
-        .once('hostTxConfirmed', e => {
-          console.log(e)
+        .once('hostTxConfirmed', () => {
           eosTxIsConfirmed = true
         })
         .then(() => resolve())
@@ -77,9 +72,8 @@ test('Should issue 0.002 pETH using ETH', async () => {
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.0005 pETH on EOS Jungle3 Testnet', async () => {
+test('Should redeem 0.0005 pETH', async () => {
   const peth = new pERC20(configs)
-  peth.setSelectedNode('https://pethoneos-node-1a.ngrok.io')
   const amountToRedeem = 0.0005
 
   let eosTxIsConfirmed = false
