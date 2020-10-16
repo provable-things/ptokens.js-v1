@@ -52,9 +52,8 @@ export class NodeSelector {
         native_network
       } = await this.provider.call(
         'GET',
-        `/${this.pToken}-on-${helpers.getBlockchainShortType(
-          this.hostBlockchain
-        )}/get-info`,
+        // prettier-ignore
+        `/${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}/get-info`,
         null,
         _timeout
       )
@@ -90,9 +89,8 @@ export class NodeSelector {
       )
       this.nodes = (await this.provider.call('GET', '/peers')).peers
 
-      const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(
-        this.hostBlockchain
-      )}`
+      // prettier-ignore
+      const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}`
 
       if (this.defaultEndpoint) {
         const node = this.nodes.find(
