@@ -2,47 +2,32 @@ import { pBTC } from '../src/index'
 import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 import { constants } from 'ptokens-utils'
+import qrcode from 'qrcode-terminal'
 
+const ETH_TESTING_ADDRESS = ''
 // prettier-ignore
-const INFURA_ROPSTEN = 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
-
-const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
+const ETH_TESTING_PRIVATE_KEY = ''
 // prettier-ignore
-const BTC_TESTING_PRIVATE_KEY = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+const BTC_TESTING_PRIVATE_KEY = ''
+const BTC_TESTING_ADDRESS = ''
 // prettier-ignore
-const ETH_TESTING_PRIVATE_KEY = '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742'
-const BTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
+const WEB3_PROVIDER = ''
 
 const pbtcOnEthConfigs = {
   blockchain: constants.blockchains.Ethereum,
-  network: constants.networks.Testnet,
+  network: constants.networks.Mainnet,
   ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
-  ethProvider: INFURA_ROPSTEN
+  ethProvider: WEB3_PROVIDER
 }
 
 jest.setTimeout(3000000)
 
 test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
   const expectedHostNetwork = 'mainnet'
-
   const pbtc = new pBTC({
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Mainnet
   })
-
-  const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
-  expect(depositAddress.toString()).to.be.a('string')
-  expect(pbtc.hostNetwork).to.be.equal(expectedHostNetwork)
-})
-
-test('Should get a BTC deposit address on Ethereum Ropsten', async () => {
-  const expectedHostNetwork = 'testnet_ropsten'
-
-  const pbtc = new pBTC({
-    blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.EthereumRopsten
-  })
-
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
   expect(depositAddress.toString()).to.be.a('string')
   expect(pbtc.hostNetwork).to.be.equal(expectedHostNetwork)
@@ -53,9 +38,7 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Testnet
   })
-
   const invalidEthAddress = 'Invalid Eth Address'
-
   try {
     await pbtc.getDepositAddress(invalidEthAddress)
   } catch (err) {
@@ -65,11 +48,15 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
 
 test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async () => {
   const pbtc = new pBTC(pbtcOnEthConfigs)
-
   const amountToIssue = 50100
   const minerFees = 1000
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
+
+  // if you want for example send ltc from a phone
+  /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+    console.log(_qrcode)
+  })*/
 
   await sendBitcoin(
     BTC_TESTING_PRIVATE_KEY,
@@ -131,10 +118,9 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async (
 
 test('Should redeem 0.000051 pBTC on Ethereum', async () => {
   const pbtc = new pBTC(pbtcOnEthConfigs)
-
   const amountToRedeem = 0.000051
 
-  let ethTxBroadcasted
+  let ethTxBroadcasted = 0
   let ethTxIsConfirmed = 0
   let nodeHasReceivedTx = 0
   let nodeHasBroadcastedTx = 0
@@ -142,11 +128,14 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
   const start = () =>
     new Promise((resolve, reject) => {
       pbtc
-        .redeem(amountToRedeem, BTC_TESTING_ADDRESS)
-        .once('onEthTxBroacasted', () => {
+        .redeem(amountToRedeem, BTC_TESTING_ADDRESS, {
+          gasPrice: 75e9,
+          gas: 200000
+        })
+        .once('onEthTxBroadcasted', () => {
           ethTxBroadcasted += 1
         })
-        .once('nativeTxBroacasted', () => {
+        .once('nativeTxBroadcasted', () => {
           ethTxBroadcasted += 1
         })
         .once('onEthTxConfirmed', () => {
@@ -161,7 +150,7 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
         .once('nodeReceivedTx', () => {
           nodeHasReceivedTx += 1
         })
-        .once('onNodeBroadcastedTx', e => {
+        .once('onNodeBroadcastedTx', () => {
           nodeHasBroadcastedTx += 1
         })
         .once('nodeBroadcastedTx', () => {
