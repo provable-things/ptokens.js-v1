@@ -1,6 +1,6 @@
 import { getBootNodeEndpoint } from './lib/index'
 import { Node } from 'ptokens-node'
-import { helpers } from 'ptokens-utils'
+import { helpers, constants } from 'ptokens-utils'
 import { HttpProvider } from 'ptokens-providers'
 
 export class NodeSelector {
@@ -13,7 +13,11 @@ export class NodeSelector {
     if (!helpers.isValidPTokenName(pToken))
       throw new Error('Invalid pToken name')
 
-    this.pToken = pToken.toLowerCase()
+    // NOTE: pETH becomes pWETH for nodes interactions
+    this.pToken =
+      pToken.toLowerCase() === constants.pTokens.pETH
+        ? constants.pTokens.pWETH
+        : pToken.toLowerCase()
 
     const {
       hostBlockchain,

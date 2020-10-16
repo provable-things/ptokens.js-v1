@@ -14,20 +14,18 @@ const PLTC_ON_EOS_MAINNET = 'https://pltconeos-node-1a.ngrok.io'
 const PETH_ON_EOS_MAINNET = 'https://pethoneos-node-1a.ngrok.io'
 const UNREACHABLE_NODE = 'https://unreachable-node.io'
 
-test('Should select a pBTC node on EOS Jungle3 Testnet', async () => {
+test('Should select a pBTC node on EOS Mainnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
     blockchain: constants.blockchains.Eosio,
-    network: constants.networks.Testnet
+    network: constants.networks.Mainnet
   })
-
   const node = await nodeSelector.select()
   const info = await node.getInfo()
-
-  expect(info.host_network).to.be.equal(constants.networks.EosioJungle3)
+  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
-  expect(info.native_network).to.be.equal(constants.networks.BitcoinTestnet)
+  expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
 })
 
 test('Should select a pBTC node on EOS Mainnet', async () => {
@@ -36,97 +34,54 @@ test('Should select a pBTC node on EOS Mainnet', async () => {
     blockchain: constants.blockchains.Eosio,
     network: constants.networks.Mainnet
   })
-
   const node = await nodeSelector.select()
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
   expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
 })
 
-test('Should select a pBTC node on EOS Mainnet with a default provider', async () => {
-  const nodeSelector = new NodeSelector({
-    pToken: constants.pTokens.pBTC,
-    blockchain: constants.blockchains.Eosio,
-    network: constants.networks.Mainnet
-  })
-
-  const node = await nodeSelector.setSelectedNode(
-    new Node({
-      pToken: constants.pTokens.pBTC,
-      blockchain: constants.blockchains.Eosio,
-      provider: new HttpProvider(PBTC_ON_EOS_MAINNET)
-    })
-  )
-  const info = await node.getInfo()
-
-  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
-  expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
-  expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
-  expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
-})
-
-test('Should select a pLTC node on EOS Mainnet with a default provider', async () => {
+test('Should select a pLTC node on EOS Mainnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pLTC,
     blockchain: constants.blockchains.Eosio,
     network: constants.networks.Mainnet
   })
-
-  const node = await nodeSelector.setSelectedNode(
-    new Node({
-      pToken: constants.pTokens.pLTC,
-      blockchain: constants.blockchains.Eosio,
-      provider: new HttpProvider(PLTC_ON_EOS_MAINNET)
-    })
-  )
+  const node = await nodeSelector.select()
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Litecoin)
   expect(info.native_network).to.be.equal(constants.networks.LitecoinMainnet)
 })
 
-test('Should select a pWETH node on EOS Mainnet with a default provider', async () => {
+test('Should select a pWETH node on EOS Mainnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pWETH,
     blockchain: constants.blockchains.Eosio,
     network: constants.networks.Mainnet
   })
-
-  const node = await nodeSelector.setSelectedNode(
-    new Node({
-      pToken: constants.pTokens.pWETH,
-      blockchain: constants.blockchains.Eosio,
-      provider: new HttpProvider(PETH_ON_EOS_MAINNET)
-    })
-  )
-
+  const node = await nodeSelector.select()
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Ethereum)
   expect(info.native_network).to.be.equal(constants.networks.EthereumMainnet)
 })
 
-test('Should select a pBTC node on EOS Jungle3 Testnet with detailed initialization', async () => {
+test('Should select a pWETH node on EOS Mainnet', async () => {
   const nodeSelector = new NodeSelector({
-    pToken: constants.pTokens.pBTC,
-    hostBlockchain: constants.blockchains.Eosio,
-    hostNetwork: constants.networks.EosioJungle3
+    pToken: constants.pTokens.pETH,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
   })
-
   const node = await nodeSelector.select()
   const info = await node.getInfo()
-
-  expect(info.host_network).to.be.equal(constants.networks.EosioJungle3)
+  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
-  expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
-  expect(info.native_network).to.be.equal(constants.networks.BitcoinTestnet)
+  expect(info.native_blockchain).to.be.equal(constants.blockchains.Ethereum)
+  expect(info.native_network).to.be.equal(constants.networks.EthereumMainnet)
 })
 
 test('Should select a pBTC node on EOS Mainnet with detailed initialization', async () => {
@@ -135,10 +90,14 @@ test('Should select a pBTC node on EOS Mainnet with detailed initialization', as
     hostBlockchain: constants.blockchains.Eosio,
     hostNetwork: constants.networks.Mainnet
   })
-
-  const node = await nodeSelector.select()
+  const node = await nodeSelector.setSelectedNode(
+    new Node({
+      pToken: constants.pTokens.pBTC,
+      blockchain: constants.blockchains.Eosio,
+      provider: new HttpProvider(PBTC_ON_EOS_MAINNET)
+    })
+  )
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
@@ -151,10 +110,8 @@ test('Should select a pBTC node on Ethereum Mainnet', async () => {
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Mainnet
   })
-
   const node = await nodeSelector.select()
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EthereumMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Ethereum)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
@@ -167,10 +124,8 @@ test('Should select a pBTC node on Ethereum Ropsten Testnet', async () => {
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Testnet
   })
-
   const node = await nodeSelector.select()
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EthereumRopsten)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Ethereum)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
@@ -183,10 +138,8 @@ test('Should select a pLTC node on Ethereum Mainnet', async () => {
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Mainnet
   })
-
   const node = await nodeSelector.select()
   const info = await node.getInfo()
-
   expect(info.host_network).to.be.equal(constants.networks.EthereumMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Ethereum)
   expect(info.native_blockchain).to.be.equal(constants.blockchains.Litecoin)
@@ -197,13 +150,11 @@ test('Should not be connected if a node is unreachable', async () => {
   const unreachableNode = UNREACHABLE_NODE
   // prettier-ignore
   const expectedErrorMessage = 'Error during checking node connection: getaddrinfo ENOTFOUND unreachable-node.io'
-
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Testnet
   })
-
   try {
     await nodeSelector.checkConnection(unreachableNode, 2000)
   } catch (_err) {
@@ -213,7 +164,6 @@ test('Should not be connected if a node is unreachable', async () => {
 
 test('Should generate an error when an invalid pToken name is set', () => {
   const expectedError = 'Invalid pToken name'
-
   try {
     // eslint-disable-next-line
     new NodeSelector({
@@ -243,29 +193,23 @@ test('Should generate an error when an invalid node is set', async () => {
 })
 
 test('Should not select a different node when a valid one is set as default and it is compatibile with the selected pToken', async () => {
-  const reachableNode = PBTC_ON_ETH_ROPSTEN
-
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
     blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Testnet,
-    defaultEndoint: reachableNode
+    network: constants.networks.Mainnet,
+    defaultEndoint: PBTC_ON_ETH_MAINNET
   })
   const selectedNode = await nodeSelector.select()
-  expect(selectedNode.provider.endpoint).to.be.equal(reachableNode)
+  expect(selectedNode.provider.endpoint).to.be.equal(PBTC_ON_ETH_MAINNET)
 })
 
 test('Should select a different node when a valid one is set as default but it is not compatibile with the selected pToken', async () => {
-  const reachableNodeButNotCompatibleWithSelectedpToken = PLTC_ON_ETH_ROPSTEN
-
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
     blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Testnet,
-    defaultNode: reachableNodeButNotCompatibleWithSelectedpToken
+    network: constants.networks.Mainnet,
+    defaultNode: PLTC_ON_EOS_MAINNET
   })
   const selectedNode = await nodeSelector.select()
-  expect(selectedNode.provider.endpoint).to.be.not.equal(
-    reachableNodeButNotCompatibleWithSelectedpToken
-  )
+  expect(selectedNode.provider.endpoint).to.be.not.equal(PLTC_ON_ETH_ROPSTEN)
 })
