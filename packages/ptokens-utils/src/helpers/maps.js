@@ -40,7 +40,7 @@ export const blockchainShortTypes = {
 export const pTokenNativeBlockchain = {
   pbtc: Bitcoin,
   pltc: Litecoin,
-  peth: Ethereum,
+  pweth: Ethereum,
   peth: Ethereum
 }
 
