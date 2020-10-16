@@ -31,7 +31,6 @@ const perc20 = new pERC20({
   network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 
   pToken: constants.pTokens.pWETH,
-  tokenAddress: '0x0000000000000000000000000000000000000000' // ex: if you want to tokenize eth
 
   // if you want to be more detailed
   hostBlockchain: 'EOS',

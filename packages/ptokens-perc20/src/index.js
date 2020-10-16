@@ -6,10 +6,19 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 
 const minimumAmounts = {
-  [eth.zeroAddress]: {
+  [constants.tokens.ETH]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.WETH]: {
     issue: 1000000000,
     redeem: 0.000000001
   }
+}
+
+const pTokensNativeContract = {
+  peth: constants.tokens.ETH,
+  pweth: constants.tokens.WETH
 }
 
 export class pERC20 extends NodeSelector {
@@ -22,7 +31,10 @@ export class pERC20 extends NodeSelector {
     } = helpers.parseParams(_configs, constants.blockchains.Ethereum)
 
     super({
-      pToken: _configs.pToken,
+      pToken:
+        _configs.pToken.toLowerCase() === constants.pTokens.pETH
+          ? 'pweth'
+          : _configs.pToken,
       hostBlockchain,
       hostNetwork,
       nativeBlockchain,
@@ -36,12 +48,12 @@ export class pERC20 extends NodeSelector {
       eosPrivateKey,
       eosRpc,
       eosSignatureProvider,
-      tokenAddress,
       pToken
     } = _configs
 
-    if (!tokenAddress || !Web3Utils.isAddress(tokenAddress)) {
-      throw new Error('Invalid token address')
+    this.tokenAddress = pTokensNativeContract[pToken.toLowerCase()]
+    if (!this.tokenAddress) {
+      throw new Error('Not supported or invalid pToken')
     }
 
     if (
@@ -71,9 +83,6 @@ export class pERC20 extends NodeSelector {
     } else if (!eosSignatureProvider && !eosPrivateKey && eosRpc) {
       this.hostApi = eos.getApi(null, eosRpc, null)
     }
-
-    this.tokenAddress = tokenAddress
-    this.pToken = pToken
   }
   /**
    * @param {String|BigNumber|BN} _amount in wei
@@ -105,30 +114,32 @@ export class pERC20 extends NodeSelector {
         if (!this.selectedNode) await this.select()
         await this._loadContractAddresses()
 
-        const ethTxHash = await eth[
-          this.ethPrivateKey ? 'sendSignedMethodTx' : 'makeContractSend'
-        ](
-          this.web3,
-          this.tokenAddress === eth.zeroAddress ? 'pegInEth' : 'pegIn',
-          {
-            privateKey: this.ethPrivateKey,
-            abi: abi.pERC20Native,
-            gas,
-            gasPrice,
-            contractAddress: eth.addHexPrefix(this.nativeContractAddress),
-            value: this.tokenAddress === eth.zeroAddress ? _amount : 0
-          },
-          this.tokenAddress === eth.zeroAddress
-            ? [_hostAccount]
-            : [_amount, this.tokenAddress, _hostAccount]
-        )
-        promiEvent.eventEmitter.emit('nativeTxBroadcasted', ethTxHash)
-
-        const ethTxReceipt = await eth.waitForTransactionConfirmation(
-          this.web3,
-          ethTxHash,
-          5000
-        )
+        let ethTxHash = null
+        const waitForEthTransaction = () =>
+          new Promise((_resolve, _reject) => {
+            eth[this.ethPrivateKey ? 'sendSignedMethodTx' : 'makeContractSend'](
+              this.web3,
+              this.tokenAddress === constants.tokens.ETH ? 'pegInEth' : 'pegIn',
+              {
+                privateKey: this.ethPrivateKey,
+                abi: abi.pERC20Native,
+                gas,
+                gasPrice,
+                contractAddress: eth.addHexPrefix(this.nativeContractAddress),
+                value: this.tokenAddress === constants.tokens.ETH ? _amount : 0
+              },
+              this.tokenAddress === constants.tokens.ETH
+                ? [_hostAccount]
+                : [_amount, this.tokenAddress, _hostAccount]
+            )
+              .once('transactionHash', _hash => {
+                ethTxHash = _hash
+                promiEvent.eventEmitter.emit('nativeTxBroadcasted', ethTxHash)
+              })
+              .once('receipt', _resolve)
+              .once('error', _reject)
+          })
+        const ethTxReceipt = await waitForEthTransaction()
         promiEvent.eventEmitter.emit('nativeTxConfirmed', ethTxReceipt)
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(
@@ -142,8 +153,6 @@ export class pERC20 extends NodeSelector {
             this.hostApi,
             incomingTxReport.broadcast_tx_hash
           )
-        } else {
-          throw new Error('Host blockchain not supported')
         }
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)

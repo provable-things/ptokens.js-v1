@@ -10,7 +10,7 @@ const ETH_TESTING_ADDRESS = ''
 // prettier-ignore
 const ETH_TESTING_PRIVATE_KEY = ''
 // prettier-ignore
-const INFURA_ROPSTEN = ''
+const WEB3_PROVIDER = ''
 // prettier-ignore
 const EOS_TESTING_PRIVATE_KEY = ''
 const EOS_TESTING_NODE_ENDPOINT = ''
@@ -20,14 +20,24 @@ const configs = {
   blockchain: constants.blockchains.Eosio,
   network: constants.networks.Testnet,
   ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
-  ethProvider: INFURA_ROPSTEN,
+  ethProvider: WEB3_PROVIDER,
   eosRpc: new JsonRpc(EOS_TESTING_NODE_ENDPOINT, { fetch }),
   eosPrivateKey: EOS_TESTING_PRIVATE_KEY,
-  pToken: constants.pTokens.pWETH,
-  tokenAddress: '0x0000000000000000000000000000000000000000'
+  pToken: constants.pTokens.pETH
 }
 
 jest.setTimeout(3000000)
+
+test('Should not issue less than 1000000000 pETH', async () => {
+  const peth = new pERC20(configs)
+  peth.setSelectedNode('https://pethoneos-node-1a.ngrok.io')
+  const amountToIssue = BigNumber('900000000')
+  try {
+    await peth.issue(amountToIssue, EOS_TESTING_ACCOUNT_NAME)
+  } catch (_err) {
+    expect(_err).to.be.equal('Impossible to issue less than 1000000000')
+  }
+})
 
 test('Should issue 0.002 pETH using ETH', async () => {
   const peth = new pERC20(configs)
@@ -72,8 +82,9 @@ test('Should issue 0.002 pETH using ETH', async () => {
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.0005 pETH', async () => {
+test('Should redeem 0.0005 pETH on EOS', async () => {
   const peth = new pERC20(configs)
+  peth.setSelectedNode('https://pethoneos-node-1a.ngrok.io')
   const amountToRedeem = 0.0005
 
   let eosTxIsConfirmed = false
@@ -90,10 +101,10 @@ test('Should redeem 0.0005 pETH', async () => {
         .once('nodeReceivedTx', () => {
           nodeHasReceivedTx = true
         })
-        .once('nodeBroadcastedTx', e => {
+        .once('nodeBroadcastedTx', () => {
           nodeHasBroadcastedTx = true
         })
-        .once('nativeTxConfirmed', e => {
+        .once('nativeTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
         .then(() => resolve())
