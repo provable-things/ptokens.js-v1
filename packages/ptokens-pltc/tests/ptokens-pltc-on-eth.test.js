@@ -2,19 +2,20 @@ import { pLTC } from '../src/index'
 import { expect } from 'chai'
 import { sendLitecoin } from './utils'
 import { constants } from 'ptokens-utils'
+import qrcode from 'qrcode-terminal'
 
 // prettier-ignore
 const ETH_TESTING_PRIVATE_KEY = '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742'
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 // prettier-ignore
-const LTC_TESTING_PRIVATE_KEY = '8d31f05cbb64ebb1986f64f70959b8cdcb528c2b095d617fd0bbf1e5c0f7ec07'
+const LTC_TESTING_PRIVATE_KEY = '8c89e6daf5bcdceb294ae29e1f055e177f7bf957da4819f14365750ffdada327'
 const LTC_TESTING_ADDRESS = 'mk8aUY9DgFMx7VfDck5oQ7FjJNhn8u3snP'
 
-const ENDPOINT_TESTNET = 'https://nuc-bridge-2.ngrok.io/'
+const ENDPOINT_TESTNET = 'http://nuc-bridge-2.ngrok.io'
 const ENDPOINT_MAINNET = 'http://pltconeth-node-1a.ngrok.io'
 
 // prettier-ignore
-const INFURA_ROPSTEN = 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
+const WEB3_PROVIDER = 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
 
 jest.setTimeout(3000000)
 
@@ -67,14 +68,18 @@ test('Should monitor an issuing of 0.001 pLTC on Ethereum Ropsten', async () => 
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.EthereumRopsten,
     ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
-    ethProvider: INFURA_ROPSTEN
+    ethProvider: WEB3_PROVIDER
   })
   pltc.setSelectedNode(ENDPOINT_TESTNET)
 
   const amountToIssue = 100000
   const minerFees = 100000
-
   const depositAddress = await pltc.getDepositAddress(ETH_TESTING_ADDRESS)
+
+  // if you want for example send ltc from a phone
+  /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+    console.log(_qrcode)
+  })*/
 
   await sendLitecoin(
     LTC_TESTING_PRIVATE_KEY,
@@ -108,10 +113,10 @@ test('Should monitor an issuing of 0.001 pLTC on Ethereum Ropsten', async () => 
         .once('onNodeReceivedTx', () => {
           nodeHasReceivedTx += 1
         })
-        .once('nodeReceivedTx', () => {
+        .once('nodeReceivedTx', e => {
           nodeHasReceivedTx += 1
         })
-        .once('onNodeBroadcastedTx', e => {
+        .once('onNodeBroadcastedTx', () => {
           nodeHasBroadcastedTx += 1
         })
         .once('nodeBroadcastedTx', () => {
@@ -137,11 +142,11 @@ test('Should monitor an issuing of 0.001 pLTC on Ethereum Ropsten', async () => 
 test('Should monitoring a redeem of 0.001 pLTC on Ethereum Ropsten', async () => {
   const pltc = new pLTC({
     blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.EthereumRopsten,
+    network: constants.networks.EthereumMainnet,
     ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
-    ethProvider: INFURA_ROPSTEN
+    ethProvider: WEB3_PROVIDER
   })
-  pltc.setSelectedNode(ENDPOINT_TESTNET)
+  pltc.setSelectedNode(ENDPOINT_MAINNET)
 
   const amountToRedeem = 0.001
 
@@ -153,11 +158,14 @@ test('Should monitoring a redeem of 0.001 pLTC on Ethereum Ropsten', async () =>
   const start = () =>
     new Promise((resolve, reject) => {
       pltc
-        .redeem(amountToRedeem, LTC_TESTING_ADDRESS)
-        .once('onEthTxBroacasted', () => {
+        .redeem(amountToRedeem, LTC_TESTING_ADDRESS, {
+          gasPrice: 75e9,
+          gas: 200000
+        })
+        .once('onEthTxBroadcasted', () => {
           ethTxBroadcasted += 1
         })
-        .once('nativeTxBroacasted', () => {
+        .once('nativeTxBroadcasted', () => {
           ethTxBroadcasted += 1
         })
         .once('onEthTxConfirmed', () => {
@@ -181,7 +189,7 @@ test('Should monitoring a redeem of 0.001 pLTC on Ethereum Ropsten', async () =>
         .once('onLtcTxConfirmed', () => {
           ltcTxIsConfirmed += 1
         })
-        .once('nativeTxConfirmed', () => {
+        .once('nativeTxConfirmed', e => {
           ltcTxIsConfirmed += 1
         })
         .then(() => resolve())

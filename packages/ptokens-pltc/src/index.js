@@ -1,18 +1,11 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import {
-  constants,
-  eth,
-  eos,
-  ltc,
-  helpers,
-  abi,
-  redeemFrom
-} from 'ptokens-utils'
+import { constants, eth, eos, ltc, helpers, redeemFrom } from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
 import * as bitcoin from 'bitcoinjs-lib'
+import BigNumber from 'bignumber.js'
 
 const MINIMUM_LTC_REDEEMABLE = 0.00005
 
@@ -151,29 +144,26 @@ export class pLTC extends NodeSelector {
         let hostTxHash = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          hostTxHash = await redeemFromEthereum(
+          const ethTxReceipt = await redeemFromEthereum(
             this.hostApi,
-            _amount,
-            decimals,
-            _ltcAddress,
-            contractAddress,
-            gas,
-            gasPrice,
-            this.hostPrivateKey
+            {
+              privateKey: this.hostPrivateKey,
+              gas,
+              gasPrice,
+              contractAddress,
+              value: 0
+            },
+            [
+              eth.onChainFormat(new BigNumber(_amount), decimals).toFixed(),
+              _ltcAddress
+            ],
+            promiEvent,
+            'nativeTxBroadcasted'
           )
-          // NOTE: 'onEthTxBroadcasted' will be removed in version > 1.0.0
-          promiEvent.eventEmitter.emit('onEthTxBroadcasted', hostTxHash)
-          promiEvent.eventEmitter.emit('nativeTxBroadcasted', hostTxHash)
-
-          const ethTxReceipt = await eth.waitForTransactionConfirmation(
-            this.hostApi,
-            hostTxHash,
-            5000
-          )
-
-          // NOTE: 'onEthTxConfirmed' will be removed in version > 1.0.0
+          // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
           promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
           promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
+          hostTxHash = ethTxReceipt.transactionHash
         }
 
         if (this.hostBlockchain === constants.blockchains.Eosio) {
@@ -189,7 +179,6 @@ export class pLTC extends NodeSelector {
           // NOTE: 'onEosTxConfirmed' will be removed in version > 1.0.0
           promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
-
           hostTxHash = eosTxReceipt.transaction_id
         }
 
@@ -198,13 +187,15 @@ export class pLTC extends NodeSelector {
           promiEvent.eventEmitter
         )
 
-        const broadcastedBtcTx = await ltc.waitForTransactionConfirmation(
+        const broadcastedLtcTxReceipt = await ltc.waitForTransactionConfirmation(
           this.nativeNetwork,
           broadcastedLtcTxReport.broadcast_tx_hash,
           3000
         )
-        promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedBtcTx)
-        promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedBtcTx)
+        // prettier-ignore
+        promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedLtcTxReceipt)
+        // prettier-ignore
+        promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedLtcTxReceipt)
 
         promiEvent.resolve({
           amount: _amount.toFixed(decimals),
@@ -212,8 +203,8 @@ export class pLTC extends NodeSelector {
           nativeTx: broadcastedLtcTxReport.broadcast_tx_hash,
           to: _ltcAddress
         })
-      } catch (err) {
-        promiEvent.reject(err)
+      } catch (_err) {
+        promiEvent.reject(_err)
       }
     }
 
