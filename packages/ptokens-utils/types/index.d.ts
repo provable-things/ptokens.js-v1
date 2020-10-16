@@ -194,13 +194,20 @@ export interface Networks {
 export interface pTokens {
   pBTC: string,
   pLTC: string,
-  pWETH: string
+  pWETH: string,
+  pETH: string
+}
+
+export interface Tokens {
+  ETH: string,
+  WETH: string,
 }
 
 export interface Constants {
   blockchains: Blockchains
   networks: Networks,
-  pTokens: pTokens
+  pTokens: pTokens,
+  tokens: Tokens
 }
 
 export const constants: Constants

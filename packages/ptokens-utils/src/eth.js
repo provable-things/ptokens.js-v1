@@ -1,5 +1,6 @@
-import polling from 'light-async-polling'
 import BigNumber from 'bignumber.js'
+import Web3PromiEvent from 'web3-core-promievent'
+import polling from 'light-async-polling'
 
 const HEX_PREFIX = '0x'
 const zeroEther = '0x00'
@@ -100,13 +101,13 @@ const makeContractCall = async (_web3, _method, _options, _params = []) => {
  * @param {Object} _options
  * @param {Array=} [] - _params
  */
-const makeContractSend = async (_web3, _method, _options, _params = []) =>
-  new Promise(async (_resolve, _reject) => {
+const makeContractSend = (_web3, _method, _options, _params = []) => {
+  const promiEvent = Web3PromiEvent()
+  const start = async () => {
     try {
       const { abi, contractAddress, value, gasPrice, gas } = _options
       const account = await getAccount(_web3, true)
       const contract = getContract(_web3, abi, contractAddress, account)
-
       contract.methods[_method](..._params)
         .send({
           from: account,
@@ -114,20 +115,31 @@ const makeContractSend = async (_web3, _method, _options, _params = []) =>
           gasPrice,
           gas
         })
-        .on('transactionHash', _hash => _resolve(_hash))
-        .on('error', _err => _reject(_err.message))
-    } catch (err) {
-      throw new Error(err.message)
+        .once('transactionHash', _hash =>
+          promiEvent.eventEmitter.emit('transactionHash', _hash)
+        )
+        .once('receipt', _receipt =>
+          promiEvent.eventEmitter.emit('receipt', _receipt)
+        )
+        .once('error', _error => promiEvent.eventEmitter.emit('error', _error))
+        .then(() => promiEvent.resolve())
+    } catch (_err) {
+      promiEvent.reject(_err)
     }
-  })
+  }
+
+  start()
+  return promiEvent.eventEmitter
+}
 
 /**
  * @param {Object} _web3
  * @param {Object} _options
  * @param {Array} _params
  */
-const sendSignedMethodTx = (_web3, _method, _options, _params) =>
-  new Promise(async (_resolve, _reject) => {
+const sendSignedMethodTx = (_web3, _method, _options, _params) => {
+  const promiEvent = Web3PromiEvent()
+  const start = async () => {
     try {
       const {
         abi,
@@ -144,32 +156,35 @@ const sendSignedMethodTx = (_web3, _method, _options, _params) =>
         'pending'
       )
 
-      const rawData = {
-        nonce,
-        gasPrice: gasPrice || (await _web3.eth.getGasPrice()),
-        gasLimit: gas || (await getGasLimit(_web3)),
-        to: contractAddress,
-        value,
-        data: contract.methods[_method](..._params).encodeABI()
-      }
-
       const { rawTransaction } = await _web3.eth.accounts.signTransaction(
-        rawData,
+        {
+          nonce,
+          gasPrice: gasPrice || (await _web3.eth.getGasPrice()),
+          gasLimit: gas || (await getGasLimit(_web3)),
+          to: contractAddress,
+          value,
+          data: contract.methods[_method](..._params).encodeABI()
+        },
         privateKey
       )
 
       _web3.eth
         .sendSignedTransaction(rawTransaction)
-        .on('transactionHash', _hash => {
-          _resolve(_hash)
-        })
-        .on('error', _error => {
-          _reject(_error)
-        })
+        .once('transactionHash', _hash =>
+          promiEvent.eventEmitter.emit('transactionHash', _hash)
+        )
+        .once('receipt', _receipt =>
+          promiEvent.eventEmitter.emit('receipt', _receipt)
+        )
+        .once('error', _error => promiEvent.eventEmitter.emit('error', _error))
+        .then(() => promiEvent.resolve())
     } catch (_err) {
-      _reject(_err)
+      promiEvent.reject(_err)
     }
-  })
+  }
+  start()
+  return promiEvent.eventEmitter
+}
 
 /**
  * @param {Object} _web3
