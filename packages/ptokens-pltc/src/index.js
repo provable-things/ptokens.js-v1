@@ -170,7 +170,7 @@ export class pLTC extends NodeSelector {
           const eosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
-            _btcAddress,
+            _ltcAddress,
             decimals,
             contractAddress,
             constants.pTokens.pLTC

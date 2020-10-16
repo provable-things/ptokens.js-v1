@@ -12,7 +12,7 @@ const confirmations = {
   ltc: 4
 }
 
-// NOTE: will be removed in versions > 1.0.0
+// NOTE: will be removed in versions >= 1.0.0
 const hostBlockchainEvents = {
   ethereum: 'onEthTxConfirmed',
   eosio: 'onEosTxConfirmed'
@@ -131,11 +131,12 @@ export class DepositAddress {
       )
     }
 
-    const hostAddressBuf = Buffer.from(
-      utils.eth.removeHexPrefix(this.hostAddress),
-      // NOTE: eos account name are utf-8 encoded
-      this.hostBlockchain === constants.blockchains.Ethereum ? 'hex' : 'utf-8'
-    )
+    // NOTE: eos account name are utf-8 encoded
+    const hostAddressBuf =
+      this.hostBlockchain === constants.blockchains.Eosio
+        ? Buffer.from(this.hostAddress, 'utf-8')
+        : Buffer.from(utils.eth.removeHexPrefix(this.hostAddress), 'hex')
+
     const nonceBuf = utils.converters.encodeUint64le(this.nonce)
     const enclavePublicKeyBuf = Buffer.from(
       utils.eth.removeHexPrefix(this.enclavePublicKey),
