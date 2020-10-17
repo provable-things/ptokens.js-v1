@@ -131,7 +131,7 @@ export class pBTC extends NodeSelector {
         }
 
         if (!btc.isValidAddress(_btcAddress)) {
-          promiEvent.reject('Btc Address is not valid')
+          promiEvent.reject('Invalid Bitcoin address')
           return
         }
 
