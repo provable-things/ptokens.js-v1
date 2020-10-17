@@ -53,7 +53,7 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async (
 
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
 
-  // if you want for example send ltc from a phone
+  // if you want for example send btc from a phone
   /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
   })*/
