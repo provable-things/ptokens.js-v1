@@ -24,13 +24,12 @@ npm install ptokens-perc20
 
 ```js
 import { pERC20 } from 'ptokens-perc20'
-import { constants } from 'ptokens-utils'
 
 const perc20 = new pERC20({
   blockchain: 'EOS',
   network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 
-  pToken: constants.pTokens.pWETH,
+  pToken: 'pWETH',
 
   // if you want to be more detailed
   hostBlockchain: 'EOS',

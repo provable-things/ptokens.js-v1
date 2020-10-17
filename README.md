@@ -71,12 +71,20 @@ const ptokens = new pTokens({
 
 &nbsp;
 
-### Example of generating a pBTC Deposit Address on Ethereum
+### Example of a pBTC pegin on Ethereum
 
 ```js
-const depositAddress = await ptokens.pbtc.getDepositAddress(ethAddress)
+import { pBTC } from 'ptokens-pbtc'
+import { constants } from 'ptokens-utils'
 
-console.log(depositAddress.toString())
+const pbtc = new pBTC({
+  blockchain: constants.blockchains.Ethereum,
+  network: constants.networks.EthereumMainnet,
+  ethPrivateKey: 'Eth private key',
+  ethProvider: 'Eth provider', // or instance of Web3 provider
+})
+
+const depositAddress = await pbtc.getDepositAddress(ethAddress)
     
 //fund the BTC address just generated (not ptokens.js stuff)
 
@@ -137,32 +145,4 @@ npm run bootstrap
 
 ```
 npm run test
-```
-
-&nbsp;
-
-***
-
-&nbsp;
-
-### :page_with_curl: Run and Build the documentation:
-
-Please be sure to have installed [__`mkdocs`__](https://www.mkdocs.org/), [__`python 2.7`__](https://www.python.org/) and __`pip`__.
-
-Switch into __`resources`__ folder:
-
-```
-cd resources
-```
-
-If you want to run the documentation locally:
-
-```
-mkdocs serve
-```
-
-If you want to build the documentation:
-
-```
-mkdocs build
 ```
