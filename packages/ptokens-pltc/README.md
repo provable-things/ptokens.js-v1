@@ -24,6 +24,8 @@ npm install ptokens-pltc
 
 ```js
 import { pLTC } from 'ptokens-pltc'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const pltc = new pLTC({
   blockchain: 'ETH',
@@ -38,4 +40,15 @@ const pltc = new pLTC({
   // optionals
   ethPrivateKey: 'Eth private key',
   ethProvider: 'Eth provider', // or instance of Web3 provider
+  defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
 })

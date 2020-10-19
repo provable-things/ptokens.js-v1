@@ -19,7 +19,7 @@ export interface pERC20Configs {
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
   eosSignatureProvider?: JsSignatureProvider
-  defaultEndpoint?: string,
+  defaultNode?: Node,
   tokenAddress: string,
   pToken: string
 }

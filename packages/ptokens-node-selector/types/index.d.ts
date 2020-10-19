@@ -9,7 +9,7 @@ export interface NodeSelectorConfigs {
   hostNetwork?: string,
   nativeBlockchain?: string,
   nativeNetwork?: string,
-  defaultEndpoint?: string,
+  defaultNode?: Node,
 }
 
 export interface NodeList extends Array<Node> {}
@@ -30,8 +30,6 @@ export class NodeSelector {
   nodes: NodeList
 
   networkType: string
-
-  defaultEndpoint: string
 
   provider: HttpProvider | null
 

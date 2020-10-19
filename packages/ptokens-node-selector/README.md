@@ -24,6 +24,8 @@ npm install ptokens-node-selector
 
 ```js
 import { NodeSelector } from 'ptokens-node-selector'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const nodeSelector = new NodeSelector({
   pToken: 'pToken name',
@@ -36,7 +38,17 @@ const nodeSelector = new NodeSelector({
   hostNetwork: 'testnet_ropsten',
   nativeBlockchain: 'BTC'
   nativeNetwork: 'testnet'
-
-  defaultEndpoint: 'https://.....' //optional
+  // optionals
+  defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
 })
 ```

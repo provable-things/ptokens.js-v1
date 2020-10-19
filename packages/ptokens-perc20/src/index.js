@@ -39,7 +39,7 @@ export class pERC20 extends NodeSelector {
       hostNetwork,
       nativeBlockchain,
       nativeNetwork,
-      defaultEndpoint: _configs.defaultEndpoint
+      defaultNode: _configs.defaultNode
     })
 
     const {

@@ -28,6 +28,25 @@ test('Should select a pBTC node on EOS Mainnet', async () => {
   expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
 })
 
+test('Should connect to a default node', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pBTC,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet,
+    defaultNode: new Node({
+      pToken: constants.pTokens.pBTC,
+      blockchain: constants.blockchains.Eosio,
+      provider: new HttpProvider(PBTC_ON_ETH_MAINNET)
+    })
+  })
+  const node = await nodeSelector.select()
+  const info = await node.getInfo()
+  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
+  expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
+  expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
+  expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
+})
+
 test('Should select a pBTC node on EOS Mainnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,

@@ -24,6 +24,8 @@ npm install ptokens-perc20
 
 ```js
 import { pERC20 } from 'ptokens-perc20'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const perc20 = new pERC20({
   blockchain: 'EOS',
@@ -43,5 +45,16 @@ const perc20 = new pERC20({
   eosPrivateKey: 'Eos Private Key',
   eosRpc: 'https:/...' // or also an instance of JsonRpc
   eosSignatureProvider: '....' // instance of JsSignatureProvider
+  defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
 })
 ```

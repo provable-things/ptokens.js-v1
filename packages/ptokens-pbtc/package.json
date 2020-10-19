@@ -34,6 +34,7 @@
     "ptokens-deposit-address": "^0.4.2",
     "ptokens-node": "^0.4.2",
     "ptokens-node-selector": "^0.4.2",
+    "ptokens-providers": "^0.4.2",
     "ptokens-utils": "^0.4.2",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1",

@@ -23,7 +23,7 @@ export interface pLTCConfigs {
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
   eosSignatureProvider?: JsSignatureProvider
-  defaultEndpoint?: string
+  defaultNode?: Node
 }
 
 export interface RedeemOptions {

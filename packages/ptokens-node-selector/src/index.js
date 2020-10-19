@@ -8,7 +8,7 @@ export class NodeSelector {
    * @param {Object} configs
    */
   constructor(_configs) {
-    const { pToken, defaultEndpoint } = _configs
+    const { pToken, defaultNode } = _configs
 
     if (!helpers.isValidPTokenName(pToken))
       throw new Error('Invalid pToken name')
@@ -36,9 +36,8 @@ export class NodeSelector {
     this.nativeBlockchain = nativeBlockchain
     this.nativeNetwork = nativeNetwork
 
-    this.selectedNode = null
+    this.selectedNode = defaultNode ? defaultNode : null
     this.nodes = []
-    this.defaultEndpoint = defaultEndpoint
     this.provider = new HttpProvider()
   }
 
@@ -95,17 +94,6 @@ export class NodeSelector {
 
       // prettier-ignore
       const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}`
-
-      if (this.defaultEndpoint) {
-        const node = this.nodes.find(
-          _node =>
-            _node.webapi === this.defaultEndpoint &&
-            _node.features.includes(feature)
-        )
-
-        if (node && (await this.checkConnection(node.webapi)))
-          return this.setSelectedNode(node.webapi)
-      }
 
       const filteredNodesByFeature = this.nodes.filter(node =>
         node.features.includes(feature)
