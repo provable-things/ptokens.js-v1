@@ -9,19 +9,19 @@ const { blockchains, pTokens } = constants
 jest.setTimeout(300000)
 
 // prettier-ignore
-const HASH_INCOMING_TX = '2099603a0ee85fce936430828af84fac3efa4fa9d34289f702c31c3de160a7ef'
+const HASH_INCOMING_TX = '4fc92193c675cb9c788b177f0217f7a11a19672f0cb194d0ab82665c1aeb8fd4'
 // prettier-ignore
-const HASH_BROADCASTED_TX = '0x4337e0ab72fe3a2329c8cb6fe666a2d11a9d8b4e4e47a293029cbf7487419165'
+const HASH_BROADCASTED_TX = '4aa602dc1b79a70630f5b7e31dd2a0f1cacfb2ba5498db85add67d5a10ddf52e'
 // deposit address
-const BTC_TESTING_ADDRESS = '3PLpcC8C9xWYuvdhnmLA2dp2qm7KvjGgi7'
-const ETH_TESTING_ADDRESS = '0x468727d0770a301d2721968765ac0b003ce332c5'
-const ENDPOINT = 'https://pbtc-node-1a.ngrok.io'
+const LTC_TESTING_ADDRESS = 'MFQ4CxrNdasetHZar5Yi92brg6ySWiA1Lx'
+const EOS_TESTING_ADDRESS = 't11ptokens11'
+const ENDPOINT = 'https://pltconeos-node-1a.ngrok.io'
 
 let node
 beforeEach(() => {
   node = new Node({
-    pToken: pTokens.pBTC,
-    blockchain: blockchains.Ethereum,
+    pToken: pTokens.pLTC,
+    blockchain: blockchains.Eosio,
     provider: new HttpProvider(ENDPOINT)
   })
 })
@@ -33,8 +33,8 @@ test('Should ping a node with one as default', async () => {
 
 test('Should ping a node after having set the headers', async () => {
   const node = new Node({
-    pToken: pTokens.pBTC,
-    blockchain: blockchains.Ethereum,
+    pToken: pTokens.pLTC,
+    blockchain: blockchains.Eosio,
     provider: new HttpProvider(ENDPOINT, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET',
@@ -82,7 +82,7 @@ test('Should get one native report', async () => {
 test('Should get one host reports by sender address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const res = await node.getReportsBySenderAddress(BTC_TESTING_ADDRESS, limit)
+  const res = await node.getReportsBySenderAddress(LTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -92,7 +92,7 @@ test('Should get one native report by recipient address', async () => {
   const expectedResultLength = 1
   const limit = 1
   const res = await node.getReportsByRecipientAddress(
-    ETH_TESTING_ADDRESS,
+    EOS_TESTING_ADDRESS,
     limit
   )
   expect(res)
@@ -103,7 +103,7 @@ test('Should get one native report by recipient address', async () => {
 test('Should get one host reports by native address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const res = await node.getReportsByNativeAddress(BTC_TESTING_ADDRESS, limit)
+  const res = await node.getReportsByNativeAddress(LTC_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -112,7 +112,7 @@ test('Should get one host reports by native address', async () => {
 test('Should get one native report by host address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const res = await node.getReportsByHostAddress(ETH_TESTING_ADDRESS, limit)
+  const res = await node.getReportsByHostAddress(EOS_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -130,7 +130,7 @@ test('Should get a native report by broadcast tx hash', async () => {
   expect(res).to.be.an.instanceof(Object)
 })
 
-test('Should get last BTC processed block', async () => {
+test('Should get last LTC processed block', async () => {
   const res = await node.getLastProcessedNativeBlock()
   expect(res).to.be.a('number')
 })

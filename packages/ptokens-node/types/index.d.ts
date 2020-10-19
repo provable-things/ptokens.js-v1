@@ -1,10 +1,9 @@
 import { EventEmitter } from 'events'
-import { HttpProvider } from 'ptokens-providers'
 
 export interface NodeConfigs {
   pToken: string,
   blockchain: string
-  provider: HttpProvider
+  endpoint: string
 }
 
 export class Node {
@@ -14,25 +13,49 @@ export class Node {
 
   blockchain: string
 
-  provider: HttpProvider
+  endpoint: string
 
   ping(): Promise<string>
 
+  getPeers(): Promise<PeerList>
+
   getInfo(): Promise<NodeInfo>
 
-  getReports(_type: string, _limit?: number): Promise<ReportList>
+  getNativeReports(_limit?: number): Promise<ReportList>
 
-  getReportsByAddress(_type: string, _address: string, _limit?: number): Promise<ReportList>
+  getHostReports(_limit?: number): Promise<ReportList>
 
-  getReportByNonce(_type: string, _nonce: number): Promise<Report>
+  getReportsBySenderAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  getLastProcessedBlock(_type: string): Promise<number>
+  getReportsByRecipientAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  getIncomingTransactionStatus(_hash: string): Promise<Report>
+  getReportsByNativeAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  getBroadcastTransactionStatus(_hash: string): Promise<Report>
+  getReportsByHostAddress(_address: string, _limit?: number): Promise<ReportList>
+
+  getReportByIncomingTxHash(_hash: string): Promise<Report>
+
+  getReportByBroadcastTxHash(_hash: string): Promise<Report>
+
+  getNativeDepositAddress(_address: string): Promise<DepositAddress>
+
+  getDepositAddresses(): Promise<any> // any because params are named in base of ptoken name
+
+  getLastProcessedNativeBlock(): Promise<number>
+
+  getLastProcessedHostBlock(): Promise<number>
 
   monitorIncomingTransaction(_hash: string, _eventEmitter: EventEmitter): Promise<Report>
+}
+
+export interface PeerList extends Array<Peer> {}
+
+export interface Features extends Array<string> {}
+
+export interface Peer {
+  webapi: string,
+  info: NodeInfo,
+  features: Features
 }
 
 export interface NodeInfo {
@@ -68,4 +91,10 @@ export interface Report {
   witnessed_timestamp: number,
   native_latest_block_number?: number,
   host_latest_block_number?: number
+}
+
+export interface DepositAddress {
+  enclavePublicKey: string,
+  nonce: number,
+  nativeDepositAddress: string
 }
