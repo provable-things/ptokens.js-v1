@@ -60,7 +60,6 @@ export class DepositAddress {
     this.hostNetwork = hostNetwork
     this.nativeBlockchain = nativeBlockchain
     this.nativeNetwork = nativeNetwork
-
     this.node = node
     this.hostApi = hostApi
   }
@@ -73,23 +72,24 @@ export class DepositAddress {
       this.hostBlockchain === utils.constants.blockchains.Ethereum &&
       !Web3Utils.isAddress(_hostAddress)
     )
-      throw new Error('Eth Address is not valid')
+      throw new Error('Invalid Ethereum Address')
 
     if (
       this.hostBlockchain === utils.constants.blockchains.Eosio &&
       !utils.eos.isValidAccountName(_hostAddress)
     )
-      throw new Error('EOS Account is not valid')
+      throw new Error('Invalid EOS Account')
 
     try {
-      const deposit = await this.node.generic(
-        'GET',
-        `get-native-deposit-address/${_hostAddress}`
-      )
+      const {
+        nonce,
+        enclavePublicKey,
+        nativeDepositAddress
+      } = await this.node.getNativeDepositAddress(_hostAddress)
 
-      this.nonce = deposit.nonce
-      this.enclavePublicKey = deposit.enclavePublicKey
-      this.value = deposit.nativeDepositAddress
+      this.nonce = nonce
+      this.enclavePublicKey = enclavePublicKey
+      this.value = nativeDepositAddress
       this.hostAddress = _hostAddress
       return this.value
     } catch (err) {
