@@ -24,8 +24,6 @@ npm install ptokens
 
 ### :zap: Usage: 
 
-### Usage: 
-
 ```js
 import pTokens from 'ptokens'
 import { HttpProvider } from 'ptokens-providers' 
