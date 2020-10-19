@@ -1,5 +1,6 @@
 import { Node } from 'ptokens-node'
 import { EventEmitter } from 'events'
+import { HttpProvider } from 'ptokens-providers'
 
 // prettier-ignore
 const HASH_INCOMING_TX ='a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
@@ -11,7 +12,7 @@ const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 const node = new Node({
   pToken: 'pBTC',
   blockchain: 'ETH',
-  endpoint: 'https://nuc-bridge-3.ngrok.io'
+  provider: new HttpProvider('endpoint')
 })
 
 // $ExpectType Promise<string>
