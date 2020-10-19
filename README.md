@@ -24,8 +24,12 @@ npm install ptokens
 
 ### :zap: Usage: 
 
+### Usage: 
+
 ```js
 import pTokens from 'ptokens'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const ptokens = new pTokens({
   pbtc: {
@@ -44,28 +48,18 @@ const ptokens = new pTokens({
     eosPrivateKey: 'Eos Private Key',
     eosRpc: 'https:/...' // or also an instance of JsonRpc
     eosSignatureProvider: '....' // instance of JsSignatureProvider
+    defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
   }
-})
-```
-
-&nbsp;
-
-It's possible to have more instances of __`pBTC`__:
-
-```js
-import pTokens from 'ptokens'
-
-const ptokens = new pTokens({
-  pbtc: [
-    {
-      blockchain: 'ETH',
-      network: 'mainnet'
-    },
-    {
-      blockchain: 'EOS',
-      network: 'mainnet'
-    }
-  ]
 })
 ```
 
