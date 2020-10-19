@@ -124,12 +124,7 @@ export class pLTC extends NodeSelector {
         if (decoded.version === 0xc4)
           ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
 
-        if (
-          !ltc.isValidAddress(
-            helpers.getNetworkType(this.hostNetwork),
-            ltcAddressToCheck
-          )
-        ) {
+        if (!ltc.isValidAddress(ltcAddressToCheck)) {
           promiEvent.reject('Ltc Address is not valid')
           return
         }

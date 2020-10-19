@@ -9,19 +9,25 @@ const LTC_TESTING_ADDRESS = 'n1qkF2NzY1v5Jj41zSJZRVJE1rJDRyoFzs'
 
 test('Should be a VALID LTC testnet address', () => {
   const validLtcTestnetAddress = LTC_TESTING_ADDRESS
-  const result = utils.ltc.isValidAddress('testnet', validLtcTestnetAddress)
+  const result = utils.ltc.isValidAddress(validLtcTestnetAddress)
   expect(result).to.be.equal(true)
 })
 
 test('Should be a VALID LTC mainnet address', () => {
   const validLtcMainnetAddress = 'MTvnA4CN73ry7c65wEuTSaKzb2pNKHB4n1'
-  const result = utils.ltc.isValidAddress('mainnet', validLtcMainnetAddress)
+  const result = utils.ltc.isValidAddress(validLtcMainnetAddress)
+  expect(result).to.be.equal(true)
+})
+
+test('Should be a VALID LTC Segwit bech32 mainnet address', () => {
+  const validLtcMainnetAddress = 'ltc1qqgytgeu96lc76v3yyvmyqrm6ru680k0tjayaca'
+  const result = utils.ltc.isValidAddress(validLtcMainnetAddress)
   expect(result).to.be.equal(true)
 })
 
 test('Should be an INVALID LTC address', () => {
   const invalidLtcAddress = 'invalid'
-  const result = utils.ltc.isValidAddress('testnet', invalidLtcAddress)
+  const result = utils.ltc.isValidAddress(invalidLtcAddress)
   expect(result).to.be.equal(false)
 })
 
