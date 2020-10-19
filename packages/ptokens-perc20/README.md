@@ -30,6 +30,7 @@ const perc20 = new pERC20({
   network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 
   pToken: 'pWETH',
+  // if you want to send ether instead of weth, you can use 'pETH'
 
   // if you want to be more detailed
   hostBlockchain: 'EOS',
