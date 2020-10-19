@@ -2,6 +2,7 @@ import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
 import { pERC20 } from 'ptokens-perc20'
 import utils from 'ptokens-utils'
+import { HttpProvider } from 'ptokens-providers'
 
 class pTokens {
   /**
@@ -32,6 +33,7 @@ class pTokens {
     }
 
     this.utils = utils
+    this.providers = { HttpProvider }
   }
 }
 

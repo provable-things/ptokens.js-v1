@@ -18,5 +18,11 @@ ptokens.pbtc
 // $ExpectType pLTCConfigs | pLTCConfigs[]
 ptokens.pltc
 
+// $ExpectType pERC20Configs | pERC20Configs[]
+ptokens.pweth
+
+// $ExpectType pERC20Configs | pERC20Configs[]
+ptokens.peth
+
 // $ExpectType Utils
 ptokens.utils

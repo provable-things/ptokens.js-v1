@@ -24,6 +24,8 @@ npm install ptokens
 
 ```js
 import pTokens from 'ptokens'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const ptokens = new pTokens({
   pbtc: {
@@ -42,6 +44,17 @@ const ptokens = new pTokens({
     eosPrivateKey: 'Eos Private Key',
     eosRpc: 'https:/...' // or also an instance of JsonRpc
     eosSignatureProvider: '....' // instance of JsSignatureProvider
+    defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
   }
 })
 ```
@@ -63,5 +76,7 @@ const ptokens = new pTokens({
       blockchain: 'EOS',
       network: 'mainnet'
     }
-  ]
+  ],
+  pltc: [{ ... }],
+  pweth: [{ ... }]
 })

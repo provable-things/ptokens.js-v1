@@ -28,6 +28,8 @@
     "ptokens-pbtc": "^0.4.2",
     "ptokens-perc20": "^0.4.2",
     "ptokens-pltc": "^0.4.2",
+    "ptokens-deposit-address": "^0.4.2",
+    "ptokens-providers": "^0.4.2",
     "ptokens-utils": "^0.4.2"
   },
   "devDependencies": {
