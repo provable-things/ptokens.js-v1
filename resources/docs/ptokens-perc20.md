@@ -1,13 +1,13 @@
-# ptokens-pbtc
+# ptokens-perc20
 
-This module enables the interaction with pBTC tokens.
+This module enables the interaction with pERC20 tokens.
 
 &nbsp;
 
 ### Installation
 
 ```
-npm install ptokens-pbtc
+npm install ptokens-perc20
 ```
 
 &nbsp;
@@ -23,26 +23,28 @@ npm install ptokens-pbtc
 
 
 ```js
-import { pBTC } from 'ptokens-pbtc'
+import { pERC20 } from 'ptokens-perc20'
 import { HttpProvider } from 'ptokens-providers' 
 import { Node } from 'ptokens-node'
 
-const pbtc = new pBTC({
-  blockchain: 'ETH', //or EOS
-  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+const pweth = new pERC20({
+  blockchain: 'EOS',
+  network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 
-  //if you want to be more detailed
-  hostBlockchain: 'ETH',
-  hostNetwork: 'testnet_ropsten',
-  nativeBlockchain: 'BTC'
-  nativeNetwork: 'testnet'
+  pToken: 'pWETH',
+  // if you want to send ether instead of weth, you can use 'pETH'
 
-  //optionals
+  // if you want to be more detailed
+  hostBlockchain: 'EOS',
+  hostNetwork: 'mainnet',
+  nativeBlockchain: 'ETH'
+  nativeNetwork: 'mainnet'
+
   ethPrivateKey: 'Eth private key',
-  ethProvider: 'Eth provider',
+  ethProvider: 'Eth provider', // or instance of Web3 provider
   eosPrivateKey: 'Eos Private Key',
-  eosRpc: 'https:/...'
-  eosSignatureProvider: ..
+  eosRpc: 'https:/...' // or also an instance of JsonRpc
+  eosSignatureProvider: '....', // instance of JsSignatureProvider
     //optionals
   defaultNode: new Node({
     pToken: 'pBTC',
@@ -57,12 +59,7 @@ const pbtc = new pBTC({
   })
 })
 
-const depositAddress = await pbtc.getDepositAddress('eth/eos address')
-console.log(depositAddress.toString())
-
-//fund the BTC address just generated (not ptokens.js stuff)
-
-depositAddress.waitForDeposit()
+pweth.issue('amount in wei', 'eos address', { gas: 20000, gasPrice: 75e9 })
   .once('nativeTxBroadcasted', tx => ... )
   .once('nativeTxConfirmed', tx => ...)
   .once('nodeReceivedTx', report => ...)
@@ -78,27 +75,29 @@ depositAddress.waitForDeposit()
 
 
 ```js
-import { pBTC } from 'ptokens-pbtc'
+import { pERC20 } from 'ptokens-pweth'
 
-const pbtc = new pBTC({
-  blockchain: 'ETH', //or EOS
-  network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
+const pweth = new pERC20({
+  blockchain: 'EOS',
+  network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 
-  //if you want to be more detailed
-  hostBlockchain: 'ETH',
-  hostNetwork: 'testnet_ropsten',
-  nativeBlockchain: 'BTC'
-  nativeNetwork: 'testnet'
+  pToken: 'pWETH',
+  // if you want to send ether instead of weth, you can use 'pETH'
 
-  //optionals
+  // if you want to be more detailed
+  hostBlockchain: 'EOS',
+  hostNetwork: 'mainnet',
+  nativeBlockchain: 'ETH'
+  nativeNetwork: 'mainnet'
+
   ethPrivateKey: 'Eth private key',
-  ethProvider: 'Eth provider',
+  ethProvider: 'Eth provider', // or instance of Web3 provider
   eosPrivateKey: 'Eos Private Key',
-  eosRpc: 'https:/...'
-  eosSignatureProvider: ..
+  eosRpc: 'https:/...' // or also an instance of JsonRpc
+  eosSignatureProvider: '....' // instance of JsSignatureProvider
 })
 
-pbtc.redeem(amount, btcAddress)
+pweth.redeem(amount, nativeAddress)
   .once('hostTxConfirmed', tx => ...)
   .once('nodeReceivedTx', report => ...)
   .once('nodeBroadcastedTx', report => ...)
@@ -115,11 +114,11 @@ It is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignaturePr
 __`eosRpc`__  can be a __`JsonRpc`__ or a string containing an rpc endpoint.
 
 ```js
-import { pBTC } from 'ptokens-pbtc'
+import { pERC20 } from 'ptokens-pweth'
 
 if (window.web3) {
   
-  const pbtc = new pBTC({
+  const pweth = new pERC20({
     blockchain: 'ETH'
     ethProvider: window.web3.currentProvider,
     network: 'testnet'
@@ -136,33 +135,29 @@ if (window.web3) {
 
 ## Class Methods
 
-* __`getDepositAddress`__
+* __`issue`__
 * __`redeem`__
 
 ***
 
-## getDepositAddress
+## issue
 
 ```js
-ptokens.pbtc.getDepositAddress(ethAddress)
+pweth.issue(amout, address)
 ```
-Generate a BTC Deposit Address
+Issue the specified amount on the pToken specified in the constructor to the selected address on the host blockchain
 
 ### Parameters
-- __`String`__ - __`ethAddress`__: Ethereum address
-
+- __`String`__ - __`address`__: Ethereum address
+- __`String`__ - __`amout`__: Amount in wei
 
 ### Returns
 
-- __`DepositAddress`__ : a deposit Address
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pERC20 issued.
 
 ### Example
 ```js
-const depositAddress= await ptokens.pbtc.getDepositAddress(ethAddress)
-
-console.log(depositAddress.toString())
-
-depositAddress.waitForDeposit()
+pweth.issue('10000000000000', address)
   .once('nativeTxBroadcasted', tx => ... )
   .once('nativeTxConfirmed', tx => ...)
   .once('nodeReceivedTx', report => ...)
@@ -176,26 +171,26 @@ depositAddress.waitForDeposit()
 ## redeem
 
 ```js
-ptokens.pbtc.redeem(amount, btcAddress)
+pweth.redeem(amount, nativeAddress)
 ```
 
-Redeem a specified number of pBTC to the specified BTC address.
+Redeem the specified number of pERC20 to the specified address.
 
 ### Parameters
 
-- __`Number`__ - __`amount`__: amount of pBTC to redeem
-- __`String`__ - __`btcAddress`__: BTC address where to receive the BTC redeemed
+- __`Number`__ - __`amount`__: amount of pERC20 to redeem
+- __`String`__ - __`nativeAddress`__: address where to receive the redeemed pTokens
 - __`Object`__ - __`options`__: redeem option (optional)
     - __`Number|String|BigNumber`__ - __`gasPrice`__: The price of gas for this transaction in wei
     - __`Number`__ - __`gas`__:  The amount of gas to use for the transaction (unused gas is refunded)
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pBTC redeemed.
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pERC20 redeemed.
 
 ### Example
 ```js
-ptokens.pbtc.redeem(1, 'btc address')
+pweth.redeem(1, 'ltc address')
   .once('hostTxConfirmed', tx =>. ...)
   .once('nodeReceivedTx', report => ...)
   .once('nodeBroadcastedTx', report => ...)

@@ -17,6 +17,8 @@ In the situation where no default node is in use, the library randomly selects a
 
 ```js
 import { NodeSelector } from 'ptokens-node-selector'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const node = new NodeSelector({
   name: 'pToken name',
@@ -29,8 +31,18 @@ const node = new NodeSelector({
   hostNetwork: 'testnet_ropsten',
   nativeBlockchain: 'BTC'
   nativeNetwork: 'testnet'
-
-  defaultEndpoint: 'https://.....' //optional
+  //optionals
+  defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
 })
 ```
 

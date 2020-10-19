@@ -1,13 +1,13 @@
-# ptokens-pbtc
+# ptokens-pltc
 
-This module enables the interaction with pBTC tokens.
+This module enables the interaction with pLTC tokens.
 
 &nbsp;
 
 ### Installation
 
 ```
-npm install ptokens-pbtc
+npm install ptokens-pltc
 ```
 
 &nbsp;
@@ -23,18 +23,18 @@ npm install ptokens-pbtc
 
 
 ```js
-import { pBTC } from 'ptokens-pbtc'
+import { pLTC } from 'ptokens-pltc'
 import { HttpProvider } from 'ptokens-providers' 
 import { Node } from 'ptokens-node'
 
-const pbtc = new pBTC({
+const pltc = new pLTC({
   blockchain: 'ETH', //or EOS
   network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
 
   //if you want to be more detailed
   hostBlockchain: 'ETH',
   hostNetwork: 'testnet_ropsten',
-  nativeBlockchain: 'BTC'
+  nativeBlockchain: 'LTC'
   nativeNetwork: 'testnet'
 
   //optionals
@@ -42,9 +42,8 @@ const pbtc = new pBTC({
   ethProvider: 'Eth provider',
   eosPrivateKey: 'Eos Private Key',
   eosRpc: 'https:/...'
-  eosSignatureProvider: ..
-    //optionals
-  defaultNode: new Node({
+  eosSignatureProvider: ..,
+    defaultNode: new Node({
     pToken: 'pBTC',
     blockchain: 'ETH',
     provider: new HttpProvider(
@@ -57,10 +56,10 @@ const pbtc = new pBTC({
   })
 })
 
-const depositAddress = await pbtc.getDepositAddress('eth/eos address')
+const depositAddress = await pltc.getDepositAddress('eth/eos address')
 console.log(depositAddress.toString())
 
-//fund the BTC address just generated (not ptokens.js stuff)
+//fund the LTC address just generated (not ptokens.js stuff)
 
 depositAddress.waitForDeposit()
   .once('nativeTxBroadcasted', tx => ... )
@@ -78,16 +77,16 @@ depositAddress.waitForDeposit()
 
 
 ```js
-import { pBTC } from 'ptokens-pbtc'
+import { pLTC } from 'ptokens-pltc'
 
-const pbtc = new pBTC({
+const pltc = new pLTC({
   blockchain: 'ETH', //or EOS
   network: 'testnet', //'testnet' or 'mainnet', default 'testnet'
 
   //if you want to be more detailed
   hostBlockchain: 'ETH',
   hostNetwork: 'testnet_ropsten',
-  nativeBlockchain: 'BTC'
+  nativeBlockchain: 'LTC'
   nativeNetwork: 'testnet'
 
   //optionals
@@ -98,7 +97,7 @@ const pbtc = new pBTC({
   eosSignatureProvider: ..
 })
 
-pbtc.redeem(amount, btcAddress)
+pltc.redeem(amount, btcAddress)
   .once('hostTxConfirmed', tx => ...)
   .once('nodeReceivedTx', report => ...)
   .once('nodeBroadcastedTx', report => ...)
@@ -115,11 +114,11 @@ It is possible to pass a standard __`JsSignatureProvider`__ as __`eosSignaturePr
 __`eosRpc`__  can be a __`JsonRpc`__ or a string containing an rpc endpoint.
 
 ```js
-import { pBTC } from 'ptokens-pbtc'
+import { pLTC } from 'ptokens-pltc'
 
 if (window.web3) {
   
-  const pbtc = new pBTC({
+  const pltc = new pLTC({
     blockchain: 'ETH'
     ethProvider: window.web3.currentProvider,
     network: 'testnet'
@@ -144,9 +143,9 @@ if (window.web3) {
 ## getDepositAddress
 
 ```js
-ptokens.pbtc.getDepositAddress(ethAddress)
+ptokens.pltc.getDepositAddress(ethAddress)
 ```
-Generate a BTC Deposit Address
+Generate a LTC Deposit Address
 
 ### Parameters
 - __`String`__ - __`ethAddress`__: Ethereum address
@@ -158,7 +157,7 @@ Generate a BTC Deposit Address
 
 ### Example
 ```js
-const depositAddress= await ptokens.pbtc.getDepositAddress(ethAddress)
+const depositAddress= await ptokens.pltc.getDepositAddress(ethAddress)
 
 console.log(depositAddress.toString())
 
@@ -176,26 +175,26 @@ depositAddress.waitForDeposit()
 ## redeem
 
 ```js
-ptokens.pbtc.redeem(amount, btcAddress)
+ptokens.pltc.redeem(amount, btcAddress)
 ```
 
-Redeem a specified number of pBTC to the specified BTC address.
+Redeem a specified number of pLTC to the specified LTC address.
 
 ### Parameters
 
-- __`Number`__ - __`amount`__: amount of pBTC to redeem
-- __`String`__ - __`btcAddress`__: BTC address where to receive the BTC redeemed
+- __`Number`__ - __`amount`__: amount of pLTC to redeem
+- __`String`__ - __`btcAddress`__: LTC address where to receive the LTC redeemed
 - __`Object`__ - __`options`__: redeem option (optional)
     - __`Number|String|BigNumber`__ - __`gasPrice`__: The price of gas for this transaction in wei
     - __`Number`__ - __`gas`__:  The amount of gas to use for the transaction (unused gas is refunded)
 
 ### Returns
 
-- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pBTC redeemed.
+- __`Promievent`__ : A [promise combined event emitter](https://web3js.readthedocs.io/en/v1.2.0/callbacks-promises-events.html#promievent). Will be resolved when the Node redeemd the specified amount of pLTC redeemed.
 
 ### Example
 ```js
-ptokens.pbtc.redeem(1, 'btc address')
+ptokens.pltc.redeem(1, 'ltc address')
   .once('hostTxConfirmed', tx =>. ...)
   .once('nodeReceivedTx', report => ...)
   .once('nodeBroadcastedTx', report => ...)
