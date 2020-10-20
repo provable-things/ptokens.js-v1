@@ -1,6 +1,6 @@
 {
   "name": "ptokens",
-  "version": "0.4.2",
+  "version": "0.7.0",
   "description": "main ptokens package",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens",
   "main": "dist/ptokens.cjs.js",
@@ -25,12 +25,12 @@
     "@babel/runtime": "^7.3.1",
     "@types/node": "^12.6.1",
     "chai": "^4.2.0",
-    "ptokens-pbtc": "^0.4.2",
-    "ptokens-perc20": "^0.4.2",
-    "ptokens-pltc": "^0.4.2",
-    "ptokens-deposit-address": "^0.4.2",
-    "ptokens-providers": "^0.4.2",
-    "ptokens-utils": "^0.4.2"
+    "ptokens-pbtc": "^0.7.0",
+    "ptokens-perc20": "^0.7.0",
+    "ptokens-pltc": "^0.7.0",
+    "ptokens-deposit-address": "^0.7.0",
+    "ptokens-providers": "^0.7.0",
+    "ptokens-utils": "^0.7.0"
   },
   "devDependencies": {
     "dtslint": "0.4.2",
