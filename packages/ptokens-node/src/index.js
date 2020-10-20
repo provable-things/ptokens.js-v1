@@ -1,155 +1,172 @@
-import { makeApiCall, REPORT_LIMIT } from './utils/index'
 import polling from 'light-async-polling'
 import { helpers } from 'ptokens-utils'
+import jsonrpc from 'jsonrpc-lite'
+import { v4 as uuidv4 } from 'uuid'
 
 const NODE_POLLING_TIME = 200
+const REPORT_LIMIT = 100
 
 export class Node {
   /**
    * @param {Object} configs
    */
   constructor(configs) {
-    const { pToken, endpoint, appName } = configs
+    const { pToken, blockchain, provider } = configs
 
-    if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
+    if (!helpers.isValidPTokenName(pToken))
+      throw new Error('Invalid pToken name')
 
-    this.info = null
-    this.pToken = pToken
-    this.endpoint = endpoint
-    this.appName = appName
+    this.pToken = pToken.toLowerCase()
+    this.blockchain = helpers.getBlockchainShortType(blockchain)
+    this.provider = provider
+    this.version = 'v1'
   }
 
   ping() {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`,
-      null,
-      this.appName
+    return this._makeJsonRpcCall(`/${this.version}`, 'node_ping')
+  }
+
+  getPeers() {
+    return this._makeJsonRpcCall(`/${this.version}`, 'node_peers')
+  }
+
+  getInfo() {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_getInfo'
     )
   }
 
-  async getInfo() {
-    if (!this.info) {
-      this.info = await makeApiCall(
-        this.endpoint,
-        'GET',
-        `${this.pToken.name}-on-${this.pToken.redeemFrom}/get-info`,
-        null,
-        this.appName
-      )
-    }
-    return this.info
-  }
-
   /**
-   * @param {String} _type
+   *
    * @param {Integer} _limit
    */
-  getReports(_type, _limit = REPORT_LIMIT) {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-reports/limit/${_limit}`,
-      null,
-      this.appName
+  getNativeReports(_limit = REPORT_LIMIT) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryNativeReports',
+      [_limit]
     )
   }
 
   /**
-   * @param {String} _type
+   *
+   * @param {Integer} _limit
+   */
+  getHostReports(_limit = REPORT_LIMIT) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryHostReports',
+      [_limit]
+    )
+  }
+
+  /**
+   *
    * @param {String} _address
    * @param {Integer} _limit
    */
-  getReportsByAddress(_type, _address, _limit = REPORT_LIMIT) {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_type}-address/${_address}/limit/${_limit}`,
-      null,
-      this.appName
+  getReportsBySenderAddress(_address, _limit = REPORT_LIMIT) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_querySender',
+      [_address, _limit]
     )
   }
 
   /**
-   * @param {String} _type
-   * @param {Integer} _nonce
+   *
+   * @param {String} _address
+   * @param {Integer} _limit
    */
-  getReportByNonce(_type, _nonce) {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/report/${_type}/nonce/${_nonce}`,
-      null,
-      this.appName
+  getReportsByRecipientAddress(_address, _limit = REPORT_LIMIT) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryRecipient',
+      [_address, _limit]
     )
   }
 
   /**
-   * @param {String} _type
+   *
+   * @param {String} _address
+   * @param {Integer} _limit
    */
-  getLastProcessedBlock(_type) {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/last-processed-${_type}-block`,
-      null,
-      this.appName
+  getReportsByNativeAddress(_address, _limit = REPORT_LIMIT) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryNativeAddress',
+      [_address, _limit]
     )
   }
 
   /**
+   *
+   * @param {String} _address
+   * @param {Integer} _limit
+   */
+  getReportsByHostAddress(_address, _limit = REPORT_LIMIT) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryHostAddress',
+      [_address, _limit]
+    )
+  }
+
+  /**
+   *
    * @param {String} _hash
    */
-  getIncomingTransactionStatus(_hash) {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/incoming-tx-hash/${_hash}`
-        .null,
-      this.appName
+  getReportByIncomingTxHash(_hash) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryIncomingTxHash',
+      [_hash]
     )
   }
 
   /**
+   *
    * @param {String} _hash
    */
-  getBroadcastTransactionStatus(_hash) {
-    return makeApiCall(
-      this.endpoint,
-      'GET',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/broadcast-tx-hash/${_hash}`,
-      null,
-      this.appName
+  getReportByBroadcastTxHash(_hash) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_queryBroadcastTxHash',
+      [_hash]
     )
   }
 
   /**
-   * @param {Object} _type
-   * @param {String} _block
+   *
+   * @param {String} _address
    */
-  submitBlock(_type, _block) {
-    return makeApiCall(
-      this.endpoint,
-      'POST',
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/submit-${_type}-block`,
-      _block,
-      this.appName
+  getNativeDepositAddress(_address) {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_getNativeDepositAddress',
+      [_address]
     )
   }
 
-  /**
-   * @param {String} _type
-   * @param {String} _path
-   * @param {Object} [_data = null]
-   */
-  generic(_type, _path, _data = null) {
-    return makeApiCall(
-      this.endpoint,
-      _type,
-      `${this.pToken.name}-on-${this.pToken.redeemFrom}/${_path}`,
-      _data,
-      this.appName
+  getDepositAddresses() {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_getDepositAddressArray'
+    )
+  }
+
+  getLastProcessedNativeBlock() {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_getLastProcessedNativeBlock'
+    )
+  }
+
+  getLastProcessedHostBlock() {
+    return this._makeJsonRpcCall(
+      `${this.version}/${this.pToken}-on-${this.blockchain}`,
+      'app_getLastProcessedHostBlock'
     )
   }
 
@@ -161,15 +178,20 @@ export class Node {
     let incomingTx = null
     let isSeen = false
     await polling(async () => {
-      incomingTx = await this.getIncomingTransactionStatus(_hash)
+      incomingTx = await this.getReportByIncomingTxHash(_hash)
 
       if (incomingTx.broadcast === false && !isSeen) {
+        _eventEmitter.emit('nodeReceivedTx', incomingTx)
         _eventEmitter.emit('onNodeReceivedTx', incomingTx)
         isSeen = true
         return false
       } else if (incomingTx.broadcast === true) {
-        if (!isSeen) _eventEmitter.emit('onNodeReceivedTx', incomingTx)
+        if (!isSeen) {
+          _eventEmitter.emit('nodeReceivedTx', incomingTx)
+          _eventEmitter.emit('onNodeReceivedTx', incomingTx)
+        }
 
+        _eventEmitter.emit('nodeBroadcastedTx', incomingTx)
         _eventEmitter.emit('onNodeBroadcastedTx', incomingTx)
         return true
       } else {
@@ -177,5 +199,18 @@ export class Node {
       }
     }, NODE_POLLING_TIME)
     return incomingTx
+  }
+
+  async _makeJsonRpcCall(_path, _call, _body = []) {
+    try {
+      const { result } = await this.provider.call(
+        'POST',
+        _path,
+        jsonrpc.request(uuidv4(), _call, _body)
+      )
+      return result
+    } catch (_err) {
+      throw new Error(_err.message)
+    }
   }
 }

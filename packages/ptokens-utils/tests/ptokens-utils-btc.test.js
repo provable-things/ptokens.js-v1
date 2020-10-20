@@ -23,16 +23,24 @@ test('Should monitor a BTC utxo given an address', async () => {
   const eventEmitter = new EventEmitter()
   const pollingTime = 200
   const network = 'testnet'
+  const broadcastEventName = 'nativeTxBroadcasted'
+  const confirmationEventName = 'nativeTxConfirmed'
 
-  let isBtcTxBroadcasted = false
-  let isBtcTxConfirmed = false
+  let btcTxBroadcasted = 0
+  let btcTxConfirmed = 0
   const start = () =>
     new Promise(resolve => {
       eventEmitter.once('onBtcTxBroadcasted', () => {
-        isBtcTxBroadcasted = true
+        btcTxBroadcasted += 1
+      })
+      eventEmitter.once(broadcastEventName, () => {
+        btcTxBroadcasted += 1
       })
       eventEmitter.once('onBtcTxConfirmed', () => {
-        isBtcTxConfirmed = true
+        btcTxConfirmed += 1
+      })
+      eventEmitter.once(confirmationEventName, () => {
+        btcTxConfirmed += 1
       })
 
       utils.btc
@@ -40,15 +48,17 @@ test('Should monitor a BTC utxo given an address', async () => {
           network,
           BTC_TESTING_ADDRESS,
           eventEmitter,
-          pollingTime
+          pollingTime,
+          broadcastEventName,
+          confirmationEventName
         )
         .then(() => resolve())
     })
 
   await start()
 
-  expect(isBtcTxBroadcasted).to.be.equal(true)
-  expect(isBtcTxConfirmed).to.be.equal(true)
+  expect(btcTxBroadcasted).to.be.equal(2)
+  expect(btcTxConfirmed).to.be.equal(2)
 })
 
 test('Should monitor a BTC transaction confirmation', async () => {

@@ -1,13 +1,15 @@
 import { Node, Report } from 'ptokens-node'
+import { HttpProvider } from 'ptokens-providers'
 
 export interface NodeSelectorConfigs {
-  pToken: {
-    name: string,
-    redeemFrom: string
-  },
-  defaultEndpoint?: string,
-  networkType: string | Promise<string>,
-  appName?: string
+  pToken: string,
+  network?: string,
+  blockchain?: string,
+  hostBlockchain?: string,
+  hostNetwork?: string,
+  nativeBlockchain?: string,
+  nativeNetwork?: string,
+  defaultNode?: Node,
 }
 
 export interface NodeList extends Array<Node> {}
@@ -15,15 +17,21 @@ export interface NodeList extends Array<Node> {}
 export class NodeSelector {
   constructor(_configs: NodeSelectorConfigs)
 
+  hostBlockchain: string
+
+  hostNetwork: string
+
+  nativeBlockchain: string
+
+  nativeNetwork: string
+
   selectedNode: Node
 
   nodes: NodeList
 
-  info: object
-
-  defaultEndpoint: string | null
-
   networkType: string
+
+  provider: HttpProvider | null
 
   checkConnection(_endpoint: string, _timeout?: number): Promise<boolean>
 
@@ -31,9 +39,5 @@ export class NodeSelector {
 
   select(): Promise<Node>
 
-  setEndpoint(_endpoint: string): Node
-
-  getNetworkType(): Promise<string>
-
-  setNetworkType(_type: string): string
+  setSelectedNode(_endpoint: string | Node): Node
 }
