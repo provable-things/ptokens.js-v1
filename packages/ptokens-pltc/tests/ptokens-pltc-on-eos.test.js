@@ -4,7 +4,7 @@ import { sendLitecoin } from './utils'
 import { JsonRpc } from 'eosjs'
 import fetch from 'node-fetch'
 import { constants } from 'ptokens-utils'
-import qrcode from 'qrcode-terminal'
+// import qrcode from 'qrcode-terminal'
 
 // prettier-ignore
 const EOS_PRIVATE_KEY = ''
@@ -45,9 +45,9 @@ test('Should monitor an issuing of 0.05 pLTC on EOS', async () => {
   const depositAddress = await pltc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
 
   // if you want for example send ltc from a phone
-  /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+  /* qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
-  })*/
+  }) */
 
   await sendLitecoin(
     LTC_TESTING_PRIVATE_KEY,

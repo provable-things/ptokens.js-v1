@@ -4,7 +4,7 @@ import { sendBitcoin } from './utils'
 import { JsonRpc } from 'eosjs'
 import fetch from 'node-fetch'
 import { constants } from 'ptokens-utils'
-import qrcode from 'qrcode-terminal'
+// import qrcode from 'qrcode-terminal'
 
 const EOS_PRIVATE_KEY = ''
 const EOS_TESTING_ACCOUNT_NAME = ''
@@ -45,9 +45,9 @@ test('Should monitor an issuing of 0.00050100 pBTC on EOS', async () => {
   const depositAddress = await pbtc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
 
   // if you want for example send btc from a phone
-  /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+  /* qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
-  })*/
+  }) */
 
   await sendBitcoin(
     BTC_TESTING_PRIVATE_KEY,
@@ -119,9 +119,6 @@ test('Should redeem 0.000051 pBTC on EOS', async () => {
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS, {
           gasPrice: 75e9,
           gas: 200000
-        })
-        .once('nativeTxBroadcasted', e => {
-          ethTxBroadcasted += 1
         })
         .once('onEosTxConfirmed', () => {
           eosTxIsConfirmed += 1

@@ -8,10 +8,10 @@ jest.setTimeout(300000)
 
 const PBTC_ON_EOS_MAINNET = 'https://pbtconeos-node-1a.ngrok.io'
 const PBTC_ON_ETH_MAINNET = 'https://pbtc-node-1a.ngrok.io'
-const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io'
+// const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io'
 const PLTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-2.ngrok.io'
 const PLTC_ON_EOS_MAINNET = 'https://pltconeos-node-1a.ngrok.io'
-const PETH_ON_EOS_MAINNET = 'https://pethoneos-node-1a.ngrok.io'
+// const PETH_ON_EOS_MAINNET = 'https://pethoneos-node-1a.ngrok.io'
 const UNREACHABLE_NODE = 'https://unreachable-node.io'
 
 test('Should select a pBTC node on EOS Mainnet', async () => {

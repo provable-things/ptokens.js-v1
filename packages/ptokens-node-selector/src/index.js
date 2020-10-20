@@ -36,7 +36,7 @@ export class NodeSelector {
     this.nativeBlockchain = nativeBlockchain
     this.nativeNetwork = nativeNetwork
 
-    this.selectedNode = defaultNode ? defaultNode : null
+    this.selectedNode = defaultNode || null
     this.nodes = []
     this.provider = new HttpProvider()
   }
@@ -61,12 +61,12 @@ export class NodeSelector {
         _timeout
       )
 
-      return host_blockchain === this.hostBlockchain &&
-        host_network === this.hostNetwork &&
-        native_blockchain === this.nativeBlockchain &&
-        native_network === this.nativeNetwork
-        ? true
-        : false
+      return Boolean(
+        host_blockchain === this.hostBlockchain &&
+          host_network === this.hostNetwork &&
+          native_blockchain === this.nativeBlockchain &&
+          native_network === this.nativeNetwork
+      )
     } catch (_err) {
       throw new Error(`Error during checking node connection: ${_err.message}`)
     }

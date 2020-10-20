@@ -52,16 +52,14 @@ export class pERC20 extends NodeSelector {
     } = _configs
 
     this.tokenAddress = pTokensNativeContract[pToken.toLowerCase()]
-    if (!this.tokenAddress) {
-      throw new Error('Not supported or invalid pToken')
-    }
+    if (!this.tokenAddress) throw new Error('Not supported or invalid pToken')
 
     if (
+      // eslint-disable-next-line
       (!ethPrivateKey && !ethProvider) ||
       (!eosPrivateKey && !eosSignatureProvider)
-    ) {
+    )
       throw new Error('Bad Initialization.')
-    }
 
     if (ethProvider) this.web3 = new Web3(ethProvider)
     if (ethPrivateKey) {

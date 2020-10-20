@@ -24,9 +24,9 @@ class pTokens {
 
     if (perc20) {
       if (Array.isArray(perc20)) {
-        perc20.forEach(
-          _perc20 => (this[_perc20.pToken.toLowerCase()] = new pERC20(_perc20))
-        )
+        perc20.forEach(_perc20 => {
+          this[_perc20.pToken.toLowerCase()] = new pERC20(_perc20)
+        })
       } else {
         this[perc20.pToken.toLowerCase()] = new pERC20(perc20)
       }

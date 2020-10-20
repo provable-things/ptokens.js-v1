@@ -2,7 +2,7 @@ import { pBTC } from '../src/index'
 import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 import { constants } from 'ptokens-utils'
-import qrcode from 'qrcode-terminal'
+// import qrcode from 'qrcode-terminal'
 
 const ETH_TESTING_ADDRESS = ''
 // prettier-ignore
@@ -47,9 +47,9 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum', async () => {
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
 
   // if you want for example send btc from a phone
-  /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+  /* qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
-  })*/
+  }) */
 
   await sendBitcoin(
     BTC_TESTING_PRIVATE_KEY,

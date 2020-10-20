@@ -15,8 +15,8 @@ export class HttpProvider {
    * @param {Object} _headers
    */
   constructor(_endpoint, _headers) {
-    this.headers = _headers ? _headers : DEFAULT_HEADERS
-    this.endpoint = _endpoint ? _endpoint : null
+    this.headers = _headers || DEFAULT_HEADERS
+    this.endpoint = _endpoint || null
 
     this.api = _endpoint
       ? axios.create({

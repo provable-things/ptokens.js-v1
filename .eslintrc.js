@@ -20,6 +20,8 @@ module.exports = {
   },
   rules: {
     quotes: [2, 'single', { avoidEscape: true }],
+    'promise/param-names': 0,
+    'camelcase': 1,
     'prefer-promise-reject-errors': 1,
     'no-template-curly-in-string': 2,
     'no-unused-expressions': 1, //for testing

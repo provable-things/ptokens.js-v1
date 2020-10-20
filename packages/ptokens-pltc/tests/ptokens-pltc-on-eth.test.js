@@ -2,7 +2,7 @@ import { pLTC } from '../src/index'
 import { expect } from 'chai'
 import { sendLitecoin } from './utils'
 import { constants } from 'ptokens-utils'
-import qrcode from 'qrcode-terminal'
+// import qrcode from 'qrcode-terminal'
 
 const ETH_TESTING_ADDRESS = ''
 // prettier-ignore
@@ -47,9 +47,9 @@ test('Should monitor an issuing of 0.001 pLTC on Ethereum', async () => {
   const depositAddress = await pltc.getDepositAddress(ETH_TESTING_ADDRESS)
 
   // if you want for example send ltc from a phone
-  /*qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+  /* qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
-  })*/
+  }) */
 
   await sendLitecoin(
     LTC_TESTING_PRIVATE_KEY,

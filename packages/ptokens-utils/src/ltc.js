@@ -1,7 +1,5 @@
 import axios from 'axios'
 import polling from 'light-async-polling'
-import validate from 'bitcoin-address-validation'
-import * as bitcoin from 'bitcoinjs-lib'
 import { Mainnet } from './helpers/names'
 
 // prettier-ignore
