@@ -71,7 +71,7 @@ export class pLTC extends NodeSelector {
       this.hostBlockchain === constants.blockchains.Ethereum &&
       !Web3Utils.isAddress(_hostAddress)
     )
-      throw new Error('Eth Address is not valid')
+      throw new Error('Invalid Ethereum Address')
 
     const selectedNode = this.selectedNode
       ? this.selectedNode
@@ -125,7 +125,7 @@ export class pLTC extends NodeSelector {
           ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
 
         if (!ltc.isValidAddress(ltcAddressToCheck)) {
-          promiEvent.reject('Ltc Address is not valid')
+          promiEvent.reject('Invalid Litecoin Address')
           return
         }
 

@@ -13,51 +13,35 @@ const EOS_RPC_URL = ''
 // prettier-ignore
 const LTC_TESTING_PRIVATE_KEY = ''
 const LTC_TESTING_ADDRESS = ''
-const ENDPOINT_MAINNET = ''
-
-const pltcOnEosConfigs = {
-  blockchain: constants.blockchains.Eosio,
-  network: constants.networks.Mainnet,
-  eosRpc: new JsonRpc(EOS_RPC_URL, { fetch }),
-  eosPrivateKey: EOS_PRIVATE_KEY
-}
-
 jest.setTimeout(3000000)
 
-test('Should get a LTC deposit address on EOS Jungle3 Testnet', async () => {
-  const pltc = new pLTC(pltcOnEosConfigs)
-  const depositAddress = await pltc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
-  expect(depositAddress.toString()).to.be.a('string')
+let pltc
+beforeEach(() => {
+  pltc = new pLTC({
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet,
+    eosRpc: new JsonRpc(EOS_RPC_URL, { fetch }),
+    eosPrivateKey: EOS_PRIVATE_KEY
+  })
 })
 
 test('Should get a LTC deposit address on EOS Mainnet', async () => {
-  const pltc = new pLTC({
-    blockchain: constants.blockchains.Eosio,
-    network: constants.networks.Mainnet
-  })
   const depositAddress = await pltc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
   expect(depositAddress.toString()).to.be.a('string')
 })
 
 test('Should not get a LTC deposit address because of invalid EOS account', async () => {
-  const pltc = new pLTC({
-    blockchain: constants.blockchains.Eosio,
-    network: constants.networks.Mainnet
-  })
   const invalidEosAddress = 'invalid test account'
   try {
     await pltc.getDepositAddress(invalidEosAddress)
   } catch (err) {
-    expect(err.message).to.be.equal('EOS Account is not valid')
+    expect(err.message).to.be.equal('Invalid EOS Account')
   }
 })
 
 test('Should monitor an issuing of 0.05 pLTC on EOS', async () => {
-  const pltc = new pLTC(pltcOnEosConfigs)
   const amountToIssue = 5000000
   const minerFees = 1000
-  await pltc.setSelectedNode(ENDPOINT_MAINNET)
-
   const depositAddress = await pltc.getDepositAddress(EOS_TESTING_ACCOUNT_NAME)
 
   // if you want for example send ltc from a phone
@@ -115,7 +99,6 @@ test('Should monitor an issuing of 0.05 pLTC on EOS', async () => {
         .then(() => resolve())
     })
   await start()
-
   expect(ltcTxIsBroadcasted).to.equal(2)
   expect(ltcTxIsConfirmed).to.equal(2)
   expect(nodeHasReceivedTx).to.equal(2)
@@ -124,10 +107,7 @@ test('Should monitor an issuing of 0.05 pLTC on EOS', async () => {
 })
 
 test('Should redeem 0.05 pLTC on EOS', async () => {
-  const pltc = new pLTC(pltcOnEosConfigs)
-  await pltc.setSelectedNode(ENDPOINT_MAINNET)
   const amountToRedeem = 0.05
-
   let eosTxIsConfirmed = 0
   let nodeHasReceivedTx = 0
   let nodeHasBroadcastedTx = 0
@@ -169,7 +149,6 @@ test('Should redeem 0.05 pLTC on EOS', async () => {
         .catch(_err => reject(_err))
     })
   await start()
-
   expect(eosTxIsConfirmed).to.equal(2)
   expect(nodeHasReceivedTx).to.equal(2)
   expect(nodeHasBroadcastedTx).to.equal(2)
