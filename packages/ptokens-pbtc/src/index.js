@@ -78,13 +78,13 @@ export class pBTC extends NodeSelector {
       this.hostBlockchain === constants.blockchains.Ethereum &&
       !Web3Utils.isAddress(_hostAddress)
     )
-      throw new Error('Eth Address is not valid')
+      throw new Error('Invalid Ethereum Address')
 
     if (
       this.hostBlockchain === constants.blockchains.Eosio &&
       !eos.isValidAccountName(_hostAddress)
     )
-      throw new Error('EOS Account is not valid')
+      throw new Error('Invalid EOS Account')
 
     const selectedNode = this.selectedNode
       ? this.selectedNode

@@ -13,44 +13,37 @@ const BTC_TESTING_ADDRESS = ''
 // prettier-ignore
 const WEB3_PROVIDER = ''
 
-const pbtcOnEthConfigs = {
-  blockchain: constants.blockchains.Ethereum,
-  network: constants.networks.Mainnet,
-  ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
-  ethProvider: WEB3_PROVIDER
-}
-
 jest.setTimeout(3000000)
+
+let pbtc
+beforeEach(() => {
+  pbtc = new pBTC({
+    blockchain: constants.blockchains.Ethereum,
+    network: constants.networks.Mainnet,
+    ethPrivateKey: ETH_TESTING_PRIVATE_KEY,
+    ethProvider: WEB3_PROVIDER
+  })
+})
 
 test('Should get a BTC deposit address on Ethereum Mainnet', async () => {
   const expectedHostNetwork = 'mainnet'
-  const pbtc = new pBTC({
-    blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Mainnet
-  })
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
   expect(depositAddress.toString()).to.be.a('string')
   expect(pbtc.hostNetwork).to.be.equal(expectedHostNetwork)
 })
 
 test('Should not get a BTC deposit address because of invalid Eth address', async () => {
-  const pbtc = new pBTC({
-    blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Testnet
-  })
   const invalidEthAddress = 'Invalid Eth Address'
   try {
     await pbtc.getDepositAddress(invalidEthAddress)
   } catch (err) {
-    expect(err.message).to.be.equal('Eth Address is not valid')
+    expect(err.message).to.be.equal('Invalid Ethereum Address')
   }
 })
 
-test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async () => {
-  const pbtc = new pBTC(pbtcOnEthConfigs)
+test('Should monitor an issuing of 0.00050100 pBTC on Ethereum', async () => {
   const amountToIssue = 50100
   const minerFees = 1000
-
   const depositAddress = await pbtc.getDepositAddress(ETH_TESTING_ADDRESS)
 
   // if you want for example send btc from a phone
@@ -116,10 +109,8 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum Testnet', async (
   expect(ethTxIsConfirmed).to.equal(2)
 })
 
-test('Should redeem 0.000051 pBTC on Ethereum', async () => {
-  const pbtc = new pBTC(pbtcOnEthConfigs)
-  const amountToRedeem = 0.000051
-
+test('Should redeem 0.0005 pBTC on Ethereum', async () => {
+  const amountToRedeem = 0.0005
   let ethTxBroadcasted = 0
   let ethTxIsConfirmed = 0
   let nodeHasReceivedTx = 0
@@ -144,7 +135,7 @@ test('Should redeem 0.000051 pBTC on Ethereum', async () => {
         .once('hostTxConfirmed', () => {
           ethTxIsConfirmed += 1
         })
-        .once('onNodeReceivedTx', () => {
+        .once('onNodeReceivedTx', e => {
           nodeHasReceivedTx += 1
         })
         .once('nodeReceivedTx', () => {
