@@ -20,6 +20,8 @@ module.exports = {
   },
   rules: {
     quotes: [2, 'single', { avoidEscape: true }],
+    'promise/param-names': 0,
+    'camelcase': 1,
     'prefer-promise-reject-errors': 1,
     'no-template-curly-in-string': 2,
     'no-unused-expressions': 1, //for testing
@@ -36,6 +38,7 @@ module.exports = {
     'space-before-function-paren': ['error', {
       'named': 'never',
     }],
+    'standard/computed-property-even-spacing': 0, //prettier compatibility
     'dot-location': [2, 'property'],
     'no-empty-function': 1,
     'no-empty': 1,

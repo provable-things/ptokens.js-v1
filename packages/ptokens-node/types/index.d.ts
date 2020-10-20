@@ -1,45 +1,62 @@
 import { EventEmitter } from 'events'
+import { HttpProvider } from 'ptokens-providers'
 
 export interface NodeConfigs {
-  pToken: {
-    name: string,
-    redeemFrom: string
-  },
-  endpoint: string,
-  appName?: string,
-}
-
-export interface pToken {
-  name: string
-  redeemFrom: string
+  pToken: string,
+  blockchain: string
+  provider: HttpProvider
 }
 
 export class Node {
   constructor(_configs: NodeConfigs)
 
-  pToken: pToken
+  pToken: string
 
-  endpoint: string
+  blockchain: string
+
+  provider: HttpProvider
 
   ping(): Promise<string>
 
+  getPeers(): Promise<PeerList>
+
   getInfo(): Promise<NodeInfo>
 
-  getReports(_type: string, _limit?: number): Promise<ReportList>
+  getNativeReports(_limit?: number): Promise<ReportList>
 
-  getReportsByAddress(_type: string, _address: string, _limit?: number): Promise<ReportList>
+  getHostReports(_limit?: number): Promise<ReportList>
 
-  getReportByNonce(_type: string, _nonce: number): Promise<Report>
+  getReportsBySenderAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  getLastProcessedBlock(_type: string): Promise<number>
+  getReportsByRecipientAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  getIncomingTransactionStatus(_hash: string): Promise<Report>
+  getReportsByNativeAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  getBroadcastTransactionStatus(_hash: string): Promise<Report>
+  getReportsByHostAddress(_address: string, _limit?: number): Promise<ReportList>
 
-  submitBlock(_type: string, _block: object): Promise<string>
+  getReportByIncomingTxHash(_hash: string): Promise<Report>
+
+  getReportByBroadcastTxHash(_hash: string): Promise<Report>
+
+  getNativeDepositAddress(_address: string): Promise<DepositAddress>
+
+  getDepositAddresses(): Promise<any> // any because params are named in base of ptoken name
+
+  getLastProcessedNativeBlock(): Promise<number>
+
+  getLastProcessedHostBlock(): Promise<number>
 
   monitorIncomingTransaction(_hash: string, _eventEmitter: EventEmitter): Promise<Report>
+}
+
+export interface PeerList extends Array<Peer> {}
+
+export interface Features extends Array<string> {}
+
+export interface Peer {
+  webapi: string,
+  info: NodeInfo,
+  features: Features
 }
 
 export interface NodeInfo {
@@ -47,6 +64,8 @@ export interface NodeInfo {
   smart_contract_address: string,
   host_network: string,
   native_network: string,
+  host_blockchain: string,
+  native_blockchain: string,
   last_processed_host_block: number,
   last_processed_native_block: number,
 }
@@ -73,4 +92,10 @@ export interface Report {
   witnessed_timestamp: number,
   native_latest_block_number?: number,
   host_latest_block_number?: number
+}
+
+export interface DepositAddress {
+  enclavePublicKey: string,
+  nonce: number,
+  nativeDepositAddress: string
 }

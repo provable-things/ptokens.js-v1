@@ -24,12 +24,11 @@ npm install ptokens-node
 
 ```js
 import { Node } from 'ptokens-node'
+import { HttpProvider } from 'ptokens-providers'
 
 const node = new Node({
-  pToken: {
-    name: 'pToken name',
-    redeemFrom: 'ETH' //for now
-  },
-  endpoint: 'https://...' //optional
+  pToken: 'pToken name'
+  blockchain: 'ex ETH, EOS',
+  provider: new HttpProvider('endpoint', { 'Content-Type': 'application/json', ... })
 })
 ```

@@ -21,51 +21,39 @@ npm install ptokens
 ### Usage
 
 ```js
-import pTokens from 'ptokens' 
+import pTokens from 'ptokens'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const ptokens = new pTokens({
   pbtc: {
+    blockchain: 'ETH', // or EOS
+    network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
+
+    // if you want to be more detailed
+    hostBlockchain: 'ETH',
+    hostNetwork: 'testnet_ropsten', // possible values are testnet_jungle2, testnet_ropsten and mainnet
+    nativeBlockchain: 'BTC'
+    nativeNetwork: 'testnet'
+
+    // optionals
     ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
-    btcNetwork: 'testnet'  //'testnet' or 'bitcoin', default 'testnet'
+    ethProvider: 'Eth provider', // or instance of Web3 provider
+    eosPrivateKey: 'Eos Private Key',
+    eosRpc: 'https:/...' // or also an instance of JsonRpc
+    eosSignatureProvider: '....' // instance of JsSignatureProvider
+    defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
   }
 })
 ```
 
-
-It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
-into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
-
-```js
-import pTokens from 'ptokens' 
-
-if (window.web3) {
-  
-  const ptokens = new pTokens({
-    pbtc: {
-      ethProvider: window.web3.currentProvider,
-      btcNetwork: 'bitcoin'
-    }
-  })
-} else {
-  console.log('No web3 detected')
-}
-```
-
-&nbsp;
-
-### Structure
-- __`Object`__ - __`pbtc`__: class for interacting with pBTC token
-- __`Object`__ - __`utils`__: some usefull utilities
-
-&nbsp;
-
-### Constructor parameters
-- __`Object`__ - __`configs`__: options for initializing a pTokens instance
-    - __`Object`__ - __`pbtc`__: options for initializing pBTC
-          - __`String`__ - __`ethPrivateKey`__: an Ethereum private key used for signing transactions for redeeming pTokens (this can be null if you pass an already initialized instance of __`ethProvider`__)
-          - __`String`__ | __`Object`__ - __`ethProvider`__: an Ethereum provider 
-          - __`String`__ - __`btcNetwork`__: Can be `bitcoin` or `testnet`
-          - __`String`__ - __`defaultNode`__: (Optional)
-
-&nbsp;

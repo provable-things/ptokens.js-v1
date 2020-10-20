@@ -26,50 +26,66 @@ npm install ptokens
 
 ```js
 import pTokens from 'ptokens'
+import { HttpProvider } from 'ptokens-providers' 
+import { Node } from 'ptokens-node'
 
 const ptokens = new pTokens({
   pbtc: {
+    blockchain: 'ETH', // or EOS
+    network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
+
+    // if you want to be more detailed
+    hostBlockchain: 'ETH',
+    hostNetwork: 'testnet_ropsten', // possible values are testnet_jungle2, testnet_ropsten and mainnet
+    nativeBlockchain: 'BTC'
+    nativeNetwork: 'testnet'
+
+    // optionals
     ethPrivateKey: 'Eth private key',
-    ethProvider: 'Eth provider',
-    btcNetwork: 'testnet',  //'testnet' or 'bitcoin', default 'testnet'
-    defaultEndpoint: 'https://......' //optional
+    ethProvider: 'Eth provider', // or instance of Web3 provider
+    eosPrivateKey: 'Eos Private Key',
+    eosRpc: 'https:/...' // or also an instance of JsonRpc
+    eosSignatureProvider: '....' // instance of JsSignatureProvider
+    defaultNode: new Node({
+    pToken: 'pBTC',
+    blockchain: 'ETH',
+    provider: new HttpProvider(
+      'node endpoint',
+      {
+        'Access-Control-Allow-Origin': '*',
+        ...
+      }
+    )
+  })
   }
 })
 ```
-It is possible to pass a standard Ethereum Provider as the __`ethProvider`__ value, such as the one injected 
-into the content script of each web page by Metamask(__`window.web3.currentProvider`__).
+
+&nbsp;
+
+### Example of a pBTC pegin on Ethereum
 
 ```js
-import pTokens from 'ptokens'
+import { pBTC } from 'ptokens-pbtc'
+import { constants } from 'ptokens-utils'
 
-if (window.web3) {
-  
-  const ptokens = new pTokens({
-    pbtc: {
-      ethProvider: window.web3.currentProvider,
-      btcNetwork: 'bitcoin'
-    }
-  })
-} else {
-  console.log('No web3 detected')
-}
-```
+const pbtc = new pBTC({
+  blockchain: constants.blockchains.Ethereum,
+  network: constants.networks.EthereumMainnet,
+  ethPrivateKey: 'Eth private key',
+  ethProvider: 'Eth provider', // or instance of Web3 provider
+})
 
-### Example of generating a pBTC Deposit Address
-
-```js
-const depositAddress = await ptokens.pbtc.getDepositAddress(ethAddress)
-
-console.log(depositAddress.toString())
+const depositAddress = await pbtc.getDepositAddress(ethAddress)
     
 //fund the BTC address just generated (not ptokens.js stuff)
 
 depositAddress.waitForDeposit()
-  .once('onBtcTxBroadcasted', tx => ... )
-  .once('onBtcTxConfirmed', tx => ...)
-  .once('onNodeReceivedTx', tx => ...)
-  .once('onNodeBroadcastedTx', tx => ...)
-  .once('onEthTxConfirmed', tx => ...)
+  .once('nativeTxBroadcasted', tx => ... )
+  .once('nativeTxConfirmed', tx => ...)
+  .once('nodeReceivedTx', tx => ...)
+  .once('nodeBroadcastedTx', tx => ...)
+  .once('hostTxConfirmed', tx => ...)
   .then(res => ...))
 ```
 
@@ -121,32 +137,4 @@ npm run bootstrap
 
 ```
 npm run test
-```
-
-&nbsp;
-
-***
-
-&nbsp;
-
-### :page_with_curl: Run and Build the documentation:
-
-Please be sure to have installed [__`mkdocs`__](https://www.mkdocs.org/), [__`python 2.7`__](https://www.python.org/) and __`pip`__.
-
-Switch into __`resources`__ folder:
-
-```
-cd resources
-```
-
-If you want to run the documentation locally:
-
-```
-mkdocs serve
-```
-
-If you want to build the documentation:
-
-```
-mkdocs build
 ```

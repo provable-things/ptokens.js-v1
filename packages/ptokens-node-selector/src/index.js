@@ -1,111 +1,106 @@
-import {
-  createApi,
-  getBootNodeApi,
-  makeApiCallWithTimeout,
-  NODE_CONNECTION_TIMEOUT,
-  DEFAULT_TIMEOUT
-} from './utils/index'
-import { helpers } from 'ptokens-utils'
+import { getBootNodeEndpoint } from './lib/index'
 import { Node } from 'ptokens-node'
-
-const networksToType = {
-  ropsten: 'testnet',
-  main: 'mainnet',
-  bitcoin: 'mainnet',
-  testnet: 'testnet',
-  mainnet: 'mainnet'
-}
+import { helpers, constants } from 'ptokens-utils'
+import { HttpProvider } from 'ptokens-providers'
 
 export class NodeSelector {
   /**
    * @param {Object} configs
    */
-  constructor(configs) {
-    const { pToken, defaultEndpoint, networkType, appName } = configs
+  constructor(_configs) {
+    const { pToken, defaultNode } = _configs
 
-    if (!helpers.pTokenIsValid(pToken)) throw new Error('Invalid pToken')
+    if (!helpers.isValidPTokenName(pToken))
+      throw new Error('Invalid pToken name')
 
-    this.pToken = pToken
-    this.pToken.name = pToken.name.toLowerCase()
-    this.pToken.redeemFrom = pToken.redeemFrom.toLowerCase()
+    // NOTE: pETH becomes pWETH for nodes interactions
+    this.pToken =
+      pToken.toLowerCase() === constants.pTokens.pETH
+        ? constants.pTokens.pWETH
+        : pToken.toLowerCase()
 
-    this.selectedNode = null
-    this.nodes = []
-    this.defaultEndpoint = defaultEndpoint
-
-    if (
-      networksToType[networkType] !== 'testnet' &&
-      networksToType[networkType] !== 'mainnet' &&
-      !networkType.then
+    const {
+      hostBlockchain,
+      hostNetwork,
+      nativeBlockchain,
+      nativeNetwork
+    } = helpers.parseParams(
+      _configs,
+      _configs.nativeBlockchain
+        ? helpers.getBlockchainType[_configs.nativeBlockchain]
+        : helpers.getNativeBlockchainFromPtokenName(this.pToken)
     )
-      throw new Error('Invalid Network')
 
-    this.networkType = networkType
-    this.appName = appName
+    this.hostBlockchain = hostBlockchain
+    this.hostNetwork = hostNetwork
+    this.nativeBlockchain = nativeBlockchain
+    this.nativeNetwork = nativeNetwork
+
+    this.selectedNode = defaultNode || null
+    this.nodes = []
+    this.provider = new HttpProvider()
   }
 
   /**
    * @param {String} _endpoint
    * @param {Number} _timeout
    */
-  async checkConnection(_endpoint, _timeout = NODE_CONNECTION_TIMEOUT) {
+  async checkConnection(_endpoint, _timeout) {
     try {
-      await makeApiCallWithTimeout(
-        createApi(_endpoint, DEFAULT_TIMEOUT, this.appName),
+      this.provider.setEndpoint(_endpoint)
+      const {
+        host_blockchain,
+        host_network,
+        native_blockchain,
+        native_network
+      } = await this.provider.call(
         'GET',
-        `/${this.pToken.name}-on-${this.pToken.redeemFrom}/ping`,
+        // prettier-ignore
+        `/${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}/get-info`,
         null,
         _timeout
       )
-      return true
-    } catch (err) {
-      return false
+
+      return Boolean(
+        host_blockchain === this.hostBlockchain &&
+          host_network === this.hostNetwork &&
+          native_blockchain === this.nativeBlockchain &&
+          native_network === this.nativeNetwork
+      )
+    } catch (_err) {
+      throw new Error(`Error during checking node connection: ${_err.message}`)
     }
   }
 
   async getApi() {
-    if (!this.selectedNode) {
-      const node = await this.select()
-      if (!node) throw new Error('No Nodes Available')
+    try {
+      if (!this.selectedNode) {
+        const node = await this.select()
+        if (!node) throw new Error('No Nodes Available')
+      }
+
+      return this.selectedNode.api
+    } catch (_err) {
+      throw new Error(`Error during getting node api: ${_err.message}`)
     }
-    return this.selectedNode.api
   }
 
   async select() {
     try {
-      const networkType = await this.getNetworkType()
+      this.provider.setEndpoint(
+        getBootNodeEndpoint(helpers.getNetworkType(this.hostNetwork))
+      )
+      this.nodes = (await this.provider.call('GET', '/peers')).peers
 
-      if (this.nodes.length === 0) {
-        const res = await makeApiCallWithTimeout(
-          getBootNodeApi(networkType, this.appName),
-          'GET',
-          '/peers'
-        )
-        this.nodes = res.peers
-      }
-
-      const feature = `${this.pToken.name}-on-${this.pToken.redeemFrom}`
-
-      if (this.defaultEndpoint) {
-        const node = this.nodes.find(
-          node =>
-            node.webapi === this.defaultEndpoint &&
-            node.features.includes(feature)
-        )
-
-        if (
-          node &&
-          (await this.checkConnection(node.webapi, NODE_CONNECTION_TIMEOUT))
-        )
-          return this.setEndpoint(node.webapi)
-      }
+      // prettier-ignore
+      const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}`
 
       const filteredNodesByFeature = this.nodes.filter(node =>
         node.features.includes(feature)
       )
 
       if (filteredNodesByFeature.length === 0)
-        throw new Error('No Nodes Available')
+        throw new Error('No nodes available relating to the selected pToken')
 
       const nodesNotReachable = []
       for (;;) {
@@ -113,18 +108,18 @@ export class NodeSelector {
         const selectedNode = filteredNodesByFeature[index]
 
         if (
-          (await this.checkConnection(
-            selectedNode.webapi,
-            NODE_CONNECTION_TIMEOUT
-          )) &&
+          (await this.checkConnection(selectedNode.webapi)) &&
           !nodesNotReachable.includes(selectedNode)
         )
-          return this.setEndpoint(selectedNode.webapi)
+          return this.setSelectedNode(selectedNode.webapi)
         else if (!nodesNotReachable.includes(selectedNode))
           nodesNotReachable.push(selectedNode)
 
-        if (nodesNotReachable.length === filteredNodesByFeature.length)
-          return null
+        if (nodesNotReachable.length === filteredNodesByFeature.length) {
+          throw new Error(
+            'All nodes relating to the selected pToken appear to be unavailable'
+          )
+        }
       }
     } catch (err) {
       throw new Error(err.message)
@@ -132,35 +127,20 @@ export class NodeSelector {
   }
 
   /**
-   * @param {String} _endpoint
+   * @param {String | Node} _node
    */
-  setEndpoint(_endpoint) {
+  setSelectedNode(_node) {
+    if (_node instanceof Node) {
+      this.selectedNode = _node
+      return this.selectedNode
+    }
+
     this.selectedNode = new Node({
       pToken: this.pToken,
-      endpoint: _endpoint,
-      appName: this.appName
+      blockchain: this.hostBlockchain,
+      provider: new HttpProvider(_node)
     })
 
     return this.selectedNode
-  }
-
-  async getNetworkType() {
-    if (this.networkType.then) {
-      const networkType = await this.networkType
-      return this.setNetworkType(networkType)
-    }
-
-    return this.setNetworkType(this.networkType)
-  }
-
-  /**
-   * @param {String} _type
-   */
-  setNetworkType(_type) {
-    this.networkType = networksToType[_type]
-
-    if (!this.networkType) throw new Error('Invalid Network Type')
-
-    return this.networkType
   }
 }

@@ -1,16 +1,24 @@
 import { NodeSelector } from 'ptokens-node-selector'
+import { Node } from 'ptokens-node'
+import { HttpProvider } from 'ptokens-providers'
 
 const nodeSelector = new NodeSelector({
-  pToken: {
-    name: 'pBTC',
-    redeemFrom: 'ETH'
-  },
-  defaultEndpoint: 'https://nuc-bridge-2.ngrok.io',
-  networkType: 'mainnet'
+  pToken: 'pBTC',
+  network: 'testnet',
+  blockchain: 'ETH'
+})
+
+// if you want to be more detailed
+const nodeSelector2 = new NodeSelector({
+  pToken: 'pBTC',
+  hostBlockchain: 'ethereum',
+  hostNetwork: 'testnet_ropsten',
+  nativeBlockchain: 'bitcoin',
+  nativeNetwork: 'testnet'
 })
 
 // $ExpectType Promise<boolean>
-nodeSelector.checkConnection('https://unreachable-node.io')
+nodeSelector2.checkConnection('https://unreachable-node.io')
 
 // $ExpectType Promise<object>
 nodeSelector.getApi()
@@ -19,10 +27,11 @@ nodeSelector.getApi()
 nodeSelector.select()
 
 // $ExpectType Node
-nodeSelector.setEndpoint('https://unreachable-node.io')
+nodeSelector.setSelectedNode('https://unreachable-node.io')
 
-// $ExpectType Promise<string>
-nodeSelector.getNetworkType()
-
-// $ExpectType string
-nodeSelector.setNetworkType('testnet')
+// $ExpectType Node
+nodeSelector.setSelectedNode(new Node({
+  pToken: 'pbtc',
+  blockchain: 'eth',
+  provider: new HttpProvider('https://unreachable-node.io'),
+}))

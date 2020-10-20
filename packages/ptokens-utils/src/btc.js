@@ -1,6 +1,7 @@
 import validate from 'bitcoin-address-validation'
 import axios from 'axios'
 import polling from 'light-async-polling'
+import { Mainnet } from './helpers/names'
 
 const BLOCKSTREAM_BASE_TESTNET_ENDPOINT =
   'https://blockstream.info/testnet/api/'
@@ -9,7 +10,7 @@ const BLOCKSTREAM_BASE_MAINNET_ENDPOINT = 'https://blockstream.info/api/'
 const _getEsploraApi = _network =>
   axios.create({
     baseURL:
-      _network === 'bitcoin'
+      _network === Mainnet
         ? BLOCKSTREAM_BASE_MAINNET_ENDPOINT
         : BLOCKSTREAM_BASE_TESTNET_ENDPOINT,
     timeout: 50000,
@@ -64,10 +65,12 @@ const monitorUtxoByAddress = async (
   _network,
   _address,
   _eventEmitter,
-  _pollingTime
+  _pollingTime,
+  _broadcastEventName,
+  _confirmationEventName
 ) => {
   let isBroadcasted = false
-  let utxo = null
+  let txId = null
   let utxos = []
   await polling(async () => {
     // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
@@ -80,13 +83,19 @@ const monitorUtxoByAddress = async (
 
     if (utxos.length > 0) {
       if (utxos[0].status.confirmed) {
-        if (!isBroadcasted) _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+        if (!isBroadcasted) {
+          _eventEmitter.emit(_broadcastEventName, utxos[0])
+          _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+        }
 
+        _eventEmitter.emit(_confirmationEventName, utxos[0])
         _eventEmitter.emit('onBtcTxConfirmed', utxos[0])
-        utxo = utxos[0].txid
+
+        txId = utxos[0].txid
         return true
       } else if (!isBroadcasted) {
         isBroadcasted = true
+        _eventEmitter.emit(_broadcastEventName, utxos[0])
         _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
         return false
       }
@@ -94,7 +103,7 @@ const monitorUtxoByAddress = async (
       return false
     }
   }, _pollingTime)
-  return utxo
+  return txId
 }
 
 /**
@@ -105,10 +114,14 @@ const monitorUtxoByAddress = async (
 const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
   let transaction = null
   await polling(async () => {
-    transaction = await _makeEsploraApiCall(_network, 'GET', `/tx/${_tx}`)
+    try {
+      transaction = await _makeEsploraApiCall(_network, 'GET', `/tx/${_tx}`)
+      if (!transaction || !transaction.status) return false
 
-    if (transaction.status.confirmed) return true
-    else return false
+      return transaction.status.confirmed
+    } catch (err) {
+      return false
+    }
   }, _pollingTime)
   return transaction
 }

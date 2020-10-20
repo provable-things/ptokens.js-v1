@@ -13,6 +13,10 @@ nav:
     - Modules:
         - ptokens: ptokens.md
         - ptokens-pbtc: ptokens-pbtc.md
+        - ptokens-pltc: ptokens-pltc.md
+        - ptokens-perc20: ptokens-perc20.md
+        - ptokens-providers: ptokens-providers.md
+        - ptokens-deposit-address: ptokens-deposit-address.md
         - ptokens-node: ptokens-node.md
         - ptokens-node-selector: ptokens-node-selector.md
         - ptokens-utils: ptokens-utils.md
