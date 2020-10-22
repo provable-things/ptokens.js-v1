@@ -214,7 +214,6 @@ export class pERC20 extends NodeSelector {
         }
 
         if (!this.selectedNode) await this.select()
-        await this._loadData()
 
         const { redeemFromEosio } = redeemFrom
 
