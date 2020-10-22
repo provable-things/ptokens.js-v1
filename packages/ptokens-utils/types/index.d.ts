@@ -124,6 +124,7 @@ export interface EthUtils {
   isHexPrefixed(_string: string): boolean
   makeContractCall(_web3: Web3, _method: string, _options: ContractCallParam, _params: Array<number | string>): Promise<TransactionReceipt>
   makeContractSend(_web3: Web3, _method: string, _options: ContractSendParam, _params: Array<number | string>): Promise<TransactionReceipt>
+  sendSignedMethodTx(_web3: Web3, _method: string, _options: ContractSendParam, _params: Array<number | string>): Promise<TransactionReceipt>
   waitForTransactionConfirmation(_web3: Web3, _tx: string, _pollingTime: number): Promise <TransactionReceipt>
 }
 

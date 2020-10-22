@@ -97,6 +97,17 @@ eth.makeContractSend(
 )
 
 // $ExpectType Promise<TransactionReceipt>
+eth.sendSignedMethodTx(
+  new Web3(),
+  'write',
+  {
+    abi: [{ param1: '' }],
+    contractAddress: ETH_TESTING_CONTRACT_ADDRESS
+  },
+  ['hello']
+)
+
+// $ExpectType Promise<TransactionReceipt>
 eth.waitForTransactionConfirmation(new Web3(), ETH_TESTING_TX, 1000)
 
 // eos
