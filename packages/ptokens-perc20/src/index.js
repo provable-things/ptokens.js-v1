@@ -13,12 +13,23 @@ const minimumAmounts = {
   [constants.tokens.WETH]: {
     issue: 1000000000,
     redeem: 0.000000001
+  },
+  [constants.tokens.PNT]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.LINK]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.MKR]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.YFI]: {
+    issue: 1000000000,
+    redeem: 0.000000001
   }
-}
-
-const pTokensNativeContract = {
-  peth: constants.tokens.ETH,
-  pweth: constants.tokens.WETH
 }
 
 export class pERC20 extends NodeSelector {
@@ -47,12 +58,8 @@ export class pERC20 extends NodeSelector {
       ethProvider,
       eosPrivateKey,
       eosRpc,
-      eosSignatureProvider,
-      pToken
+      eosSignatureProvider
     } = _configs
-
-    this.tokenAddress = pTokensNativeContract[pToken.toLowerCase()]
-    if (!this.tokenAddress) throw new Error('Not supported or invalid pToken')
 
     if (
       // eslint-disable-next-line
@@ -81,6 +88,9 @@ export class pERC20 extends NodeSelector {
     } else if (!eosSignatureProvider && !eosPrivateKey && eosRpc) {
       this.hostApi = eos.getApi(null, eosRpc, null)
     }
+
+    this._peginEth =
+      _configs.pToken.toLowerCase() === constants.pTokens.pETH ? true : false
   }
   /**
    * @param {String|BigNumber|BN} _amount in wei
@@ -93,11 +103,15 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
+        await this._loadData()
+
         if (
-          BigNumber(_amount).isLessThan(minimumAmounts[this.tokenAddress].issue)
+          BigNumber(_amount).isLessThan(
+            minimumAmounts[this.nativeContractAddress].issue
+          )
         ) {
           // prettier-ignore
-          promiEvent.reject(`Impossible to issue less than ${minimumAmounts[this.tokenAddress].issue}`)
+          promiEvent.reject(`Impossible to issue less than ${minimumAmounts[this.nativeContractAddress].issue}`)
           return
         }
 
@@ -110,25 +124,24 @@ export class pERC20 extends NodeSelector {
         }
 
         if (!this.selectedNode) await this.select()
-        await this._loadContractAddresses()
 
         let ethTxHash = null
         const waitForEthTransaction = () =>
           new Promise((_resolve, _reject) => {
             eth[this.ethPrivateKey ? 'sendSignedMethodTx' : 'makeContractSend'](
               this.web3,
-              this.tokenAddress === constants.tokens.ETH ? 'pegInEth' : 'pegIn',
+              this._peginEth ? 'pegInEth' : 'pegIn',
               {
                 privateKey: this.ethPrivateKey,
-                abi: abi.pERC20Native,
+                abi: abi.pERC20Vault,
                 gas,
                 gasPrice,
-                contractAddress: eth.addHexPrefix(this.nativeContractAddress),
-                value: this.tokenAddress === constants.tokens.ETH ? _amount : 0
+                contractAddress: eth.addHexPrefix(this.nativeVaultAddress),
+                value: this._peginEth ? _amount : 0
               },
-              this.tokenAddress === constants.tokens.ETH
+              this._peginEth
                 ? [_hostAccount]
-                : [_amount, this.tokenAddress, _hostAccount]
+                : [_amount, this.nativeContractAddress, _hostAccount]
             )
               .once('transactionHash', _hash => {
                 ethTxHash = _hash
@@ -180,13 +193,15 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
+        await this._loadData()
+
         if (
           BigNumber(_amount).isLessThan(
-            minimumAmounts[this.tokenAddress].redeem
+            minimumAmounts[this.nativeContractAddress].redeem
           )
         ) {
           // prettier-ignore
-          promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.tokenAddress].redeem}`)
+          promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.nativeContractAddress].redeem}`)
           return
         }
 
@@ -199,7 +214,7 @@ export class pERC20 extends NodeSelector {
         }
 
         if (!this.selectedNode) await this.select()
-        await this._loadContractAddresses()
+        await this._loadData()
 
         const { redeemFromEosio } = redeemFrom
 
@@ -209,7 +224,7 @@ export class pERC20 extends NodeSelector {
             this.hostApi,
             _amount,
             _nativeAccount,
-            9, // NOTE: WETH decimals on EOS
+            9, // NOTE: perc20 decimals on EOS
             this.hostContractAddress,
             this.pToken === constants.pTokens.pWETH ? 'peth' : this.pToken
           )
@@ -245,21 +260,30 @@ export class pERC20 extends NodeSelector {
     return promiEvent.eventEmitter
   }
 
-  async _loadContractAddresses() {
+  async _loadData() {
     try {
       if (!this.selectedNode) await this.select()
       if (!this.nativeContractAddress || !this.hostContractAddress) {
         const {
           native_smart_contract_address,
-          host_smart_contract_address
+          host_smart_contract_address,
+          native_vault_address
         } = await this.selectedNode.getInfo()
-        this.nativeContractAddress = native_smart_contract_address
-        this.hostContractAddress = host_smart_contract_address
+        this.nativeContractAddress = eth.addHexPrefix(
+          native_smart_contract_address
+        )
+        this.hostContractAddress =
+          this.hostBlockchain === constants.blockchains.Eosio
+            ? host_smart_contract_address
+            : eth.addHexPrefix(host_smart_contract_address)
+        this.nativeVaultAddress = native_vault_address
+          ? eth.addHexPrefix(native_vault_address)
+          : null
       }
 
       return this.nativeContractAddress
     } catch (_err) {
-      throw new Error(`Error during getting contract address: ${_err.message}`)
+      throw new Error(`Error during loading data: ${_err.message}`)
     }
   }
 }

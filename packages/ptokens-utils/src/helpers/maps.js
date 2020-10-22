@@ -16,7 +16,11 @@ import {
   pBTC,
   pLTC,
   pWETH,
-  pETH
+  pETH,
+  pYFI,
+  PNT,
+  pLINK,
+  pMKR
 } from './names'
 
 export const blockchainTypes = {
@@ -41,7 +45,11 @@ export const pTokenNativeBlockchain = {
   pbtc: Bitcoin,
   pltc: Litecoin,
   pweth: Ethereum,
-  peth: Ethereum
+  peth: Ethereum,
+  plink: Ethereum,
+  pyfi: Ethereum,
+  pmkr: Ethereum,
+  pnt: Ethereum
 }
 
 export const networkLabels = {
@@ -74,4 +82,13 @@ export const networkLabelType = {
   mainnet: Mainnet
 }
 
-export const pTokensAvailables = [pBTC, pLTC, pWETH, pETH]
+export const pTokensAvailables = [
+  pBTC,
+  pLTC,
+  pWETH,
+  pETH,
+  pYFI,
+  pMKR,
+  PNT,
+  pLINK
+]

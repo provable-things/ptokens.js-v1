@@ -16,10 +16,13 @@ import {
   pBTC,
   pLTC,
   pETH,
-  pWETH
+  pWETH,
+  pLINK,
+  pMKR,
+  pYFI,
+  PNT
 } from './helpers/names'
-
-import { ETH, WETH } from './helpers/tokens'
+import * as tokens from './helpers/tokens'
 
 /**
  *
@@ -57,16 +60,11 @@ const pTokens = {
   pBTC,
   pLTC,
   pETH,
-  pWETH
-}
-
-/**
- *
- * Tokens list
- */
-const tokens = {
-  ETH,
-  WETH
+  pWETH,
+  pLINK,
+  pMKR,
+  pYFI,
+  PNT
 }
 
 export { blockchains, networks, pTokens, tokens }

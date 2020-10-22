@@ -42,17 +42,17 @@ export class pERC20 extends NodeSelector {
 
   decimals: string | null
 
-  contractAddress: string | null
+  nativeContractAddress: string | null
+
+  hostContractAddress: string | null
+
+  nativeVaultAddress: string | null
 
   hostPrivatekey?: string | null
 
   web3: Web3
 
   hostApi?: Api
-
-  tokenAddress: string
-
-  pToken: string
 
   issue(_amount: string | BigNumber | BN, _hostAddress: string, _options?: Options): PromiEvent<object | TransactionReceipt | Report | Result>
 

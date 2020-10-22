@@ -195,12 +195,20 @@ export interface pTokens {
   pBTC: string,
   pLTC: string,
   pWETH: string,
-  pETH: string
+  pETH: string,
+  pLINK: string,
+  PNT: string,
+  pMKR: string,
+  pYFI: string,
 }
 
 export interface Tokens {
   ETH: string,
   WETH: string,
+  LINK: string,
+  PNT: string,
+  MKR: string,
+  YFI: string,
 }
 
 export interface Constants {
