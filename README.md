@@ -47,16 +47,16 @@ const ptokens = new pTokens({
     eosRpc: 'https:/...' // or also an instance of JsonRpc
     eosSignatureProvider: '....' // instance of JsSignatureProvider
     defaultNode: new Node({
-    pToken: 'pBTC',
-    blockchain: 'ETH',
-    provider: new HttpProvider(
-      'node endpoint',
-      {
-        'Access-Control-Allow-Origin': '*',
-        ...
-      }
-    )
-  })
+      pToken: 'pBTC',
+      blockchain: 'ETH',
+      provider: new HttpProvider(
+        'node endpoint',
+        {
+          'Access-Control-Allow-Origin': '*',
+          ...
+        }
+      )
+    })
   }
 })
 ```
