@@ -180,12 +180,12 @@ export class Node {
     await polling(async () => {
       incomingTx = await this.getReportByIncomingTxHash(_hash)
 
-      if (incomingTx.broadcast === false && !isSeen) {
+      if (incomingTx && incomingTx.broadcast === false && !isSeen) {
         _eventEmitter.emit('nodeReceivedTx', incomingTx)
         _eventEmitter.emit('onNodeReceivedTx', incomingTx)
         isSeen = true
         return false
-      } else if (incomingTx.broadcast === true) {
+      } else if (incomingTx && incomingTx.broadcast === true) {
         if (!isSeen) {
           _eventEmitter.emit('nodeReceivedTx', incomingTx)
           _eventEmitter.emit('onNodeReceivedTx', incomingTx)
