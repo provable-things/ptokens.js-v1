@@ -1,6 +1,6 @@
 {
   "name": "ptokens-utils",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "repo holding some utils needed by other packages",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-utils",
   "main": "dist/ptokens-utils.cjs.js",
@@ -34,7 +34,7 @@
     "eosjs": "^20.0.3",
     "eventemitter3": "^4.0.0",
     "light-async-polling": "^1.0.2",
-    "text-encoding": "^0.7.0",
+    "text-encoding": "^0.7.1",
     "web3": "^1.2.2"
   },
   "devDependencies": {
