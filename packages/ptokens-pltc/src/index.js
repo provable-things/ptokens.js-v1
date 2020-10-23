@@ -118,13 +118,7 @@ export class pLTC extends NodeSelector {
           return
         }
 
-        // NOTE: add support for p2sh testnet address (Q...)
-        let ltcAddressToCheck = _ltcAddress
-        const decoded = bitcoin.address.fromBase58Check(_ltcAddress)
-        if (decoded.version === 0xc4)
-          ltcAddressToCheck = bitcoin.address.toBase58Check(decoded.hash, 0x3a)
-
-        if (!ltc.isValidAddress(ltcAddressToCheck)) {
+        if (!ltc.isValidAddress(_ltcAddress)) {
           promiEvent.reject('Invalid Litecoin Address')
           return
         }

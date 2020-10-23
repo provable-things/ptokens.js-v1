@@ -1,42 +1,49 @@
 {
-	"name": "ptokens-utils",
-	"version": "0.7.1",
-	"description": "repo holding some utils needed by other packages",
-	"repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-utils",
-	"main": "dist/ptokens-utils.cjs.js",
-	"module": "dist/ptokens-utils.esm.js",
-	"browser": "dist/ptokens-utils.umd.js",
-	"types": "types/index.d.ts",
-	"keywords": [
-		"ptokens",
-		"javaScript",
-		"ethereum",
-		"bitcoin",
-		"pnetwork"
-	],
-	"author": "alle.manfredi@gmail.com @provable-things",
-	"license": "LGPL-3.0",
-	"dependencies": {
-		"@babel/runtime": "^7.3.1",
-		"@types/node": "^12.6.1",
-		"axios": "^0.19.2",
-		"bignumber.js": "^9.0.0",
-		"bitcoin-address-validation": "^1.0.0",
-		"bitcoinjs-lib": "^5.1.6",
-		"chai": "^4.2.0",
-		"eosjs": "^20.0.3",
-		"eventemitter3": "^4.0.0",
-		"light-async-polling": "^1.0.2",
-		"text-encoding": "^0.7.0",
-		"web3": "^1.2.2"
-	},
-	"devDependencies": {
-		"@types/text-encoding": "0.0.35",
-		"dtslint": "0.4.2",
-		"jest": "^24.8.0"
-	},
-	"files": [
-		"dist",
-		"types/index.d.ts"
-	]
+  "name": "ptokens-utils",
+  "version": "0.7.1",
+  "description": "repo holding some utils needed by other packages",
+  "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-utils",
+  "main": "dist/ptokens-utils.cjs.js",
+  "module": "dist/ptokens-utils.esm.js",
+  "browser": "dist/ptokens-utils.umd.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest",
+    "lint": "npx eslint ./src --fix && npx eslint ./tests --fix",
+    "dtslint": "dtslint types --onlyTestTsNext"
+  },
+  "keywords": [
+    "ptokens",
+    "javaScript",
+    "ethereum",
+    "bitcoin",
+    "pnetwork"
+  ],
+  "author": "alle.manfredi@gmail.com @provable-things",
+  "license": "LGPL-3.0",
+  "dependencies": {
+    "@babel/runtime": "^7.3.1",
+    "@types/node": "^12.6.1",
+    "axios": "^0.19.2",
+    "bignumber.js": "^9.0.0",
+    "bitcoin-address-validation": "^1.0.0",
+    "bitcoinjs-lib": "^5.1.6",
+    "chai": "^4.2.0",
+    "eosjs": "^20.0.3",
+    "eventemitter3": "^4.0.0",
+    "light-async-polling": "^1.0.2",
+    "text-encoding": "^0.7.0",
+    "web3": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/text-encoding": "0.0.35",
+    "dtslint": "0.4.2",
+    "jest": "^24.8.0"
+  },
+  "files": [
+    "dist",
+    "types/index.d.ts"
+  ]
 }
