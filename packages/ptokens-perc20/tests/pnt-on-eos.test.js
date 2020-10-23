@@ -32,7 +32,7 @@ beforeEach(() => {
   })
 })
 
-/*test('Should not issue less than 1000000000 pNT', async () => {
+test('Should not issue less than 1000000000 pNT', async () => {
   const amountToIssue = BigNumber('900000000')
   try {
     await pnt.issue(amountToIssue, EOS_TESTING_ACCOUNT_NAME)
@@ -128,7 +128,7 @@ test('Should issue 0.00002 pNT using ETH', async () => {
   expect(nodeHasBroadcastedTx).to.equal(true)
   expect(eosTxIsConfirmed).to.equal(true)
 })
-*/
+
 test('Should redeem 0.00002 pNT on EOS', async () => {
   const amountToRedeem = 0.00002
   let eosTxIsConfirmed = false
