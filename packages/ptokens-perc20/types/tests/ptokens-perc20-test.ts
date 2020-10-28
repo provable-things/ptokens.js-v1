@@ -4,7 +4,6 @@ const perc20 = new pERC20({
   network: 'mainnet',
   blockchain: 'eos',
   pToken: 'pweth',
-  tokenAddress: '0x0000000000000000000000000000000000000000'
 })
 
 // $ExpectType PromiEvent<object | TransactionReceipt | Report | Result>
