@@ -11,6 +11,8 @@ import {
   Litecoin,
   LitecoinMainnet,
   LitecoinTestnet,
+  Telos,
+  TelosMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -32,7 +34,8 @@ const blockchains = {
   Bitcoin,
   Eosio,
   Ethereum,
-  Litecoin
+  Litecoin,
+  Telos
 }
 
 /**
@@ -49,7 +52,8 @@ const networks = {
   EosioMainnet,
   EosioJungle3,
   LitecoinMainnet,
-  LitecoinTestnet
+  LitecoinTestnet,
+  TelosMainnet
 }
 
 /**

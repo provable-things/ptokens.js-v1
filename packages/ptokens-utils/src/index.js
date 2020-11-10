@@ -22,6 +22,7 @@ export default {
   constants,
   eth,
   eos,
+  telos: eos,
   helpers,
   ltc,
   redeemFrom: {

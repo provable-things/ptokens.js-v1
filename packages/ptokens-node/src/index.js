@@ -3,7 +3,7 @@ import { helpers } from 'ptokens-utils'
 import jsonrpc from 'jsonrpc-lite'
 import { v4 as uuidv4 } from 'uuid'
 
-const NODE_POLLING_TIME = 200
+const NODE_POLLING_TIME = 2000
 const REPORT_LIMIT = 100
 
 export class Node {

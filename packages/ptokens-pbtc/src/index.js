@@ -167,7 +167,10 @@ export class pBTC extends NodeSelector {
           hostTxHash = ethTxReceipt.transactionHash
         }
 
-        if (this.hostBlockchain === constants.blockchains.Eosio) {
+        if (
+          this.hostBlockchain === constants.blockchains.Eosio ||
+          this.hostBlockchain === constants.blockchains.Telos
+        ) {
           const eosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
@@ -177,8 +180,10 @@ export class pBTC extends NodeSelector {
             constants.pTokens.pBTC
           )
 
-          // NOTE: 'onEosTxConfirmed' will be removed in version >= 1.0.0
-          promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+          if (this.hostBlockchain === constants.blockchains.Eosio) {
+            // NOTE: 'onEosTxConfirmed' will be removed in version >= 1.0.0
+            promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+          }
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
           hostTxHash = eosTxReceipt.transaction_id
         }

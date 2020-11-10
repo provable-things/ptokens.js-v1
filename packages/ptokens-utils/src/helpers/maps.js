@@ -11,6 +11,7 @@ import {
   Eosio,
   EosioMainnet,
   EosioJungle3,
+  TelosMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -20,7 +21,8 @@ import {
   pYFI,
   PNT,
   pLINK,
-  pMKR
+  pMKR,
+  Telos
 } from './names'
 
 export const blockchainTypes = {
@@ -31,14 +33,16 @@ export const blockchainTypes = {
   bitcoin: Bitcoin,
   btc: Bitcoin,
   ltc: Litecoin,
-  litecoin: Litecoin
+  litecoin: Litecoin,
+  telos: Telos
 }
 
 export const blockchainShortTypes = {
   ethereum: 'eth',
   eosio: 'eos',
   bitcoin: 'btc',
-  litecoin: 'ltc'
+  litecoin: 'ltc',
+  telos: 'telos'
 }
 
 export const pTokenNativeBlockchain = {
@@ -72,6 +76,9 @@ export const networkLabels = {
     testnet: LitecoinTestnet,
     mainnet: LitecoinMainnet,
     litecoin: LitecoinMainnet
+  },
+  telos: {
+    mainnet: TelosMainnet
   }
 }
 

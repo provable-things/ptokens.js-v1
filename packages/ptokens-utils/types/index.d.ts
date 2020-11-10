@@ -176,7 +176,8 @@ export interface Blockchains {
   Bitcoin: string,
   Litecoin: string,
   Ethereum: string,
-  Eosio: string
+  Eosio: string,
+  Telos: string
 }
 
 export interface Networks {
@@ -189,7 +190,8 @@ export interface Networks {
   EthereumMainnet: string,
   EthereumRopsten: string,
   EosioMainnet: string,
-  EosioJungle3: string
+  EosioJungle3: string,
+  TelosMainnet: string
 }
 
 export interface pTokens {

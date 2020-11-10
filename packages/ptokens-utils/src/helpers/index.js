@@ -12,41 +12,35 @@ import { Mainnet, Testnet } from './names'
  *
  * @param {String} _network
  */
-const getNetworkType = _network => {
-  return networkLabelType[_network.toLowerCase()]
-}
+const getNetworkType = _network => networkLabelType[_network.toLowerCase()]
 
 /**
  *
  * @param {String} _blockchain
  */
-const getBlockchainType = _blockchain => {
-  return blockchainTypes[_blockchain.toLowerCase()]
-}
+const getBlockchainType = _blockchain =>
+  blockchainTypes[_blockchain.toLowerCase()]
 
 /**
  *
  * @param {String} _blockchain
  */
-const getBlockchainShortType = _blockchain => {
-  return blockchainShortTypes[_blockchain.toLowerCase()]
-}
+const getBlockchainShortType = _blockchain =>
+  blockchainShortTypes[_blockchain.toLowerCase()]
 
 /**
  *
  * @param {String} _name
  */
-const getNativeBlockchainFromPtokenName = _name => {
-  return pTokenNativeBlockchain[_name.toLowerCase()]
-}
+const getNativeBlockchainFromPtokenName = _name =>
+  pTokenNativeBlockchain[_name.toLowerCase()]
 
 /**
  *
  * @param {String} _name
  */
-const isValidPTokenName = _name => {
-  return Boolean(pTokensAvailables.includes(_name.toLowerCase()))
-}
+const isValidPTokenName = _name =>
+  Boolean(pTokensAvailables.includes(_name.toLowerCase()))
 
 /**
  *
