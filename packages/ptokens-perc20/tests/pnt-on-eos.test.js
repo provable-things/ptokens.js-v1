@@ -32,7 +32,7 @@ beforeEach(() => {
   })
 })
 
-test('Should not issue less than 1000000000 pNT', async () => {
+test('Should not issue less than 1000000000 PNT', async () => {
   const amountToIssue = BigNumber('900000000')
   try {
     await pnt.issue(amountToIssue, EOS_TESTING_ACCOUNT_NAME)
@@ -41,7 +41,7 @@ test('Should not issue less than 1000000000 pNT', async () => {
   }
 })
 
-test('Should issue 0.00002 pNT using ETH', async () => {
+test('Should issue 0.00002 PNT', async () => {
   const amountToIssue = BigNumber('20000000000000')
   let ethTxBrodcasted = 2
   let ethTxIsConfirmed = false
@@ -99,24 +99,19 @@ test('Should issue 0.00002 pNT using ETH', async () => {
           gasPrice: 75e9,
           gas: 200000
         })
-        .once('nativeTxBroadcasted', e => {
-          console.log(e)
+        .once('nativeTxBroadcasted', () => {
           ethTxBrodcasted = true
         })
-        .once('nativeTxConfirmed', e => {
-          console.log(e)
+        .once('nativeTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
-        .once('nodeReceivedTx', e => {
-          console.log(e)
+        .once('nodeReceivedTx', () => {
           nodeHasReceivedTx = true
         })
-        .once('nodeBroadcastedTx', e => {
-          console.log(e)
+        .once('nodeBroadcastedTx', () => {
           nodeHasBroadcastedTx = true
         })
-        .once('hostTxConfirmed', e => {
-          console.log(e)
+        .once('hostTxConfirmed', () => {
           eosTxIsConfirmed = true
         })
         .then(() => resolve())
@@ -129,7 +124,7 @@ test('Should issue 0.00002 pNT using ETH', async () => {
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.00002 pNT on EOS', async () => {
+test('Should redeem 0.00002 PNT on EOS', async () => {
   const amountToRedeem = 0.00002
   let eosTxIsConfirmed = false
   let nodeHasReceivedTx = false
@@ -139,20 +134,16 @@ test('Should redeem 0.00002 pNT on EOS', async () => {
     new Promise((resolve, reject) => {
       pnt
         .redeem(amountToRedeem, ETH_TESTING_ADDRESS)
-        .once('hostTxConfirmed', e => {
-          console.log(e)
+        .once('hostTxConfirmed', () => {
           eosTxIsConfirmed = true
         })
-        .once('nodeReceivedTx', e => {
-          console.log(e)
+        .once('nodeReceivedTx', () => {
           nodeHasReceivedTx = true
         })
-        .once('nodeBroadcastedTx', e => {
-          console.log(e)
+        .once('nodeBroadcastedTx', () => {
           nodeHasBroadcastedTx = true
         })
-        .once('nativeTxConfirmed', e => {
-          console.log(e)
+        .once('nativeTxConfirmed', () => {
           ethTxIsConfirmed = true
         })
         .then(() => resolve())
