@@ -22,6 +22,7 @@ import {
   PNT,
   pLINK,
   pMKR,
+  PTERIA,
   Telos
 } from './names'
 
@@ -53,7 +54,8 @@ export const pTokenNativeBlockchain = {
   plink: Ethereum,
   pyfi: Ethereum,
   pmkr: Ethereum,
-  pnt: Ethereum
+  pnt: Ethereum,
+  pteria: Ethereum
 }
 
 export const networkLabels = {
@@ -97,5 +99,6 @@ export const pTokensAvailables = [
   pYFI,
   pMKR,
   PNT,
-  pLINK
+  pLINK,
+  PTERIA
 ]

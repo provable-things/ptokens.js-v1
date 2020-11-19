@@ -201,6 +201,7 @@ export interface pTokens {
   pETH: string,
   pLINK: string,
   PNT: string,
+  PTERIA: string,
   pMKR: string,
   pYFI: string,
 }
@@ -210,6 +211,7 @@ export interface Tokens {
   WETH: string,
   LINK: string,
   PNT: string,
+  PTERIA: string,
   MKR: string,
   YFI: string,
 }

@@ -29,6 +29,10 @@ const minimumAmounts = {
   [constants.tokens.YFI]: {
     issue: 1000000000,
     redeem: 0.000000001
+  },
+  [constants.tokens.PTERIA]: {
+    issue: 1000000000,
+    redeem: 0.000000001
   }
 }
 
@@ -89,8 +93,7 @@ export class pERC20 extends NodeSelector {
       this.hostApi = eos.getApi(null, eosRpc, null)
     }
 
-    this._peginEth =
-      _configs.pToken.toLowerCase() === constants.pTokens.pETH ? true : false
+    this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
   /**
    * @param {String|BigNumber|BN} _amount in wei

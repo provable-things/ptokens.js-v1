@@ -22,7 +22,8 @@ import {
   pLINK,
   pMKR,
   pYFI,
-  PNT
+  PNT,
+  PTERIA
 } from './helpers/names'
 import * as tokens from './helpers/tokens'
 
@@ -68,7 +69,8 @@ const pTokens = {
   pLINK,
   pMKR,
   pYFI,
-  PNT
+  PNT,
+  PTERIA
 }
 
 export { blockchains, networks, pTokens, tokens }
