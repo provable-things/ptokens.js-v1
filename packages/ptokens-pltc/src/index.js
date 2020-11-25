@@ -4,8 +4,6 @@ import { NodeSelector } from 'ptokens-node-selector'
 import { constants, eth, eos, ltc, helpers, redeemFrom } from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
-import * as bitcoin from 'bitcoinjs-lib'
-import BigNumber from 'bignumber.js'
 
 const MINIMUM_LTC_REDEEMABLE = 0.00005
 
@@ -100,7 +98,7 @@ export class pLTC extends NodeSelector {
   }
 
   /**
-   * @param {Number} _amount
+   * @param {Number|String|BigNumber} _amount
    * @param {String} _ltcAddress
    * @param {RedeemOptions} _options
    */
@@ -126,7 +124,6 @@ export class pLTC extends NodeSelector {
         if (!this.selectedNode) await this.select()
 
         // prettier-ignore
-        const decimals = this.hostBlockchain === constants.blockchains.Ethereum ? 18 : 8
         const contractAddress = await this._getContractAddress()
 
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
@@ -142,12 +139,9 @@ export class pLTC extends NodeSelector {
               contractAddress,
               value: 0
             },
-            [
-              eth.onChainFormat(new BigNumber(_amount), decimals).toFixed(),
-              _ltcAddress
-            ],
+            [_amount, _ltcAddress],
             promiEvent,
-            'nativeTxBroadcasted'
+            'hostTxBroadcasted'
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
           promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
@@ -160,7 +154,7 @@ export class pLTC extends NodeSelector {
             this.hostApi,
             _amount,
             _ltcAddress,
-            decimals,
+            8,
             contractAddress,
             constants.pTokens.pLTC
           )
@@ -187,7 +181,7 @@ export class pLTC extends NodeSelector {
         promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedLtcTxReceipt)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(decimals),
+          amount: _amount,
           hostTx: hostTxHash,
           nativeTx: broadcastedLtcTxReport.broadcast_tx_hash,
           to: _ltcAddress
