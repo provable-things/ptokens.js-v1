@@ -65,13 +65,6 @@ export class pERC20 extends NodeSelector {
       eosSignatureProvider
     } = _configs
 
-    if (
-      // eslint-disable-next-line
-      (!ethPrivateKey && !ethProvider) ||
-      (!eosPrivateKey && !eosSignatureProvider)
-    )
-      throw new Error('Bad Initialization.')
-
     if (ethProvider) this.web3 = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.web3.eth.accounts.privateKeyToAccount(
