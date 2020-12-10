@@ -1,6 +1,6 @@
 {
   "name": "ptokens-deposit-address",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "repo holding the code related to deposit addresses",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-deposit-address",
   "main": "dist/ptokens-deposit-address.cjs.js",
@@ -32,9 +32,9 @@
     "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
     "eosjs": "^20.0.3",
-    "ptokens-node": "^0.7.1",
-    "ptokens-providers": "^0.7.1",
-    "ptokens-utils": "^0.7.1",
+    "ptokens-node": "^0.8.0",
+    "ptokens-providers": "^0.8.0",
+    "ptokens-utils": "^0.8.0",
     "web3": "^1.2.2"
   },
   "devDependencies": {

@@ -133,7 +133,8 @@ export class DepositAddress {
 
     // NOTE: eos account name are utf-8 encoded
     const hostAddressBuf =
-      this.hostBlockchain === constants.blockchains.Eosio
+      this.hostBlockchain === constants.blockchains.Eosio ||
+      this.hostBlockchain === constants.blockchains.Telos
         ? Buffer.from(this.hostAddress, 'utf-8')
         : Buffer.from(utils.eth.removeHexPrefix(this.hostAddress), 'hex')
 
@@ -185,35 +186,38 @@ export class DepositAddress {
         this.hostBlockchain
       )
 
-      const nativeTxId = await utils[
-        shortNativeBlockchain
-      ].monitorUtxoByAddress(
-        this.nativeNetwork,
-        this.value,
-        promiEvent.eventEmitter,
-        POLLING_TIME,
-        'nativeTxBroadcasted',
-        'nativeTxConfirmed',
-        confirmations[shortNativeBlockchain]
-      )
+      // prettier-ignore
+      const nativeTxId = await utils[shortNativeBlockchain]
+        .monitorUtxoByAddress(
+          this.nativeNetwork,
+          this.value,
+          promiEvent.eventEmitter,
+          POLLING_TIME,
+          'nativeTxBroadcasted',
+          'nativeTxConfirmed',
+          confirmations[shortNativeBlockchain]
+        )
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(
         nativeTxId,
         promiEvent.eventEmitter
       )
 
-      const hostTxReceipt = await utils[
-        shortHostBlockchain
-      ].waitForTransactionConfirmation(
-        this.hostApi,
-        broadcastedHostTxReport.broadcast_tx_hash,
-        HOST_NODE_POLLING_TIME_INTERVAL
-      )
+      // prettier-ignore
+      const hostTxReceipt = await utils[shortHostBlockchain]
+        .waitForTransactionConfirmation(
+          this.hostApi,
+          broadcastedHostTxReport.broadcast_tx_hash,
+          HOST_NODE_POLLING_TIME_INTERVAL
+        )
 
-      promiEvent.eventEmitter.emit(
-        hostBlockchainEvents[this.hostBlockchain],
-        hostTxReceipt
-      )
+      if (this.hostBlockchain !== utils.constants.blockchains.Telos) {
+        // NOTE: 'onEosTxConfirmed & onEthTxConfirmed' will be removed in version >= 1.0.0
+        promiEvent.eventEmitter.emit(
+          hostBlockchainEvents[this.hostBlockchain],
+          hostTxReceipt
+        )
+      }
       promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
 
       promiEvent.resolve({

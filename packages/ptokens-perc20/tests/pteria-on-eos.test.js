@@ -28,11 +28,11 @@ beforeEach(() => {
     ethProvider: WEB3_PROVIDER,
     eosRpc: new JsonRpc(EOS_TESTING_NODE_ENDPOINT, { fetch }),
     eosPrivateKey: EOS_TESTING_PRIVATE_KEY,
-    pToken: constants.pTokens.PNT
+    pToken: constants.pTokens.PTERIA
   })
 })
 
-test('Should not issue less than 1000000000 PNT', async () => {
+test('Should not issue less than 1000000000 PTERIA', async () => {
   const amountToIssue = BigNumber('900000000')
   try {
     await pnt.issue(amountToIssue, EOS_TESTING_ACCOUNT_NAME)
@@ -41,8 +41,8 @@ test('Should not issue less than 1000000000 PNT', async () => {
   }
 })
 
-test('Should issue 0.00002 PNT', async () => {
-  const amountToIssue = BigNumber('20000000000000')
+test('Should issue 0.002 PTERIA', async () => {
+  const amountToIssue = BigNumber('2000000000000000')
   let ethTxBrodcasted = 2
   let ethTxIsConfirmed = false
   let nodeHasReceivedTx = false
@@ -86,10 +86,10 @@ test('Should issue 0.00002 PNT', async () => {
       ],
       gas: 200000,
       gasPrice: 75e9,
-      contractAddress: constants.tokens.PNT,
+      contractAddress: constants.tokens.PTERIA,
       value: 0
     },
-    [eth.addHexPrefix(native_vault_address), BigNumber('20000000000000')]
+    [eth.addHexPrefix(native_vault_address), BigNumber('2000000000000000')]
   )
 
   const start = () =>
@@ -124,8 +124,8 @@ test('Should issue 0.00002 PNT', async () => {
   expect(eosTxIsConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.00002 PNT on EOS', async () => {
-  const amountToRedeem = 0.00002
+test('Should redeem 0.002 PTERIA on EOS', async () => {
+  const amountToRedeem = 0.002
   let eosTxIsConfirmed = false
   let nodeHasReceivedTx = false
   let nodeHasBroadcastedTx = false

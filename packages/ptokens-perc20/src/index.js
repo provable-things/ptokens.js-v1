@@ -4,33 +4,7 @@ import { NodeSelector } from 'ptokens-node-selector'
 import { abi, constants, eth, eos, helpers, redeemFrom } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
-
-const minimumAmounts = {
-  [constants.tokens.ETH]: {
-    issue: 1000000000,
-    redeem: 0.000000001
-  },
-  [constants.tokens.WETH]: {
-    issue: 1000000000,
-    redeem: 0.000000001
-  },
-  [constants.tokens.PNT]: {
-    issue: 1000000000,
-    redeem: 0.000000001
-  },
-  [constants.tokens.LINK]: {
-    issue: 1000000000,
-    redeem: 0.000000001
-  },
-  [constants.tokens.MKR]: {
-    issue: 1000000000,
-    redeem: 0.000000001
-  },
-  [constants.tokens.YFI]: {
-    issue: 1000000000,
-    redeem: 0.000000001
-  }
-}
+import minimumAmounts from './minimum-amounts'
 
 export class pERC20 extends NodeSelector {
   constructor(_configs) {
@@ -61,13 +35,6 @@ export class pERC20 extends NodeSelector {
       eosSignatureProvider
     } = _configs
 
-    if (
-      // eslint-disable-next-line
-      (!ethPrivateKey && !ethProvider) ||
-      (!eosPrivateKey && !eosSignatureProvider)
-    )
-      throw new Error('Bad Initialization.')
-
     if (ethProvider) this.web3 = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.web3.eth.accounts.privateKeyToAccount(
@@ -89,8 +56,7 @@ export class pERC20 extends NodeSelector {
       this.hostApi = eos.getApi(null, eosRpc, null)
     }
 
-    this._peginEth =
-      _configs.pToken.toLowerCase() === constants.pTokens.pETH ? true : false
+    this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
   /**
    * @param {String|BigNumber|BN} _amount in wei

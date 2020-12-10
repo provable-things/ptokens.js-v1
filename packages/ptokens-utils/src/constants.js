@@ -11,6 +11,8 @@ import {
   Litecoin,
   LitecoinMainnet,
   LitecoinTestnet,
+  Telos,
+  TelosMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -20,7 +22,13 @@ import {
   pLINK,
   pMKR,
   pYFI,
-  PNT
+  PNT,
+  PTERIA,
+  pUNI,
+  pBAND,
+  pBAL,
+  pCOMP,
+  pSNX
 } from './helpers/names'
 import * as tokens from './helpers/tokens'
 
@@ -32,7 +40,8 @@ const blockchains = {
   Bitcoin,
   Eosio,
   Ethereum,
-  Litecoin
+  Litecoin,
+  Telos
 }
 
 /**
@@ -49,7 +58,8 @@ const networks = {
   EosioMainnet,
   EosioJungle3,
   LitecoinMainnet,
-  LitecoinTestnet
+  LitecoinTestnet,
+  TelosMainnet
 }
 
 /**
@@ -64,7 +74,13 @@ const pTokens = {
   pLINK,
   pMKR,
   pYFI,
-  PNT
+  PNT,
+  PTERIA,
+  pUNI,
+  pBAND,
+  pBAL,
+  pCOMP,
+  pSNX
 }
 
 export { blockchains, networks, pTokens, tokens }

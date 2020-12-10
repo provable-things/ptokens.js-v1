@@ -4,7 +4,6 @@ import { NodeSelector } from 'ptokens-node-selector'
 import { constants, eth, eos, btc, helpers, redeemFrom } from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
-import BigNumber from 'bignumber.js'
 
 const MINIMUM_BTC_REDEEMABLE = 0.00005
 
@@ -113,7 +112,7 @@ export class pBTC extends NodeSelector {
   }
 
   /**
-   * @param {Number} _amount
+   * @param {Number|BigNumber|String} _amount
    * @param {String} _btcAddress
    * @param {RedeemOptions} _options
    */
@@ -138,7 +137,6 @@ export class pBTC extends NodeSelector {
         if (!this.selectedNode) await this.select()
 
         // prettier-ignore
-        const decimals = this.hostBlockchain === constants.blockchains.Ethereum ? 18 : 8
         const contractAddress = await this._getContractAddress()
 
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
@@ -154,12 +152,9 @@ export class pBTC extends NodeSelector {
               contractAddress,
               value: 0
             },
-            [
-              eth.onChainFormat(new BigNumber(_amount), decimals).toFixed(),
-              _btcAddress
-            ],
+            [_amount, _btcAddress],
             promiEvent,
-            'nativeTxBroadcasted'
+            'hostTxBroadcasted'
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
           promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
@@ -167,18 +162,23 @@ export class pBTC extends NodeSelector {
           hostTxHash = ethTxReceipt.transactionHash
         }
 
-        if (this.hostBlockchain === constants.blockchains.Eosio) {
+        if (
+          this.hostBlockchain === constants.blockchains.Eosio ||
+          this.hostBlockchain === constants.blockchains.Telos
+        ) {
           const eosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
             _btcAddress,
-            decimals,
+            8,
             contractAddress,
             constants.pTokens.pBTC
           )
 
-          // NOTE: 'onEosTxConfirmed' will be removed in version >= 1.0.0
-          promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+          if (this.hostBlockchain === constants.blockchains.Eosio) {
+            // NOTE: 'onEosTxConfirmed' will be removed in version >= 1.0.0
+            promiEvent.eventEmitter.emit('onEosTxConfirmed', eosTxReceipt)
+          }
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
           hostTxHash = eosTxReceipt.transaction_id
         }
@@ -200,7 +200,7 @@ export class pBTC extends NodeSelector {
         promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedBtcTxReceipt)
 
         promiEvent.resolve({
-          amount: _amount.toFixed(decimals),
+          amount: _amount,
           hostTx: hostTxHash,
           nativeTx: broadcastedBtcTxReport.broadcast_tx_hash,
           to: _btcAddress

@@ -2,6 +2,7 @@ import { pBTC } from '../src/index'
 import { expect } from 'chai'
 import { sendBitcoin } from './utils'
 import { constants } from 'ptokens-utils'
+import BigNumber from 'bignumber.js'
 // import qrcode from 'qrcode-terminal'
 
 const ETH_TESTING_ADDRESS = ''
@@ -110,7 +111,9 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum', async () => {
 })
 
 test('Should redeem 0.0005 pBTC on Ethereum', async () => {
-  const amountToRedeem = 0.0005
+  const amountToRedeem = BigNumber(0.0005)
+    .multipliedBy(10 ** 18)
+    .toFixed()
   let ethTxBroadcasted = 0
   let ethTxIsConfirmed = 0
   let nodeHasReceivedTx = 0
@@ -123,10 +126,7 @@ test('Should redeem 0.0005 pBTC on Ethereum', async () => {
           gasPrice: 75e9,
           gas: 200000
         })
-        .once('onEthTxBroadcasted', () => {
-          ethTxBroadcasted += 1
-        })
-        .once('nativeTxBroadcasted', () => {
+        .once('hostTxBroadcasted', () => {
           ethTxBroadcasted += 1
         })
         .once('onEthTxConfirmed', () => {
@@ -158,7 +158,7 @@ test('Should redeem 0.0005 pBTC on Ethereum', async () => {
     })
   await start()
 
-  expect(ethTxBroadcasted).to.equal(2)
+  expect(ethTxBroadcasted).to.equal(1)
   expect(ethTxIsConfirmed).to.equal(2)
   expect(nodeHasReceivedTx).to.equal(2)
   expect(nodeHasBroadcastedTx).to.equal(2)
