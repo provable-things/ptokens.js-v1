@@ -23,7 +23,12 @@ import {
   pMKR,
   pYFI,
   PNT,
-  PTERIA
+  PTERIA,
+  pUNI,
+  pBAND,
+  pBAL,
+  pCOMP,
+  pSNX
 } from './helpers/names'
 import * as tokens from './helpers/tokens'
 
@@ -70,7 +75,12 @@ const pTokens = {
   pMKR,
   pYFI,
   PNT,
-  PTERIA
+  PTERIA,
+  pUNI,
+  pBAND,
+  pBAL,
+  pCOMP,
+  pSNX
 }
 
 export { blockchains, networks, pTokens, tokens }

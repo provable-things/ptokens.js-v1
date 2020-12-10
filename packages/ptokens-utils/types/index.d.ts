@@ -204,6 +204,11 @@ export interface pTokens {
   PTERIA: string,
   pMKR: string,
   pYFI: string,
+  pUNI: string,
+  pBAND: string,
+  pBAL: string,
+  pCOMP: string,
+  pSNX: string,
 }
 
 export interface Tokens {
@@ -214,6 +219,11 @@ export interface Tokens {
   PTERIA: string,
   MKR: string,
   YFI: string,
+  UNI: string,
+  BAND: string,
+  BAL: string,
+  COMP: string,
+  SNX: string,
 }
 
 export interface Constants {

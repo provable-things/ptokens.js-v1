@@ -14,6 +14,7 @@ import {
   TelosMainnet,
   Mainnet,
   Testnet,
+  Telos,
   pBTC,
   pLTC,
   pWETH,
@@ -23,7 +24,11 @@ import {
   pLINK,
   pMKR,
   PTERIA,
-  Telos
+  pUNI,
+  pBAND,
+  pBAL,
+  pCOMP,
+  pSNX
 } from './names'
 
 export const blockchainTypes = {
@@ -55,7 +60,12 @@ export const pTokenNativeBlockchain = {
   pyfi: Ethereum,
   pmkr: Ethereum,
   pnt: Ethereum,
-  pteria: Ethereum
+  pteria: Ethereum,
+  puni: Ethereum,
+  pband: Ethereum,
+  pbal: Ethereum,
+  pcomp: Ethereum,
+  psnx: Ethereum
 }
 
 export const networkLabels = {
@@ -100,5 +110,10 @@ export const pTokensAvailables = [
   pMKR,
   PNT,
   pLINK,
-  PTERIA
+  PTERIA,
+  pUNI,
+  pBAND,
+  pBAL,
+  pCOMP,
+  pSNX
 ]
