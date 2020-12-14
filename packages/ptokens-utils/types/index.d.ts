@@ -209,6 +209,10 @@ export interface pTokens {
   pBAL: string,
   pCOMP: string,
   pSNX: string,
+  pOMG: string,
+  pDAI: string,
+  pANT: string,
+  pLRC: string
 }
 
 export interface Tokens {
@@ -224,6 +228,10 @@ export interface Tokens {
   BAL: string,
   COMP: string,
   SNX: string,
+  OMG: string,
+  DAI: string,
+  ANT: string,
+  LRC: string
 }
 
 export interface Constants {

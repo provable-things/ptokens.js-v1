@@ -28,7 +28,11 @@ import {
   pBAND,
   pBAL,
   pCOMP,
-  pSNX
+  pSNX,
+  pOMG,
+  pDAI,
+  pANT,
+  pLRC
 } from './names'
 
 export const blockchainTypes = {
@@ -65,7 +69,11 @@ export const pTokenNativeBlockchain = {
   pband: Ethereum,
   pbal: Ethereum,
   pcomp: Ethereum,
-  psnx: Ethereum
+  psnx: Ethereum,
+  pomg: Ethereum,
+  pdai: Ethereum,
+  pant: Ethereum,
+  plrc: Ethereum
 }
 
 export const networkLabels = {
@@ -115,5 +123,9 @@ export const pTokensAvailables = [
   pBAND,
   pBAL,
   pCOMP,
-  pSNX
+  pSNX,
+  pOMG,
+  pDAI,
+  pANT,
+  pLRC
 ]

@@ -28,7 +28,11 @@ import {
   pBAND,
   pBAL,
   pCOMP,
-  pSNX
+  pSNX,
+  pOMG,
+  pDAI,
+  pANT,
+  pLRC
 } from './helpers/names'
 import * as tokens from './helpers/tokens'
 
@@ -80,7 +84,11 @@ const pTokens = {
   pBAND,
   pBAL,
   pCOMP,
-  pSNX
+  pSNX,
+  pOMG,
+  pDAI,
+  pANT,
+  pLRC
 }
 
 export { blockchains, networks, pTokens, tokens }

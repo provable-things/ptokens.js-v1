@@ -47,5 +47,21 @@ export default {
   [constants.tokens.SNX]: {
     issue: 1000000000,
     redeem: 0.000000001
+  },
+  [constants.tokens.OMG]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.DAI]: {
+    issue: 1000000000,
+    redeem: 0.0001
+  },
+  [constants.tokens.ANT]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.LRC]: {
+    issue: 1000000000,
+    redeem: 0.000000001
   }
 }
