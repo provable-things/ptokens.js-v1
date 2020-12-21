@@ -83,5 +83,5 @@ export default {
   [constants.tokens.PNK]: {
     issue: 1000000000,
     redeem: 0.000000001
-  },
+  }
 }

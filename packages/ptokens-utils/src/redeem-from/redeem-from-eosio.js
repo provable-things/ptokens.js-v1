@@ -4,14 +4,7 @@ import pTokenOnEosAbi from '../abi/pTokenOnEOSContractAbi.json'
 const EOS_BLOCKS_BEHIND = 3
 const EOS_EXPIRE_SECONDS = 60
 
-const redeemFromEosio = async (
-  _api,
-  _amount,
-  _nativeAddress,
-  _decimals,
-  _contractAddress,
-  _pToken
-) => {
+const redeemFromEosio = async (_api, _amount, _nativeAddress, _decimals, _contractAddress, _pToken) => {
   try {
     const eosPublicKeys = await _api.signatureProvider.getAvailableKeys()
     const eosAccountName = await getAccountName(_api.rpc, eosPublicKeys)
@@ -39,11 +32,7 @@ const redeemFromEosio = async (
             ],
             data: {
               sender: eosAccountName,
-              quantity: getAmountInEosFormat(
-                _amount,
-                _decimals,
-                _pToken.toUpperCase()
-              ),
+              quantity: getAmountInEosFormat(_amount, _decimals, _pToken.toUpperCase()),
               memo: _nativeAddress
             }
           }

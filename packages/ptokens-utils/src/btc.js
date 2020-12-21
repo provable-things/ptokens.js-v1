@@ -3,16 +3,12 @@ import axios from 'axios'
 import polling from 'light-async-polling'
 import { Mainnet } from './helpers/names'
 
-const BLOCKSTREAM_BASE_TESTNET_ENDPOINT =
-  'https://blockstream.info/testnet/api/'
+const BLOCKSTREAM_BASE_TESTNET_ENDPOINT = 'https://blockstream.info/testnet/api/'
 const BLOCKSTREAM_BASE_MAINNET_ENDPOINT = 'https://blockstream.info/api/'
 
 const _getEsploraApi = _network =>
   axios.create({
-    baseURL:
-      _network === Mainnet
-        ? BLOCKSTREAM_BASE_MAINNET_ENDPOINT
-        : BLOCKSTREAM_BASE_TESTNET_ENDPOINT,
+    baseURL: _network === Mainnet ? BLOCKSTREAM_BASE_MAINNET_ENDPOINT : BLOCKSTREAM_BASE_TESTNET_ENDPOINT,
     timeout: 50000,
     headers: {
       'Content-Type': 'text/plain'
@@ -32,24 +28,21 @@ const _makeEsploraApiCall = (_network, _callType, _apiPath, _params) =>
  * @param {String} _network
  * @param {String} _tx
  */
-const broadcastTransaction = (_network, _tx) =>
-  _makeEsploraApiCall(_network, 'POST', '/tx', _tx)
+const broadcastTransaction = (_network, _tx) => _makeEsploraApiCall(_network, 'POST', '/tx', _tx)
 
 /**
  *
  * @param {String} _network
  * @param {String} _address
  */
-const getUtxoByAddress = (_network, _address) =>
-  _makeEsploraApiCall(_network, 'GET', `/address/${_address}/utxo`)
+const getUtxoByAddress = (_network, _address) => _makeEsploraApiCall(_network, 'GET', `/address/${_address}/utxo`)
 
 /**
  *
  * @param {String} _network
  * @param {String} _txId
  */
-const getTransactionHexById = (_network, _txId) =>
-  _makeEsploraApiCall(_network, 'GET', `/tx/${_txId}/hex`)
+const getTransactionHexById = (_network, _txId) => _makeEsploraApiCall(_network, 'GET', `/tx/${_txId}/hex`)
 
 /**
  * @param {String} _address
@@ -75,11 +68,7 @@ const monitorUtxoByAddress = async (
   await polling(async () => {
     // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
 
-    utxos = await _makeEsploraApiCall(
-      _network,
-      'GET',
-      `/address/${_address}/utxo`
-    )
+    utxos = await _makeEsploraApiCall(_network, 'GET', `/address/${_address}/utxo`)
 
     if (utxos.length > 0) {
       if (utxos[0].status.confirmed) {

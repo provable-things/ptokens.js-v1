@@ -13,9 +13,7 @@ const PLTC_ON_ETH_MAINNET = 'https://pltconeth-node-1a.ngrok.io'
 const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io/'
 const PLTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-2.ngrok.io'
 
-// prettier-ignore
 const INFURA_MAINNET = 'https://mainnet.infura.io/v3/4762c881ac0c4938be76386339358ed6'
-// prettier-ignore
 const INFURA_ROPSTEN = 'https://mainnet.infura.io/v3/4762c881ac0c4938be76386339358ed6'
 const EOS_MAINNET_NODE = 'https://eos-mainnet-4.ptokens.io'
 

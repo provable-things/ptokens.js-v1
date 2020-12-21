@@ -2,9 +2,7 @@ import { Node } from 'ptokens-node'
 import { EventEmitter } from 'events'
 import { HttpProvider } from 'ptokens-providers'
 
-// prettier-ignore
 const HASH_INCOMING_TX ='a177f86e24eb3ffc0a272f7f0bd6cb8fb6acb97a67ac211a7863b12dfcec1a29'
-// prettier-ignore
 const HASH_BROADCASTED_TX = '0xac53ba6214ad2b0513fd6d69ab2c39a6649fc83a61048eb5d4aebad80f0cbe30'
 const BTC_TESTING_ADDRESS = '2NFLTr9nFbnexQgRP3hpEH5NKduvqpiAUpw'
 const ETH_TESTING_ADDRESS = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'

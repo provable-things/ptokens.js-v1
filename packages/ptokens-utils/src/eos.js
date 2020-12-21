@@ -24,8 +24,7 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
     })
   }
 
-  const signatureProvider =
-    _signatureProvider || new JsSignatureProvider([_privateKey])
+  const signatureProvider = _signatureProvider || new JsSignatureProvider([_privateKey])
 
   const rpc = typeof _rpc === 'string' ? new JsonRpc(_rpc, { fetch }) : _rpc
 
@@ -61,8 +60,7 @@ const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
  * @param {String} _accountName
  */
 const isValidAccountName = _accountName =>
-  // prettier-ignore
-  (new RegExp('(([a-z]|[1-5]|.){0,12})$')).test(_accountName) && _accountName.length <= EOS_MAX_ACCOUNT_LENGTH
+  new RegExp('(([a-z]|[1-5]|.){0,12})$').test(_accountName) && _accountName.length <= EOS_MAX_ACCOUNT_LENGTH
 
 /**
  * @param {Api} _api
@@ -74,8 +72,7 @@ const waitForTransactionConfirmation = async (_api, _tx) => {
     try {
       receipt = await _api.rpc.history_get_transaction(_tx)
 
-      if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED)
-        return true
+      if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
       else return false
     } catch (err) {
       return false
@@ -84,10 +81,4 @@ const waitForTransactionConfirmation = async (_api, _tx) => {
   return receipt
 }
 
-export {
-  getApi,
-  getAccountName,
-  getAmountInEosFormat,
-  isValidAccountName,
-  waitForTransactionConfirmation
-}
+export { getApi, getAccountName, getAmountInEosFormat, isValidAccountName, waitForTransactionConfirmation }

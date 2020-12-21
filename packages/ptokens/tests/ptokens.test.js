@@ -64,8 +64,7 @@ test('Should init pTokens correctly with 1 instance of pBTC and 1 of pLTC and 1 
         pToken: constants.pTokens.pWETH,
         blockchain: constants.blockchains.Ethereum,
         network: constants.networks.Testnet,
-        ethPrivateKey:
-          'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
+        ethPrivateKey: 'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
         ethProvider: 'https://provider.com',
         eosPrivateKey: 'private key',
         eosSignatureProvider: 'https://provider.com'
@@ -74,8 +73,7 @@ test('Should init pTokens correctly with 1 instance of pBTC and 1 of pLTC and 1 
         pToken: constants.pTokens.pETH,
         blockchain: constants.blockchains.Ethereum,
         network: constants.networks.Testnet,
-        ethPrivateKey:
-          'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
+        ethPrivateKey: 'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
         ethProvider: 'https://provider.com',
         eosPrivateKey: 'private key',
         eosSignatureProvider: 'https://provider.com'

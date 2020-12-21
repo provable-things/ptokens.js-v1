@@ -5,13 +5,9 @@ import fetch from 'node-fetch'
 import { constants } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
 
-// prettier-ignore
 const ETH_TESTING_ADDRESS = ''
-// prettier-ignore
 const ETH_TESTING_PRIVATE_KEY = ''
-// prettier-ignore
 const WEB3_PROVIDER = ''
-// prettier-ignore
 const EOS_TESTING_PRIVATE_KEY = ''
 const EOS_TESTING_NODE_ENDPOINT = ''
 const EOS_TESTING_ACCOUNT_NAME = ''

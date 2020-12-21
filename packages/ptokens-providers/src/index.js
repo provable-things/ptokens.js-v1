@@ -38,19 +38,11 @@ export class HttpProvider {
       const CancelToken = axios.CancelToken
       const options = {
         cancelToken: _timeout
-          ? new CancelToken(_cancel =>
-              setTimeout(
-                () => _cancel(`timeout of ${_timeout}ms exceeded`),
-                _timeout
-              )
-            )
+          ? new CancelToken(_cancel => setTimeout(() => _cancel(`timeout of ${_timeout}ms exceeded`), _timeout))
           : undefined
       }
 
-      const details = [
-        _apiPath,
-        ...(_callType === 'GET' ? [options] : [_params, options])
-      ]
+      const details = [_apiPath, ...(_callType === 'GET' ? [options] : [_params, options])]
 
       const { data } = await this.api[_callType.toLowerCase()](...details)
 

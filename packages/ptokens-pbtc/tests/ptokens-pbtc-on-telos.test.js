@@ -9,7 +9,6 @@ import { constants } from 'ptokens-utils'
 const TELOS_PRIVATE_KEY = ''
 const TELOS_TESTING_ACCOUNT_NAME = ''
 const TELOS_RPC_URL = ''
-// prettier-ignore
 const BTC_TESTING_PRIVATE_KEY = ''
 const BTC_TESTING_ADDRESS = ''
 
@@ -28,9 +27,7 @@ beforeEach(() => {
 })
 
 test('Should get a BTC deposit address on Telos Mainnet', async () => {
-  const depositAddress = await pbtc.getDepositAddress(
-    TELOS_TESTING_ACCOUNT_NAME
-  )
+  const depositAddress = await pbtc.getDepositAddress(TELOS_TESTING_ACCOUNT_NAME)
   expect(depositAddress.toString()).to.be.a('string')
 })
 
@@ -46,22 +43,14 @@ test('Should not get a BTC deposit address because of invalid Telos account', as
 test('Should monitor an issuing of 0.00050100 pBTC on Telos', async () => {
   const amountToIssue = 50100
   const minerFees = 1000
-  const depositAddress = await pbtc.getDepositAddress(
-    TELOS_TESTING_ACCOUNT_NAME
-  )
+  const depositAddress = await pbtc.getDepositAddress(TELOS_TESTING_ACCOUNT_NAME)
 
   // if you want for example send btc from a phone
   /* qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
   }) */
 
-  await sendBitcoin(
-    BTC_TESTING_PRIVATE_KEY,
-    BTC_TESTING_ADDRESS,
-    amountToIssue,
-    minerFees,
-    depositAddress.toString()
-  )
+  await sendBitcoin(BTC_TESTING_PRIVATE_KEY, BTC_TESTING_ADDRESS, amountToIssue, minerFees, depositAddress.toString())
 
   let btcTxIsBroadcasted = false
   let btcTxIsConfirmed = false

@@ -47,14 +47,7 @@ test('Should monitor a LTC utxo given an address', async () => {
         isLtcTxConfirmed = true
       })
 
-      utils.ltc
-        .monitorUtxoByAddress(
-          network,
-          LTC_TESTING_ADDRESS,
-          eventEmitter,
-          pollingTime
-        )
-        .then(() => resolve())
+      utils.ltc.monitorUtxoByAddress(network, LTC_TESTING_ADDRESS, eventEmitter, pollingTime).then(() => resolve())
     })
 
   await start()
@@ -67,11 +60,7 @@ test('Should monitor a LTC transaction confirmation', async () => {
   const pollingTime = 200
   const network = 'testnet'
 
-  const receipt = await utils.ltc.waitForTransactionConfirmation(
-    network,
-    UTXO,
-    pollingTime
-  )
+  const receipt = await utils.ltc.waitForTransactionConfirmation(network, UTXO, pollingTime)
 
   expect(receipt).to.be.an('object')
 })

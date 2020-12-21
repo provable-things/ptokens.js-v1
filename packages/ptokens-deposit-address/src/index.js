@@ -47,14 +47,7 @@ export class DepositAddress {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const {
-      nativeBlockchain,
-      nativeNetwork,
-      hostBlockchain,
-      hostNetwork,
-      hostApi,
-      node
-    } = _configs
+    const { nativeBlockchain, nativeNetwork, hostBlockchain, hostNetwork, hostApi, node } = _configs
 
     this.hostBlockchain = hostBlockchain
     this.hostNetwork = hostNetwork
@@ -68,24 +61,14 @@ export class DepositAddress {
    * @param {String} _hostAddress
    */
   async generate(_hostAddress) {
-    if (
-      this.hostBlockchain === utils.constants.blockchains.Ethereum &&
-      !Web3Utils.isAddress(_hostAddress)
-    )
+    if (this.hostBlockchain === utils.constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
       throw new Error('Invalid Ethereum Address')
 
-    if (
-      this.hostBlockchain === utils.constants.blockchains.Eosio &&
-      !utils.eos.isValidAccountName(_hostAddress)
-    )
+    if (this.hostBlockchain === utils.constants.blockchains.Eosio && !utils.eos.isValidAccountName(_hostAddress))
       throw new Error('Invalid EOS Account')
 
     try {
-      const {
-        nonce,
-        enclavePublicKey,
-        nativeDepositAddress
-      } = await this.node.getNativeDepositAddress(_hostAddress)
+      const { nonce, enclavePublicKey, nativeDepositAddress } = await this.node.getNativeDepositAddress(_hostAddress)
 
       this.nonce = nonce
       this.enclavePublicKey = enclavePublicKey
@@ -126,35 +109,20 @@ export class DepositAddress {
     ) {
       network = bitcoin.networks.litecoinTestnet
     } else {
-      throw new Error(
-        'Please use a valid combination of nativeNetwork and nativeBlockchain'
-      )
+      throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
     }
 
     // NOTE: eos account name are utf-8 encoded
     const hostAddressBuf =
-      this.hostBlockchain === constants.blockchains.Eosio ||
-      this.hostBlockchain === constants.blockchains.Telos
+      this.hostBlockchain === constants.blockchains.Eosio || this.hostBlockchain === constants.blockchains.Telos
         ? Buffer.from(this.hostAddress, 'utf-8')
         : Buffer.from(utils.eth.removeHexPrefix(this.hostAddress), 'hex')
 
     const nonceBuf = utils.converters.encodeUint64le(this.nonce)
-    const enclavePublicKeyBuf = Buffer.from(
-      utils.eth.removeHexPrefix(this.enclavePublicKey),
-      'hex'
-    )
-
-    const hostAddressAndNonceHashBuf = bitcoin.crypto.hash256(
-      Buffer.concat([hostAddressBuf, nonceBuf])
-    )
-
+    const enclavePublicKeyBuf = Buffer.from(utils.eth.removeHexPrefix(this.enclavePublicKey), 'hex')
+    const hostAddressAndNonceHashBuf = bitcoin.crypto.hash256(Buffer.concat([hostAddressBuf, nonceBuf]))
     const output = bitcoin.script.compile(
-      [].concat(
-        hostAddressAndNonceHashBuf,
-        bitcoin.opcodes.OP_DROP,
-        enclavePublicKeyBuf,
-        bitcoin.opcodes.OP_CHECKSIG
-      )
+      [].concat(hostAddressAndNonceHashBuf, bitcoin.opcodes.OP_DROP, enclavePublicKeyBuf, bitcoin.opcodes.OP_CHECKSIG)
     )
 
     const p2sh = bitcoin.payments.p2sh({
@@ -179,54 +147,34 @@ export class DepositAddress {
     const start = async () => {
       if (!this.value) promiEvent.reject('Please generate a deposit address')
 
-      const shortNativeBlockchain = utils.helpers.getBlockchainShortType(
-        this.nativeBlockchain
-      )
-      const shortHostBlockchain = utils.helpers.getBlockchainShortType(
-        this.hostBlockchain
-      )
+      const shortNativeBlockchain = utils.helpers.getBlockchainShortType(this.nativeBlockchain)
+      const shortHostBlockchain = utils.helpers.getBlockchainShortType(this.hostBlockchain)
 
-      // prettier-ignore
-      const nativeTxId = await utils[shortNativeBlockchain]
-        .monitorUtxoByAddress(
-          this.nativeNetwork,
-          this.value,
-          promiEvent.eventEmitter,
-          POLLING_TIME,
-          'nativeTxBroadcasted',
-          'nativeTxConfirmed',
-          confirmations[shortNativeBlockchain]
-        )
-
-      const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(
-        nativeTxId,
-        promiEvent.eventEmitter
+      const nativeTxId = await utils[shortNativeBlockchain].monitorUtxoByAddress(
+        this.nativeNetwork,
+        this.value,
+        promiEvent.eventEmitter,
+        POLLING_TIME,
+        'nativeTxBroadcasted',
+        'nativeTxConfirmed',
+        confirmations[shortNativeBlockchain]
       )
 
-      // prettier-ignore
-      const hostTxReceipt = await utils[shortHostBlockchain]
-        .waitForTransactionConfirmation(
-          this.hostApi,
-          broadcastedHostTxReport.broadcast_tx_hash,
-          HOST_NODE_POLLING_TIME_INTERVAL
-        )
+      const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(nativeTxId, promiEvent.eventEmitter)
+      const hostTxReceipt = await utils[shortHostBlockchain].waitForTransactionConfirmation(
+        this.hostApi,
+        broadcastedHostTxReport.broadcast_tx_hash,
+        HOST_NODE_POLLING_TIME_INTERVAL
+      )
 
       if (this.hostBlockchain !== utils.constants.blockchains.Telos) {
         // NOTE: 'onEosTxConfirmed & onEthTxConfirmed' will be removed in version >= 1.0.0
-        promiEvent.eventEmitter.emit(
-          hostBlockchainEvents[this.hostBlockchain],
-          hostTxReceipt
-        )
+        promiEvent.eventEmitter.emit(hostBlockchainEvents[this.hostBlockchain], hostTxReceipt)
       }
       promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
 
       promiEvent.resolve({
-        amount: utils.eth
-          .offChainFormat(
-            new BigNumber(broadcastedHostTxReport.host_tx_amount),
-            8
-          )
-          .toFixed(),
+        amount: utils.eth.offChainFormat(new BigNumber(broadcastedHostTxReport.host_tx_amount), 8).toFixed(),
         nativeTx: nativeTxId,
         hostTx: broadcastedHostTxReport.broadcast_tx_hash,
         to: this.hostAddress

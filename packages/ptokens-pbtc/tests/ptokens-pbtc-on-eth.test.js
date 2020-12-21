@@ -6,12 +6,9 @@ import BigNumber from 'bignumber.js'
 // import qrcode from 'qrcode-terminal'
 
 const ETH_TESTING_ADDRESS = ''
-// prettier-ignore
 const ETH_TESTING_PRIVATE_KEY = ''
-// prettier-ignore
 const BTC_TESTING_PRIVATE_KEY = ''
 const BTC_TESTING_ADDRESS = ''
-// prettier-ignore
 const WEB3_PROVIDER = ''
 
 jest.setTimeout(3000000)
@@ -52,13 +49,7 @@ test('Should monitor an issuing of 0.00050100 pBTC on Ethereum', async () => {
     console.log(_qrcode)
   }) */
 
-  await sendBitcoin(
-    BTC_TESTING_PRIVATE_KEY,
-    BTC_TESTING_ADDRESS,
-    amountToIssue,
-    minerFees,
-    depositAddress.toString()
-  )
+  await sendBitcoin(BTC_TESTING_PRIVATE_KEY, BTC_TESTING_ADDRESS, amountToIssue, minerFees, depositAddress.toString())
 
   let btcTxIsBroadcasted = 0
   let btcTxIsConfirmed = 0

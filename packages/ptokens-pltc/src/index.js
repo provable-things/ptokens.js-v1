@@ -12,12 +12,10 @@ export class pLTC extends NodeSelector {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const {
-      hostBlockchain,
-      hostNetwork,
-      nativeBlockchain,
-      nativeNetwork
-    } = helpers.parseParams(_configs, constants.blockchains.Litecoin)
+    const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
+      _configs,
+      constants.blockchains.Litecoin
+    )
 
     super({
       pToken: constants.pTokens.pLTC,
@@ -28,19 +26,11 @@ export class pLTC extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const {
-      ethPrivateKey,
-      ethProvider,
-      eosPrivateKey,
-      eosRpc,
-      eosSignatureProvider
-    } = _configs
+    const { ethPrivateKey, ethProvider, eosPrivateKey, eosRpc, eosSignatureProvider } = _configs
 
     if (ethProvider) this.hostApi = new Web3(ethProvider)
     if (ethPrivateKey) {
-      const account = this.hostApi.eth.accounts.privateKeyToAccount(
-        eth.addHexPrefix(ethPrivateKey)
-      )
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
 
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
@@ -65,19 +55,12 @@ export class pLTC extends NodeSelector {
    * @param {String} _hostAddress
    */
   async getDepositAddress(_hostAddress) {
-    if (
-      this.hostBlockchain === constants.blockchains.Ethereum &&
-      !Web3Utils.isAddress(_hostAddress)
-    )
+    if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
       throw new Error('Invalid Ethereum Address')
 
-    const selectedNode = this.selectedNode
-      ? this.selectedNode
-      : await this.select()
+    const selectedNode = this.selectedNode ? this.selectedNode : await this.select()
     if (!selectedNode) {
-      throw new Error(
-        'No node selected. Impossible to generate a BTC deposit Address.'
-      )
+      throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
     }
 
     const depositAddress = new DepositAddress({
@@ -91,8 +74,7 @@ export class pLTC extends NodeSelector {
 
     await depositAddress.generate(_hostAddress)
 
-    if (!depositAddress.verify())
-      throw new Error('Node deposit address does not match expected address')
+    if (!depositAddress.verify()) throw new Error('Node deposit address does not match expected address')
 
     return depositAddress
   }
@@ -110,9 +92,7 @@ export class pLTC extends NodeSelector {
         const { gas, gasPrice } = _options
 
         if (_amount < MINIMUM_LTC_REDEEMABLE) {
-          promiEvent.reject(
-            `Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`
-          )
+          promiEvent.reject(`Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`)
           return
         }
 
@@ -123,7 +103,6 @@ export class pLTC extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        // prettier-ignore
         const contractAddress = await this._getContractAddress()
 
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
@@ -175,9 +154,7 @@ export class pLTC extends NodeSelector {
           broadcastedLtcTxReport.broadcast_tx_hash,
           3000
         )
-        // prettier-ignore
         promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedLtcTxReceipt)
-        // prettier-ignore
         promiEvent.eventEmitter.emit('onLtcTxConfirmed', broadcastedLtcTxReceipt)
 
         promiEvent.resolve({

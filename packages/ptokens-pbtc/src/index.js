@@ -12,12 +12,10 @@ export class pBTC extends NodeSelector {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const {
-      hostBlockchain,
-      hostNetwork,
-      nativeBlockchain,
-      nativeNetwork
-    } = helpers.parseParams(_configs, constants.blockchains.Bitcoin)
+    const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
+      _configs,
+      constants.blockchains.Bitcoin
+    )
 
     super({
       pToken: constants.pTokens.pBTC,
@@ -28,26 +26,15 @@ export class pBTC extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const {
-      ethPrivateKey,
-      ethProvider,
-      eosPrivateKey,
-      eosRpc,
-      eosSignatureProvider
-    } = _configs
+    const { ethPrivateKey, ethProvider, eosPrivateKey, eosRpc, eosSignatureProvider } = _configs
 
-    if (
-      (ethProvider || ethPrivateKey) &&
-      (eosSignatureProvider || eosPrivateKey)
-    )
+    if ((ethProvider || ethPrivateKey) && (eosSignatureProvider || eosPrivateKey))
       throw new Error('Bad Initialization. Impossible to use Both ETH and EOS')
 
     // NOTE: parse eth params
     if (ethProvider) this.hostApi = new Web3(ethProvider)
     if (ethPrivateKey) {
-      const account = this.hostApi.eth.accounts.privateKeyToAccount(
-        eth.addHexPrefix(ethPrivateKey)
-      )
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
 
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
@@ -73,25 +60,15 @@ export class pBTC extends NodeSelector {
    * @param {String} _hostAddress
    */
   async getDepositAddress(_hostAddress) {
-    if (
-      this.hostBlockchain === constants.blockchains.Ethereum &&
-      !Web3Utils.isAddress(_hostAddress)
-    )
+    if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
       throw new Error('Invalid Ethereum Address')
 
-    if (
-      this.hostBlockchain === constants.blockchains.Eosio &&
-      !eos.isValidAccountName(_hostAddress)
-    )
+    if (this.hostBlockchain === constants.blockchains.Eosio && !eos.isValidAccountName(_hostAddress))
       throw new Error('Invalid EOS Account')
 
-    const selectedNode = this.selectedNode
-      ? this.selectedNode
-      : await this.select()
+    const selectedNode = this.selectedNode ? this.selectedNode : await this.select()
     if (!selectedNode) {
-      throw new Error(
-        'No node selected. Impossible to generate a BTC deposit Address.'
-      )
+      throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
     }
 
     const depositAddress = new DepositAddress({
@@ -105,8 +82,7 @@ export class pBTC extends NodeSelector {
 
     await depositAddress.generate(_hostAddress)
 
-    if (!depositAddress.verify())
-      throw new Error('Node deposit address does not match expected address')
+    if (!depositAddress.verify()) throw new Error('Node deposit address does not match expected address')
 
     return depositAddress
   }
@@ -124,7 +100,6 @@ export class pBTC extends NodeSelector {
         const { gas, gasPrice } = _options
 
         if (_amount < MINIMUM_BTC_REDEEMABLE) {
-          // prettier-ignore
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`)
           return
         }
@@ -136,7 +111,6 @@ export class pBTC extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        // prettier-ignore
         const contractAddress = await this._getContractAddress()
 
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
@@ -194,9 +168,7 @@ export class pBTC extends NodeSelector {
           5000
         )
         // NOTE: 'onBtcTxConfirmed' will be removed in version >= 1.0.0
-        // prettier-ignore
         promiEvent.eventEmitter.emit('onBtcTxConfirmed', broadcastedBtcTxReceipt)
-        // prettier-ignore
         promiEvent.eventEmitter.emit('nativeTxConfirmed', broadcastedBtcTxReceipt)
 
         promiEvent.resolve({
