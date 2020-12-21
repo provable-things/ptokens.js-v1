@@ -99,9 +99,8 @@ export class pERC20 extends NodeSelector {
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(ethTxHash, promiEvent.eventEmitter)
 
         let hostTxReceipt
-        if (this.hostBlockchain === constants.blockchains.Eosio) {
+        if (this.hostBlockchain === constants.blockchains.Eosio)
           hostTxReceipt = await eos.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
-        }
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
         promiEvent.resolve({

@@ -59,11 +59,8 @@ const parseParams = (_params, _nativeBlockchain) => {
 
   if (!parsedHostBlockchain) throw new Error('Invalid hostBlockchain value')
 
-  if (hostNetwork) {
-    parsedHostNetwork = networkLabels[parsedHostBlockchain][hostNetwork.toLowerCase()]
-  } else if (network) {
-    parsedHostNetwork = networkLabels[parsedHostBlockchain][network.toLowerCase()]
-  }
+  if (hostNetwork) parsedHostNetwork = networkLabels[parsedHostBlockchain][hostNetwork.toLowerCase()]
+  else if (network) parsedHostNetwork = networkLabels[parsedHostBlockchain][network.toLowerCase()]
 
   if (!parsedHostNetwork) throw new Error('Invalid hostNetwork value')
 

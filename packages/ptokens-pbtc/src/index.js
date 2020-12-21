@@ -67,9 +67,7 @@ export class pBTC extends NodeSelector {
       throw new Error('Invalid EOS Account')
 
     const selectedNode = this.selectedNode ? this.selectedNode : await this.select()
-    if (!selectedNode) {
-      throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
-    }
+    if (!selectedNode) throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
 
     const depositAddress = new DepositAddress({
       node: selectedNode,

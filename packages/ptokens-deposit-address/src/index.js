@@ -91,26 +91,24 @@ export class DepositAddress {
     if (
       this.nativeNetwork === constants.networks.BitcoinMainnet &&
       this.nativeBlockchain === constants.blockchains.Bitcoin
-    ) {
+    )
       network = bitcoin.networks.bitcoin
-    } else if (
+    else if (
       this.nativeNetwork === constants.networks.BitcoinTestnet &&
       this.nativeBlockchain === constants.blockchains.Bitcoin
-    ) {
+    )
       network = bitcoin.networks.testnet
-    } else if (
+    else if (
       this.nativeNetwork === constants.networks.LitecoinMainnet &&
       this.nativeBlockchain === constants.blockchains.Litecoin
-    ) {
+    )
       network = bitcoin.networks.litecoin
-    } else if (
+    else if (
       this.nativeNetwork === constants.networks.LitecoinTestnet &&
       this.nativeBlockchain === constants.blockchains.Litecoin
-    ) {
+    )
       network = bitcoin.networks.litecoinTestnet
-    } else {
-      throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
-    }
+    else throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
 
     // NOTE: eos account name are utf-8 encoded
     const hostAddressBuf =

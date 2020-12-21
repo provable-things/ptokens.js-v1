@@ -88,9 +88,8 @@ export class NodeSelector {
           return this.setSelectedNode(selectedNode.webapi)
         else if (!nodesNotReachable.includes(selectedNode)) nodesNotReachable.push(selectedNode)
 
-        if (nodesNotReachable.length === filteredNodesByFeature.length) {
+        if (nodesNotReachable.length === filteredNodesByFeature.length)
           throw new Error('All nodes relating to the selected pToken appear to be unavailable')
-        }
       }
     } catch (err) {
       throw new Error(err.message)

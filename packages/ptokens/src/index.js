@@ -10,13 +10,9 @@ class pTokens {
    */
   constructor(_configs) {
     const { pbtc, pltc, perc20 } = _configs
-    if (pbtc) {
-      this.pbtc = !Array.isArray(pbtc) ? new pBTC(pbtc) : pbtc.map(_el => new pBTC(_el))
-    }
+    if (pbtc) this.pbtc = !Array.isArray(pbtc) ? new pBTC(pbtc) : pbtc.map(_el => new pBTC(_el))
 
-    if (pltc) {
-      this.pltc = !Array.isArray(pltc) ? new pLTC(pltc) : pltc.map(_el => new pLTC(_el))
-    }
+    if (pltc) this.pltc = !Array.isArray(pltc) ? new pLTC(pltc) : pltc.map(_el => new pLTC(_el))
 
     if (perc20) {
       if (Array.isArray(perc20)) {
