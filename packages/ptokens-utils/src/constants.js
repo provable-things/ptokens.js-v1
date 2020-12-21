@@ -32,7 +32,12 @@ import {
   pOMG,
   pDAI,
   pANT,
-  pLRC
+  pLRC,
+  pUOS,
+  pBAT,
+  pREP,
+  pZRX,
+  pPNK
 } from './helpers/names'
 import * as tokens from './helpers/tokens'
 
@@ -88,7 +93,12 @@ const pTokens = {
   pOMG,
   pDAI,
   pANT,
-  pLRC
+  pLRC,
+  pUOS,
+  pBAT,
+  pREP,
+  pZRX,
+  pPNK
 }
 
 export { blockchains, networks, pTokens, tokens }

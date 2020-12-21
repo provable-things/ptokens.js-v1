@@ -32,7 +32,12 @@ import {
   pOMG,
   pDAI,
   pANT,
-  pLRC
+  pLRC,
+  pUOS,
+  pBAT,
+  pREP,
+  pZRX,
+  pPNK
 } from './names'
 
 export const blockchainTypes = {
@@ -73,7 +78,12 @@ export const pTokenNativeBlockchain = {
   pomg: Ethereum,
   pdai: Ethereum,
   pant: Ethereum,
-  plrc: Ethereum
+  plrc: Ethereum,
+  puos: Ethereum,
+  pbat: Ethereum,
+  prep: Ethereum,
+  pzrx: Ethereum,
+  ppnk: Ethereum
 }
 
 export const networkLabels = {
@@ -127,5 +137,10 @@ export const pTokensAvailables = [
   pOMG,
   pDAI,
   pANT,
-  pLRC
+  pLRC,
+  pUOS,
+  pBAT,
+  pREP,
+  pZRX,
+  pPNK
 ]

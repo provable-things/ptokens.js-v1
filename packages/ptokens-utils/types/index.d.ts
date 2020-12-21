@@ -212,7 +212,12 @@ export interface pTokens {
   pOMG: string,
   pDAI: string,
   pANT: string,
-  pLRC: string
+  pLRC: string,
+  pUOS: string,
+  pBAT: string,
+  pREP: string,
+  pZRX: string,
+  pPNK: string
 }
 
 export interface Tokens {
@@ -231,7 +236,12 @@ export interface Tokens {
   OMG: string,
   DAI: string,
   ANT: string,
-  LRC: string
+  LRC: string,
+  UOS: string,
+  BAT: string,
+  REP: string,
+  ZRX: string,
+  PNK: string
 }
 
 export interface Constants {

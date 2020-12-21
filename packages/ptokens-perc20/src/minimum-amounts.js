@@ -63,5 +63,25 @@ export default {
   [constants.tokens.LRC]: {
     issue: 1000000000,
     redeem: 0.000000001
-  }
+  },
+  [constants.tokens.UOS]: {
+    issue: 1,
+    redeem: 0.0001
+  },
+  [constants.tokens.BAT]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.REP]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ZRX]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.PNK]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
 }
