@@ -42,6 +42,37 @@ bitcoin.networks.litecoinTestnet = {
   wif: 0xb0
 }
 
+bitcoin.networks.dogecoin = {
+  messagePrefix: '\x19Dogecoin Signed Message:\n',
+  bip32: {
+    public: 0x02facafd,
+    private: 0x02fac398
+  },
+  pubKeyHash: 0x1e,
+  scriptHash: 0x16,
+  wif: 0x9e
+}
+
+const {
+  constants: {
+    networks: { BitcoinMainnet, BitcoinTestnet, LitecoinMainnet, LitecoinTestnet, DogecoinMainnet },
+    blockchains: { Bitcoin, Litecoin, Dogecoin }
+  }
+} = utils
+const NETWORKS = {
+  [Bitcoin]: {
+    [BitcoinMainnet]: bitcoin.networks.bitcoin,
+    [BitcoinTestnet]: bitcoin.networks.testnet
+  },
+  [Litecoin]: {
+    [LitecoinMainnet]: bitcoin.networks.litecoin,
+    [LitecoinTestnet]: bitcoin.networks.litecoinTestnet
+  },
+  [Dogecoin]: {
+    [DogecoinMainnet]: bitcoin.networks.dogecoin
+  }
+}
+
 export class DepositAddress {
   /**
    * @param {Object} _configs
@@ -75,7 +106,7 @@ export class DepositAddress {
       this.value = nativeDepositAddress
       this.hostAddress = _hostAddress
       return this.value
-    } catch (err) {
+    } catch (_err) {
       throw new Error('Error during deposit address generation')
     }
   }
@@ -85,34 +116,17 @@ export class DepositAddress {
   }
 
   verify() {
-    const { constants } = utils
-
-    let network
-    if (
-      this.nativeNetwork === constants.networks.BitcoinMainnet &&
-      this.nativeBlockchain === constants.blockchains.Bitcoin
-    )
-      network = bitcoin.networks.bitcoin
-    else if (
-      this.nativeNetwork === constants.networks.BitcoinTestnet &&
-      this.nativeBlockchain === constants.blockchains.Bitcoin
-    )
-      network = bitcoin.networks.testnet
-    else if (
-      this.nativeNetwork === constants.networks.LitecoinMainnet &&
-      this.nativeBlockchain === constants.blockchains.Litecoin
-    )
-      network = bitcoin.networks.litecoin
-    else if (
-      this.nativeNetwork === constants.networks.LitecoinTestnet &&
-      this.nativeBlockchain === constants.blockchains.Litecoin
-    )
-      network = bitcoin.networks.litecoinTestnet
-    else throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
+    const {
+      constants: {
+        blockchains: { Eosio, Telos }
+      }
+    } = utils
+    const network = NETWORKS[this.nativeBlockchain][this.nativeNetwork]
+    if (!network) throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
 
     // NOTE: eos account name are utf-8 encoded
     const hostAddressBuf =
-      this.hostBlockchain === constants.blockchains.Eosio || this.hostBlockchain === constants.blockchains.Telos
+      this.hostBlockchain === Eosio || this.hostBlockchain === Telos
         ? Buffer.from(this.hostAddress, 'utf-8')
         : Buffer.from(utils.eth.removeHexPrefix(this.hostAddress), 'hex')
 

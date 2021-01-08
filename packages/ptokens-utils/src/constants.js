@@ -103,7 +103,8 @@ const pTokens = {
   pBAT,
   pREP,
   pZRX,
-  pPNK
+  pPNK,
+  pDOGE
 }
 
 export { blockchains, networks, pTokens, tokens }
