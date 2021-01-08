@@ -13,6 +13,8 @@ import {
   LitecoinTestnet,
   Telos,
   TelosMainnet,
+  Dogecoin,
+  DogecoinMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -37,7 +39,8 @@ import {
   pBAT,
   pREP,
   pZRX,
-  pPNK
+  pPNK,
+  pDOGE
 } from './helpers/names'
 import * as tokens from './helpers/tokens'
 
@@ -50,7 +53,8 @@ const blockchains = {
   Eosio,
   Ethereum,
   Litecoin,
-  Telos
+  Telos,
+  Dogecoin
 }
 
 /**
@@ -68,7 +72,8 @@ const networks = {
   EosioJungle3,
   LitecoinMainnet,
   LitecoinTestnet,
-  TelosMainnet
+  TelosMainnet,
+  DogecoinMainnet
 }
 
 /**

@@ -1,4 +1,5 @@
 import * as btc from './btc'
+import * as doge from './doge'
 import * as ltc from './ltc'
 import * as converters from './converters'
 import * as eth from './eth'
@@ -18,6 +19,7 @@ export default {
     pERC20Vault: pERC20VaultContractAbi
   },
   btc,
+  doge,
   converters,
   constants,
   eth,
