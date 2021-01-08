@@ -4,7 +4,7 @@ import { Testnet } from './helpers/names'
 
 const DOGE_CHAIN_API = 'https://dogechain.info/api/v1'
 
-const _getInsightLiteApi = _network => {
+const _getDogeChainApi = _network => {
   if (_network === Testnet) throw new Error('Dogecoin on Testnet is not supported')
   return axios.create({
     baseURL: DOGE_CHAIN_API,
@@ -17,7 +17,7 @@ const _getInsightLiteApi = _network => {
 
 const _makeDogeChainApiCall = (_network, _callType, _apiPath, _params) =>
   new Promise((resolve, reject) => {
-    _getInsightLiteApi(_network)
+    _getDogeChainApi(_network)
       [_callType.toLowerCase()](_apiPath, _params)
       .then(_res => resolve(_res.data))
       .catch(_err => reject(_err))
