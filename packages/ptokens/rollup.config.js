@@ -3,6 +3,7 @@ import rollupConfig from '../../rollup.config'
 
 export default rollupConfig('pTokens', pkg.name, {
   'ptokens-pbtc': 'ptokens-pbtc',
+  'ptokens-pdoge': 'ptokens-pdoge',
   'ptokens-erc20': 'ptokens-erc20',
   'ptokens-pltc': 'ptokens-pltc',
   'ptokens-utils': 'ptokens-utils',

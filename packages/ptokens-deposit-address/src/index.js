@@ -9,7 +9,8 @@ const POLLING_TIME = 3000
 
 const confirmations = {
   btc: 1,
-  ltc: 4
+  ltc: 4,
+  doge: 1
 }
 
 // NOTE: will be removed in versions >= 1.0.0

@@ -81,7 +81,7 @@ const monitorUtxoByAddress = async (
 
         if (utxos[0].confirmations >= _confirmations) {
           _eventEmitter.emit(_confirmationEventName, utxos[0])
-          utxo = utxos[0].txid
+          utxo = utxos[0].tx_hash
           return true
         }
         return false
@@ -94,7 +94,7 @@ const monitorUtxoByAddress = async (
       return false
     }
   }, _pollingTime)
-  return utxo
+  return utxo.startsWith('0x') ? utxo : '0x' + utxo
 }
 
 /**
