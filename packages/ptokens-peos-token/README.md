@@ -44,7 +44,7 @@ const pbtc = new pEOSToken({
   eosRpc: 'https:/...' // or also an instance of JsonRpc
   eosSignatureProvider: '....' // instance of JsSignatureProvider
   defaultNode: new Node({
-    pToken: 'pEOSToken',
+    pToken: 'pEOS',
     blockchain: 'ETH',
     provider: new HttpProvider(
       'node endpoint',
