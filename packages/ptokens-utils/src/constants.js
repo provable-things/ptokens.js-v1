@@ -40,9 +40,10 @@ import {
   pREP,
   pZRX,
   pPNK,
-  pDOGE
+  pDOGE,
+  pEOS
 } from './helpers/names'
-import * as tokens from './helpers/tokens'
+import tokens from './helpers/tokens'
 
 /**
  *
@@ -104,7 +105,8 @@ const pTokens = {
   pREP,
   pZRX,
   pPNK,
-  pDOGE
+  pDOGE,
+  pEOS
 }
 
 export { blockchains, networks, pTokens, tokens }

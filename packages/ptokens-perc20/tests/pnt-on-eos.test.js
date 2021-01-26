@@ -82,7 +82,7 @@ test('Should issue 0.00002 PNT', async () => {
       ],
       gas: 200000,
       gasPrice: 75e9,
-      contractAddress: constants.tokens.PNT,
+      contractAddress: constants.tokens.ethereum.mainnet.PNT,
       value: 0
     },
     [eth.addHexPrefix(native_vault_address), BigNumber('20000000000000')]

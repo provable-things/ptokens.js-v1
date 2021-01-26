@@ -223,10 +223,11 @@ export interface pTokens {
   pREP: string,
   pZRX: string,
   pPNK: string,
-  pDOGE: string
+  pDOGE: string,
+  pEOS: string
 }
 
-export interface Tokens {
+export interface EthereumMainnetTokens {
   ETH: string,
   WETH: string,
   LINK: string,
@@ -248,6 +249,14 @@ export interface Tokens {
   REP: string,
   ZRX: string,
   PNK: string
+}
+
+export interface EthereumTokens {
+  mainnet: EthereumMainnetTokens
+}
+
+export interface Tokens {
+  ethereum: EthereumTokens
 }
 
 export interface Constants {

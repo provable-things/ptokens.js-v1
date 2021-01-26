@@ -82,7 +82,7 @@ test('Should issue 0.002 PTERIA', async () => {
       ],
       gas: 200000,
       gasPrice: 75e9,
-      contractAddress: constants.tokens.PTERIA,
+      contractAddress: constants.tokens.ethereum.mainnet.PTERIA,
       value: 0
     },
     [eth.addHexPrefix(native_vault_address), BigNumber('2000000000000000')]

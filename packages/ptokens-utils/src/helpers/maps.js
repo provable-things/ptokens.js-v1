@@ -40,7 +40,8 @@ import {
   pREP,
   pZRX,
   pPNK,
-  pDOGE
+  pDOGE,
+  pEOS
 } from './names'
 
 export const blockchainTypes = {
@@ -90,7 +91,8 @@ export const pTokenNativeBlockchain = {
   prep: Ethereum,
   pzrx: Ethereum,
   ppnk: Ethereum,
-  pdoge: Dogecoin
+  pdoge: Dogecoin,
+  peos: Eosio
 }
 
 export const networkLabels = {
@@ -154,5 +156,6 @@ export const pTokensAvailables = [
   pREP,
   pZRX,
   pPNK,
-  pDOGE
+  pDOGE,
+  pEOS
 ]

@@ -150,7 +150,11 @@ export class pERC20 extends NodeSelector {
             this.hostApi,
             _amount,
             _nativeAccount,
-            [constants.tokens.DAI, constants.tokens.UOS].includes(this.nativeContractAddress) ? 4 : 9, // NOTE: perc20 decimals on EOS except DAI and UOS
+            [constants.tokens.ethereum.mainnet.DAI, constants.tokens.ethereum.mainnet.UOS].includes(
+              this.nativeContractAddress
+            )
+              ? 4
+              : 9, // NOTE: perc20 decimals on EOS except DAI and UOS
             this.hostContractAddress,
             this.pToken === constants.pTokens.pWETH ? 'peth' : this.pToken
           )
