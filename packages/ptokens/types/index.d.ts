@@ -11,15 +11,16 @@ import {
 import { pBTCConfigs } from 'ptokens-pbtc'
 import { pLTCConfigs } from 'ptokens-pltc'
 import { pERC20Configs } from 'ptokens-perc20'
+import { pEOSTokenConfigs } from 'ptokens-peos-token'
 import { pDOGEConfigs} from 'ptokens-pdoge'
 import { HttpProvider } from 'ptokens-providers'
 
 export interface pTokensConfigs {
   pbtc?: pBTCConfigs | pBTCConfigs[],
   pltc?: pLTCConfigs | pLTCConfigs[],
-  pweth?: pERC20Configs | pERC20Configs[],
-  peth?: pERC20Configs | pERC20Configs[],
+  perc20?: pERC20Configs | pERC20Configs[],
   pdoge?: pDOGEConfigs | pDOGEConfigs[],
+  peosToken?: pEOSTokenConfigs | pEOSTokenConfigs[] 
 }
 
 export interface Utils {
@@ -38,16 +39,6 @@ export interface Providers {
 
 export class pTokens {
   constructor(_configs: pTokensConfigs)
-
-  pbtc?: pBTCConfigs | pBTCConfigs[]
-
-  pltc?: pLTCConfigs | pLTCConfigs[]
-
-  pweth?: pERC20Configs | pERC20Configs[]
-
-  peth?: pERC20Configs | pERC20Configs[]
-
-  doge?: pDOGEConfigs | pDOGEConfigs[]
 
   utils: Utils
 

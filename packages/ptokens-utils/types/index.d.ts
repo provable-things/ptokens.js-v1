@@ -251,12 +251,21 @@ export interface EthereumMainnetTokens {
   PNK: string
 }
 
+export interface EosioMainnetTokens {
+  EOS: string
+}
+
 export interface EthereumTokens {
   mainnet: EthereumMainnetTokens
 }
 
+export interface EosioTokens {
+  mainnet: EosioMainnetTokens
+}
+
 export interface Tokens {
-  ethereum: EthereumTokens
+  ethereum: EthereumTokens,
+  eosio: EosioTokens
 }
 
 export interface Constants {

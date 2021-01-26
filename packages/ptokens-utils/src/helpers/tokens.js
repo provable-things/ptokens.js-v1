@@ -26,7 +26,9 @@ export default {
       PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d'
     }
   },
-  [EosioMainnet]: {
-    [Eosio]: {}
+  [Eosio]: {
+    [EosioMainnet]: {
+      EOS: 'eosio.token'
+    }
   }
 }
