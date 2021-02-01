@@ -29,7 +29,8 @@ export interface RedeemOptions {
 
 export interface IssueOptions {
   blocksBehind: number,
-  expireSecond: number
+  expireSecond: number,
+  permission: string
 }
 
 export interface Result {
@@ -39,12 +40,16 @@ export interface Result {
   to: string,
 }
 
-export class pEOSToken extends NodeSelector {
+export class pEosioToken extends NodeSelector {
   constructor(configs: pEOSConfigs)
 
   decimals: string | null
 
-  contractAddress: string | null
+  nativeContractAddress: string | null
+
+  hostContractAddress: string | null
+
+  nativeVaultAddress: string | null
 
   hostPrivatekey?: string | null
 

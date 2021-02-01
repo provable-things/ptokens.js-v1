@@ -1,16 +1,16 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import { constants, eth, eos, helpers, redeemFrom } from 'ptokens-utils'
+import { abi, constants, eth, eos, helpers, redeemFrom } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import minimumAmounts from './minimum-amounts'
 
-export class pEOSToken extends NodeSelector {
+export class pEosioToken extends NodeSelector {
   constructor(_configs) {
     const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
       _configs,
-      constants.blockchains.Ethereum
+      constants.blockchains.Eosio
     )
 
     super({
@@ -49,10 +49,10 @@ export class pEOSToken extends NodeSelector {
    */
   issue(_amount, _hostAccount, _options) {
     const promiEvent = Web3PromiEvent()
-    const { blocksBehind, expireSeconds } = _options
-
     const start = async () => {
       try {
+        const { blocksBehind, expireSeconds, permission } = _options
+
         await this._loadData()
 
         if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].issue)) {
@@ -74,6 +74,11 @@ export class pEOSToken extends NodeSelector {
           throw new Error('Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin')
         }
 
+        this.eosApi.cachedAbis.set(this.nativeContractAddress, {
+          abi: abi.EosioToken,
+          rawAbi: null
+        })
+
         const nativeTxReceipt = await this.eosApi.transact(
           {
             actions: [
@@ -83,12 +88,13 @@ export class pEOSToken extends NodeSelector {
                 authorization: [
                   {
                     actor: eosAccountName,
-                    permission: 'active'
+                    permission
                   }
                 ],
                 data: {
-                  sender: eosAccountName,
-                  quantity: eos.getAmountInEosFormat(_amount, 8, this.pToken.slice(1).toUpperCase()),
+                  from: eosAccountName,
+                  to: this.nativeVaultAddress,
+                  quantity: eos.getAmountInEosFormat(_amount, 4, this.pToken.slice(1).toUpperCase()),
                   memo: _hostAccount
                 }
               }
@@ -136,6 +142,8 @@ export class pEOSToken extends NodeSelector {
 
     const start = async () => {
       try {
+        await this._loadData()
+
         if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].redeem)) {
           promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.nativeContractAddress].redeem}`)
           return
@@ -145,8 +153,6 @@ export class pEOSToken extends NodeSelector {
           promiEvent.reject('Invalid native account')
           return
         }
-
-        await this._loadData()
 
         let hostTxHash = null
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
@@ -196,15 +202,15 @@ export class pEOSToken extends NodeSelector {
       if (!this.nativeContractAddress || !this.hostContractAddress) {
         const {
           native_smart_contract_address,
-          host_smart_contract_address
-          // native_vault_address
+          host_smart_contract_address,
+          native_vault_address
         } = await this.selectedNode.getInfo()
-        this.nativeContractAddress = eth.addHexPrefix(native_smart_contract_address)
+        this.nativeVaultAddress = native_vault_address
+        this.nativeContractAddress = native_smart_contract_address
         this.hostContractAddress =
           this.hostBlockchain === constants.blockchains.Ethereum
             ? eth.addHexPrefix(host_smart_contract_address)
             : host_smart_contract_address
-        // this.nativeVaultAccount = native_vault_address ? eth.addHexPrefix(native_vault_address) : null
       }
 
       return this.nativeContractAddress

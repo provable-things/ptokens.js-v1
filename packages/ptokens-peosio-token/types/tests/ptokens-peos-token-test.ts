@@ -1,6 +1,6 @@
-import { pEOSToken } from 'ptokens-peos-token'
+import { pEosioToken } from 'ptokens-peosio-token'
 
-const peos = new pEOSToken({
+const peos = new pEosioToken({
   network: 'mainnet',
   blockchain: 'eth'
 })

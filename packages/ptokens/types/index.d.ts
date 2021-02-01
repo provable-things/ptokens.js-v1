@@ -11,7 +11,7 @@ import {
 import { pBTCConfigs } from 'ptokens-pbtc'
 import { pLTCConfigs } from 'ptokens-pltc'
 import { pERC20Configs } from 'ptokens-perc20'
-import { pEOSTokenConfigs } from 'ptokens-peos-token'
+import { pEOSTokenConfigs } from 'ptokens-peosio-token'
 import { pDOGEConfigs} from 'ptokens-pdoge'
 import { HttpProvider } from 'ptokens-providers'
 

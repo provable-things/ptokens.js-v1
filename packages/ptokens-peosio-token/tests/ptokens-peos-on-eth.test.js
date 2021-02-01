@@ -1,22 +1,22 @@
-import { pEOSToken } from '../src/index'
+import { pEosioToken } from '../src/index'
 import { expect } from 'chai'
 import { JsonRpc } from 'eosjs'
 import fetch from 'node-fetch'
 import { constants } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
 
+const EOS_TESTING_PRIVATE_KEY = ''
+const EOS_TESTING_ACCOUNT_NAME = ''
+const EOS_RPC_URL = ''
 const ETH_TESTING_ADDRESS = ''
 const ETH_TESTING_PRIVATE_KEY = ''
 const WEB3_PROVIDER = ''
-const EOS_TESTING_ACCOUNT_NAME = ''
-const EOS_RPC_URL = ''
-const EOS_TESTING_PRIVATE_KEY = ''
 
 jest.setTimeout(3000000)
 
 let peos
 beforeEach(() => {
-  peos = new pEOSToken({
+  peos = new pEosioToken({
     pToken: constants.pTokens.pEOS,
     blockchain: constants.blockchains.Ethereum,
     network: constants.networks.Mainnet,
@@ -27,7 +27,7 @@ beforeEach(() => {
   })
 })
 
-test('Should monitor an issuing of 0.005 pEOSToken on ETH', async () => {
+test('Should monitor an issuing of 0.005 pEosioToken on ETH', async () => {
   const amountToIssue = '0.005'
   let eosTxIsConfirmed = false
   let nodeHasReceivedTx = false
@@ -36,7 +36,7 @@ test('Should monitor an issuing of 0.005 pEOSToken on ETH', async () => {
   const start = () =>
     new Promise(resolve => {
       peos
-        .issue(amountToIssue, ETH_TESTING_ADDRESS, { blocksBehind: 3, expireSeconds: 60 })
+        .issue(amountToIssue, ETH_TESTING_ADDRESS, { blocksBehind: 3, expireSeconds: 60, permission: 'active' })
         .once('nativeTxConfirmed', () => {
           eosTxIsConfirmed = true
         })
@@ -69,7 +69,7 @@ test('Should redeem 0.005 pEOS from ETH', async () => {
     new Promise((resolve, reject) => {
       peos
         .redeem(amountToRedeem, EOS_TESTING_ACCOUNT_NAME, {
-          gasPrice: 75e9,
+          gasPrice: 100e9,
           gas: 200000
         })
         .once('hostTxBroadcasted', () => {

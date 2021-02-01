@@ -1,6 +1,6 @@
-# ptokens-peos-token
+# ptokens-peosio-token
 
-Module for interacting only with pEOSToken.
+Module for interacting only with pEosioToken.
 
 &nbsp;
 
@@ -11,7 +11,7 @@ Module for interacting only with pEOSToken.
 ### Installation:
 
 ```
-npm install ptokens-peos-token
+npm install ptokens-peosio-token
 ```
 
 &nbsp;
@@ -23,11 +23,11 @@ npm install ptokens-peos-token
 ### Usage:
 
 ```js
-import { pEOSToken } from 'ptokens-peos-token'
+import { pEosioToken } from 'ptokens-peosio-token'
 import { HttpProvider } from 'ptokens-providers' 
 import { Node } from 'ptokens-node'
 
-const pbtc = new pEOSToken({
+const pbtc = new pEosioToken({
   blockchain: 'ETH',
   network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
 

@@ -3,7 +3,7 @@ import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
 import { pERC20 } from 'ptokens-perc20'
 import { constants } from 'ptokens-utils'
-import { pEOSToken } from 'ptokens-peos-token'
+import { pEOSToken } from 'ptokens-peosio-token'
 import { expect } from 'chai'
 
 test('Should init pTokens correctly with 1 instance of pBTC', () => {

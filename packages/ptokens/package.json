@@ -32,7 +32,7 @@
     "ptokens-deposit-address": "^0.8.0",
     "ptokens-pbtc": "^0.8.0",
     "ptokens-pdoge": "^0.8.0",
-    "ptokens-peos-token": "^0.8.0",
+    "ptokens-peosio-token": "^0.8.0",
     "ptokens-perc20": "^0.8.0",
     "ptokens-pltc": "^0.8.0",
     "ptokens-providers": "^0.8.0",
