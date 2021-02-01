@@ -110,8 +110,9 @@ test('Should redeem 0.000051 pBTC on EOS', async () => {
     new Promise((resolve, reject) => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS, {
-          gasPrice: 75e9,
-          gas: 200000
+          blocksBehind: 3,
+          expireSeconds: 60,
+          permission: 'active'
         })
         .once('onEosTxConfirmed', () => {
           eosTxIsConfirmed += 1

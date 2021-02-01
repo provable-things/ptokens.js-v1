@@ -128,6 +128,8 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
+        const { blocksBehind, expireSeconds, permission } = _options
+
         await this._loadData()
 
         if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].redeem)) {
@@ -156,7 +158,8 @@ export class pERC20 extends NodeSelector {
               ? 4
               : 9, // NOTE: perc20 decimals on EOS except DAI and UOS
             this.hostContractAddress,
-            this.pToken === constants.pTokens.pWETH ? 'peth' : this.pToken
+            this.pToken === constants.pTokens.pWETH ? 'peth' : this.pToken,
+            { blocksBehind, expireSeconds, permission }
           )
 
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)

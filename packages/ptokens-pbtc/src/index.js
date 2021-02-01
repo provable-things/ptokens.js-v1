@@ -95,7 +95,7 @@ export class pBTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission } = _options
 
         if (_amount < MINIMUM_BTC_REDEEMABLE) {
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`)
@@ -144,7 +144,12 @@ export class pBTC extends NodeSelector {
             _btcAddress,
             8,
             contractAddress,
-            constants.pTokens.pBTC
+            constants.pTokens.pBTC,
+            {
+              blocksBehind,
+              expireSeconds,
+              permission
+            }
           )
 
           if (this.hostBlockchain === constants.blockchains.Eosio) {

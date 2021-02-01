@@ -34,7 +34,10 @@ export interface pBTCConfigs {
 
 export interface RedeemOptions {
   gas?: number,
-  gasPrice?: number | string | BigNumber
+  gasPrice?: number | string | BigNumber,
+  blocksBehind?: string, 
+  expireSeconds?: string,
+  permission?: string,
 }
 
 export class pBTC extends NodeSelector {

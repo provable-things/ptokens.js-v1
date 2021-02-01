@@ -129,7 +129,7 @@ test('Should redeem 0.002 PTERIA on EOS', async () => {
   const start = () =>
     new Promise((resolve, reject) => {
       pnt
-        .redeem(amountToRedeem, ETH_TESTING_ADDRESS)
+        .redeem(amountToRedeem, ETH_TESTING_ADDRESS, { blocksBehind: 3, expireSeconds: 60, permission: 'active' })
         .once('hostTxConfirmed', () => {
           eosTxIsConfirmed = true
         })

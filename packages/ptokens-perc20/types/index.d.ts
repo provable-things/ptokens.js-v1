@@ -25,7 +25,10 @@ export interface pERC20Configs {
 
 export interface Options {
   gas?: number,
-  gasPrice?: number | string | BigNumber
+  gasPrice?: number | string | BigNumber,
+  blocksBehind: string, 
+  expireSeconds: string,
+  permission: string,
 }
 
 /*
