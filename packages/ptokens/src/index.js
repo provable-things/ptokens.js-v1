@@ -1,7 +1,7 @@
 import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
 import { pERC20 } from 'ptokens-perc20'
-import { pEOSToken } from 'ptokens-peosio-token'
+import { pEosioToken } from 'ptokens-peosio-token'
 import { pDOGE } from 'ptokens-pdoge'
 import utils from 'ptokens-utils'
 import { HttpProvider } from 'ptokens-providers'
@@ -11,7 +11,7 @@ class pTokens {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { pbtc, pltc, perc20, pdoge, peosToken } = _configs
+    const { pbtc, pltc, perc20, pdoge, peosioToken } = _configs
     if (pbtc) this.pbtc = !Array.isArray(pbtc) ? new pBTC(pbtc) : pbtc.map(_el => new pBTC(_el))
 
     if (pltc) this.pltc = !Array.isArray(pltc) ? new pLTC(pltc) : pltc.map(_el => new pLTC(_el))
@@ -28,13 +28,13 @@ class pTokens {
       }
     }
 
-    if (peosToken) {
-      if (Array.isArray(peosToken)) {
-        peosToken.forEach(_peostoken => {
-          this[_peostoken.pToken.toLowerCase()] = new pEOSToken(_peostoken)
+    if (peosioToken) {
+      if (Array.isArray(peosioToken)) {
+        peosioToken.forEach(_peostoken => {
+          this[_peostoken.pToken.toLowerCase()] = new pEosioToken(_peostoken)
         })
       } else {
-        this[peosToken.pToken.toLowerCase()] = new pEOSToken(peosToken)
+        this[peosioToken.pToken.toLowerCase()] = new pEosioToken(peosioToken)
       }
     }
 

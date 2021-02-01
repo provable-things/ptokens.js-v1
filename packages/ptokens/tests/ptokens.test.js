@@ -3,7 +3,7 @@ import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
 import { pERC20 } from 'ptokens-perc20'
 import { constants } from 'ptokens-utils'
-import { pEOSToken } from 'ptokens-peosio-token'
+import { pEosioToken } from 'ptokens-peosio-token'
 import { expect } from 'chai'
 
 test('Should init pTokens correctly with 1 instance of pBTC', () => {
@@ -80,7 +80,7 @@ test('Should init pTokens correctly with more ptokens instances', () => {
         eosSignatureProvider: 'https://provider.com'
       }
     ],
-    peosToken: [
+    peosioToken: [
       {
         pToken: constants.pTokens.pEOS,
         blockchain: constants.blockchains.Eosio,
@@ -96,5 +96,5 @@ test('Should init pTokens correctly with more ptokens instances', () => {
   expect(ptokens.pltc).to.be.an.instanceof(pLTC)
   expect(ptokens.pweth).to.be.an.instanceof(pERC20)
   expect(ptokens.peth).to.be.an.instanceof(pERC20)
-  expect(ptokens.peos).to.be.an.instanceof(pEOSToken)
+  expect(ptokens.peos).to.be.an.instanceof(pEosioToken)
 })

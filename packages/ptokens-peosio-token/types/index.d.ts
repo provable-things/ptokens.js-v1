@@ -7,7 +7,7 @@ import { NodeSelector } from 'ptokens-node-selector'
 import { BigNumber } from 'bignumber.js'
 import BN = require('bn.js')
 
-export interface pEOSConfigs {
+export interface pEosioTokenConfigs {
   network?: string,
   hostNetwork?: string,
   blockchain?: string,
@@ -41,7 +41,7 @@ export interface Result {
 }
 
 export class pEosioToken extends NodeSelector {
-  constructor(configs: pEOSConfigs)
+  constructor(configs: pEosioTokenConfigs)
 
   decimals: string | null
 
