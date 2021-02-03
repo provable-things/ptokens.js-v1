@@ -23,8 +23,8 @@ export interface pEosioTokenConfigs {
 }
 
 export interface RedeemOptions {
-  gas?: number,
-  gasPrice?: number | string | BigNumber
+  gas: number,
+  gasPrice: number | string | BigNumber
 }
 
 export interface IssueOptions {
@@ -55,7 +55,7 @@ export class pEosioToken extends NodeSelector {
 
   hostApi?: Web3 | Api
 
-  issue(_amount: string, _hostAddress: string, _options?: IssueOptions): PromiEvent<object | TransactionReceipt | Report | Result>
+  issue(_amount: string, _hostAddress: string, _options: IssueOptions): PromiEvent<object | TransactionReceipt | Report | Result>
 
   redeem(_amount: number|string|BigNumber|BN, _account: string, _options: RedeemOptions): PromiEvent<object | TransactionReceipt | Report | Result>
 }
