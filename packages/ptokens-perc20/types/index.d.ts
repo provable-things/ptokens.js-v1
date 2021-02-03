@@ -23,11 +23,14 @@ export interface pERC20Configs {
   pToken: string
 }
 
-export interface Options {
-  gas?: number,
-  gasPrice?: number | string | BigNumber,
-  blocksBehind: string, 
-  expireSeconds: string,
+export interface IssueOptions {
+  gas: number,
+  gasPrice: number | string | BigNumber,
+}
+
+export interface RedeemOptions {
+  blocksBehind: number,
+  expireSeconds: number,
   permission: string,
 }
 
@@ -56,9 +59,9 @@ export class pERC20 extends NodeSelector {
 
   hostApi?: Api
 
-  issue(_amount: string | BigNumber | BN, _hostAddress: string, _options?: Options): PromiEvent<object | TransactionReceipt | Report | Result>
+  issue(_amount: string | BigNumber | BN, _hostAddress: string, _options: IssueOptions): PromiEvent<object | TransactionReceipt | Report | Result>
 
-  redeem(_amount: number | string, _nativeAddress: string): PromiEvent<object | Report | TransactionReceipt | Result>
+  redeem(_amount: number | string, _nativeAddress: string, _options: RedeemOptions): PromiEvent<object | Report | TransactionReceipt | Result>
 }
 
 export interface Result {
