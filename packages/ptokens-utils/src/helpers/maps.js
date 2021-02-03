@@ -119,9 +119,9 @@ export const networkLabels = {
   telos: {
     mainnet: TelosMainnet
   },
-  bitcoin: {
+  dogecoin: {
     mainnet: DogecoinMainnet,
-    bitcoin: DogecoinMainnet
+    dogecoin: DogecoinMainnet
   }
 }
 

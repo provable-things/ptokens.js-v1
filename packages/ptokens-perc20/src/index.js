@@ -122,8 +122,9 @@ export class pERC20 extends NodeSelector {
    *
    * @param {string|number} _amount
    * @param {string} _nativeAccount
+   * @param {Options} _options
    */
-  redeem(_amount, _nativeAccount) {
+  redeem(_amount, _nativeAccount, _options = {}) {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {

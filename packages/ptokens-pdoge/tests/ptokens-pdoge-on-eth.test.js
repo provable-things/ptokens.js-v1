@@ -41,6 +41,7 @@ test('Should monitor an issuing of 0.001 pDOGE on Ethereum', async () => {
   const depositAddress = await pdoge.getDepositAddress(ETH_TESTING_ADDRESS)
 
   qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+    // eslint-disable-next-line no-console
     console.log(_qrcode)
   })
 
