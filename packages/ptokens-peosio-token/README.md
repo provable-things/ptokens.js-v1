@@ -27,9 +27,10 @@ import { pEosioToken } from 'ptokens-peosio-token'
 import { HttpProvider } from 'ptokens-providers' 
 import { Node } from 'ptokens-node'
 
-const pbtc = new pEosioToken({
+const peos = new pEosioToken({
   blockchain: 'ETH',
   network: 'testnet', // 'testnet' or 'mainnet', default 'testnet'
+  pToken: 'pEOS',
 
   // if you want to be more detailed
   hostBlockchain: 'ETH',
