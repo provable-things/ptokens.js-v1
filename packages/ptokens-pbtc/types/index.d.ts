@@ -35,7 +35,7 @@ export interface pBTCConfigs {
 export interface RedeemOptions {
   gas?: number,
   gasPrice?: number | string | BigNumber,
-  blocksBehind?: string, 
+  blocksBehind?: string,
   expireSeconds?: string,
   permission?: string,
 }

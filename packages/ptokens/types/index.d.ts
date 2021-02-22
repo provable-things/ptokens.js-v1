@@ -20,7 +20,7 @@ export interface pTokensConfigs {
   pltc?: pLTCConfigs | pLTCConfigs[],
   perc20?: pERC20Configs | pERC20Configs[],
   pdoge?: pDOGEConfigs | pDOGEConfigs[],
-  peosioToken?: pEosioTokenConfigs | pEosioTokenConfigs[] 
+  peosioToken?: pEosioTokenConfigs | pEosioTokenConfigs[]
 }
 
 export interface Utils {
