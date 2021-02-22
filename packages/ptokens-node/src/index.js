@@ -13,8 +13,7 @@ export class Node {
   constructor(configs) {
     const { pToken, blockchain, provider } = configs
 
-    if (!helpers.isValidPTokenName(pToken))
-      throw new Error('Invalid pToken name')
+    if (!helpers.isValidPTokenName(pToken)) throw new Error('Invalid pToken name')
 
     this.pToken = pToken.toLowerCase()
     this.blockchain = helpers.getBlockchainShortType(blockchain)
@@ -31,10 +30,7 @@ export class Node {
   }
 
   getInfo() {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_getInfo'
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_getInfo')
   }
 
   /**
@@ -42,11 +38,9 @@ export class Node {
    * @param {Integer} _limit
    */
   getNativeReports(_limit = REPORT_LIMIT) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryNativeReports',
-      [_limit]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryNativeReports', [
+      _limit
+    ])
   }
 
   /**
@@ -54,11 +48,9 @@ export class Node {
    * @param {Integer} _limit
    */
   getHostReports(_limit = REPORT_LIMIT) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryHostReports',
-      [_limit]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryHostReports', [
+      _limit
+    ])
   }
 
   /**
@@ -67,11 +59,10 @@ export class Node {
    * @param {Integer} _limit
    */
   getReportsBySenderAddress(_address, _limit = REPORT_LIMIT) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_querySender',
-      [_address, _limit]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_querySender', [
+      _address,
+      _limit
+    ])
   }
 
   /**
@@ -80,11 +71,10 @@ export class Node {
    * @param {Integer} _limit
    */
   getReportsByRecipientAddress(_address, _limit = REPORT_LIMIT) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryRecipient',
-      [_address, _limit]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryRecipient', [
+      _address,
+      _limit
+    ])
   }
 
   /**
@@ -93,11 +83,10 @@ export class Node {
    * @param {Integer} _limit
    */
   getReportsByNativeAddress(_address, _limit = REPORT_LIMIT) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryNativeAddress',
-      [_address, _limit]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryNativeAddress', [
+      _address,
+      _limit
+    ])
   }
 
   /**
@@ -106,11 +95,10 @@ export class Node {
    * @param {Integer} _limit
    */
   getReportsByHostAddress(_address, _limit = REPORT_LIMIT) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryHostAddress',
-      [_address, _limit]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryHostAddress', [
+      _address,
+      _limit
+    ])
   }
 
   /**
@@ -118,11 +106,9 @@ export class Node {
    * @param {String} _hash
    */
   getReportByIncomingTxHash(_hash) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryIncomingTxHash',
-      [_hash]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryIncomingTxHash', [
+      _hash
+    ])
   }
 
   /**
@@ -130,11 +116,9 @@ export class Node {
    * @param {String} _hash
    */
   getReportByBroadcastTxHash(_hash) {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_queryBroadcastTxHash',
-      [_hash]
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_queryBroadcastTxHash', [
+      _hash
+    ])
   }
 
   /**
@@ -150,10 +134,7 @@ export class Node {
   }
 
   getDepositAddresses() {
-    return this._makeJsonRpcCall(
-      `${this.version}/${this.pToken}-on-${this.blockchain}`,
-      'app_getDepositAddressArray'
-    )
+    return this._makeJsonRpcCall(`${this.version}/${this.pToken}-on-${this.blockchain}`, 'app_getDepositAddressArray')
   }
 
   getLastProcessedNativeBlock() {
@@ -203,11 +184,7 @@ export class Node {
 
   async _makeJsonRpcCall(_path, _call, _body = []) {
     try {
-      const { result } = await this.provider.call(
-        'POST',
-        _path,
-        jsonrpc.request(uuidv4(), _call, _body)
-      )
+      const { result } = await this.provider.call('POST', _path, jsonrpc.request(uuidv4(), _call, _body))
       return result
     } catch (_err) {
       throw new Error(_err.message)

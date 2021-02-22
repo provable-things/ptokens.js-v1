@@ -9,14 +9,12 @@ const zeroAddress = '0x0000000000000000000000000000000000000000'
 /**
  * @param {String} _string
  */
-const addHexPrefix = _string =>
-  isHexPrefixed(_string) ? _string : HEX_PREFIX + _string
+const addHexPrefix = _string => (isHexPrefixed(_string) ? _string : HEX_PREFIX + _string)
 
 /**
  * @param {String} _string
  */
-const removeHexPrefix = _string =>
-  isHexPrefixed(_string) ? _string.substr(2) : _string
+const removeHexPrefix = _string => (isHexPrefixed(_string) ? _string.substr(2) : _string)
 
 /**
  *
@@ -24,8 +22,7 @@ const removeHexPrefix = _string =>
  * @param {integer} _decimals
  */
 
-const onChainFormat = (_amount, _decimals) =>
-  _amount.multipliedBy(new BigNumber(Math.pow(10, _decimals)))
+const onChainFormat = (_amount, _decimals) => _amount.multipliedBy(new BigNumber(Math.pow(10, _decimals)))
 
 /**
  *
@@ -33,8 +30,7 @@ const onChainFormat = (_amount, _decimals) =>
  * @param {integer} _decimals
  */
 
-const offChainFormat = (_amount, _decimals) =>
-  _amount.dividedBy(new BigNumber(Math.pow(10, _decimals)))
+const offChainFormat = (_amount, _decimals) => _amount.dividedBy(new BigNumber(Math.pow(10, _decimals)))
 
 /**
  * @param {Object} _web3
@@ -115,12 +111,8 @@ const makeContractSend = (_web3, _method, _options, _params = []) => {
           gasPrice,
           gas
         })
-        .once('transactionHash', _hash =>
-          promiEvent.eventEmitter.emit('transactionHash', _hash)
-        )
-        .once('receipt', _receipt =>
-          promiEvent.eventEmitter.emit('receipt', _receipt)
-        )
+        .once('transactionHash', _hash => promiEvent.eventEmitter.emit('transactionHash', _hash))
+        .once('receipt', _receipt => promiEvent.eventEmitter.emit('receipt', _receipt))
         .once('error', _error => promiEvent.eventEmitter.emit('error', _error))
         .then(() => promiEvent.resolve())
     } catch (_err) {
@@ -141,20 +133,10 @@ const sendSignedMethodTx = (_web3, _method, _options, _params) => {
   const promiEvent = Web3PromiEvent()
   const start = async () => {
     try {
-      const {
-        abi,
-        contractAddress,
-        value,
-        gas,
-        gasPrice,
-        privateKey
-      } = _options
+      const { abi, contractAddress, value, gas, gasPrice, privateKey } = _options
 
       const contract = getContract(_web3, abi, _web3.eth.defaultAccount)
-      const nonce = await _web3.eth.getTransactionCount(
-        _web3.eth.defaultAccount,
-        'pending'
-      )
+      const nonce = await _web3.eth.getTransactionCount(_web3.eth.defaultAccount, 'pending')
 
       const { rawTransaction } = await _web3.eth.accounts.signTransaction(
         {
@@ -170,12 +152,8 @@ const sendSignedMethodTx = (_web3, _method, _options, _params) => {
 
       _web3.eth
         .sendSignedTransaction(rawTransaction)
-        .once('transactionHash', _hash =>
-          promiEvent.eventEmitter.emit('transactionHash', _hash)
-        )
-        .once('receipt', _receipt =>
-          promiEvent.eventEmitter.emit('receipt', _receipt)
-        )
+        .once('transactionHash', _hash => promiEvent.eventEmitter.emit('transactionHash', _hash))
+        .once('receipt', _receipt => promiEvent.eventEmitter.emit('receipt', _receipt))
         .once('error', _error => promiEvent.eventEmitter.emit('error', _error))
         .then(() => promiEvent.resolve())
     } catch (_err) {

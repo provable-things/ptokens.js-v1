@@ -8,9 +8,7 @@ const { blockchains, pTokens } = constants
 
 jest.setTimeout(300000)
 
-// prettier-ignore
 const HASH_INCOMING_TX = '2099603a0ee85fce936430828af84fac3efa4fa9d34289f702c31c3de160a7ef'
-// prettier-ignore
 const HASH_BROADCASTED_TX = '0x4337e0ab72fe3a2329c8cb6fe666a2d11a9d8b4e4e47a293029cbf7487419165'
 // deposit address
 const BTC_TESTING_ADDRESS = '3PLpcC8C9xWYuvdhnmLA2dp2qm7KvjGgi7'
@@ -91,10 +89,7 @@ test('Should get one host reports by sender address', async () => {
 test('Should get one native report by recipient address', async () => {
   const expectedResultLength = 1
   const limit = 1
-  const res = await node.getReportsByRecipientAddress(
-    ETH_TESTING_ADDRESS,
-    limit
-  )
+  const res = await node.getReportsByRecipientAddress(ETH_TESTING_ADDRESS, limit)
   expect(res)
     .to.be.an.instanceof(Array)
     .to.have.lengthOf(expectedResultLength)
@@ -153,11 +148,9 @@ test('Should monitor an incoming transaction', async () => {
       eventEmitter.once('nodeBroadcastedTx', () => {
         nodeHasBroadcastedTx += 1
       })
-      node
-        .monitorIncomingTransaction(HASH_INCOMING_TX, eventEmitter)
-        .then(() => {
-          resolve()
-        })
+      node.monitorIncomingTransaction(HASH_INCOMING_TX, eventEmitter).then(() => {
+        resolve()
+      })
     })
   await start()
   expect(nodeHasReceivedTx).to.be.equal(2)

@@ -7,7 +7,14 @@ const perc20 = new pERC20({
 })
 
 // $ExpectType PromiEvent<object | TransactionReceipt | Report | Result>
-perc20.issue('1000000000000', 'eos account')
+perc20.issue('1000000000000', 'eos account', {
+  gas: 10,
+  gasPrice: 10
+})
 
 // $ExpectType PromiEvent<object | TransactionReceipt | Report | Result>
-perc20.redeem(0.002, 'eth address')
+perc20.redeem(0.002, 'eth address', {
+  blocksBehind: 30,
+  expireSeconds: 120,
+  permission: 'active',
+})

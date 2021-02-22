@@ -1,5 +1,6 @@
 import {
   btc,
+  doge,
   converters,
   constants,
   eth,
@@ -39,7 +40,7 @@ btc.waitForTransactionConfirmation('testnet', BTC_UTXO, 10000, 'nativeTxBroadcas
 // converters
 
 // $ExpectType number
-converters.decodeUint64le(new Buffer('474633d2'))
+converters.decodeUint64le(Buffer.from('474633d2'))
 
 // $ExpectType Buffer
 converters.encodeUint64le(10)
@@ -47,7 +48,6 @@ converters.encodeUint64le(10)
 // eth
 const ETH_TESTING_CONTRACT_ADDRESS = '0x15FA11dFB23eae46Fda69fB6A148f41677B4a090'
 const ETH_TESTING_ADDRESS = '0x1f0b6A3AC984B4c990d8Ce867103E9C384629747'
-// prettier-ignore
 const ETH_TESTING_TX ='0xcbda0526ef6f74583e0af541e3e8b25542130691bddea2fdf5956c8e1ea783e5'
 
 // $ExpectType string
@@ -243,3 +243,23 @@ ltc.monitorUtxoByAddress('testnet', LTC_TESTING_ADDRESS, new EventEmitter(), 100
 
 // $ExpectType Promise<LitecoinTransactionReceipt>
 ltc.waitForTransactionConfirmation('testnet', LTC_UTXO, 10000, 'broadcast event name', 'confirmation event name')
+
+// dogecoin
+const DOGE_RAW_TX = "raw rx"
+const DOGE_TESTING_ADDRESS = 'n1qkF2NzY1v5Jj41zSJZRVJE1rJDRyoFzs'
+const DOGE_UTXO = 'utxo'
+
+// $ExpectType Promise<LitecoinBroadcastedTx>
+doge.broadcastTransaction('mainnet', DOGE_RAW_TX)
+
+// $ExpectType Promise<LitecoinUtxoList>
+doge.getUtxoByAddress('mainnet', DOGE_TESTING_ADDRESS)
+
+// $ExpectType boolean
+doge.isValidAddress('mainnet', DOGE_TESTING_ADDRESS)
+
+// $ExpectType Promise<string>
+doge.monitorUtxoByAddress('mainnet', DOGE_TESTING_ADDRESS, new EventEmitter(), 1000)
+
+// $ExpectType Promise<LitecoinTransactionReceipt>
+doge.waitForTransactionConfirmation('mainnet', DOGE_UTXO, 10000, 'broadcast event name', 'confirmation event name')

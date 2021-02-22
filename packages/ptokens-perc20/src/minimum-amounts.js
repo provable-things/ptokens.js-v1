@@ -1,50 +1,86 @@
 import { constants } from 'ptokens-utils'
 export default {
-  [constants.tokens.ETH]: {
+  [constants.tokens.ethereum.mainnet.ETH]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.WETH]: {
+  [constants.tokens.ethereum.mainnet.WETH]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.PNT]: {
+  [constants.tokens.ethereum.mainnet.PNT]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.LINK]: {
+  [constants.tokens.ethereum.mainnet.LINK]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.MKR]: {
+  [constants.tokens.ethereum.mainnet.MKR]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.YFI]: {
+  [constants.tokens.ethereum.mainnet.YFI]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.PTERIA]: {
+  [constants.tokens.ethereum.mainnet.PTERIA]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.UNI]: {
+  [constants.tokens.ethereum.mainnet.UNI]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.BAND]: {
+  [constants.tokens.ethereum.mainnet.BAND]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.BAL]: {
+  [constants.tokens.ethereum.mainnet.BAL]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.COMP]: {
+  [constants.tokens.ethereum.mainnet.COMP]: {
     issue: 1000000000,
     redeem: 0.000000001
   },
-  [constants.tokens.SNX]: {
+  [constants.tokens.ethereum.mainnet.SNX]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.OMG]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.DAI]: {
+    issue: 1000000000,
+    redeem: 0.0001
+  },
+  [constants.tokens.ethereum.mainnet.ANT]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.LRC]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.UOS]: {
+    issue: 1,
+    redeem: 0.0001
+  },
+  [constants.tokens.ethereum.mainnet.BAT]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.REP]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.ZRX]: {
+    issue: 1000000000,
+    redeem: 0.000000001
+  },
+  [constants.tokens.ethereum.mainnet.PNK]: {
     issue: 1000000000,
     redeem: 0.000000001
   }

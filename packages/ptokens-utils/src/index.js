@@ -1,4 +1,5 @@
 import * as btc from './btc'
+import * as doge from './doge'
 import * as ltc from './ltc'
 import * as converters from './converters'
 import * as eth from './eth'
@@ -10,14 +11,17 @@ import { redeemFromEthereum } from './redeem-from/redeem-from-ethereum'
 import pERC20VaultContractAbi from './abi/pERC20VaultContractAbi.json'
 import pTokenOnEosAbi from './abi/pTokenOnEOSContractAbi.json'
 import pTokenOnEthAbi from './abi/pTokenOnETHContractAbi.json'
+import EosioTokenAbi from './abi/EosioTokenAbi.json'
 
 export default {
   abi: {
     pTokenOnEth: pTokenOnEthAbi,
     pTokenOnEos: pTokenOnEosAbi,
-    pERC20Vault: pERC20VaultContractAbi
+    pERC20Vault: pERC20VaultContractAbi,
+    EosioToken: EosioTokenAbi
   },
   btc,
+  doge,
   converters,
   constants,
   eth,

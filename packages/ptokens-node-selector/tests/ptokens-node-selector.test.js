@@ -167,7 +167,6 @@ test('Should select a pLTC node on Ethereum Mainnet', async () => {
 
 test('Should not be connected if a node is unreachable', async () => {
   const unreachableNode = UNREACHABLE_NODE
-  // prettier-ignore
   const expectedErrorMessage = 'Error during checking node connection: getaddrinfo ENOTFOUND unreachable-node.io'
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,

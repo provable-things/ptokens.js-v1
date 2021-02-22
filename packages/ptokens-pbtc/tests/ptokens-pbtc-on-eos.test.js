@@ -9,7 +9,6 @@ import { constants } from 'ptokens-utils'
 const EOS_PRIVATE_KEY = ''
 const EOS_TESTING_ACCOUNT_NAME = ''
 const EOS_RPC_URL = ''
-// prettier-ignore
 const BTC_TESTING_PRIVATE_KEY = ''
 const BTC_TESTING_ADDRESS = ''
 
@@ -49,13 +48,7 @@ test('Should monitor an issuing of 0.00050100 pBTC on EOS', async () => {
     console.log(_qrcode)
   }) */
 
-  await sendBitcoin(
-    BTC_TESTING_PRIVATE_KEY,
-    BTC_TESTING_ADDRESS,
-    amountToIssue,
-    minerFees,
-    depositAddress.toString()
-  )
+  await sendBitcoin(BTC_TESTING_PRIVATE_KEY, BTC_TESTING_ADDRESS, amountToIssue, minerFees, depositAddress.toString())
 
   let btcTxIsBroadcasted = 0
   let btcTxIsConfirmed = 0
@@ -117,8 +110,9 @@ test('Should redeem 0.000051 pBTC on EOS', async () => {
     new Promise((resolve, reject) => {
       pbtc
         .redeem(amountToRedeem, BTC_TESTING_ADDRESS, {
-          gasPrice: 75e9,
-          gas: 200000
+          blocksBehind: 3,
+          expireSeconds: 60,
+          permission: 'active'
         })
         .once('onEosTxConfirmed', () => {
           eosTxIsConfirmed += 1

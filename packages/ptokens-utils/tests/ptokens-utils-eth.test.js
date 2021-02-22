@@ -5,11 +5,8 @@ import abi from './utils/exampleContractABI.json'
 import BigNumber from 'bignumber.js'
 
 const TEST_CONTRACT_ADDRESS = '0x15FA11dFB23eae46Fda69fB6A148f41677B4a090'
-// prettier-ignore
 const TEST_ETH_PRIVATE_KEY = '422c874bed50b69add046296530dc580f8e2e253879d98d66023b7897ab15742'
-// prettier-ignore
 const TEST_ETH_PROVIDER = 'https://kovan.infura.io/v3/4762c881ac0c4938be76386339358ed6'
-// prettier-ignore
 const ETH_TESTING_TX = '0xcbda0526ef6f74583e0af541e3e8b25542130691bddea2fdf5956c8e1ea783e5'
 
 jest.setTimeout(60000)
@@ -39,9 +36,7 @@ test('Should return the correct Ethereum offchain format', () => {
   const onChainAmount = new BigNumber(10000)
   const decimals = 4
   const expectedOffChainAmount = '1'
-  const offChainAmount = utils.eth
-    .offChainFormat(onChainAmount, decimals, '/')
-    .toFixed()
+  const offChainAmount = utils.eth.offChainFormat(onChainAmount, decimals, '/').toFixed()
   expect(offChainAmount).to.be.equal(expectedOffChainAmount)
 })
 
@@ -49,9 +44,7 @@ test('Should return the correct Ethereum onchain format', () => {
   const offChainAmount = new BigNumber(1)
   const decimals = 4
   const expectedOnChainAmount = '10000'
-  const onChainAmount = utils.eth
-    .onChainFormat(offChainAmount, decimals, '*')
-    .toFixed()
+  const onChainAmount = utils.eth.onChainFormat(offChainAmount, decimals, '*').toFixed()
   expect(onChainAmount).to.be.equal(expectedOnChainAmount)
 })
 
@@ -59,9 +52,7 @@ test('Should return the current Ethereum account with non injected Web3 instance
   const web3 = new Web3(TEST_ETH_PROVIDER)
   const expectedEthereumAccount = '0xdf3B180694aB22C577f7114D822D28b92cadFd75'
 
-  const account = web3.eth.accounts.privateKeyToAccount(
-    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
-  )
+  const account = web3.eth.accounts.privateKeyToAccount(utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY))
   web3.eth.defaultAccount = account.address
   const ethereumAccount = await utils.eth.getAccount(web3)
   expect(ethereumAccount).to.be.equal(expectedEthereumAccount)
@@ -69,15 +60,8 @@ test('Should return the current Ethereum account with non injected Web3 instance
 
 test('Should return a valid Web3.eth.Contract instance', () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
-  const account = web3.eth.accounts.privateKeyToAccount(
-    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
-  )
-  const contract = utils.eth.getContract(
-    web3,
-    abi,
-    TEST_CONTRACT_ADDRESS,
-    account.address
-  )
+  const account = web3.eth.accounts.privateKeyToAccount(utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY))
+  const contract = utils.eth.getContract(web3, abi, TEST_CONTRACT_ADDRESS, account.address)
   const expectedContract = new web3.eth.Contract(abi, TEST_CONTRACT_ADDRESS, {
     defaultAccount: account.address
   })
@@ -114,9 +98,7 @@ test('Should call an ETH contract call', async () => {
 
 test('Should make an ETH contract send correctly', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
-  const account = web3.eth.accounts.privateKeyToAccount(
-    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
-  )
+  const account = web3.eth.accounts.privateKeyToAccount(utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY))
   web3.eth.defaultAccount = account.address
   const expectedNumber = 10
 
@@ -139,9 +121,7 @@ test('Should make an ETH contract send correctly', async () => {
 
 test('Should make an ETH contract send correctly specifying the gas', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
-  const account = web3.eth.accounts.privateKeyToAccount(
-    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
-  )
+  const account = web3.eth.accounts.privateKeyToAccount(utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY))
   web3.eth.defaultAccount = account.address
   const expectedNumber = 10
 
@@ -167,9 +147,7 @@ test('Should fail to send a tx because of gas limit', async () => {
   const GAS_TOO_LOW = 10
 
   const web3 = new Web3(TEST_ETH_PROVIDER)
-  const account = web3.eth.accounts.privateKeyToAccount(
-    utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY)
-  )
+  const account = web3.eth.accounts.privateKeyToAccount(utils.eth.addHexPrefix(TEST_ETH_PRIVATE_KEY))
   web3.eth.defaultAccount = account.address
 
   try {
@@ -185,18 +163,12 @@ test('Should fail to send a tx because of gas limit', async () => {
       [0]
     )
   } catch (err) {
-    expect(err.message).to.includes(
-      'Signer Error: gas limit is too low. Need at least'
-    )
+    expect(err.message).to.includes('Signer Error: gas limit is too low. Need at least')
   }
 })
 
 test('Should wait for an ETH transaction confirmation', async () => {
   const web3 = new Web3(TEST_ETH_PROVIDER)
-  const receipt = await utils.eth.waitForTransactionConfirmation(
-    web3,
-    ETH_TESTING_TX,
-    3000
-  )
+  const receipt = await utils.eth.waitForTransactionConfirmation(web3, ETH_TESTING_TX, 3000)
   expect(receipt).to.be.an('Object')
 })

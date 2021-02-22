@@ -82,7 +82,10 @@ export interface BtcUtils {
     _network: string,
     _address: string,
     _eventEmitter: EventEmitter,
-    _pollingTime: number
+    _pollingTime: number,
+    _broadcastEventName?: string,
+    _confirmationEventName?: string,
+    _confirmations?: number
   ): Promise<string>
   waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number, _broadcastEventName: string, _confirmationEventName: string): Promise<BitcoinTransactionReceipt>
 }
@@ -177,7 +180,8 @@ export interface Blockchains {
   Litecoin: string,
   Ethereum: string,
   Eosio: string,
-  Telos: string
+  Telos: string,
+  Dogecoin: string
 }
 
 export interface Networks {
@@ -191,7 +195,8 @@ export interface Networks {
   EthereumRopsten: string,
   EosioMainnet: string,
   EosioJungle3: string,
-  TelosMainnet: string
+  TelosMainnet: string,
+  DogecoinMainnet: string
 }
 
 export interface pTokens {
@@ -209,9 +214,20 @@ export interface pTokens {
   pBAL: string,
   pCOMP: string,
   pSNX: string,
+  pOMG: string,
+  pDAI: string,
+  pANT: string,
+  pLRC: string,
+  pUOS: string,
+  pBAT: string,
+  pREP: string,
+  pZRX: string,
+  pPNK: string,
+  pDOGE: string,
+  pEOS: string
 }
 
-export interface Tokens {
+export interface EthereumMainnetTokens {
   ETH: string,
   WETH: string,
   LINK: string,
@@ -224,6 +240,32 @@ export interface Tokens {
   BAL: string,
   COMP: string,
   SNX: string,
+  OMG: string,
+  DAI: string,
+  ANT: string,
+  LRC: string,
+  UOS: string,
+  BAT: string,
+  REP: string,
+  ZRX: string,
+  PNK: string
+}
+
+export interface EosioMainnetTokens {
+  EOS: string
+}
+
+export interface EthereumTokens {
+  mainnet: EthereumMainnetTokens
+}
+
+export interface EosioTokens {
+  mainnet: EosioMainnetTokens
+}
+
+export interface Tokens {
+  ethereum: EthereumTokens,
+  eosio: EosioTokens
 }
 
 export interface Constants {
@@ -313,9 +355,79 @@ export interface LtcUtils {
     _network: string,
     _address: string,
     _eventEmitter: EventEmitter,
-    _pollingTime: number
+    _pollingTime: number,
+    _broadcastEventName?: string,
+    _confirmationEventName?: string,
+    _confirmations?: number
   ): Promise <string>
   waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number, _broadcastEventName: string, _confirmationEventName: string): Promise<LitecoinTransactionReceipt>
 }
 
 export const ltc: LtcUtils
+
+// doge
+export interface DogecoinBroadcastedTx {
+  tx: string
+}
+
+export interface DogecoinUtxoList extends Array<DogecoinUtxo> {}
+
+export interface DogecoinUtxo {
+  tx_hash: string,
+  tx_output_n: number,
+  script: string,
+  value: string,
+  confirmations: number
+}
+
+export interface DogecoinInput {
+  pos: number,
+  value: string,
+  type: string,
+  address: string,
+  scriptSig: object,
+  previous_output: object
+}
+
+export interface DogecoinOutput {
+  pos: number,
+  value: string,
+  type: string,
+  address: string,
+}
+
+export interface DogecoinInputs extends Array<DogecoinInput> {}
+
+export interface DogecoinOutputs extends Array<DogecoinOutput> {}
+
+export interface DogecoinTransactionReceipt {
+  hash: string,
+  confirmations: number,
+  size: number,
+  version: BitcoinVinList,
+  locktime: BitcoinVoutList
+  block_hash: string,
+  time: number,
+  inputs_n: number
+  inputs: DogecoinInputs,
+  inputs_value: string,
+  outputs_n: number,
+  outputs: DogecoinOutputs
+  outputs_value: string,
+  fee: number
+}
+
+export interface DogeUtils {
+  broadcastTransaction(_network: string, _tx: string): Promise<DogecoinBroadcastedTx>
+  getUtxoByAddress(_network: string, _address: string): Promise<DogecoinUtxoList>
+  isValidAddress(_network: string, _address: string): boolean
+  monitorUtxoByAddress(
+    _network: string,
+    _address: string,
+    _eventEmitter: EventEmitter,
+    _pollingTime: number
+  ): Promise <string>
+  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number, _broadcastEventName: string, _confirmationEventName: string): Promise<LitecoinTransactionReceipt>
+}
+
+export const doge: LtcUtils

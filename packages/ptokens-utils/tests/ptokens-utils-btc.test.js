@@ -65,11 +65,7 @@ test('Should monitor a BTC transaction confirmation', async () => {
   const pollingTime = 200
   const network = 'testnet'
 
-  const receipt = await utils.btc.waitForTransactionConfirmation(
-    network,
-    UTXO,
-    pollingTime
-  )
+  const receipt = await utils.btc.waitForTransactionConfirmation(network, UTXO, pollingTime)
 
   expect(receipt).to.be.an('object')
 })

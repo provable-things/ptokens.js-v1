@@ -5,18 +5,22 @@ import {
   Converters,
   Constants,
   LtcUtils,
-  EosUtils
+  EosUtils,
+  DogeUtils
 } from 'ptokens-utils'
-import { pBTC, pBTCConfigs } from 'ptokens-pbtc'
-import { pLTC, pLTCConfigs } from 'ptokens-pltc'
-import { pERC20, pERC20Configs } from 'ptokens-perc20'
+import { pBTCConfigs } from 'ptokens-pbtc'
+import { pLTCConfigs } from 'ptokens-pltc'
+import { pERC20Configs } from 'ptokens-perc20'
+import { pEosioTokenConfigs } from 'ptokens-peosio-token'
+import { pDOGEConfigs} from 'ptokens-pdoge'
 import { HttpProvider } from 'ptokens-providers'
 
 export interface pTokensConfigs {
   pbtc?: pBTCConfigs | pBTCConfigs[],
   pltc?: pLTCConfigs | pLTCConfigs[],
-  pweth?: pERC20Configs | pERC20Configs[],
-  peth?: pERC20Configs | pERC20Configs[],
+  perc20?: pERC20Configs | pERC20Configs[],
+  pdoge?: pDOGEConfigs | pDOGEConfigs[],
+  peosioToken?: pEosioTokenConfigs | pEosioTokenConfigs[]
 }
 
 export interface Utils {
@@ -24,6 +28,7 @@ export interface Utils {
   eth: EthUtils,
   ltc: LtcUtils,
   eos: EosUtils,
+  doge: DogeUtils,
   helpers: Helpers,
   converters: Converters,
   constants: Constants
@@ -34,14 +39,6 @@ export interface Providers {
 
 export class pTokens {
   constructor(_configs: pTokensConfigs)
-
-  pbtc: pBTCConfigs | pBTCConfigs[]
-
-  pltc: pLTCConfigs | pLTCConfigs[]
-
-  pweth: pERC20Configs | pERC20Configs[]
-
-  peth: pERC20Configs | pERC20Configs[]
 
   utils: Utils
 

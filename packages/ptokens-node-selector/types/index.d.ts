@@ -31,6 +31,8 @@ export class NodeSelector {
 
   networkType: string
 
+  pToken: string
+
   provider: HttpProvider | null
 
   checkConnection(_endpoint: string, _timeout?: number): Promise<boolean>

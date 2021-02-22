@@ -1,13 +1,7 @@
 import * as eth from '../eth'
 import pTokenOnEth from '../abi/pTokenOnETHContractAbi.json'
 
-const redeemFromEthereum = (
-  _web3,
-  _options,
-  _params,
-  _promiEvent,
-  _broadcastEventName
-) =>
+const redeemFromEthereum = (_web3, _options, _params, _promiEvent, _broadcastEventName) =>
   new Promise((_resolve, _reject) => {
     eth[_options.privateKey ? 'sendSignedMethodTx' : 'makeContractSend'](
       _web3,

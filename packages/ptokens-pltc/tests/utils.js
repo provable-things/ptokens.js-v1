@@ -8,17 +8,8 @@ import utils from 'ptokens-utils'
  * @param {Number} _minerFees
  * @param {String} _to
  */
-const sendLitecoin = async (
-  _ltcPrivateKey,
-  _ltcAddress,
-  _value,
-  _minerFees,
-  _to
-) => {
-  const key = bitcoin.ECPair.fromPrivateKey(
-    Buffer.from(_ltcPrivateKey, 'hex'),
-    bitcoin.networks.testnet
-  )
+const sendLitecoin = async (_ltcPrivateKey, _ltcAddress, _value, _minerFees, _to) => {
+  const key = bitcoin.ECPair.fromPrivateKey(Buffer.from(_ltcPrivateKey, 'hex'), bitcoin.networks.testnet)
 
   const utxos = await utils.ltc.getUtxoByAddress('testnet', _ltcAddress)
 
@@ -32,10 +23,7 @@ const sendLitecoin = async (
     }
   }
 
-  const utxoToSpendHex = await utils.ltc.getTransactionHexById(
-    'testnet',
-    utxoToSpend.txid
-  )
+  const utxoToSpendHex = await utils.ltc.getTransactionHexById('testnet', utxoToSpend.txid)
 
   bitcoin.networks.litecoinTestnet = {
     messagePrefix: '\x19Litecoin Signed Message:\n',

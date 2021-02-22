@@ -2,17 +2,12 @@ import axios from 'axios'
 import polling from 'light-async-polling'
 import { Mainnet } from './helpers/names'
 
-// prettier-ignore
 const LTC_PTOKENS_NODE_TESTNET_API = 'https://ltc-testnet-node-1.ptokens.io/insight-lite-api'
-// prettier-ignore
 const LTC_PTOKENS_NODE_MAINNET_API = 'https://ltc-node-1.ptokens.io/insight-lite-api'
 
 const _getInsightLiteApi = _network =>
   axios.create({
-    baseURL:
-      _network === Mainnet
-        ? LTC_PTOKENS_NODE_MAINNET_API
-        : LTC_PTOKENS_NODE_TESTNET_API,
+    baseURL: _network === Mainnet ? LTC_PTOKENS_NODE_MAINNET_API : LTC_PTOKENS_NODE_TESTNET_API,
     timeout: 50000,
     headers: {
       'Content-Type': 'application/json'
@@ -42,16 +37,14 @@ const broadcastTransaction = (_network, _tx) =>
  * @param {String} _network
  * @param {String} _address
  */
-const getUtxoByAddress = (_network, _address) =>
-  _makeInsightLiteApiCall(_network, 'GET', `/addrs/${_address}/utxo`)
+const getUtxoByAddress = (_network, _address) => _makeInsightLiteApiCall(_network, 'GET', `/addrs/${_address}/utxo`)
 
 /**
  *
  * @param {String} _network
  * @param {String} _txId
  */
-const getTransactionHexById = (_network, _txId) =>
-  _makeInsightLiteApiCall(_network, 'GET', `/rawtx/${_txId}`)
+const getTransactionHexById = (_network, _txId) => _makeInsightLiteApiCall(_network, 'GET', `/rawtx/${_txId}`)
 
 /**
  * @param {String} _address
@@ -82,11 +75,7 @@ const monitorUtxoByAddress = async (
   await polling(async () => {
     // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
 
-    utxos = await _makeInsightLiteApiCall(
-      _network,
-      'GET',
-      `/addrs/${_address}/utxo`
-    )
+    utxos = await _makeInsightLiteApiCall(_network, 'GET', `/addrs/${_address}/utxo`)
 
     if (utxos.length > 0) {
       if (utxos[0].confirmations > 0) {
@@ -125,11 +114,7 @@ const waitForTransactionConfirmation = async (_network, _tx, _pollingTime) => {
   let transaction = null
   await polling(async () => {
     try {
-      transaction = await _makeInsightLiteApiCall(
-        _network,
-        'GET',
-        `/tx/${_tx}/`
-      )
+      transaction = await _makeInsightLiteApiCall(_network, 'GET', `/tx/${_tx}/`)
       return transaction.confirmations > 0
     } catch (_err) {
       return false

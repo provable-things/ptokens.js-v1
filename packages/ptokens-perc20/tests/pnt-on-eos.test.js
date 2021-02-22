@@ -6,13 +6,9 @@ import { constants, eth } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 
-// prettier-ignore
 const ETH_TESTING_ADDRESS = ''
-// prettier-ignore
 const ETH_TESTING_PRIVATE_KEY = ''
-// prettier-ignore
 const WEB3_PROVIDER = ''
-// prettier-ignore
 const EOS_TESTING_PRIVATE_KEY = ''
 const EOS_TESTING_NODE_ENDPOINT = ''
 const EOS_TESTING_ACCOUNT_NAME = ''
@@ -86,7 +82,7 @@ test('Should issue 0.00002 PNT', async () => {
       ],
       gas: 200000,
       gasPrice: 75e9,
-      contractAddress: constants.tokens.PNT,
+      contractAddress: constants.tokens.ethereum.mainnet.PNT,
       value: 0
     },
     [eth.addHexPrefix(native_vault_address), BigNumber('20000000000000')]
@@ -133,7 +129,7 @@ test('Should redeem 0.00002 PNT on EOS', async () => {
   const start = () =>
     new Promise((resolve, reject) => {
       pnt
-        .redeem(amountToRedeem, ETH_TESTING_ADDRESS)
+        .redeem(amountToRedeem, ETH_TESTING_ADDRESS, { blocksBehind: 3, expireSeconds: 60, permission: 'active' })
         .once('hostTxConfirmed', () => {
           eosTxIsConfirmed = true
         })

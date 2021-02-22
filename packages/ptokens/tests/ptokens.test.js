@@ -3,6 +3,7 @@ import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
 import { pERC20 } from 'ptokens-perc20'
 import { constants } from 'ptokens-utils'
+import { pEosioToken } from 'ptokens-peosio-token'
 import { expect } from 'chai'
 
 test('Should init pTokens correctly with 1 instance of pBTC', () => {
@@ -49,7 +50,7 @@ test('Should init pTokens correctly with 2 instance of pLTC', () => {
   expect(ptokens.pltc).to.have.lengthOf(2)
 })
 
-test('Should init pTokens correctly with 1 instance of pBTC and 1 of pLTC and 1 of pWETH', () => {
+test('Should init pTokens correctly with more ptokens instances', () => {
   const ptokens = new pTokens({
     pbtc: {
       blockchain: constants.blockchains.Ethereum,
@@ -64,8 +65,7 @@ test('Should init pTokens correctly with 1 instance of pBTC and 1 of pLTC and 1 
         pToken: constants.pTokens.pWETH,
         blockchain: constants.blockchains.Ethereum,
         network: constants.networks.Testnet,
-        ethPrivateKey:
-          'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
+        ethPrivateKey: 'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
         ethProvider: 'https://provider.com',
         eosPrivateKey: 'private key',
         eosSignatureProvider: 'https://provider.com'
@@ -74,8 +74,18 @@ test('Should init pTokens correctly with 1 instance of pBTC and 1 of pLTC and 1 
         pToken: constants.pTokens.pETH,
         blockchain: constants.blockchains.Ethereum,
         network: constants.networks.Testnet,
-        ethPrivateKey:
-          'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
+        ethPrivateKey: 'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
+        ethProvider: 'https://provider.com',
+        eosPrivateKey: 'private key',
+        eosSignatureProvider: 'https://provider.com'
+      }
+    ],
+    peosioToken: [
+      {
+        pToken: constants.pTokens.pEOS,
+        blockchain: constants.blockchains.Eosio,
+        network: constants.networks.Mainnet,
+        ethPrivateKey: 'e7c862ea586f7ca20d1d370b30211062fc49066a5b2aacf25a22620620b09200',
         ethProvider: 'https://provider.com',
         eosPrivateKey: 'private key',
         eosSignatureProvider: 'https://provider.com'
@@ -86,4 +96,5 @@ test('Should init pTokens correctly with 1 instance of pBTC and 1 of pLTC and 1 
   expect(ptokens.pltc).to.be.an.instanceof(pLTC)
   expect(ptokens.pweth).to.be.an.instanceof(pERC20)
   expect(ptokens.peth).to.be.an.instanceof(pERC20)
+  expect(ptokens.peos).to.be.an.instanceof(pEosioToken)
 })

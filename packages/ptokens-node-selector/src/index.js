@@ -10,21 +10,12 @@ export class NodeSelector {
   constructor(_configs) {
     const { pToken, defaultNode } = _configs
 
-    if (!helpers.isValidPTokenName(pToken))
-      throw new Error('Invalid pToken name')
+    if (!helpers.isValidPTokenName(pToken)) throw new Error('Invalid pToken name')
 
     // NOTE: pETH becomes pWETH for nodes interactions
-    this.pToken =
-      pToken.toLowerCase() === constants.pTokens.pETH
-        ? constants.pTokens.pWETH
-        : pToken.toLowerCase()
+    this.pToken = pToken.toLowerCase() === constants.pTokens.pETH ? constants.pTokens.pWETH : pToken.toLowerCase()
 
-    const {
-      hostBlockchain,
-      hostNetwork,
-      nativeBlockchain,
-      nativeNetwork
-    } = helpers.parseParams(
+    const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
       _configs,
       _configs.nativeBlockchain
         ? helpers.getBlockchainType[_configs.nativeBlockchain]
@@ -48,14 +39,8 @@ export class NodeSelector {
   async checkConnection(_endpoint, _timeout) {
     try {
       this.provider.setEndpoint(_endpoint)
-      const {
-        host_blockchain,
-        host_network,
-        native_blockchain,
-        native_network
-      } = await this.provider.call(
+      const { host_blockchain, host_network, native_blockchain, native_network } = await this.provider.call(
         'GET',
-        // prettier-ignore
         `/${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}/get-info`,
         null,
         _timeout
@@ -87,39 +72,24 @@ export class NodeSelector {
 
   async select() {
     try {
-      this.provider.setEndpoint(
-        getBootNodeEndpoint(helpers.getNetworkType(this.hostNetwork))
-      )
+      this.provider.setEndpoint(getBootNodeEndpoint(helpers.getNetworkType(this.hostNetwork)))
       this.nodes = (await this.provider.call('GET', '/peers')).peers
 
-      // prettier-ignore
       const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}`
-
-      const filteredNodesByFeature = this.nodes.filter(node =>
-        node.features.includes(feature)
-      )
-
-      if (filteredNodesByFeature.length === 0)
-        throw new Error('No nodes available relating to the selected pToken')
+      const filteredNodesByFeature = this.nodes.filter(node => node.features.includes(feature))
+      if (filteredNodesByFeature.length === 0) throw new Error('No nodes available relating to the selected pToken')
 
       const nodesNotReachable = []
       for (;;) {
         const index = Math.floor(Math.random() * filteredNodesByFeature.length)
         const selectedNode = filteredNodesByFeature[index]
 
-        if (
-          (await this.checkConnection(selectedNode.webapi)) &&
-          !nodesNotReachable.includes(selectedNode)
-        )
+        if ((await this.checkConnection(selectedNode.webapi)) && !nodesNotReachable.includes(selectedNode))
           return this.setSelectedNode(selectedNode.webapi)
-        else if (!nodesNotReachable.includes(selectedNode))
-          nodesNotReachable.push(selectedNode)
+        else if (!nodesNotReachable.includes(selectedNode)) nodesNotReachable.push(selectedNode)
 
-        if (nodesNotReachable.length === filteredNodesByFeature.length) {
-          throw new Error(
-            'All nodes relating to the selected pToken appear to be unavailable'
-          )
-        }
+        if (nodesNotReachable.length === filteredNodesByFeature.length)
+          throw new Error('All nodes relating to the selected pToken appear to be unavailable')
       }
     } catch (err) {
       throw new Error(err.message)

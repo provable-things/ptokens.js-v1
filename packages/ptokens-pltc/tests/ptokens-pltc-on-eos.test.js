@@ -6,11 +6,9 @@ import fetch from 'node-fetch'
 import { constants } from 'ptokens-utils'
 // import qrcode from 'qrcode-terminal'
 
-// prettier-ignore
 const EOS_PRIVATE_KEY = ''
 const EOS_TESTING_ACCOUNT_NAME = ''
 const EOS_RPC_URL = ''
-// prettier-ignore
 const LTC_TESTING_PRIVATE_KEY = ''
 const LTC_TESTING_ADDRESS = ''
 jest.setTimeout(3000000)
@@ -49,13 +47,7 @@ test('Should monitor an issuing of 0.05 pLTC on EOS', async () => {
     console.log(_qrcode)
   }) */
 
-  await sendLitecoin(
-    LTC_TESTING_PRIVATE_KEY,
-    LTC_TESTING_ADDRESS,
-    amountToIssue,
-    minerFees,
-    depositAddress.toString()
-  )
+  await sendLitecoin(LTC_TESTING_PRIVATE_KEY, LTC_TESTING_ADDRESS, amountToIssue, minerFees, depositAddress.toString())
 
   let ltcTxIsBroadcasted = 0
   let ltcTxIsConfirmed = 0

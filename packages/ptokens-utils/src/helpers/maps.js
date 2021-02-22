@@ -11,10 +11,12 @@ import {
   Eosio,
   EosioMainnet,
   EosioJungle3,
+  Telos,
   TelosMainnet,
+  Dogecoin,
+  DogecoinMainnet,
   Mainnet,
   Testnet,
-  Telos,
   pBTC,
   pLTC,
   pWETH,
@@ -28,7 +30,18 @@ import {
   pBAND,
   pBAL,
   pCOMP,
-  pSNX
+  pSNX,
+  pOMG,
+  pDAI,
+  pANT,
+  pLRC,
+  pUOS,
+  pBAT,
+  pREP,
+  pZRX,
+  pPNK,
+  pDOGE,
+  pEOS
 } from './names'
 
 export const blockchainTypes = {
@@ -40,7 +53,9 @@ export const blockchainTypes = {
   btc: Bitcoin,
   ltc: Litecoin,
   litecoin: Litecoin,
-  telos: Telos
+  telos: Telos,
+  dogecoin: Dogecoin,
+  doge: Dogecoin
 }
 
 export const blockchainShortTypes = {
@@ -48,7 +63,8 @@ export const blockchainShortTypes = {
   eosio: 'eos',
   bitcoin: 'btc',
   litecoin: 'ltc',
-  telos: 'telos'
+  telos: 'telos',
+  dogecoin: 'doge'
 }
 
 export const pTokenNativeBlockchain = {
@@ -65,7 +81,18 @@ export const pTokenNativeBlockchain = {
   pband: Ethereum,
   pbal: Ethereum,
   pcomp: Ethereum,
-  psnx: Ethereum
+  psnx: Ethereum,
+  pomg: Ethereum,
+  pdai: Ethereum,
+  pant: Ethereum,
+  plrc: Ethereum,
+  puos: Ethereum,
+  pbat: Ethereum,
+  prep: Ethereum,
+  pzrx: Ethereum,
+  ppnk: Ethereum,
+  pdoge: Dogecoin,
+  peos: Eosio
 }
 
 export const networkLabels = {
@@ -91,6 +118,10 @@ export const networkLabels = {
   },
   telos: {
     mainnet: TelosMainnet
+  },
+  dogecoin: {
+    mainnet: DogecoinMainnet,
+    dogecoin: DogecoinMainnet
   }
 }
 
@@ -115,5 +146,16 @@ export const pTokensAvailables = [
   pBAND,
   pBAL,
   pCOMP,
-  pSNX
+  pSNX,
+  pOMG,
+  pDAI,
+  pANT,
+  pLRC,
+  pUOS,
+  pBAT,
+  pREP,
+  pZRX,
+  pPNK,
+  pDOGE,
+  pEOS
 ]
