@@ -28,7 +28,10 @@ export interface pLTCConfigs {
 
 export interface RedeemOptions {
   gas?: number,
-  gasPrice?: number | string | BigNumber
+  gasPrice?: number | string | BigNumber,
+  blocksBehind?: string, 
+  expireSeconds?: string,
+  permission?: string,
 }
 
 export class pLTC extends NodeSelector {

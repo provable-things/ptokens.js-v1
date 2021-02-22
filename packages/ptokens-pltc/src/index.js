@@ -87,7 +87,7 @@ export class pLTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission } = _options
 
         if (_amount < MINIMUM_LTC_REDEEMABLE) {
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`)
@@ -133,7 +133,12 @@ export class pLTC extends NodeSelector {
             _ltcAddress,
             8,
             contractAddress,
-            constants.pTokens.pLTC
+            constants.pTokens.pLTC,
+            {
+              blocksBehind,
+              expireSeconds,
+              permission
+            }
           )
 
           // NOTE: 'onEosTxConfirmed' will be removed in version > 1.0.0
