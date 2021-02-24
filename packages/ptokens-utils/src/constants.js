@@ -15,6 +15,8 @@ import {
   TelosMainnet,
   Dogecoin,
   DogecoinMainnet,
+  BinanceSmartChain,
+  BinanceSmartChainMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -55,7 +57,8 @@ const blockchains = {
   Ethereum,
   Litecoin,
   Telos,
-  Dogecoin
+  Dogecoin,
+  BinanceSmartChain
 }
 
 /**
@@ -74,7 +77,8 @@ const networks = {
   LitecoinMainnet,
   LitecoinTestnet,
   TelosMainnet,
-  DogecoinMainnet
+  DogecoinMainnet,
+  BinanceSmartChainMainnet
 }
 
 /**

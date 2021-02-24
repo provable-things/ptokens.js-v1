@@ -15,6 +15,8 @@ import {
   TelosMainnet,
   Dogecoin,
   DogecoinMainnet,
+  BinanceSmartChain,
+  BinanceSmartChainMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -55,7 +57,9 @@ export const blockchainTypes = {
   litecoin: Litecoin,
   telos: Telos,
   dogecoin: Dogecoin,
-  doge: Dogecoin
+  doge: Dogecoin,
+  'binance-smart-chain': BinanceSmartChain,
+  bsc: BinanceSmartChain
 }
 
 export const blockchainShortTypes = {
@@ -64,7 +68,8 @@ export const blockchainShortTypes = {
   bitcoin: 'btc',
   litecoin: 'ltc',
   telos: 'telos',
-  dogecoin: 'doge'
+  dogecoin: 'doge',
+  'binance-smart-chain': 'bsc'
 }
 
 export const pTokenNativeBlockchain = {
@@ -122,6 +127,9 @@ export const networkLabels = {
   dogecoin: {
     mainnet: DogecoinMainnet,
     dogecoin: DogecoinMainnet
+  },
+  'binance-smart-chain': {
+    mainnet: BinanceSmartChainMainnet
   }
 }
 

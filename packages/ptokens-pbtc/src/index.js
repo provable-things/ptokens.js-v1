@@ -63,6 +63,9 @@ export class pBTC extends NodeSelector {
     if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
       throw new Error('Invalid Ethereum Address')
 
+    if (this.hostBlockchain === constants.blockchains.BinanceSmartChain && !Web3Utils.isAddress(_hostAddress))
+      throw new Error('Invalid Binance Smart Chain Address')
+
     if (this.hostBlockchain === constants.blockchains.Eosio && !eos.isValidAccountName(_hostAddress))
       throw new Error('Invalid EOS Account')
 
@@ -114,7 +117,10 @@ export class pBTC extends NodeSelector {
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
 
         let hostTxHash = null
-        if (this.hostBlockchain === constants.blockchains.Ethereum) {
+        if (
+          this.hostBlockchain === constants.blockchains.Ethereum ||
+          this.hostBlockchain === constants.blockchains.BinanceSmartChain
+        ) {
           const ethTxReceipt = await redeemFromEthereum(
             this.hostApi,
             {
@@ -129,7 +135,10 @@ export class pBTC extends NodeSelector {
             'hostTxBroadcasted'
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
-          promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+          if (this.hostBlockchain === constants.blockchains.Ethereum) {
+            promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+          }
+
           promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
           hostTxHash = ethTxReceipt.transactionHash
         }
