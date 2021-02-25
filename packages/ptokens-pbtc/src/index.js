@@ -121,7 +121,7 @@ export class pBTC extends NodeSelector {
           this.hostBlockchain === constants.blockchains.Ethereum ||
           this.hostBlockchain === constants.blockchains.BinanceSmartChain
         ) {
-          const ethTxReceipt = await redeemFromEthereum(
+          const hostTxReceipt = await redeemFromEthereum(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,
@@ -136,11 +136,11 @@ export class pBTC extends NodeSelector {
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
           if (this.hostBlockchain === constants.blockchains.Ethereum) {
-            promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
+            promiEvent.eventEmitter.emit('onEthTxConfirmed', hostTxReceipt)
           }
 
-          promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
-          hostTxHash = ethTxReceipt.transactionHash
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.transactionHash
         }
 
         if (
