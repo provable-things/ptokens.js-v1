@@ -182,7 +182,8 @@ export interface Blockchains {
   Eosio: string,
   Telos: string,
   Dogecoin: string,
-  BinanceSmartChain: string
+  BinanceSmartChain: string,
+  Polygon: string
 }
 
 export interface Networks {
@@ -198,7 +199,8 @@ export interface Networks {
   EosioJungle3: string,
   TelosMainnet: string,
   DogecoinMainnet: string,
-  BinanceSmartChainMainnet: string
+  BinanceSmartChainMainnet: string,
+  MaticMainnet: string
 }
 
 export interface pTokens {

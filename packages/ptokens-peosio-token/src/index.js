@@ -155,8 +155,11 @@ export class pEosioToken extends NodeSelector {
         }
 
         let hostTxHash = null
-        if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFrom.redeemFromEthereum(
+        if (
+          this.hostBlockchain === constants.blockchains.Ethereum ||
+          this.hostBlockchain === constants.blockchains.Polygon
+        ) {
+          const hostTxReceipt = await redeemFrom.redeemFromEthereum(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,
@@ -169,8 +172,8 @@ export class pEosioToken extends NodeSelector {
             promiEvent,
             'hostTxBroadcasted'
           )
-          promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
-          hostTxHash = ethTxReceipt.transactionHash
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.transactionHash
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)

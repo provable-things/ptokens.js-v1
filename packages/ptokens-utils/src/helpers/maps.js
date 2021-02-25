@@ -17,6 +17,8 @@ import {
   DogecoinMainnet,
   BinanceSmartChain,
   BinanceSmartChainMainnet,
+  Polygon,
+  MaticMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -59,7 +61,9 @@ export const blockchainTypes = {
   dogecoin: Dogecoin,
   doge: Dogecoin,
   'binance-smart-chain': BinanceSmartChain,
-  bsc: BinanceSmartChain
+  bsc: BinanceSmartChain,
+  matic: Polygon,
+  polygon: Polygon
 }
 
 export const blockchainShortTypes = {
@@ -69,7 +73,9 @@ export const blockchainShortTypes = {
   litecoin: 'ltc',
   telos: 'telos',
   dogecoin: 'doge',
-  'binance-smart-chain': 'bsc'
+  'binance-smart-chain': 'bsc',
+  matic: 'polygon',
+  polygon: 'polygon'
 }
 
 export const pTokenNativeBlockchain = {
@@ -130,6 +136,12 @@ export const networkLabels = {
   },
   'binance-smart-chain': {
     mainnet: BinanceSmartChainMainnet
+  },
+  polygon: {
+    mainnet: MaticMainnet
+  },
+  polygon: {
+    mainnet: MaticMainnet
   }
 }
 
