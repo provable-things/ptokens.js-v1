@@ -183,7 +183,8 @@ export interface Blockchains {
   Telos: string,
   Dogecoin: string,
   BinanceSmartChain: string,
-  Polygon: string
+  Polygon: string,
+  Xdai: string
 }
 
 export interface Networks {
@@ -200,7 +201,8 @@ export interface Networks {
   TelosMainnet: string,
   DogecoinMainnet: string,
   BinanceSmartChainMainnet: string,
-  MaticMainnet: string
+  PolygonMainnet: string,
+  XdaiMainnet: string
 }
 
 export interface pTokens {

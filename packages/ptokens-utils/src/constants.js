@@ -18,7 +18,9 @@ import {
   BinanceSmartChain,
   BinanceSmartChainMainnet,
   Polygon,
-  MaticMainnet,
+  PolygonMainnet,
+  Xdai,
+  XdaiMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -61,7 +63,8 @@ const blockchains = {
   Telos,
   Dogecoin,
   BinanceSmartChain,
-  Polygon
+  Polygon,
+  Xdai
 }
 
 /**
@@ -82,7 +85,8 @@ const networks = {
   TelosMainnet,
   DogecoinMainnet,
   BinanceSmartChainMainnet,
-  MaticMainnet
+  PolygonMainnet,
+  XdaiMainnet
 }
 
 /**

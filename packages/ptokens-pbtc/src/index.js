@@ -35,7 +35,6 @@ export class pBTC extends NodeSelector {
     if (ethProvider) this.hostApi = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
-
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
     } else {
@@ -119,7 +118,8 @@ export class pBTC extends NodeSelector {
         let hostTxHash = null
         if (
           this.hostBlockchain === constants.blockchains.Ethereum ||
-          this.hostBlockchain === constants.blockchains.BinanceSmartChain
+          this.hostBlockchain === constants.blockchains.BinanceSmartChain ||
+          this.hostBlockchain === constants.blockchains.Xdai
         ) {
           const hostTxReceipt = await redeemFromEthereum(
             this.hostApi,
