@@ -28,7 +28,8 @@ export default {
   },
   [Eosio]: {
     [EosioMainnet]: {
-      EOS: 'eosio.token'
+      EOS: 'eosio.token',
+      IQ: 'everipediaiq'
     }
   }
 }

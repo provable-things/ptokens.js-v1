@@ -94,7 +94,11 @@ export class pEosioToken extends NodeSelector {
                 data: {
                   from: eosAccountName,
                   to: this.nativeVaultAddress,
-                  quantity: eos.getAmountInEosFormat(_amount, 4, this.pToken.slice(1).toUpperCase()),
+                  quantity: eos.getAmountInEosFormat(
+                    _amount,
+                    this.pToken === constants.pTokens.IQ ? 3 : 4,
+                    this.pToken === constants.pTokens.IQ ? 'IQ' : this.pToken.slice(1).toUpperCase()
+                  ),
                   memo: _hostAccount
                 }
               }

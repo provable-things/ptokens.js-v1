@@ -230,7 +230,8 @@ export interface pTokens {
   pZRX: string,
   pPNK: string,
   pDOGE: string,
-  pEOS: string
+  pEOS: string,
+  IQ: string
 }
 
 export interface EthereumMainnetTokens {

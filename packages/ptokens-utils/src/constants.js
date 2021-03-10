@@ -47,7 +47,8 @@ import {
   pZRX,
   pPNK,
   pDOGE,
-  pEOS
+  pEOS,
+  IQ
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -118,7 +119,8 @@ const pTokens = {
   pZRX,
   pPNK,
   pDOGE,
-  pEOS
+  pEOS,
+  IQ
 }
 
 export { blockchains, networks, pTokens, tokens }
