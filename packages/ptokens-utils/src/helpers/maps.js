@@ -15,6 +15,12 @@ import {
   TelosMainnet,
   Dogecoin,
   DogecoinMainnet,
+  BinanceSmartChain,
+  BinanceSmartChainMainnet,
+  Polygon,
+  PolygonMainnet,
+  Xdai,
+  XdaiMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -41,7 +47,9 @@ import {
   pZRX,
   pPNK,
   pDOGE,
-  pEOS
+  pEOS,
+  IQ,
+  TLOS
 } from './names'
 
 export const blockchainTypes = {
@@ -55,7 +63,12 @@ export const blockchainTypes = {
   litecoin: Litecoin,
   telos: Telos,
   dogecoin: Dogecoin,
-  doge: Dogecoin
+  doge: Dogecoin,
+  'binance-smart-chain': BinanceSmartChain,
+  bsc: BinanceSmartChain,
+  matic: Polygon,
+  polygon: Polygon,
+  xdai: Xdai
 }
 
 export const blockchainShortTypes = {
@@ -64,7 +77,11 @@ export const blockchainShortTypes = {
   bitcoin: 'btc',
   litecoin: 'ltc',
   telos: 'telos',
-  dogecoin: 'doge'
+  dogecoin: 'doge',
+  'binance-smart-chain': 'bsc',
+  matic: 'polygon',
+  polygon: 'polygon',
+  xdai: 'xdai'
 }
 
 export const pTokenNativeBlockchain = {
@@ -92,7 +109,9 @@ export const pTokenNativeBlockchain = {
   pzrx: Ethereum,
   ppnk: Ethereum,
   pdoge: Dogecoin,
-  peos: Eosio
+  peos: Eosio,
+  iq: Eosio,
+  tlos: Telos
 }
 
 export const networkLabels = {
@@ -122,6 +141,18 @@ export const networkLabels = {
   dogecoin: {
     mainnet: DogecoinMainnet,
     dogecoin: DogecoinMainnet
+  },
+  'binance-smart-chain': {
+    mainnet: BinanceSmartChainMainnet
+  },
+  polygon: {
+    mainnet: PolygonMainnet
+  },
+  matic: {
+    mainnet: PolygonMainnet
+  },
+  xdai: {
+    mainnet: XdaiMainnet
   }
 }
 
@@ -157,5 +188,7 @@ export const pTokensAvailables = [
   pZRX,
   pPNK,
   pDOGE,
-  pEOS
+  pEOS,
+  IQ,
+  TLOS
 ]

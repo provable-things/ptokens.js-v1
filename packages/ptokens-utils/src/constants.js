@@ -15,6 +15,12 @@ import {
   TelosMainnet,
   Dogecoin,
   DogecoinMainnet,
+  BinanceSmartChain,
+  BinanceSmartChainMainnet,
+  Polygon,
+  PolygonMainnet,
+  Xdai,
+  XdaiMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -41,7 +47,9 @@ import {
   pZRX,
   pPNK,
   pDOGE,
-  pEOS
+  pEOS,
+  IQ,
+  TLOS
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -55,7 +63,10 @@ const blockchains = {
   Ethereum,
   Litecoin,
   Telos,
-  Dogecoin
+  Dogecoin,
+  BinanceSmartChain,
+  Polygon,
+  Xdai
 }
 
 /**
@@ -74,7 +85,10 @@ const networks = {
   LitecoinMainnet,
   LitecoinTestnet,
   TelosMainnet,
-  DogecoinMainnet
+  DogecoinMainnet,
+  BinanceSmartChainMainnet,
+  PolygonMainnet,
+  XdaiMainnet
 }
 
 /**
@@ -106,7 +120,9 @@ const pTokens = {
   pZRX,
   pPNK,
   pDOGE,
-  pEOS
+  pEOS,
+  IQ,
+  TLOS
 }
 
 export { blockchains, networks, pTokens, tokens }

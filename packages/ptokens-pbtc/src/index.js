@@ -35,7 +35,6 @@ export class pBTC extends NodeSelector {
     if (ethProvider) this.hostApi = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
-
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
     } else {
@@ -62,6 +61,9 @@ export class pBTC extends NodeSelector {
   async getDepositAddress(_hostAddress) {
     if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
       throw new Error('Invalid Ethereum Address')
+
+    if (this.hostBlockchain === constants.blockchains.BinanceSmartChain && !Web3Utils.isAddress(_hostAddress))
+      throw new Error('Invalid Binance Smart Chain Address')
 
     if (this.hostBlockchain === constants.blockchains.Eosio && !eos.isValidAccountName(_hostAddress))
       throw new Error('Invalid EOS Account')
@@ -114,8 +116,12 @@ export class pBTC extends NodeSelector {
         const { redeemFromEthereum, redeemFromEosio } = redeemFrom
 
         let hostTxHash = null
-        if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFromEthereum(
+        if (
+          this.hostBlockchain === constants.blockchains.Ethereum ||
+          this.hostBlockchain === constants.blockchains.BinanceSmartChain ||
+          this.hostBlockchain === constants.blockchains.Xdai
+        ) {
+          const hostTxReceipt = await redeemFromEthereum(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,
@@ -129,9 +135,11 @@ export class pBTC extends NodeSelector {
             'hostTxBroadcasted'
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
-          promiEvent.eventEmitter.emit('onEthTxConfirmed', ethTxReceipt)
-          promiEvent.eventEmitter.emit('hostTxConfirmed', ethTxReceipt)
-          hostTxHash = ethTxReceipt.transactionHash
+          if (this.hostBlockchain === constants.blockchains.Ethereum)
+            promiEvent.eventEmitter.emit('onEthTxConfirmed', hostTxReceipt)
+
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.transactionHash
         }
 
         if (

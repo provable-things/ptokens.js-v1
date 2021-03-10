@@ -181,7 +181,10 @@ export interface Blockchains {
   Ethereum: string,
   Eosio: string,
   Telos: string,
-  Dogecoin: string
+  Dogecoin: string,
+  BinanceSmartChain: string,
+  Polygon: string,
+  Xdai: string
 }
 
 export interface Networks {
@@ -196,7 +199,10 @@ export interface Networks {
   EosioMainnet: string,
   EosioJungle3: string,
   TelosMainnet: string,
-  DogecoinMainnet: string
+  DogecoinMainnet: string,
+  BinanceSmartChainMainnet: string,
+  PolygonMainnet: string,
+  XdaiMainnet: string
 }
 
 export interface pTokens {
@@ -224,7 +230,9 @@ export interface pTokens {
   pZRX: string,
   pPNK: string,
   pDOGE: string,
-  pEOS: string
+  pEOS: string,
+  IQ: string,
+  TLOS: string
 }
 
 export interface EthereumMainnetTokens {
@@ -251,8 +259,17 @@ export interface EthereumMainnetTokens {
   PNK: string
 }
 
+export interface TelosMainnetTokens {
+  TELOS: string
+}
+
+export interface TelosTokens {
+  mainnet: TelosMainnetTokens
+}
+
 export interface EosioMainnetTokens {
-  EOS: string
+  EOS: string,
+  IQ: string
 }
 
 export interface EthereumTokens {
@@ -265,7 +282,8 @@ export interface EosioTokens {
 
 export interface Tokens {
   ethereum: EthereumTokens,
-  eosio: EosioTokens
+  eosio: EosioTokens,
+  telos: TelosTokens
 }
 
 export interface Constants {

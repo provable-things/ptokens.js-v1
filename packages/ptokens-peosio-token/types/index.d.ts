@@ -18,7 +18,10 @@ export interface pEosioTokenConfigs {
   ethProvider?: string | object,
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
-  eosSignatureProvider?: JsSignatureProvider
+  eosSignatureProvider?: JsSignatureProvider,
+  telosPrivateKey?: string,
+  telosRpc?: string | JsonRpc,
+  telosSignatureProvider?: JsSignatureProvider
   defaultNode?: Node
 }
 
@@ -51,7 +54,11 @@ export class pEosioToken extends NodeSelector {
 
   nativeVaultAddress: string | null
 
+  nativePrivatekey?: string | null
+
   hostPrivatekey?: string | null
+
+  nativeApi?: Api
 
   hostApi?: Web3 | Api
 
