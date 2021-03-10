@@ -1,6 +1,6 @@
 {
   "name": "ptokens-providers",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "repo holding the code related to network providers",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-providers",
   "main": "dist/ptokens-providers.cjs.js",
