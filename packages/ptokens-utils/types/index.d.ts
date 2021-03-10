@@ -231,7 +231,8 @@ export interface pTokens {
   pPNK: string,
   pDOGE: string,
   pEOS: string,
-  IQ: string
+  IQ: string,
+  TLOS: string
 }
 
 export interface EthereumMainnetTokens {
@@ -258,8 +259,17 @@ export interface EthereumMainnetTokens {
   PNK: string
 }
 
+export interface TelosMainnetTokens {
+  TELOS: string
+}
+
+export interface TelosTokens {
+  mainnet: TelosMainnetTokens
+}
+
 export interface EosioMainnetTokens {
-  EOS: string
+  EOS: string,
+  IQ: string
 }
 
 export interface EthereumTokens {
@@ -272,7 +282,8 @@ export interface EosioTokens {
 
 export interface Tokens {
   ethereum: EthereumTokens,
-  eosio: EosioTokens
+  eosio: EosioTokens,
+  telos: TelosTokens
 }
 
 export interface Constants {

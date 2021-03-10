@@ -135,9 +135,8 @@ export class pBTC extends NodeSelector {
             'hostTxBroadcasted'
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
-          if (this.hostBlockchain === constants.blockchains.Ethereum) {
+          if (this.hostBlockchain === constants.blockchains.Ethereum)
             promiEvent.eventEmitter.emit('onEthTxConfirmed', hostTxReceipt)
-          }
 
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
           hostTxHash = hostTxReceipt.transactionHash

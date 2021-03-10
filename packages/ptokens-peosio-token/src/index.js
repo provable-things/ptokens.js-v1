@@ -22,15 +22,33 @@ export class pEosioToken extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const { ethPrivateKey, ethProvider, eosPrivateKey, eosRpc, eosSignatureProvider } = _configs
+    const {
+      ethPrivateKey,
+      ethProvider,
+      eosPrivateKey,
+      eosRpc,
+      eosSignatureProvider,
+      telosPrivateKey,
+      telosRpc,
+      telosSignatureProvider
+    } = _configs
 
     if (eosSignatureProvider) {
-      this.eosApi = eos.getApi(null, eosRpc, eosSignatureProvider)
+      this.nativeApi = eos.getApi(null, eosRpc, eosSignatureProvider)
     } else if (eosPrivateKey && eosRpc) {
-      this.eosApi = eos.getApi(eosPrivateKey, eosRpc, null)
-      this.eosPrivateKey = eosPrivateKey
+      this.nativeApi = eos.getApi(eosPrivateKey, eosRpc, null)
+      this.nativePrivateKey = eosPrivateKey
     } else if (!eosSignatureProvider && !eosPrivateKey && eosRpc) {
-      this.eosApi = eos.getApi(null, eosRpc, null)
+      this.nativeApi = eos.getApi(null, eosRpc, null)
+    }
+
+    if (telosSignatureProvider) {
+      this.nativeApi = eos.getApi(null, telosRpc, telosSignatureProvider)
+    } else if (telosPrivateKey && telosRpc) {
+      this.nativeApi = eos.getApi(telosPrivateKey, telosRpc, null)
+      this.nativePrivateKey = telosPrivateKey
+    } else if (!telosSignatureProvider && !telosPrivateKey && telosRpc) {
+      this.nativeApi = eos.getApi(null, telosRpc, null)
     }
 
     if (ethProvider) this.hostApi = new Web3(ethProvider)
@@ -67,19 +85,19 @@ export class pEosioToken extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        const eosPublicKeys = await this.eosApi.signatureProvider.getAvailableKeys()
-        const eosAccountName = await eos.getAccountName(this.eosApi.rpc, eosPublicKeys)
+        const eosPublicKeys = await this.nativeApi.signatureProvider.getAvailableKeys()
+        const eosAccountName = await eos.getAccountName(this.nativeApi.rpc, eosPublicKeys)
         if (!eosAccountName) {
           // prettier-ignore
           throw new Error('Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin')
         }
 
-        this.eosApi.cachedAbis.set(this.nativeContractAddress, {
+        this.nativeApi.cachedAbis.set(this.nativeContractAddress, {
           abi: abi.EosioToken,
           rawAbi: null
         })
 
-        const nativeTxReceipt = await this.eosApi.transact(
+        const nativeTxReceipt = await this.nativeApi.transact(
           {
             actions: [
               {
@@ -97,7 +115,9 @@ export class pEosioToken extends NodeSelector {
                   quantity: eos.getAmountInEosFormat(
                     _amount,
                     this.pToken === constants.pTokens.IQ ? 3 : 4,
-                    this.pToken === constants.pTokens.IQ ? 'IQ' : this.pToken.slice(1).toUpperCase()
+                    this.pToken === constants.pTokens.IQ || this.pToken === constants.pTokens.TLOS
+                      ? this.pToken.toUpperCase()
+                      : this.pToken.slice(1).toUpperCase()
                   ),
                   memo: _hostAccount
                 }
@@ -183,7 +203,7 @@ export class pEosioToken extends NodeSelector {
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
 
         const nativeTxReceipt = await eos.waitForTransactionConfirmation(
-          this.eosApi,
+          this.nativeApi,
           incomingTxReport.broadcast_tx_hash
         )
         promiEvent.eventEmitter.emit('nativeTxConfirmed', nativeTxReceipt)

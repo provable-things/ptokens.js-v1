@@ -48,7 +48,8 @@ import {
   pPNK,
   pDOGE,
   pEOS,
-  IQ
+  IQ,
+  TLOS
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -120,7 +121,8 @@ const pTokens = {
   pPNK,
   pDOGE,
   pEOS,
-  IQ
+  IQ,
+  TLOS
 }
 
 export { blockchains, networks, pTokens, tokens }

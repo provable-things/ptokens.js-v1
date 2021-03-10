@@ -1,4 +1,4 @@
-import { EthereumMainnet, EosioMainnet, Ethereum, Eosio } from './names'
+import { EthereumMainnet, EosioMainnet, Ethereum, Eosio, Telos, TelosMainnet } from './names'
 
 export default {
   [Ethereum]: {
@@ -30,6 +30,11 @@ export default {
     [EosioMainnet]: {
       EOS: 'eosio.token',
       IQ: 'everipediaiq'
+    }
+  },
+  [Telos]: {
+    [TelosMainnet]: {
+      TLOS: 'eosio.token'
     }
   }
 }
