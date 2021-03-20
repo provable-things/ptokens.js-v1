@@ -92,11 +92,11 @@ export class pDOGE extends NodeSelector {
 
         const contractAddress = await this._getContractAddress()
 
-        const { redeemFromEthereum } = redeemFrom
+        const { redeemFromEvmCompatible } = redeemFrom
         let hostTxHash = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFromEthereum(
+          const ethTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,

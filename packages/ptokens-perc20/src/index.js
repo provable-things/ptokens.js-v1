@@ -22,16 +22,32 @@ export class pERC20 extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const { ethPrivateKey, ethProvider, eosPrivateKey, eosRpc, eosSignatureProvider } = _configs
+    const {
+      ethPrivateKey,
+      ethProvider,
+      bscPrivateKey,
+      bscProvider,
+      eosPrivateKey,
+      eosRpc,
+      eosSignatureProvider
+    } = _configs
 
     if (ethProvider) this.web3 = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.web3.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
-
       this.web3.eth.defaultAccount = account.address
       this.ethPrivateKey = eth.addHexPrefix(ethPrivateKey)
     } else {
       this.ethPrivateKey = null
+    }
+
+    if (bscProvider) this.web3 = new Web3(bscProvider)
+    if (bscPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(bscPrivateKey)
+    } else {
+      this.hostPrivateKey = null
     }
 
     if (eosSignatureProvider) {
@@ -145,9 +161,29 @@ export class pERC20 extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        const { redeemFromEosio } = redeemFrom
+        const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
+
+        if (this.hostBlockchain === constants.blockchains.BinanceSmartChain) {
+          const hostTxReceipt = await redeemFromEvmCompatible(
+            this.hostApi,
+            {
+              privateKey: this.hostPrivateKey,
+              gas,
+              gasPrice,
+              contractAddress,
+              value: 0
+            },
+            [_amount, _btcAddress],
+            promiEvent,
+            'hostTxBroadcasted'
+          )
+
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.transactionHash
+        }
+
         if (this.hostBlockchain === constants.blockchains.Eosio) {
           const eosTxReceipt = await redeemFromEosio(
             this.hostApi,

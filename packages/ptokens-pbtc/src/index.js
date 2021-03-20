@@ -113,7 +113,7 @@ export class pBTC extends NodeSelector {
 
         const contractAddress = await this._getContractAddress()
 
-        const { redeemFromEthereum, redeemFromEosio } = redeemFrom
+        const { redeemFromEvmCompatible, redeemFromEosio } = redeemFrom
 
         let hostTxHash = null
         if (
@@ -121,7 +121,7 @@ export class pBTC extends NodeSelector {
           this.hostBlockchain === constants.blockchains.BinanceSmartChain ||
           this.hostBlockchain === constants.blockchains.Xdai
         ) {
-          const hostTxReceipt = await redeemFromEthereum(
+          const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,

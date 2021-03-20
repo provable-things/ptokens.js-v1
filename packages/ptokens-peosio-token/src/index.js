@@ -183,7 +183,7 @@ export class pEosioToken extends NodeSelector {
           this.hostBlockchain === constants.blockchains.Ethereum ||
           this.hostBlockchain === constants.blockchains.Polygon
         ) {
-          const hostTxReceipt = await redeemFrom.redeemFromEthereum(
+          const hostTxReceipt = await redeemFrom.redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,
