@@ -41,7 +41,7 @@ export class pERC20 extends NodeSelector {
       this.ethPrivateKey = null
     }
 
-    if (bscProvider) this.web3 = new Web3(bscProvider)
+    if (bscProvider) this.hostApi = new Web3(bscProvider)
     if (bscPrivateKey) {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
       this.hostApi.eth.defaultAccount = account.address
@@ -145,7 +145,7 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
-        const { blocksBehind, expireSeconds, permission } = _options
+        const { blocksBehind, expireSeconds, permission, gas, gasPrice } = _options
 
         await this._loadData()
 
@@ -164,7 +164,6 @@ export class pERC20 extends NodeSelector {
         const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
-
         if (this.hostBlockchain === constants.blockchains.BinanceSmartChain) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
@@ -172,10 +171,10 @@ export class pERC20 extends NodeSelector {
               privateKey: this.hostPrivateKey,
               gas,
               gasPrice,
-              contractAddress,
+              contractAddress: this.hostContractAddress,
               value: 0
             },
-            [_amount, _btcAddress],
+            [_amount, _nativeAccount],
             promiEvent,
             'hostTxBroadcasted'
           )
@@ -204,7 +203,10 @@ export class pERC20 extends NodeSelector {
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
-        const nativeTxReceipt = await eth.waitForTransactionConfirmation(this.web3, incomingTxReport.broadcast_tx_hash)
+        const nativeTxReceipt = await eth.waitForTransactionConfirmation(
+          this.hostApi,
+          incomingTxReport.broadcast_tx_hash
+        )
         promiEvent.eventEmitter.emit('nativeTxConfirmed', nativeTxReceipt)
 
         promiEvent.resolve({
@@ -238,8 +240,6 @@ export class pERC20 extends NodeSelector {
             : eth.addHexPrefix(host_smart_contract_address)
         this.nativeVaultAddress = native_vault_address ? eth.addHexPrefix(native_vault_address) : null
       }
-
-      return this.nativeContractAddress
     } catch (_err) {
       throw new Error(`Error during loading data: ${_err.message}`)
     }

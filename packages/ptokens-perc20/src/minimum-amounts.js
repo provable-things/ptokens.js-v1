@@ -83,5 +83,10 @@ export default {
   [constants.tokens.ethereum.mainnet.PNK]: {
     issue: 1000000000,
     redeem: 0.000000001
+  },
+  // TODO: provisional until we differentiate by issue and redeem blockchain
+  [constants.tokens.ethereum.mainnet.OPIUM]: {
+    issue: 1000000000,
+    redeem: 1000000000
   }
 }

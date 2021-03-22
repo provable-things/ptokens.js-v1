@@ -232,7 +232,8 @@ export interface pTokens {
   pDOGE: string,
   pEOS: string,
   IQ: string,
-  TLOS: string
+  TLOS: string,
+  pOPIUM: string
 }
 
 export interface EthereumMainnetTokens {
@@ -256,7 +257,8 @@ export interface EthereumMainnetTokens {
   BAT: string,
   REP: string,
   ZRX: string,
-  PNK: string
+  PNK: string,
+  OPIUM: string
 }
 
 export interface TelosMainnetTokens {

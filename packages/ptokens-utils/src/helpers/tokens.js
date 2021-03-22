@@ -23,7 +23,8 @@ export default {
       BAT: '0x0d8775f648430679a709e98d2b0cb6250d2887ef',
       REP: '0x221657776846890989a759ba2973e427dff5c9bb',
       ZRX: '0xe41d2489571d322189246dafa5ebde1f4699f498',
-      PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d'
+      PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d',
+      OPIUM: '0x888888888889c00c67689029d7856aac1065ec11'
     }
   },
   [Eosio]: {

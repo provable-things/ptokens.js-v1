@@ -34,6 +34,8 @@ export interface RedeemOptions {
   blocksBehind: number,
   expireSeconds: number,
   permission: string,
+  gasPrice: string | number,
+  gas: string | number
 }
 
 /*
