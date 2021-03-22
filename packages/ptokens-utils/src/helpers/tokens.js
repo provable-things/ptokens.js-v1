@@ -24,7 +24,9 @@ export default {
       REP: '0x221657776846890989a759ba2973e427dff5c9bb',
       ZRX: '0xe41d2489571d322189246dafa5ebde1f4699f498',
       PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d',
-      OPIUM: '0x888888888889c00c67689029d7856aac1065ec11'
+      OPIUM: '0x888888888889c00c67689029d7856aac1065ec11',
+      BCP: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
+      'DEFI++': '0x8d1ce361eb68e9e05573443c407d4a3bed23b033'
     }
   },
   [Eosio]: {
