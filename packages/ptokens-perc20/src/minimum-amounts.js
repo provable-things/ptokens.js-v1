@@ -145,5 +145,11 @@ export default {
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
+  },
+  [constants.tokens.ethereum.mainnet.CGG]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.BinanceSmartChain]: 1000000000
+    }
   }
 }

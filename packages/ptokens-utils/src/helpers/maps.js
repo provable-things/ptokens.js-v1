@@ -52,7 +52,8 @@ import {
   TLOS,
   pOPIUM,
   pBCP,
-  pDEFIPlusPlus
+  pDEFIPlusPlus,
+  CGG
 } from './names'
 
 export const blockchainTypes = {
@@ -117,7 +118,8 @@ export const pTokenNativeBlockchain = {
   tlos: Telos,
   popium: Ethereum,
   pbcp: Ethereum,
-  pdefiplusplus: Ethereum
+  pdefiplusplus: Ethereum,
+  cgg: Ethereum
 }
 
 export const networkLabels = {
@@ -199,5 +201,6 @@ export const pTokensAvailables = [
   TLOS,
   pOPIUM,
   pBCP,
-  pDEFIPlusPlus
+  pDEFIPlusPlus,
+  CGG
 ]

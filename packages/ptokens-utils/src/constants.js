@@ -52,7 +52,8 @@ import {
   TLOS,
   pOPIUM,
   pBCP,
-  pDEFIPlusPlus
+  pDEFIPlusPlus,
+  CGG
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -128,7 +129,8 @@ const pTokens = {
   TLOS,
   pOPIUM,
   pBCP,
-  pDEFIPlusPlus
+  pDEFIPlusPlus,
+  CGG
 }
 
 export { blockchains, networks, pTokens, tokens }

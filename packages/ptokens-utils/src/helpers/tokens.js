@@ -26,7 +26,8 @@ export default {
       PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d',
       OPIUM: '0x888888888889c00c67689029d7856aac1065ec11',
       BCP: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
-      'DEFI++': '0x8d1ce361eb68e9e05573443c407d4a3bed23b033'
+      'DEFI++': '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
+      CGG: '0x1fe24f25b1cf609b9c4e7e12d802e3640dfa5e43'
     }
   },
   [Eosio]: {
