@@ -157,13 +157,13 @@ export default {
     }
   },
   [constants.tokens.ethereum.mainnet.USDC]: {
-    issue: 1000000000,
+    issue: 5000000,
     redeem: {
       [constants.blockchains.Telos]: 0.000000001
     }
   },
   [constants.tokens.ethereum.mainnet.USDT]: {
-    issue: 1000000000,
+    issue: 5000000,
     redeem: {
       [constants.blockchains.Telos]: 0.000000001
     }
