@@ -20,7 +20,10 @@ export interface pERC20Configs {
   bscProvider?: string | object,
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
-  eosSignatureProvider?: JsSignatureProvider
+  eosSignatureProvider?: JsSignatureProvider,
+  telosPrivateKey?: string,
+  telosRpc?: string | JsonRpc,
+  teolsSignatureProvider?: JsSignatureProvider,
   defaultNode?: Node,
   pToken: string
 }

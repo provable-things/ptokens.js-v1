@@ -236,7 +236,9 @@ export interface pTokens {
   pOPIUM: string,
   pBCP: string,
   pDEFIPlusPlus: string,
-  CGG: string
+  CGG: string,
+  pUSDC: string,
+  pUSDT: string
 }
 
 export interface EthereumMainnetTokens {
@@ -264,7 +266,9 @@ export interface EthereumMainnetTokens {
   OPIUM: string,
   BCP: string,
   'DEFI++': string,
-  CGG: string
+  CGG: string,
+  USDC: string,
+  USDT: string
 }
 
 export interface TelosMainnetTokens {

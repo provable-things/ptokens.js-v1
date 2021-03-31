@@ -53,7 +53,9 @@ import {
   pOPIUM,
   pBCP,
   pDEFIPlusPlus,
-  CGG
+  CGG,
+  pUSDT,
+  pUSDC
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -130,7 +132,9 @@ const pTokens = {
   pOPIUM,
   pBCP,
   pDEFIPlusPlus,
-  CGG
+  CGG,
+  pUSDT,
+  pUSDC
 }
 
 export { blockchains, networks, pTokens, tokens }

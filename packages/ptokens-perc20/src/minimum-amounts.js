@@ -3,26 +3,30 @@ export default {
   [constants.tokens.ethereum.mainnet.ETH]: {
     issue: 1000000000,
     redeem: {
-      [constants.blockchains.Eosio]: 0.000000001
+      [constants.blockchains.Eosio]: 0.000000001,
+      [constants.blockchains.Telos]: 0.000000001
     }
   },
   [constants.tokens.ethereum.mainnet.WETH]: {
     issue: 1000000000,
     redeem: {
-      [constants.blockchains.Eosio]: 0.000000001
+      [constants.blockchains.Eosio]: 0.000000001,
+      [constants.blockchains.Telos]: 0.000000001
     }
   },
   [constants.tokens.ethereum.mainnet.PNT]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
+      [constants.blockchains.Telos]: 0.000000001,
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
   [constants.tokens.ethereum.mainnet.LINK]: {
     issue: 1000000000,
     redeem: {
-      [constants.blockchains.Eosio]: 0.000000001
+      [constants.blockchains.Eosio]: 0.000000001,
+      [constants.blockchains.Telos]: 0.000000001
     }
   },
   [constants.tokens.ethereum.mainnet.MKR]: {
@@ -150,6 +154,18 @@ export default {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
+    }
+  },
+  [constants.tokens.ethereum.mainnet.USDC]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.Telos]: 0.000000001
+    }
+  },
+  [constants.tokens.ethereum.mainnet.USDT]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.Telos]: 0.000000001
     }
   }
 }
