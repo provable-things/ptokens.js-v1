@@ -6,7 +6,6 @@ import polling from 'light-async-polling'
 
 const EOS_MAX_ACCOUNT_LENGTH = 12
 const EOS_TRANSACTION_EXECUTED = 'executed'
-const EOS_NODE_POLLING_TIME_INTERVAL = 300
 
 /**
  * @param {String} _privateKey
@@ -66,18 +65,17 @@ const isValidAccountName = _accountName =>
  * @param {Api} _api
  * @param {String} _tx
  */
-const waitForTransactionConfirmation = async (_api, _tx) => {
+const waitForTransactionConfirmation = async (_api, _tx, _pollingTime = 2000) => {
   let receipt = null
   await polling(async () => {
     try {
       receipt = await _api.rpc.history_get_transaction(_tx)
-
       if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
       else return false
     } catch (err) {
       return false
     }
-  }, EOS_NODE_POLLING_TIME_INTERVAL)
+  }, _pollingTime)
   return receipt
 }
 

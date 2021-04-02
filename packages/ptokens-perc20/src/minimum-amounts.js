@@ -19,7 +19,8 @@ export default {
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
       [constants.blockchains.Telos]: 0.000000001,
-      [constants.blockchains.BinanceSmartChain]: 1000000000
+      [constants.blockchains.BinanceSmartChain]: 1000000000,
+      [constants.blockchains.Xdai]: 1000000000
     }
   },
   [constants.tokens.ethereum.mainnet.LINK]: {

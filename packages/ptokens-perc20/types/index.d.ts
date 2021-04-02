@@ -18,6 +18,8 @@ export interface pERC20Configs {
   ethProvider?: string | object,
   bscPrivateKey?: string,
   bscProvider?: string | object,
+  xdaiPrivateKey?: string,
+  xdaiProvider?: string | object,
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
   eosSignatureProvider?: JsSignatureProvider,

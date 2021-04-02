@@ -27,6 +27,8 @@ export class pERC20 extends NodeSelector {
       ethProvider,
       bscPrivateKey,
       bscProvider,
+      xdaiPrivateKey,
+      xdaiProvider,
       eosPrivateKey,
       eosRpc,
       eosSignatureProvider,
@@ -49,6 +51,15 @@ export class pERC20 extends NodeSelector {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(bscPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
+
+    if (xdaiProvider) this.hostApi = new Web3(xdaiProvider)
+    if (xdaiPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(xdaiPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(xdaiPrivateKey)
     } else {
       this.hostPrivateKey = null
     }
@@ -92,8 +103,10 @@ export class pERC20 extends NodeSelector {
         }
 
         if (
-          (this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos) &&
-          !eos.isValidAccountName(_hostAccount)
+          ((this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos) &&
+            !eos.isValidAccountName(_hostAccount)) ||
+          ((this.hostBlockchain === blockchains.BinanceSmartChain || this.hostBlockchain === blockchains.Xdai) &&
+            !Web3Utils.isAddress(_hostAccount))
         ) {
           promiEvent.reject('Invalid host account')
           return
@@ -132,6 +145,9 @@ export class pERC20 extends NodeSelector {
         let hostTxReceipt
         if (this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos)
           hostTxReceipt = await eos.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
+
+        if (this.hostBlockchain === blockchains.Xdai || this.hostBlockchain === blockchains.BinanceSmartChain)
+          hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
         promiEvent.resolve({
@@ -181,7 +197,7 @@ export class pERC20 extends NodeSelector {
         const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
-        if (this.hostBlockchain === blockchains.BinanceSmartChain) {
+        if (this.hostBlockchain === blockchains.BinanceSmartChain || this.hostBlockchain === blockchains.Xdai) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
