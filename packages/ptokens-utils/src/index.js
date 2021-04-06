@@ -4,6 +4,7 @@ import * as ltc from './ltc'
 import * as converters from './converters'
 import * as eth from './eth'
 import * as eos from './eos'
+import * as rvn from './rvn'
 import * as helpers from './helpers/index'
 import * as constants from './constants'
 import { redeemFromEosio } from './redeem-from/redeem-from-eosio'
@@ -29,6 +30,7 @@ export default {
   telos: eos,
   helpers,
   ltc,
+  rvn,
   redeemFrom: {
     redeemFromEvmCompatible,
     redeemFromEosio

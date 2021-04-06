@@ -1,5 +1,6 @@
 import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
+import { pRVN } from 'ptokens-prvn'
 import { pERC20 } from 'ptokens-perc20'
 import { pEosioToken } from 'ptokens-peosio-token'
 import { pDOGE } from 'ptokens-pdoge'
@@ -11,10 +12,12 @@ class pTokens {
    * @param {Object} _configs
    */
   constructor(_configs) {
-    const { pbtc, pltc, perc20, pdoge, peosioToken } = _configs
+    const { pbtc, pltc, prvn, perc20, pdoge, peosioToken } = _configs
     if (pbtc) this.pbtc = !Array.isArray(pbtc) ? new pBTC(pbtc) : pbtc.map(_el => new pBTC(_el))
 
     if (pltc) this.pltc = !Array.isArray(pltc) ? new pLTC(pltc) : pltc.map(_el => new pLTC(_el))
+
+    if (prvn) this.prvn = !Array.isArray(prvn) ? new pRVN(prvn) : prvn.map(_el => new pRVN(_el))
 
     if (pdoge) this.pdoge = !Array.isArray(pdoge) ? new pDOGE(pdoge) : pdoge.map(_el => new pDOGE(_el))
 

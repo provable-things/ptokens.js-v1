@@ -21,6 +21,8 @@ import {
   PolygonMainnet,
   Xdai,
   XdaiMainnet,
+  Ravencoin,
+  RavencoinMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -55,7 +57,8 @@ import {
   pDEFIPlusPlus,
   CGG,
   pUSDC,
-  pUSDT
+  pUSDT,
+  pRVN
 } from './names'
 
 export const blockchainTypes = {
@@ -74,7 +77,9 @@ export const blockchainTypes = {
   bsc: BinanceSmartChain,
   matic: Polygon,
   polygon: Polygon,
-  xdai: Xdai
+  xdai: Xdai,
+  ravencoin: Ravencoin,
+  rvn: Ravencoin
 }
 
 export const blockchainShortTypes = {
@@ -87,7 +92,8 @@ export const blockchainShortTypes = {
   'binance-smart-chain': 'bsc',
   matic: 'polygon',
   polygon: 'polygon',
-  xdai: 'xdai'
+  xdai: 'xdai',
+  ravencoin: 'rvn'
 }
 
 export const pTokenNativeBlockchain = {
@@ -123,7 +129,8 @@ export const pTokenNativeBlockchain = {
   pdefiplusplus: Ethereum,
   cgg: Ethereum,
   pusdc: Ethereum,
-  pusdt: Ethereum
+  pusdt: Ethereum,
+  prvn: Ravencoin
 }
 
 export const networkLabels = {
@@ -165,6 +172,10 @@ export const networkLabels = {
   },
   xdai: {
     mainnet: XdaiMainnet
+  },
+  ravencoin: {
+    mainnet: RavencoinMainnet,
+    ravencoin: RavencoinMainnet
   }
 }
 
@@ -208,5 +219,6 @@ export const pTokensAvailables = [
   pDEFIPlusPlus,
   CGG,
   pUSDT,
-  pUSDC
+  pUSDC,
+  pRVN
 ]

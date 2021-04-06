@@ -7,6 +7,7 @@ export default rollupConfig('pTokens', pkg.name, {
   'ptokens-perc20': 'ptokens-perc20',
   'ptokens-peosio-token': 'ptokens-peosio-token',
   'ptokens-pltc': 'ptokens-pltc',
+  'ptokens-prvn': 'ptokens-prvn',
   'ptokens-utils': 'ptokens-utils',
   'ptokens-providers': 'ptokens-providers',
   'ptokens-deposit-address': 'ptokens-deposit-address'

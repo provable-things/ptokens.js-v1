@@ -13,6 +13,7 @@ const PLTC_ON_ETH_MAINNET = 'https://pltconeth-node-1a.ngrok.io'
 const PBTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-3.ngrok.io/'
 const PLTC_ON_ETH_ROPSTEN = 'https://nuc-bridge-2.ngrok.io'
 const PDOGE_ON_ETH_MAINNET = 'http://51.195.136.212:3002'
+const PRVN_ON_ETH_MAINNET = 'https://prvnonbsc-node-1a.ngrok.io'
 
 const INFURA_MAINNET = 'https://mainnet.infura.io/v3/4762c881ac0c4938be76386339358ed6'
 const INFURA_ROPSTEN = 'https://ropsten.infura.io/v3/4762c881ac0c4938be76386339358ed6'
@@ -218,6 +219,23 @@ test('Should generate correctly a pDOGE deposit address on Ethereum Mainnet', as
     hostBlockchain: constants.blockchains.Ethereum,
     hostNetwork: constants.networks.EthereumMainnet,
     hostApi: new Web3(INFURA_MAINNET),
+    node
+  })
+  await depositAddress.generate(ETH_TESTING_ADDRESS)
+  expect(depositAddress.verify()).to.be.eq(true)
+})
+
+test('Should generate correctly a pRVN deposit address on Binance Smart Chain Mainnet', async () => {
+  const node = new Node({
+    pToken: constants.pTokens.pRVN,
+    blockchain: constants.blockchains.BinanceSmartChain,
+    provider: new HttpProvider(PRVN_ON_ETH_MAINNET)
+  })
+  const depositAddress = new DepositAddress({
+    nativeBlockchain: constants.blockchains.Ravencoin,
+    nativeNetwork: constants.networks.RavencoinMainnet,
+    hostBlockchain: constants.blockchains.BinanceSmartChain,
+    hostNetwork: constants.networks.BinanceSmartChainMainnet,
     node
   })
   await depositAddress.generate(ETH_TESTING_ADDRESS)

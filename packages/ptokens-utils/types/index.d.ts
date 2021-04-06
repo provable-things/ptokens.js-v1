@@ -184,7 +184,8 @@ export interface Blockchains {
   Dogecoin: string,
   BinanceSmartChain: string,
   Polygon: string,
-  Xdai: string
+  Xdai: string,
+  Ravencoin: string
 }
 
 export interface Networks {
@@ -202,7 +203,8 @@ export interface Networks {
   DogecoinMainnet: string,
   BinanceSmartChainMainnet: string,
   PolygonMainnet: string,
-  XdaiMainnet: string
+  XdaiMainnet: string,
+  RavecoinMainnet: string
 }
 
 export interface pTokens {
@@ -238,7 +240,8 @@ export interface pTokens {
   pDEFIPlusPlus: string,
   CGG: string,
   pUSDC: string,
-  pUSDT: string
+  pUSDT: string,
+  pRVN: string
 }
 
 export interface EthereumMainnetTokens {
@@ -461,3 +464,92 @@ export interface DogeUtils {
 }
 
 export const doge: LtcUtils
+
+
+// ltc
+export interface RavencoinUtxoList extends Array<RavencoinUtxo> {}
+
+export interface RavencoinUtxo {
+  address: string,
+  txid: string,
+  vout: number
+  value: number,
+  scriptPubKey: string,
+  amount: number,
+  satoshis: number,
+  height: number,
+  confirmations: number
+}
+
+export interface RavencoinBroadcastedTx {
+  txid: string
+}
+
+export interface RavencoinVin {
+  addr: string,
+  doubleSpentTxID: string | null,
+  n: number,
+  scriptSig: {
+    asm: string,
+    hex: string,
+  },
+  sequence: number
+  txid: string
+  value: number
+  valueSat: number
+  vout: number
+}
+
+export interface RavencoinVout {
+  n: number
+  scriptPubKey: {
+    addresses: string[],
+    asm: string,
+    hex: string,
+    type: string,
+  }
+  spentHeight: number,
+  spentIndex: number,
+  spentTxId: string,
+  value: number,
+}
+
+export interface RavencoinVinList extends Array<RavencoinVin> {}
+
+export interface RavencoinVoutList extends Array<RavencoinVout> {}
+
+export interface RavencoinTransactionReceipt {
+  blockhash: string,
+  blockheight: number,
+  blocktime: number,
+  confirmations: number,
+  fees: number,
+  locktime: number,
+  size: number,
+  time: number,
+  txid: string,
+  valueIn: number,
+  valueOut: number,
+  version: number,
+  vin: LitecoinVinList
+  vout: LitecoinVoutList
+}
+
+export interface RvnUtils {
+  broadcastTransaction(_network: string, _tx: string): Promise<RavencoinBroadcastedTx>
+  getUtxoByAddress(_network: string, _address: string): Promise<RavencoinUtxoList>
+  getTransactionHexById(_network: string, _txId: string): Promise<string>
+  isValidAddress(_network: string, _address: string): boolean
+  monitorUtxoByAddress(
+    _network: string,
+    _address: string,
+    _eventEmitter: EventEmitter,
+    _pollingTime: number,
+    _broadcastEventName?: string,
+    _confirmationEventName?: string,
+    _confirmations?: number
+  ): Promise <string>
+  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number, _broadcastEventName: string, _confirmationEventName: string): Promise<RavencoinTransactionReceipt>
+}
+
+export const rvn: RvnUtils

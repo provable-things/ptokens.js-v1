@@ -21,6 +21,8 @@ import {
   PolygonMainnet,
   Xdai,
   XdaiMainnet,
+  Ravencoin,
+  RavencoinMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -55,7 +57,8 @@ import {
   pDEFIPlusPlus,
   CGG,
   pUSDT,
-  pUSDC
+  pUSDC,
+  pRVN
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -72,7 +75,8 @@ const blockchains = {
   Dogecoin,
   BinanceSmartChain,
   Polygon,
-  Xdai
+  Xdai,
+  Ravencoin
 }
 
 /**
@@ -94,7 +98,8 @@ const networks = {
   DogecoinMainnet,
   BinanceSmartChainMainnet,
   PolygonMainnet,
-  XdaiMainnet
+  XdaiMainnet,
+  RavencoinMainnet
 }
 
 /**
@@ -134,7 +139,8 @@ const pTokens = {
   pDEFIPlusPlus,
   CGG,
   pUSDT,
-  pUSDC
+  pUSDC,
+  pRVN
 }
 
 export { blockchains, networks, pTokens, tokens }

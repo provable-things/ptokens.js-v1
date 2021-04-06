@@ -21,9 +21,11 @@
     "bitcoin",
     "pnetwork",
     "litecoin",
+    "ravencoin",
     "eos",
     "dogecoin",
-    "eos"
+    "eos",
+    "binance-smart-chain"
   ],
   "dependencies": {
     "@babel/runtime": "^7.3.1",
@@ -35,6 +37,7 @@
     "ptokens-peosio-token": "^0.10.0",
     "ptokens-perc20": "^0.10.0",
     "ptokens-pltc": "^0.10.0",
+    "ptokens-prvn": "^0.10.0",
     "ptokens-providers": "^0.10.0",
     "ptokens-utils": "^0.10.0"
   },

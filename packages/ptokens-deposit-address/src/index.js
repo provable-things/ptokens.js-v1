@@ -1,5 +1,4 @@
 import Web3PromiEvent from 'web3-core-promievent'
-import Web3Utils from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import * as bitcoin from 'bitcoinjs-lib'
 import * as utils from 'ptokens-utils'
@@ -10,7 +9,8 @@ const POLLING_TIME = 3000
 const confirmations = {
   btc: 1,
   ltc: 4,
-  doge: 1
+  doge: 1,
+  rvn: 25
 }
 
 // NOTE: will be removed in versions >= 1.0.0
@@ -43,21 +43,21 @@ bitcoin.networks.litecoinTestnet = {
   wif: 0xb0
 }
 
-bitcoin.networks.dogecoin = {
-  messagePrefix: '\x19Dogecoin Signed Message:\n',
+bitcoin.networks.ravencoin = {
+  messagePrefix: '\x1aRavencoin Signed Message:\n',
   bip32: {
-    public: 0x02facafd,
-    private: 0x02fac398
+    public: 0x0488b21e,
+    private: 0x0488ade4
   },
-  pubKeyHash: 0x1e,
-  scriptHash: 0x16,
-  wif: 0x9e
+  pubKeyHash: 0x3c,
+  scriptHash: 0x7a,
+  wif: 0x80
 }
 
 const {
   constants: {
-    networks: { BitcoinMainnet, BitcoinTestnet, LitecoinMainnet, LitecoinTestnet, DogecoinMainnet },
-    blockchains: { Bitcoin, Litecoin, Dogecoin }
+    networks: { BitcoinMainnet, BitcoinTestnet, LitecoinMainnet, LitecoinTestnet, DogecoinMainnet, RavencoinMainnet },
+    blockchains: { Bitcoin, Litecoin, Dogecoin, Ravencoin }
   }
 } = utils
 const NETWORKS = {
@@ -71,6 +71,9 @@ const NETWORKS = {
   },
   [Dogecoin]: {
     [DogecoinMainnet]: bitcoin.networks.dogecoin
+  },
+  [Ravencoin]: {
+    [RavencoinMainnet]: bitcoin.networks.ravencoin
   }
 }
 
@@ -93,12 +96,6 @@ export class DepositAddress {
    * @param {String} _hostAddress
    */
   async generate(_hostAddress) {
-    if (this.hostBlockchain === utils.constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
-      throw new Error('Invalid Ethereum Address')
-
-    if (this.hostBlockchain === utils.constants.blockchains.Eosio && !utils.eos.isValidAccountName(_hostAddress))
-      throw new Error('Invalid EOS Account')
-
     try {
       const { nonce, enclavePublicKey, nativeDepositAddress } = await this.node.getNativeDepositAddress(_hostAddress)
 
@@ -108,6 +105,7 @@ export class DepositAddress {
       this.hostAddress = _hostAddress
       return this.value
     } catch (_err) {
+      console.log(_err)
       throw new Error('Error during deposit address generation')
     }
   }
@@ -152,12 +150,12 @@ export class DepositAddress {
   waitForDeposit() {
     const promiEvent = Web3PromiEvent()
 
-    if (!this.hostApi) {
-      promiEvent.reject('Provider not specified. Impossible to monitor the tx')
-      return
-    }
-
     const start = async () => {
+      if (!this.hostApi) {
+        promiEvent.reject('Provider not specified. Impossible to monitor the tx')
+        return
+      }
+
       if (!this.value) promiEvent.reject('Please generate a deposit address')
 
       const shortNativeBlockchain = utils.helpers.getBlockchainShortType(this.nativeBlockchain)
@@ -174,7 +172,9 @@ export class DepositAddress {
       )
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(nativeTxId, promiEvent.eventEmitter)
-      const hostTxReceipt = await utils[shortHostBlockchain].waitForTransactionConfirmation(
+      const hostTxReceipt = await utils[
+        shortHostBlockchain === 'bsc' ? 'eth' : shortHostBlockchain
+      ].waitForTransactionConfirmation(
         this.hostApi,
         broadcastedHostTxReport.broadcast_tx_hash,
         HOST_NODE_POLLING_TIME_INTERVAL
