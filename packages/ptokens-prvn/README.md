@@ -41,8 +41,8 @@ const prvn = new pRVN({
   nativeNetwork: blockchains.RavenCoinMainnet
 
   // optionals
-  bscPrivateKey: 'Eth private key',
-  bscProvider: 'Eth provider', // or instance of Web3 provider
+  bscPrivateKey: 'BSC private key',
+  bscProvider: 'BSC provider', // or instance of Web3 provider
   defaultNode: new Node({
     pToken: pTokens.pRVN,
     blockchain: 'ETH',
