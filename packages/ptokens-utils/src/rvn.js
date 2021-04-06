@@ -2,7 +2,7 @@ import axios from 'axios'
 import polling from 'light-async-polling'
 import { Testnet } from './helpers/names'
 
-const RVN_PTOKENS_NODE_MAINNET_API = 'https://api.ravencoin.org/api'
+const RVN_PTOKENS_NODE_MAINNET_API = 'https://corsproxy.ptokens.io/v1/?apiurl=https://api.ravencoin.org/api'
 
 const _getInsightLiteApi = _network => {
   if (_network === Testnet) throw new Error('Ravecoin Testnet is not supported')
