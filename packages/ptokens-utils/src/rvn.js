@@ -52,7 +52,7 @@ const getTransactionHexById = (_network, _txId) => _makeInsightLiteApiCall(_netw
  * @param {String} _network
  */
 const isValidAddress = _address => {
-  const res = _address.match(/r[a-zA-HJ-NP-Z0-9]{26,40}/g)
+  const res = _address.match(/(r|R)[a-zA-HJ-NP-Z0-9]{26,40}/g)
   if (!res) return false
   return res[0] === _address
 }
