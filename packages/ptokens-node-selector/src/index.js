@@ -16,24 +16,36 @@ export class NodeSelector {
   }
 
   /**
+   * @description _timeout should be within _options but in order to don't break
+   *              retrocompatibility has been left where it was
    * @param {String} _endpoint
    * @param {Number} _timeout
+   * @param {CheckConnectionOption} _options
    */
-  async checkConnection(_endpoint, _timeout) {
+  async checkConnection(_endpoint, _timeout, _options = {}) {
+    const {
+      pToken: optionalPtoken,
+      hostBlockchain: optionalHostBlockchain,
+      hostNetwork: optionalHostNetwork,
+      nativeBlockchain: optionalNativeBlockchain,
+      nativeNetwork: optionalNativeNetwork
+    } = _options
     try {
       this.provider.setEndpoint(_endpoint)
       const { host_blockchain, host_network, native_blockchain, native_network } = await this.provider.call(
         'GET',
-        `/${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}/get-info`,
+        `/${optionalPtoken ? optionalPtoken : this.pToken}-on-${helpers.getBlockchainShortType(
+          optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain
+        )}/get-info`,
         null,
         _timeout
       )
 
       return Boolean(
-        host_blockchain === this.hostBlockchain &&
-          host_network === this.hostNetwork &&
-          native_blockchain === this.nativeBlockchain &&
-          native_network === this.nativeNetwork
+        host_blockchain === (optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain) &&
+          host_network === (optionalHostNetwork ? optionalHostNetwork : this.hostNetwork) &&
+          native_blockchain === (optionalNativeBlockchain ? optionalNativeBlockchain : this.nativeBlockchain) &&
+          native_network === (optionalNativeNetwork ? optionalNativeNetwork : this.nativeNetwork)
       )
     } catch (_err) {
       throw new Error(`Error during checking node connection: ${_err.message}`)
@@ -54,25 +66,47 @@ export class NodeSelector {
   }
 
   /**
-   * @param {Boolean} _forceFetchNodes
+   * @param {SelectOptions} _options
    */
-  async select(_forceFetchNodes = false) {
+  async select(_options = {}) {
+    const {
+      forceFetchingNodes,
+      nodes: optionalNodes,
+      pToken: optionalPtoken,
+      hostBlockchain: optionalHostBlockchain,
+      hostNetwork: optionalHostNetwork,
+      nativeBlockchain: optionalNativeBlockchain,
+      nativeNetwork: optionalNativeNetwork
+    } = _options
+
     try {
-      if (this.nodes.length === 0 || _forceFetchNodes) {
-        await this.fetchNodes(helpers.getNetworkType(this.hostNetwork))
+      if ((this.nodes.length === 0 || forceFetchingNodes) && !optionalNodes) {
+        await this.fetchNodes(helpers.getNetworkType(optionalHostNetwork ? optionalHostNetwork : this.hostNetwork))
       }
 
-      const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}`
-      const filteredNodesByFeature = this.nodes.filter(node => node.features.includes(feature))
+      // prettier-ignore
+      const feature = `${optionalPtoken ? optionalPtoken : this.pToken}-on-${helpers.getBlockchainShortType(optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain)}`
+
+      const filteredNodesByFeature = optionalNodes
+        ? optionalNodes.filter(({ features }) => features.includes(feature))
+        : this.nodes.filter(({ features }) => features.includes(feature))
       if (filteredNodesByFeature.length === 0) throw new Error('No nodes available relating to the selected pToken')
 
       const nodesNotReachable = []
       for (;;) {
         const index = Math.floor(Math.random() * filteredNodesByFeature.length)
         const selectedNode = filteredNodesByFeature[index]
-
-        if ((await this.checkConnection(selectedNode.webapi)) && !nodesNotReachable.includes(selectedNode))
-          return this.setSelectedNode(selectedNode.webapi)
+        if (
+          (await this.checkConnection(selectedNode.webapi, 5000, {
+            pToken: optionalPtoken,
+            nativeNetwork: optionalNativeNetwork,
+            nativeBlockchain: optionalNativeBlockchain,
+            hostNetwork: optionalHostNetwork,
+            hostBlockchain: optionalHostBlockchain
+          })) &&
+          !nodesNotReachable.includes(selectedNode)
+        )
+          return this.setSelectedNode(selectedNode.webapi, { pToken: optionalPtoken, hostBlockchain: optionalHostBlockchain })
         else if (!nodesNotReachable.includes(selectedNode)) nodesNotReachable.push(selectedNode)
 
         if (nodesNotReachable.length === filteredNodesByFeature.length)
@@ -85,16 +119,18 @@ export class NodeSelector {
 
   /**
    * @param {String | Node} _node
+   * @param {SetSelectedNodeOptions} _options
    */
-  setSelectedNode(_node) {
+  setSelectedNode(_node, _options = {}) {
+    const { pToken: optionalPtoken, hostBlockchain: optionalHostBlockchain } = _options
     if (_node instanceof Node) {
       this.selectedNode = _node
       return this.selectedNode
     }
 
     this.selectedNode = new Node({
-      pToken: this.pToken,
-      blockchain: this.hostBlockchain,
+      pToken: optionalPtoken ? optionalPtoken : this.pToken,
+      blockchain: optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain,
       provider: new HttpProvider(_node)
     })
 

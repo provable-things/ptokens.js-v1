@@ -12,7 +12,28 @@ export interface NodeSelectorConfigs {
   defaultNode?: Node,
 }
 
-export interface NodeList extends Array<Node> {}
+export interface SelectOptions {
+  forceFetchingNodes?: boolean,
+  nodes?: object[],
+  pToken: string,
+  nativeNetwork?: string,
+  nativeBlockchain?: string,
+  hostNetwork?: string,
+  hostBlockchain?: string
+}
+
+export interface CheckConnectionOption {
+  pToken: string,
+  nativeNetwork?: string,
+  nativeBlockchain?: string,
+  hostNetwork?: string,
+  hostBlockchain?: string
+}
+
+export interface SetSelectedNodeOptions {
+  pToken: string,
+  hostBlockchain?: string
+}
 
 export class NodeSelector {
   constructor(_configs: NodeSelectorConfigs)
@@ -27,7 +48,7 @@ export class NodeSelector {
 
   selectedNode: Node
 
-  nodes: NodeList
+  nodes: Node[]
 
   networkType: string
 
@@ -35,15 +56,15 @@ export class NodeSelector {
 
   provider: HttpProvider | null
 
-  checkConnection(_endpoint: string, _timeout?: number): Promise<boolean>
+  checkConnection(_endpoint: string, _timeout?: number, _options?: CheckConnectionOption): Promise<boolean>
 
   getApi(): Promise<object>
 
-  select(_forceFetchNodes?: boolean): Promise<Node>
+  select(_options?: SelectOptions): Promise<Node>
 
-  setSelectedNode(_endpoint: string | Node): Node
+  setSelectedNode(_endpoint: string | Node, _options?: SetSelectedNodeOptions): Node
 
   setParams(_configs: object): any
 
-  fetchNodes(): Promise<NodeList>
+  fetchNodes(): Promise<Node[]>
 }

@@ -14,21 +14,21 @@ const PLTC_ON_EOS_MAINNET = 'https://pltconeos-node-1a.ngrok.io'
 // const PETH_ON_EOS_MAINNET = 'https://pethoneos-node-1a.ngrok.io'
 const UNREACHABLE_NODE = 'https://unreachable-node.io'
 
-test('Should select a pBTC node on EOS Mainnet', async () => {
-  const nodeSelector = new NodeSelector({
+test('Should select a pBTC node on EOS Mainnet without constructor parameters', async () => {
+  const nodeSelector = new NodeSelector()
+  const node = await nodeSelector.select({
     pToken: constants.pTokens.pBTC,
-    blockchain: constants.blockchains.Eosio,
-    network: constants.networks.Mainnet
-  })
-  const node = await nodeSelector.select()
-
-  nodeSelector.setParams({
-    pToken: constants.pTokens.pBTC,
-    blockchain: constants.blockchains.Ethereum,
-    network: constants.networks.Mainnet
+    nativeBlockchain: constants.blockchains.Bitcoin,
+    nativeNetwork: constants.networks.BitcoinMainnet,
+    hostNetwork: constants.networks.EosioMainnet,
+    hostBlockchain: constants.blockchains.Eosio
   })
 
-  await nodeSelector.select()
+  const info = await node.getInfo()
+  expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
+  expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
+  expect(info.native_blockchain).to.be.equal(constants.blockchains.Bitcoin)
+  expect(info.native_network).to.be.equal(constants.networks.BitcoinMainnet)
 })
 
 test('Should select a pBTC node on EOS Mainnet', async () => {

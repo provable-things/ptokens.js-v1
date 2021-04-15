@@ -43,5 +43,5 @@ nodeSelector.setParams({
   blockchain: 'ETH'
 })
 
-// $ExpectType Promise<NodeList>
+// $ExpectType Promise<Node[]>
 nodeSelector.fetchNodes()
