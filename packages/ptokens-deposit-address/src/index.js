@@ -132,8 +132,6 @@ export class DepositAddress {
       }
     } = utils
 
-    console.log(this.nativeBlockchain, this.nativeNetwork)
-
     const network = NETWORKS[this.nativeBlockchain][this.nativeNetwork]
     if (!network) throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
 
