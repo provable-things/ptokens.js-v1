@@ -1,4 +1,4 @@
-import { Node, Report } from 'ptokens-node'
+import { Node } from 'ptokens-node'
 import { HttpProvider } from 'ptokens-providers'
 
 export interface NodeSelectorConfigs {
@@ -39,7 +39,11 @@ export class NodeSelector {
 
   getApi(): Promise<object>
 
-  select(): Promise<Node>
+  select(_forceFetchNodes?: boolean): Promise<Node>
 
   setSelectedNode(_endpoint: string | Node): Node
+
+  setParams(_configs: object): any
+
+  fetchNodes(): Promise<NodeList>
 }

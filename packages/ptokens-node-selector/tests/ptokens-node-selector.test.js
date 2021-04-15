@@ -21,6 +21,23 @@ test('Should select a pBTC node on EOS Mainnet', async () => {
     network: constants.networks.Mainnet
   })
   const node = await nodeSelector.select()
+
+  nodeSelector.setParams({
+    pToken: constants.pTokens.pBTC,
+    blockchain: constants.blockchains.Ethereum,
+    network: constants.networks.Mainnet
+  })
+
+  await nodeSelector.select()
+})
+
+/*test('Should select a pBTC node on EOS Mainnet', async () => {
+  const nodeSelector = new NodeSelector({
+    pToken: constants.pTokens.pBTC,
+    blockchain: constants.blockchains.Eosio,
+    network: constants.networks.Mainnet
+  })
+  const node = await nodeSelector.select()
   const info = await node.getInfo()
   expect(info.host_network).to.be.equal(constants.networks.EosioMainnet)
   expect(info.host_blockchain).to.be.equal(constants.blockchains.Eosio)
@@ -231,3 +248,4 @@ test('Should select a different node when a valid one is set as default but it i
   const selectedNode = await nodeSelector.select()
   expect(selectedNode.provider.endpoint).to.be.not.equal(PLTC_ON_ETH_ROPSTEN)
 })
+*/

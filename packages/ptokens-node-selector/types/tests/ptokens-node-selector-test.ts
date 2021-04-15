@@ -35,3 +35,13 @@ nodeSelector.setSelectedNode(new Node({
   blockchain: 'eth',
   provider: new HttpProvider('https://unreachable-node.io'),
 }))
+
+// $ExpectType any
+nodeSelector.setParams({
+  pToken: 'pBTC',
+  network: 'testnet',
+  blockchain: 'ETH'
+})
+
+// $ExpectType Promise<NodeList>
+nodeSelector.fetchNodes()

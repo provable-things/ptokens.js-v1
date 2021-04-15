@@ -8,26 +8,9 @@ export class NodeSelector {
    * @param {Object} configs
    */
   constructor(_configs) {
-    const { pToken, defaultNode } = _configs
-
-    if (!helpers.isValidPTokenName(pToken)) throw new Error('Invalid pToken name')
-
-    // NOTE: pETH becomes pWETH for nodes interactions
-    this.pToken = pToken.toLowerCase() === constants.pTokens.pETH ? constants.pTokens.pWETH : pToken.toLowerCase()
-
-    const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
-      _configs,
-      _configs.nativeBlockchain
-        ? helpers.getBlockchainType[_configs.nativeBlockchain]
-        : helpers.getNativeBlockchainFromPtokenName(this.pToken)
-    )
-
-    this.hostBlockchain = hostBlockchain
-    this.hostNetwork = hostNetwork
-    this.nativeBlockchain = nativeBlockchain
-    this.nativeNetwork = nativeNetwork
-
-    this.selectedNode = defaultNode || null
+    if (_configs) {
+      this.setParams(_configs)
+    }
     this.nodes = []
     this.provider = new HttpProvider()
   }
@@ -70,10 +53,14 @@ export class NodeSelector {
     }
   }
 
-  async select() {
+  /**
+   * @param {Boolean} _forceFetchNodes
+   */
+  async select(_forceFetchNodes = false) {
     try {
-      this.provider.setEndpoint(getBootNodeEndpoint(helpers.getNetworkType(this.hostNetwork)))
-      this.nodes = (await this.provider.call('GET', '/peers')).peers
+      if (this.nodes.length === 0 || _forceFetchNodes) {
+        await this.fetchNodes(helpers.getNetworkType(this.hostNetwork))
+      }
 
       const feature = `${this.pToken}-on-${helpers.getBlockchainShortType(this.hostBlockchain)}`
       const filteredNodesByFeature = this.nodes.filter(node => node.features.includes(feature))
@@ -112,5 +99,44 @@ export class NodeSelector {
     })
 
     return this.selectedNode
+  }
+
+  /**
+   * @param {Object} configs
+   */
+  setParams(_configs) {
+    const { defaultNode, pToken } = _configs
+
+    if (!helpers.isValidPTokenName(pToken)) throw new Error('Invalid pToken name')
+
+    // NOTE: pETH becomes pWETH for nodes interactions
+    this.pToken = pToken.toLowerCase() === constants.pTokens.pETH ? constants.pTokens.pWETH : pToken.toLowerCase()
+
+    const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
+      _configs,
+      _configs.nativeBlockchain
+        ? helpers.getBlockchainType[_configs.nativeBlockchain]
+        : helpers.getNativeBlockchainFromPtokenName(this.pToken)
+    )
+
+    this.hostBlockchain = hostBlockchain
+    this.hostNetwork = hostNetwork
+    this.nativeBlockchain = nativeBlockchain
+    this.nativeNetwork = nativeNetwork
+
+    this.selectedNode = defaultNode || null
+  }
+
+  /**
+   * @param {String} _networkType
+   */
+  async fetchNodes(_networkType) {
+    try {
+      this.provider.setEndpoint(getBootNodeEndpoint(_networkType))
+      this.nodes = (await this.provider.call('GET', '/peers')).peers
+      return this.nodes
+    } catch (_err) {
+      throw new Error(err.message)
+    }
   }
 }
