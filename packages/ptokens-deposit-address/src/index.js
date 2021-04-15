@@ -43,6 +43,17 @@ bitcoin.networks.litecoinTestnet = {
   wif: 0xb0
 }
 
+bitcoin.networks.dogecoin = {
+  messagePrefix: '\x1aRavencoin Signed Message:\n',
+  bip32: {
+    public: 0x02facafd,
+    private: 0x02fac398
+  },
+  pubKeyHash: 0x1e,
+  scriptHash: 0x16,
+  wif: 0x9e
+}
+
 bitcoin.networks.ravencoin = {
   messagePrefix: '\x1aRavencoin Signed Message:\n',
   bip32: {
@@ -120,6 +131,9 @@ export class DepositAddress {
         blockchains: { Eosio, Telos }
       }
     } = utils
+
+    console.log(this.nativeBlockchain, this.nativeNetwork)
+
     const network = NETWORKS[this.nativeBlockchain][this.nativeNetwork]
     if (!network) throw new Error('Please use a valid combination of nativeNetwork and nativeBlockchain')
 
