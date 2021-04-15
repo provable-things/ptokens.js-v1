@@ -31,7 +31,7 @@ test('Should select a pBTC node on EOS Mainnet', async () => {
   await nodeSelector.select()
 })
 
-/*test('Should select a pBTC node on EOS Mainnet', async () => {
+test('Should select a pBTC node on EOS Mainnet', async () => {
   const nodeSelector = new NodeSelector({
     pToken: constants.pTokens.pBTC,
     blockchain: constants.blockchains.Eosio,
@@ -248,4 +248,3 @@ test('Should select a different node when a valid one is set as default but it i
   const selectedNode = await nodeSelector.select()
   expect(selectedNode.provider.endpoint).to.be.not.equal(PLTC_ON_ETH_ROPSTEN)
 })
-*/
