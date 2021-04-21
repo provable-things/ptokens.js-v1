@@ -32,6 +32,7 @@ export interface RedeemOptions {
   blocksBehind?: string,
   expireSeconds?: string,
   permission?: string,
+  actor?: string
 }
 
 export class pLTC extends NodeSelector {

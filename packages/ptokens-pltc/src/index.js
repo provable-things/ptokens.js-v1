@@ -87,7 +87,7 @@ export class pLTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice, blocksBehind, expireSeconds, permission } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor } = _options
 
         if (_amount < MINIMUM_LTC_REDEEMABLE) {
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`)
@@ -137,7 +137,8 @@ export class pLTC extends NodeSelector {
             {
               blocksBehind,
               expireSeconds,
-              permission
+              permission,
+              actor
             }
           )
 

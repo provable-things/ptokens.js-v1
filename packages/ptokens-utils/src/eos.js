@@ -36,19 +36,6 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
 }
 
 /**
- * @param {JsonRpc} _rpc
- * @param {Array} _pubkeys
- */
-const getAccountName = (_rpc, _pubkeys) =>
-  new Promise((resolve, reject) => {
-    const currentPublicKey = _pubkeys[0]
-    _rpc
-      .history_get_key_accounts(currentPublicKey)
-      .then(accounts => resolve(accounts.account_names[0]))
-      .catch(err => reject(err))
-  })
-
-/**
  * @param {Number} _amount
  */
 const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
@@ -79,4 +66,4 @@ const waitForTransactionConfirmation = async (_api, _tx, _pollingTime = 2000) =>
   return receipt
 }
 
-export { getApi, getAccountName, getAmountInEosFormat, isValidAccountName, waitForTransactionConfirmation }
+export { getApi, getAmountInEosFormat, isValidAccountName, waitForTransactionConfirmation }

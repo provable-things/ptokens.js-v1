@@ -80,7 +80,7 @@ export class pEosioToken extends NodeSelector {
     const promiEvent = Web3PromiEvent()
     const start = async () => {
       try {
-        const { blocksBehind, expireSeconds, permission } = _options
+        const { blocksBehind, expireSeconds, permission, actor } = _options
 
         await this._loadData()
 
@@ -100,13 +100,6 @@ export class pEosioToken extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        const eosPublicKeys = await this.nativeApi.signatureProvider.getAvailableKeys()
-        const eosAccountName = await eos.getAccountName(this.nativeApi.rpc, eosPublicKeys)
-        if (!eosAccountName) {
-          // prettier-ignore
-          throw new Error('Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin')
-        }
-
         this.nativeApi.cachedAbis.set(this.nativeContractAddress, {
           abi: abi.EosioToken,
           rawAbi: null
@@ -120,12 +113,12 @@ export class pEosioToken extends NodeSelector {
                 name: 'transfer',
                 authorization: [
                   {
-                    actor: eosAccountName,
+                    actor,
                     permission
                   }
                 ],
                 data: {
-                  from: eosAccountName,
+                  from: actor,
                   to: this.nativeVaultAddress,
                   quantity: eos.getAmountInEosFormat(
                     _amount,

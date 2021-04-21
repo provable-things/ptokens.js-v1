@@ -692,7 +692,6 @@ const tx = await utils.eth.waitForTransactionConfirmation(web3, '0x8cc2e8f07ac6a
 ## utils.eos
 
 * __`getApi`__
-* __`getAccountName`__
 * __`getAmountInEosFormat`__
 * __`isValidAccountName`__
 * __`waitForTransactionConfirmation`__
@@ -720,30 +719,6 @@ Returns an initialized EOS __`Api`__ object
 ### Example
 ```js
 const api = utils.eos.getApi('provate key', 'https://', null)
-```
-
-&nbsp;
-
-## eos.getAccountName
-
-```js
-utils.eos.getAccountName(api, publicKeys)
-```
-
-Returns an EOS account name given a list of public keys
-
-### Parameters
-
-- __`Api`__ - __`api`__: An EOS Api instance
-- __`Array`__ - __`publicKeys`__: list of public keys
-
-### Returns
-
-- __`Promise`__ : when resolved returns the account name
-
-### Example
-```js
-const api = utils.eos.getAccountName(api, ['EOS5....'])
 ```
 
 &nbsp;

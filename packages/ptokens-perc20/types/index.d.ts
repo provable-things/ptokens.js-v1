@@ -36,9 +36,10 @@ export interface IssueOptions {
 }
 
 export interface RedeemOptions {
-  blocksBehind: number,
-  expireSeconds: number,
-  permission: string,
+  blocksBehind?: number,
+  expireSeconds?: number,
+  permission?: string,
+  actor?: string,
   gasPrice: string | number,
   gas: string | number
 }

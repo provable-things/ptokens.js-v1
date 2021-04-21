@@ -176,7 +176,7 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
-        const { blocksBehind, expireSeconds, permission, gas, gasPrice } = _options
+        const { blocksBehind, expireSeconds, permission, gas, gasPrice, actor } = _options
         const { blockchains, tokens, pTokens } = constants
 
         await this._loadData()
@@ -228,7 +228,7 @@ export class pERC20 extends NodeSelector {
               : 9,
             this.hostContractAddress,
             this.pToken === pTokens.pWETH ? 'peth' : this.pToken,
-            { blocksBehind, expireSeconds, permission }
+            { blocksBehind, expireSeconds, permission, actor }
           )
 
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosOrTelosTxReceipt)

@@ -35,7 +35,8 @@ export interface RedeemOptions {
 export interface IssueOptions {
   blocksBehind: number,
   expireSecond: number,
-  permission: string
+  permission: string,
+  actor: string,
 }
 
 export interface Result {

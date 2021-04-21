@@ -125,9 +125,6 @@ const eosApi = new Api({
 // $ExpectType Api
 eos.getApi('private key', 'node endpoint', signatureProvider)
 
-// $ExpectType Promise<string>
-eos.getAccountName(jsonRpc, ['pubK1, pubK2'])
-
 // $ExpectType Promise<string[]>
 eos.getAvailablePublicKeys(signatureProvider)
 

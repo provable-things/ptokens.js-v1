@@ -1,22 +1,7 @@
 import utils from '../src'
 import { expect } from 'chai'
-import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
-import { JsonRpc } from 'eosjs'
-import fetch from 'node-fetch'
-
-const eosPrivateKey = '5JFPd8Kvhf7zSrxKCrMvhK22WKbh1jFw5TLeLjyPpp2yh4SvReS'
-const eosProvider = 'https://pbtc-on-eos-jungle-3.ptokens.io'
 
 jest.setTimeout(30000)
-
-test('Should get the correct EOS account name', async () => {
-  const signatureProvider = new JsSignatureProvider([eosPrivateKey])
-  const rpc = new JsonRpc(eosProvider, { fetch })
-  const expectedAccountName = 'all3manfr4di'
-  const publicKeys = await signatureProvider.getAvailableKeys()
-  const accountName = await utils.eos.getAccountName(rpc, publicKeys)
-  expect(accountName).to.be.equal(expectedAccountName)
-})
 
 test('all3manfr3di should be a valid EOS account name', () => {
   const validEosAccountName = 'all3manfr3di'

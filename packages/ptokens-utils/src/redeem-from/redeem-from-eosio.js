@@ -1,16 +1,9 @@
-import { getAccountName, getAmountInEosFormat } from '../eos'
+import { getAmountInEosFormat } from '../eos'
 import pTokenOnEosAbi from '../abi/pTokenOnEOSContractAbi.json'
 
 const redeemFromEosio = async (_api, _amount, _nativeAddress, _decimals, _contractAddress, _pToken, _options) => {
   try {
-    const { blocksBehind, expireSeconds, permission } = _options
-    const eosPublicKeys = await _api.signatureProvider.getAvailableKeys()
-    const eosAccountName = await getAccountName(_api.rpc, eosPublicKeys)
-    if (!eosAccountName) {
-      // prettier-ignore
-      throw new Error('Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin')
-    }
-
+    const { blocksBehind, expireSeconds, permission, actor } = _options
     _api.cachedAbis.set(_contractAddress, {
       abi: pTokenOnEosAbi,
       rawAbi: null
@@ -24,12 +17,12 @@ const redeemFromEosio = async (_api, _amount, _nativeAddress, _decimals, _contra
             name: 'redeem',
             authorization: [
               {
-                actor: eosAccountName,
+                actor,
                 permission
               }
             ],
             data: {
-              sender: eosAccountName,
+              sender: actor,
               quantity: getAmountInEosFormat(_amount, _decimals, _pToken.toUpperCase()),
               memo: _nativeAddress
             }
