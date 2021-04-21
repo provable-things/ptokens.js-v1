@@ -182,9 +182,9 @@ export class pERC20 extends NodeSelector {
 
         await this._loadData()
 
-        if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].redeem[this.hostBlockchain])) {
-          // prettier-ignore
-          promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.nativeContractAddress].redeem[this.hostBlockchain]}`)
+        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].redeem[this.hostBlockchain]
+        if (BigNumber(_amount).isLessThan(minimumAmount)) {
+          promiEvent.reject(`Impossible to redeem less than ${minimumAmount}`)
           return
         }
 
