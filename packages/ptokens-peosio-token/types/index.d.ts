@@ -16,6 +16,8 @@ export interface pEosioTokenConfigs {
   nativeBlockchain?: string,
   ethPrivateKey?: string,
   ethProvider?: string | object,
+  bscPrivateKey?: string,
+  bscProvider?: string | object,
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
   eosSignatureProvider?: JsSignatureProvider,

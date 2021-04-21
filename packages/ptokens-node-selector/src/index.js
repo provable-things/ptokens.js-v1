@@ -106,7 +106,10 @@ export class NodeSelector {
           })) &&
           !nodesNotReachable.includes(selectedNode)
         )
-          return this.setSelectedNode(selectedNode.webapi, { pToken: optionalPtoken, hostBlockchain: optionalHostBlockchain })
+          return this.setSelectedNode(selectedNode.webapi, {
+            pToken: optionalPtoken,
+            hostBlockchain: optionalHostBlockchain
+          })
         else if (!nodesNotReachable.includes(selectedNode)) nodesNotReachable.push(selectedNode)
 
         if (nodesNotReachable.length === filteredNodesByFeature.length)

@@ -25,6 +25,8 @@ export class pEosioToken extends NodeSelector {
     const {
       ethPrivateKey,
       ethProvider,
+      bscPrivateKey,
+      bscProvider,
       eosPrivateKey,
       eosRpc,
       eosSignatureProvider,
@@ -59,6 +61,15 @@ export class pEosioToken extends NodeSelector {
     } else {
       this.hostPrivateKey = null
     }
+
+    if (bscProvider) this.hostApi = new Web3(bscProvider)
+    if (bscPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(bscPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
   }
   /**
    * @param {String} _amount in wei
@@ -78,7 +89,11 @@ export class pEosioToken extends NodeSelector {
           return
         }
 
-        if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAccount)) {
+        if (
+          (this.hostBlockchain === constants.blockchains.Ethereum ||
+            this.hostBlockchain === constants.blockchains.BinanceSmartChain) &&
+          !Web3Utils.isAddress(_hostAccount)
+        ) {
           promiEvent.reject('Invalid host account')
           return
         }
@@ -181,7 +196,8 @@ export class pEosioToken extends NodeSelector {
         let hostTxHash = null
         if (
           this.hostBlockchain === constants.blockchains.Ethereum ||
-          this.hostBlockchain === constants.blockchains.Polygon
+          this.hostBlockchain === constants.blockchains.Polygon ||
+          this.hostBlockchain === constants.blockchains.BinanceSmartChain
         ) {
           const hostTxReceipt = await redeemFrom.redeemFromEvmCompatible(
             this.hostApi,
