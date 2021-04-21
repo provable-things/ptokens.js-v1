@@ -168,5 +168,11 @@ export default {
     redeem: {
       [constants.blockchains.Telos]: 0.000000001
     }
+  },
+  [constants.tokens.ethereum.mainnet.OPEN]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.BinanceSmartChain]: 1000000000
+    }
   }
 }

@@ -58,7 +58,8 @@ import {
   CGG,
   pUSDT,
   pUSDC,
-  pRVN
+  pRVN,
+  pOPEN
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -140,7 +141,8 @@ const pTokens = {
   CGG,
   pUSDT,
   pUSDC,
-  pRVN
+  pRVN,
+  pOPEN
 }
 
 export { blockchains, networks, pTokens, tokens }

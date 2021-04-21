@@ -240,7 +240,8 @@ export interface pTokens {
   CGG: string,
   pUSDC: string,
   pUSDT: string,
-  pRVN: string
+  pRVN: string,
+  pOPEN: string
 }
 
 export interface EthereumMainnetTokens {
@@ -270,7 +271,8 @@ export interface EthereumMainnetTokens {
   'DEFI++': string,
   CGG: string,
   USDC: string,
-  USDT: string
+  USDT: string,
+  OPEN: string
 }
 
 export interface TelosMainnetTokens {

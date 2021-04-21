@@ -29,7 +29,8 @@ export default {
       'DEFI++': '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
       CGG: '0x1fe24f25b1cf609b9c4e7e12d802e3640dfa5e43',
       USDT: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-      USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+      USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      OPEN: '0x69e8b9528cabda89fe846c67675b5d73d463a916'
     }
   },
   [Eosio]: {

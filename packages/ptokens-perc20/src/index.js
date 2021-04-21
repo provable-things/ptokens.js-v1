@@ -97,8 +97,9 @@ export class pERC20 extends NodeSelector {
         const { blockchains } = constants
         await this._loadData()
 
-        if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].issue)) {
-          promiEvent.reject(`Impossible to issue less than ${minimumAmounts[this.nativeContractAddress].issue}`)
+        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].issue
+        if (BigNumber(_amount).isLessThan(minimumAmount)) {
+          promiEvent.reject(`Impossible to issue less than ${minimumAmount}`)
           return
         }
 

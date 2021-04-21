@@ -58,7 +58,8 @@ import {
   CGG,
   pUSDC,
   pUSDT,
-  pRVN
+  pRVN,
+  pOPEN
 } from './names'
 
 export const blockchainTypes = {
@@ -130,7 +131,8 @@ export const pTokenNativeBlockchain = {
   cgg: Ethereum,
   pusdc: Ethereum,
   pusdt: Ethereum,
-  prvn: Ravencoin
+  prvn: Ravencoin,
+  popen: Ethereum
 }
 
 export const networkLabels = {
@@ -220,5 +222,6 @@ export const pTokensAvailables = [
   CGG,
   pUSDT,
   pUSDC,
-  pRVN
+  pRVN,
+  pOPEN
 ]
