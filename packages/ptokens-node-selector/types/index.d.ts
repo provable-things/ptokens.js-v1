@@ -13,6 +13,7 @@ export interface NodeSelectorConfigs {
 }
 
 export interface SelectOptions {
+  timeout: number,
   forceFetchingNodes?: boolean,
   nodes?: object[],
   pToken: string,

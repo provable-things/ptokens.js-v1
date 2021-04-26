@@ -70,6 +70,7 @@ export class NodeSelector {
    */
   async select(_options = {}) {
     const {
+      timeout,
       forceFetchingNodes,
       nodes: optionalNodes,
       pToken: optionalPtoken,
@@ -90,14 +91,15 @@ export class NodeSelector {
       const filteredNodesByFeature = optionalNodes
         ? optionalNodes.filter(({ features }) => features.includes(feature))
         : this.nodes.filter(({ features }) => features.includes(feature))
-      if (filteredNodesByFeature.length === 0) throw new Error('No nodes available relating to the selected pToken')
+      if (filteredNodesByFeature.length === 0)
+        throw new Error(`No nodes available relating to the selected pToken (${feature})`)
 
       const nodesNotReachable = []
       for (;;) {
         const index = Math.floor(Math.random() * filteredNodesByFeature.length)
         const selectedNode = filteredNodesByFeature[index]
         if (
-          (await this.checkConnection(selectedNode.webapi, 5000, {
+          (await this.checkConnection(selectedNode.webapi, timeout ? timeout : 5000, {
             pToken: optionalPtoken,
             nativeNetwork: optionalNativeNetwork,
             nativeBlockchain: optionalNativeBlockchain,
@@ -113,7 +115,7 @@ export class NodeSelector {
         else if (!nodesNotReachable.includes(selectedNode)) nodesNotReachable.push(selectedNode)
 
         if (nodesNotReachable.length === filteredNodesByFeature.length)
-          throw new Error('All nodes relating to the selected pToken appear to be unavailable')
+          throw new Error(`All nodes relating to the selected pToken (${feature}) appear to be unavailable`)
       }
     } catch (err) {
       throw new Error(err.message)
