@@ -1,6 +1,6 @@
 {
   "name": "ptokens-peosio-token",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "repo holding the code for interacting with pEosioToken",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-peosio-token",
   "main": "dist/ptokens-peosio-token.cjs.js",
@@ -30,10 +30,10 @@
     "bitcoinjs-lib": "^5.1.6",
     "chai": "^4.2.0",
     "eosjs": "^21.0.0",
-    "ptokens-node": "^0.10.0",
-    "ptokens-node-selector": "^0.10.0",
-    "ptokens-providers": "^0.10.0",
-    "ptokens-utils": "^0.10.0",
+    "ptokens-node": "^0.11.0",
+    "ptokens-node-selector": "^0.11.0",
+    "ptokens-providers": "^0.11.0",
+    "ptokens-utils": "^0.11.0",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1",
     "web3-utils": "^1.2.4"
