@@ -40,8 +40,8 @@ export interface RedeemOptions {
   expireSeconds?: number,
   permission?: string,
   actor?: string,
-  gasPrice: string | number,
-  gas: string | number
+  gasPrice?: string | number,
+  gas?: string | number
 }
 
 /*
