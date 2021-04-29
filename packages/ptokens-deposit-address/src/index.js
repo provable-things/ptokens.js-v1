@@ -116,7 +116,6 @@ export class DepositAddress {
       this.hostAddress = _hostAddress
       return this.value
     } catch (_err) {
-      console.log(_err)
       throw new Error('Error during deposit address generation')
     }
   }

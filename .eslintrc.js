@@ -111,7 +111,8 @@ module.exports = {
     'no-mixed-requires': 2,
     'no-new-require': 0,
     'no-path-concat': 1,
-    'no-sync': 1
+    'no-sync': 1,
+    'no-mixed-operators': 1
     // stylistic (leaving up to standard)
 
     // ECMAScript 6 (tbd)

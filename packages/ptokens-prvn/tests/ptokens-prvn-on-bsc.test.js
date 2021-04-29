@@ -2,7 +2,7 @@ import { pRVN } from '../src/index'
 import { expect } from 'chai'
 import { constants } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
-import qrcode from 'qrcode-terminal'
+// import qrcode from 'qrcode-terminal'
 
 const BSC_TESTING_ADDRESS = ''
 const BSC_TESTING_PRIVATE_KEY = ''
@@ -39,9 +39,9 @@ test('Should not get a RVN deposit address because of invalid Binance Smart Chai
 test('Should monitor an issuing of pRVN on Binance Smart Chain', async () => {
   const depositAddress = await prvn.getDepositAddress(BSC_TESTING_ADDRESS)
 
-  qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
+  /* qrcode.generate(depositAddress.toString(), { small: true }, _qrcode => {
     console.log(_qrcode)
-  })
+  }) */
 
   let rvnTxIsBroadcasted = false
   let rvnTxIsConfirmed = false

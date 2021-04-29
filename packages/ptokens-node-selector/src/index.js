@@ -8,9 +8,8 @@ export class NodeSelector {
    * @param {Object} configs
    */
   constructor(_configs) {
-    if (_configs) {
-      this.setParams(_configs)
-    }
+    if (_configs) this.setParams(_configs)
+
     this.nodes = []
     this.provider = new HttpProvider()
   }
@@ -34,18 +33,18 @@ export class NodeSelector {
       this.provider.setEndpoint(_endpoint)
       const { host_blockchain, host_network, native_blockchain, native_network } = await this.provider.call(
         'GET',
-        `/${optionalPtoken ? optionalPtoken : this.pToken}-on-${helpers.getBlockchainShortType(
-          optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain
+        `/${optionalPtoken || this.pToken}-on-${helpers.getBlockchainShortType(
+          optionalHostBlockchain || this.hostBlockchain
         )}/get-info`,
         null,
         _timeout
       )
 
       return Boolean(
-        host_blockchain === (optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain) &&
-          host_network === (optionalHostNetwork ? optionalHostNetwork : this.hostNetwork) &&
-          native_blockchain === (optionalNativeBlockchain ? optionalNativeBlockchain : this.nativeBlockchain) &&
-          native_network === (optionalNativeNetwork ? optionalNativeNetwork : this.nativeNetwork)
+        host_blockchain === (optionalHostBlockchain || this.hostBlockchain) &&
+          host_network === (optionalHostNetwork || this.hostNetwork) &&
+          native_blockchain === (optionalNativeBlockchain || this.nativeBlockchain) &&
+          native_network === (optionalNativeNetwork || this.nativeNetwork)
       )
     } catch (_err) {
       throw new Error(`Error during checking node connection: ${_err.message}`)
@@ -81,12 +80,11 @@ export class NodeSelector {
     } = _options
 
     try {
-      if ((this.nodes.length === 0 || forceFetchingNodes) && !optionalNodes) {
-        await this.fetchNodes(helpers.getNetworkType(optionalHostNetwork ? optionalHostNetwork : this.hostNetwork))
-      }
+      if ((this.nodes.length === 0 || forceFetchingNodes) && !optionalNodes)
+        await this.fetchNodes(helpers.getNetworkType(optionalHostNetwork || this.hostNetwork))
 
       // prettier-ignore
-      const feature = `${optionalPtoken ? optionalPtoken : this.pToken}-on-${helpers.getBlockchainShortType(optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain)}`
+      const feature = `${optionalPtoken || this.pToken}-on-${helpers.getBlockchainShortType(optionalHostBlockchain || this.hostBlockchain)}`
 
       const filteredNodesByFeature = optionalNodes
         ? optionalNodes.filter(({ features }) => features.includes(feature))
@@ -99,7 +97,7 @@ export class NodeSelector {
         const index = Math.floor(Math.random() * filteredNodesByFeature.length)
         const selectedNode = filteredNodesByFeature[index]
         if (
-          (await this.checkConnection(selectedNode.webapi, timeout ? timeout : 5000, {
+          (await this.checkConnection(selectedNode.webapi, timeout || 5000, {
             pToken: optionalPtoken,
             nativeNetwork: optionalNativeNetwork,
             nativeBlockchain: optionalNativeBlockchain,
@@ -107,18 +105,20 @@ export class NodeSelector {
             hostBlockchain: optionalHostBlockchain
           })) &&
           !nodesNotReachable.includes(selectedNode)
-        )
+        ) {
           return this.setSelectedNode(selectedNode.webapi, {
             pToken: optionalPtoken,
             hostBlockchain: optionalHostBlockchain
           })
-        else if (!nodesNotReachable.includes(selectedNode)) nodesNotReachable.push(selectedNode)
+        } else if (!nodesNotReachable.includes(selectedNode)) {
+          nodesNotReachable.push(selectedNode)
+        }
 
         if (nodesNotReachable.length === filteredNodesByFeature.length)
           throw new Error(`All nodes relating to the selected pToken (${feature}) appear to be unavailable`)
       }
-    } catch (err) {
-      throw new Error(err.message)
+    } catch (_err) {
+      throw new Error(_err.message)
     }
   }
 
@@ -134,8 +134,8 @@ export class NodeSelector {
     }
 
     this.selectedNode = new Node({
-      pToken: optionalPtoken ? optionalPtoken : this.pToken,
-      blockchain: optionalHostBlockchain ? optionalHostBlockchain : this.hostBlockchain,
+      pToken: optionalPtoken || this.pToken,
+      blockchain: optionalHostBlockchain || this.hostBlockchain,
       provider: new HttpProvider(_node)
     })
 
@@ -177,7 +177,7 @@ export class NodeSelector {
       this.nodes = (await this.provider.call('GET', '/peers')).peers
       return this.nodes
     } catch (_err) {
-      throw new Error(err.message)
+      throw new Error(_err.message)
     }
   }
 }
