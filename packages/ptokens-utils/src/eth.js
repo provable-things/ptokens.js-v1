@@ -169,7 +169,7 @@ const sendSignedMethodTx = (_web3, _method, _options, _params) => {
  * @param {String} _tx
  * @param {Number} _pollingTime
  */
-const waitForTransactionConfirmation = async (_web3, _tx, _pollingTime) => {
+const waitForTransactionConfirmation = async (_web3, _tx, _pollingTime = 5000) => {
   let receipt = null
   await polling(async () => {
     receipt = await _web3.eth.getTransactionReceipt(_tx)

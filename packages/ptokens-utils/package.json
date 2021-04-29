@@ -1,6 +1,6 @@
 {
   "name": "ptokens-utils",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "repo holding some utils needed by other packages",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-utils",
   "main": "dist/ptokens-utils.cjs.js",

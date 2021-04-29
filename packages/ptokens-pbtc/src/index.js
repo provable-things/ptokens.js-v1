@@ -97,7 +97,7 @@ export class pBTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice, blocksBehind, expireSeconds, permission } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor } = _options
 
         if (_amount < MINIMUM_BTC_REDEEMABLE) {
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`)
@@ -113,7 +113,7 @@ export class pBTC extends NodeSelector {
 
         const contractAddress = await this._getContractAddress()
 
-        const { redeemFromEthereum, redeemFromEosio } = redeemFrom
+        const { redeemFromEvmCompatible, redeemFromEosio } = redeemFrom
 
         let hostTxHash = null
         if (
@@ -121,7 +121,7 @@ export class pBTC extends NodeSelector {
           this.hostBlockchain === constants.blockchains.BinanceSmartChain ||
           this.hostBlockchain === constants.blockchains.Xdai
         ) {
-          const hostTxReceipt = await redeemFromEthereum(
+          const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,
@@ -156,7 +156,8 @@ export class pBTC extends NodeSelector {
             {
               blocksBehind,
               expireSeconds,
-              permission
+              permission,
+              actor
             }
           )
 

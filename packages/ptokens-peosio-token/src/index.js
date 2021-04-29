@@ -25,6 +25,8 @@ export class pEosioToken extends NodeSelector {
     const {
       ethPrivateKey,
       ethProvider,
+      bscPrivateKey,
+      bscProvider,
       eosPrivateKey,
       eosRpc,
       eosSignatureProvider,
@@ -59,6 +61,15 @@ export class pEosioToken extends NodeSelector {
     } else {
       this.hostPrivateKey = null
     }
+
+    if (bscProvider) this.hostApi = new Web3(bscProvider)
+    if (bscPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(bscPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
   }
   /**
    * @param {String} _amount in wei
@@ -69,7 +80,7 @@ export class pEosioToken extends NodeSelector {
     const promiEvent = Web3PromiEvent()
     const start = async () => {
       try {
-        const { blocksBehind, expireSeconds, permission } = _options
+        const { blocksBehind, expireSeconds, permission, actor } = _options
 
         await this._loadData()
 
@@ -78,19 +89,16 @@ export class pEosioToken extends NodeSelector {
           return
         }
 
-        if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAccount)) {
+        if (
+          (this.hostBlockchain === constants.blockchains.Ethereum ||
+            this.hostBlockchain === constants.blockchains.BinanceSmartChain) &&
+          !Web3Utils.isAddress(_hostAccount)
+        ) {
           promiEvent.reject('Invalid host account')
           return
         }
 
         if (!this.selectedNode) await this.select()
-
-        const eosPublicKeys = await this.nativeApi.signatureProvider.getAvailableKeys()
-        const eosAccountName = await eos.getAccountName(this.nativeApi.rpc, eosPublicKeys)
-        if (!eosAccountName) {
-          // prettier-ignore
-          throw new Error('Account name does not exist. Check that you entered it correctly or make sure to have enabled history plugin')
-        }
 
         this.nativeApi.cachedAbis.set(this.nativeContractAddress, {
           abi: abi.EosioToken,
@@ -105,12 +113,12 @@ export class pEosioToken extends NodeSelector {
                 name: 'transfer',
                 authorization: [
                   {
-                    actor: eosAccountName,
+                    actor,
                     permission
                   }
                 ],
                 data: {
-                  from: eosAccountName,
+                  from: actor,
                   to: this.nativeVaultAddress,
                   quantity: eos.getAmountInEosFormat(
                     _amount,
@@ -181,9 +189,10 @@ export class pEosioToken extends NodeSelector {
         let hostTxHash = null
         if (
           this.hostBlockchain === constants.blockchains.Ethereum ||
-          this.hostBlockchain === constants.blockchains.Polygon
+          this.hostBlockchain === constants.blockchains.Polygon ||
+          this.hostBlockchain === constants.blockchains.BinanceSmartChain
         ) {
-          const hostTxReceipt = await redeemFrom.redeemFromEthereum(
+          const hostTxReceipt = await redeemFrom.redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,

@@ -5,7 +5,7 @@ import { constants, eth, doge, helpers, redeemFrom } from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
 
-const MINIMUM_LTC_REDEEMABLE = 0.00005
+const MINIMUM_DOGE_REDEEMABLE = 50000000000000
 
 export class pDOGE extends NodeSelector {
   /**
@@ -57,8 +57,7 @@ export class pDOGE extends NodeSelector {
       nativeNetwork: this.nativeNetwork,
       hostBlockchain: this.hostBlockchain,
       hostNetwork: this.hostNetwork,
-      hostApi: this.hostApi,
-      nativeNode: this.dogecoinNode
+      hostApi: this.hostApi
     })
 
     await depositAddress.generate(_hostAddress)
@@ -78,8 +77,8 @@ export class pDOGE extends NodeSelector {
       try {
         const { gas, gasPrice } = _options
 
-        if (_amount < MINIMUM_LTC_REDEEMABLE) {
-          promiEvent.reject(`Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pDOGE`)
+        if (_amount < MINIMUM_DOGE_REDEEMABLE) {
+          promiEvent.reject(`Impossible to burn less than ${MINIMUM_DOGE_REDEEMABLE} pDOGE`)
           return
         }
 
@@ -92,11 +91,11 @@ export class pDOGE extends NodeSelector {
 
         const contractAddress = await this._getContractAddress()
 
-        const { redeemFromEthereum } = redeemFrom
+        const { redeemFromEvmCompatible } = redeemFrom
         let hostTxHash = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFromEthereum(
+          const ethTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,

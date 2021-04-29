@@ -136,7 +136,6 @@ export const eth: EthUtils
 // eos
 export interface EosUtils {
   getApi(_privateKey: string, _rpc: string | JsonRpc, _signatureProvider: JsSignatureProvider | null): Api
-  getAccountName(_rpc: JsonRpc, _pubkeys: string[]): Promise<string>
   getAvailablePublicKeys(_signatureProvider: JsSignatureProvider): Promise<string[]>
   getAmountInEosFormat(_amount: number, _decimals: number): number
   isValidAccountName(_accountName: string): boolean
@@ -184,7 +183,8 @@ export interface Blockchains {
   Dogecoin: string,
   BinanceSmartChain: string,
   Polygon: string,
-  Xdai: string
+  Xdai: string,
+  Ravencoin: string
 }
 
 export interface Networks {
@@ -202,7 +202,8 @@ export interface Networks {
   DogecoinMainnet: string,
   BinanceSmartChainMainnet: string,
   PolygonMainnet: string,
-  XdaiMainnet: string
+  XdaiMainnet: string,
+  RavecoinMainnet: string
 }
 
 export interface pTokens {
@@ -232,7 +233,16 @@ export interface pTokens {
   pDOGE: string,
   pEOS: string,
   IQ: string,
-  TLOS: string
+  TLOS: string,
+  pOPIUM: string,
+  pBCP: string,
+  pDEFIPlusPlus: string,
+  CGG: string,
+  pUSDC: string,
+  pUSDT: string,
+  pRVN: string,
+  pOPEN: string,
+  OCP: string
 }
 
 export interface EthereumMainnetTokens {
@@ -256,7 +266,18 @@ export interface EthereumMainnetTokens {
   BAT: string,
   REP: string,
   ZRX: string,
-  PNK: string
+  PNK: string,
+  OPIUM: string,
+  BCP: string,
+  'DEFI++': string,
+  CGG: string,
+  USDC: string,
+  USDT: string,
+  OPEN: string
+}
+
+export interface BinanceSmartChainMainnetTokens {
+  OCP: string
 }
 
 export interface TelosMainnetTokens {
@@ -280,10 +301,15 @@ export interface EosioTokens {
   mainnet: EosioMainnetTokens
 }
 
+export interface BinanceSmartChainTokens {
+  mainnet: BinanceSmartChainMainnetTokens
+}
+
 export interface Tokens {
   ethereum: EthereumTokens,
   eosio: EosioTokens,
-  telos: TelosTokens
+  telos: TelosTokens,
+  'binance-smart-chain': BinanceSmartChainTokens
 }
 
 export interface Constants {
@@ -449,3 +475,91 @@ export interface DogeUtils {
 }
 
 export const doge: LtcUtils
+
+// ltc
+export interface RavencoinUtxoList extends Array<RavencoinUtxo> {}
+
+export interface RavencoinUtxo {
+  address: string,
+  txid: string,
+  vout: number
+  value: number,
+  scriptPubKey: string,
+  amount: number,
+  satoshis: number,
+  height: number,
+  confirmations: number
+}
+
+export interface RavencoinBroadcastedTx {
+  txid: string
+}
+
+export interface RavencoinVin {
+  addr: string,
+  doubleSpentTxID: string | null,
+  n: number,
+  scriptSig: {
+    asm: string,
+    hex: string,
+  },
+  sequence: number
+  txid: string
+  value: number
+  valueSat: number
+  vout: number
+}
+
+export interface RavencoinVout {
+  n: number
+  scriptPubKey: {
+    addresses: string[],
+    asm: string,
+    hex: string,
+    type: string,
+  }
+  spentHeight: number,
+  spentIndex: number,
+  spentTxId: string,
+  value: number,
+}
+
+export interface RavencoinVinList extends Array<RavencoinVin> {}
+
+export interface RavencoinVoutList extends Array<RavencoinVout> {}
+
+export interface RavencoinTransactionReceipt {
+  blockhash: string,
+  blockheight: number,
+  blocktime: number,
+  confirmations: number,
+  fees: number,
+  locktime: number,
+  size: number,
+  time: number,
+  txid: string,
+  valueIn: number,
+  valueOut: number,
+  version: number,
+  vin: LitecoinVinList
+  vout: LitecoinVoutList
+}
+
+export interface RvnUtils {
+  broadcastTransaction(_network: string, _tx: string): Promise<RavencoinBroadcastedTx>
+  getUtxoByAddress(_network: string, _address: string): Promise<RavencoinUtxoList>
+  getTransactionHexById(_network: string, _txId: string): Promise<string>
+  isValidAddress(_network: string, _address: string): boolean
+  monitorUtxoByAddress(
+    _network: string,
+    _address: string,
+    _eventEmitter: EventEmitter,
+    _pollingTime: number,
+    _broadcastEventName?: string,
+    _confirmationEventName?: string,
+    _confirmations?: number
+  ): Promise <string>
+  waitForTransactionConfirmation(_network: string, _tx: string, _pollingTime: number, _broadcastEventName: string, _confirmationEventName: string): Promise<RavencoinTransactionReceipt>
+}
+
+export const rvn: RvnUtils

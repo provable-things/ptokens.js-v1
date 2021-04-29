@@ -9,6 +9,10 @@ const ptokens = new pTokens({
   pltc: [{
     network: 'mainnet',
     blockchain: 'eth'
+  }],
+  prvn: [{
+    network: 'mainnet',
+    blockchain: 'bsc'
   }]
 })
 

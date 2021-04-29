@@ -16,9 +16,16 @@ export interface pERC20Configs {
   nativeBlockchain?: string,
   ethPrivateKey?: string,
   ethProvider?: string | object,
+  bscPrivateKey?: string,
+  bscProvider?: string | object,
+  xdaiPrivateKey?: string,
+  xdaiProvider?: string | object,
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
-  eosSignatureProvider?: JsSignatureProvider
+  eosSignatureProvider?: JsSignatureProvider,
+  telosPrivateKey?: string,
+  telosRpc?: string | JsonRpc,
+  teolsSignatureProvider?: JsSignatureProvider,
   defaultNode?: Node,
   pToken: string
 }
@@ -29,9 +36,12 @@ export interface IssueOptions {
 }
 
 export interface RedeemOptions {
-  blocksBehind: number,
-  expireSeconds: number,
-  permission: string,
+  blocksBehind?: number,
+  expireSeconds?: number,
+  permission?: string,
+  actor?: string,
+  gasPrice?: string | number,
+  gas?: string | number
 }
 
 /*

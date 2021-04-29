@@ -1,4 +1,13 @@
-import { EthereumMainnet, EosioMainnet, Ethereum, Eosio, Telos, TelosMainnet } from './names'
+import {
+  EthereumMainnet,
+  EosioMainnet,
+  Ethereum,
+  Eosio,
+  Telos,
+  TelosMainnet,
+  BinanceSmartChain,
+  BinanceSmartChainMainnet
+} from './names'
 
 export default {
   [Ethereum]: {
@@ -23,7 +32,19 @@ export default {
       BAT: '0x0d8775f648430679a709e98d2b0cb6250d2887ef',
       REP: '0x221657776846890989a759ba2973e427dff5c9bb',
       ZRX: '0xe41d2489571d322189246dafa5ebde1f4699f498',
-      PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d'
+      PNK: '0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d',
+      OPIUM: '0x888888888889c00c67689029d7856aac1065ec11',
+      BCP: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
+      'DEFI++': '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
+      CGG: '0x1fe24f25b1cf609b9c4e7e12d802e3640dfa5e43',
+      USDT: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+      USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      OPEN: '0x69e8b9528cabda89fe846c67675b5d73d463a916'
+    }
+  },
+  [BinanceSmartChain]: {
+    [BinanceSmartChainMainnet]: {
+      OCP: '0x3c70260eee0a2bfc4b375feb810325801f289fbd'
     }
   },
   [Eosio]: {

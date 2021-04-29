@@ -9,7 +9,8 @@ const peos = new pEosioToken({
 peos.issue('0.0015', '0xdf3B180694aB22C577f7114D822D28b92cadFd75', {
   blocksBehind: 30,
   expireSecond: 120,
-  permission: 'active'
+  permission: 'active',
+  actor: 'actor'
 })
 
 // $ExpectType PromiEvent<object | TransactionReceipt | Report | Result>

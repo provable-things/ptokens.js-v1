@@ -6,7 +6,6 @@ import polling from 'light-async-polling'
 
 const EOS_MAX_ACCOUNT_LENGTH = 12
 const EOS_TRANSACTION_EXECUTED = 'executed'
-const EOS_NODE_POLLING_TIME_INTERVAL = 300
 
 /**
  * @param {String} _privateKey
@@ -37,19 +36,6 @@ const getApi = (_privateKey, _rpc, _signatureProvider = null) => {
 }
 
 /**
- * @param {JsonRpc} _rpc
- * @param {Array} _pubkeys
- */
-const getAccountName = (_rpc, _pubkeys) =>
-  new Promise((resolve, reject) => {
-    const currentPublicKey = _pubkeys[0]
-    _rpc
-      .history_get_key_accounts(currentPublicKey)
-      .then(accounts => resolve(accounts.account_names[0]))
-      .catch(err => reject(err))
-  })
-
-/**
  * @param {Number} _amount
  */
 const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
@@ -66,19 +52,18 @@ const isValidAccountName = _accountName =>
  * @param {Api} _api
  * @param {String} _tx
  */
-const waitForTransactionConfirmation = async (_api, _tx) => {
+const waitForTransactionConfirmation = async (_api, _tx, _pollingTime = 2000) => {
   let receipt = null
   await polling(async () => {
     try {
       receipt = await _api.rpc.history_get_transaction(_tx)
-
       if (receipt && receipt.trx.receipt.status === EOS_TRANSACTION_EXECUTED) return true
       else return false
     } catch (err) {
       return false
     }
-  }, EOS_NODE_POLLING_TIME_INTERVAL)
+  }, _pollingTime)
   return receipt
 }
 
-export { getApi, getAccountName, getAmountInEosFormat, isValidAccountName, waitForTransactionConfirmation }
+export { getApi, getAmountInEosFormat, isValidAccountName, waitForTransactionConfirmation }

@@ -59,7 +59,7 @@ export class pLTC extends NodeSelector {
       throw new Error('Invalid Ethereum Address')
 
     const selectedNode = this.selectedNode ? this.selectedNode : await this.select()
-    if (!selectedNode) throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
+    if (!selectedNode) throw new Error('No node selected. Impossible to generate a LTC deposit Address.')
 
     const depositAddress = new DepositAddress({
       node: selectedNode,
@@ -87,7 +87,7 @@ export class pLTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice, blocksBehind, expireSeconds, permission } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor } = _options
 
         if (_amount < MINIMUM_LTC_REDEEMABLE) {
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_LTC_REDEEMABLE} pLTC`)
@@ -103,11 +103,11 @@ export class pLTC extends NodeSelector {
 
         const contractAddress = await this._getContractAddress()
 
-        const { redeemFromEthereum, redeemFromEosio } = redeemFrom
+        const { redeemFromEvmCompatible, redeemFromEosio } = redeemFrom
         let hostTxHash = null
 
         if (this.hostBlockchain === constants.blockchains.Ethereum) {
-          const ethTxReceipt = await redeemFromEthereum(
+          const ethTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
               privateKey: this.hostPrivateKey,
@@ -137,7 +137,8 @@ export class pLTC extends NodeSelector {
             {
               blocksBehind,
               expireSeconds,
-              permission
+              permission,
+              actor
             }
           )
 

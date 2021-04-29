@@ -36,6 +36,7 @@ export interface RedeemOptions {
   gas?: number,
   gasPrice?: number | string | BigNumber,
   blocksBehind?: string,
+  actor?: string,
   expireSeconds?: string,
   permission?: string,
 }

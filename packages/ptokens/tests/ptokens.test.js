@@ -1,6 +1,7 @@
 import pTokens from '../src/index'
 import { pBTC } from 'ptokens-pbtc'
 import { pLTC } from 'ptokens-pltc'
+import { pRVN } from 'ptokens-prvn'
 import { pERC20 } from 'ptokens-perc20'
 import { constants } from 'ptokens-utils'
 import { pEosioToken } from 'ptokens-peosio-token'
@@ -60,6 +61,10 @@ test('Should init pTokens correctly with more ptokens instances', () => {
       blockchain: constants.blockchains.Ethereum,
       network: constants.networks.Testnet
     },
+    prvn: {
+      blockchain: constants.blockchains.BinanceSmartChain,
+      network: constants.networks.Mainnet
+    },
     perc20: [
       {
         pToken: constants.pTokens.pWETH,
@@ -94,6 +99,7 @@ test('Should init pTokens correctly with more ptokens instances', () => {
   })
   expect(ptokens.pbtc).to.be.an.instanceof(pBTC)
   expect(ptokens.pltc).to.be.an.instanceof(pLTC)
+  expect(ptokens.prvn).to.be.an.instanceof(pRVN)
   expect(ptokens.pweth).to.be.an.instanceof(pERC20)
   expect(ptokens.peth).to.be.an.instanceof(pERC20)
   expect(ptokens.peos).to.be.an.instanceof(pEosioToken)

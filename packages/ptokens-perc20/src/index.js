@@ -22,16 +22,46 @@ export class pERC20 extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const { ethPrivateKey, ethProvider, eosPrivateKey, eosRpc, eosSignatureProvider } = _configs
+    const {
+      ethPrivateKey,
+      ethProvider,
+      bscPrivateKey,
+      bscProvider,
+      xdaiPrivateKey,
+      xdaiProvider,
+      eosPrivateKey,
+      eosRpc,
+      eosSignatureProvider,
+      telosPrivateKey,
+      telosRpc,
+      telosSignatureProvider
+    } = _configs
 
     if (ethProvider) this.web3 = new Web3(ethProvider)
     if (ethPrivateKey) {
       const account = this.web3.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
-
       this.web3.eth.defaultAccount = account.address
       this.ethPrivateKey = eth.addHexPrefix(ethPrivateKey)
     } else {
       this.ethPrivateKey = null
+    }
+
+    if (bscProvider) this.hostApi = new Web3(bscProvider)
+    if (bscPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(bscPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
+
+    if (xdaiProvider) this.hostApi = new Web3(xdaiProvider)
+    if (xdaiPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(xdaiPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(xdaiPrivateKey)
+    } else {
+      this.hostPrivateKey = null
     }
 
     if (eosSignatureProvider) {
@@ -43,6 +73,15 @@ export class pERC20 extends NodeSelector {
       this.hostApi = eos.getApi(null, eosRpc, null)
     }
 
+    if (telosSignatureProvider) {
+      this.hostApi = eos.getApi(null, telosRpc, telosSignatureProvider)
+    } else if (telosPrivateKey && telosRpc) {
+      this.hostApi = eos.getApi(telosPrivateKey, telosRpc, null)
+      this.hostPrivateKey = telosPrivateKey
+    } else if (!telosSignatureProvider && !telosPrivateKey && telosRpc) {
+      this.hostApi = eos.getApi(null, telosRpc, null)
+    }
+
     this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
   /**
@@ -52,18 +91,24 @@ export class pERC20 extends NodeSelector {
    */
   issue(_amount, _hostAccount, _options = {}) {
     const promiEvent = Web3PromiEvent()
-    const { gas, gasPrice } = _options
-
     const start = async () => {
       try {
+        const { gas, gasPrice } = _options
+        const { blockchains } = constants
         await this._loadData()
 
-        if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].issue)) {
-          promiEvent.reject(`Impossible to issue less than ${minimumAmounts[this.nativeContractAddress].issue}`)
+        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].issue
+        if (BigNumber(_amount).isLessThan(minimumAmount)) {
+          promiEvent.reject(`Impossible to issue less than ${minimumAmount}`)
           return
         }
 
-        if (this.hostBlockchain === constants.blockchains.Eosio && !eos.isValidAccountName(_hostAccount)) {
+        if (
+          ((this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos) &&
+            !eos.isValidAccountName(_hostAccount)) ||
+          ((this.hostBlockchain === blockchains.BinanceSmartChain || this.hostBlockchain === blockchains.Xdai) &&
+            !Web3Utils.isAddress(_hostAccount))
+        ) {
           promiEvent.reject('Invalid host account')
           return
         }
@@ -99,8 +144,11 @@ export class pERC20 extends NodeSelector {
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(ethTxHash, promiEvent.eventEmitter)
 
         let hostTxReceipt
-        if (this.hostBlockchain === constants.blockchains.Eosio)
+        if (this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos)
           hostTxReceipt = await eos.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
+
+        if (this.hostBlockchain === blockchains.Xdai || this.hostBlockchain === blockchains.BinanceSmartChain)
+          hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
         promiEvent.resolve({
@@ -129,46 +177,70 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
-        const { blocksBehind, expireSeconds, permission } = _options
+        const { blocksBehind, expireSeconds, permission, gas, gasPrice, actor } = _options
+        const { blockchains, tokens, pTokens } = constants
 
         await this._loadData()
 
-        if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].redeem)) {
-          promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.nativeContractAddress].redeem}`)
+        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].redeem[this.hostBlockchain]
+        if (BigNumber(_amount).isLessThan(minimumAmount)) {
+          promiEvent.reject(`Impossible to redeem less than ${minimumAmount}`)
           return
         }
 
-        if (this.nativeBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_nativeAccount)) {
+        if (this.nativeBlockchain === blockchains.Ethereum && !Web3Utils.isAddress(_nativeAccount)) {
           promiEvent.reject('Invalid native account')
           return
         }
 
         if (!this.selectedNode) await this.select()
 
-        const { redeemFromEosio } = redeemFrom
+        const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
-        if (this.hostBlockchain === constants.blockchains.Eosio) {
-          const eosTxReceipt = await redeemFromEosio(
+        if (this.hostBlockchain === blockchains.BinanceSmartChain || this.hostBlockchain === blockchains.Xdai) {
+          const hostTxReceipt = await redeemFromEvmCompatible(
+            this.hostApi,
+            {
+              privateKey: this.hostPrivateKey,
+              gas,
+              gasPrice,
+              contractAddress: this.hostContractAddress,
+              value: 0
+            },
+            [_amount, _nativeAccount],
+            promiEvent,
+            'hostTxBroadcasted'
+          )
+
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.transactionHash
+        }
+
+        if (this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos) {
+          const eosOrTelosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
             _nativeAccount,
-            [constants.tokens.ethereum.mainnet.DAI, constants.tokens.ethereum.mainnet.UOS].includes(
-              this.nativeContractAddress
-            )
+            [tokens.ethereum.mainnet.DAI, tokens.ethereum.mainnet.UOS].includes(this.nativeContractAddress)
               ? 4
-              : 9, // NOTE: perc20 decimals on EOS except DAI and UOS
+              : [tokens.ethereum.mainnet.USDT, tokens.ethereum.mainnet.USDC].includes(this.nativeContractAddress)
+              ? 6
+              : 9,
             this.hostContractAddress,
-            this.pToken === constants.pTokens.pWETH ? 'peth' : this.pToken,
-            { blocksBehind, expireSeconds, permission }
+            this.pToken === pTokens.pWETH ? 'peth' : this.pToken,
+            { blocksBehind, expireSeconds, permission, actor }
           )
 
-          promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
-          hostTxHash = eosTxReceipt.transaction_id
+          promiEvent.eventEmitter.emit('hostTxConfirmed', eosOrTelosTxReceipt)
+          hostTxHash = eosOrTelosTxReceipt.transaction_id
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
-        const nativeTxReceipt = await eth.waitForTransactionConfirmation(this.web3, incomingTxReport.broadcast_tx_hash)
+        const nativeTxReceipt = await eth.waitForTransactionConfirmation(
+          this.hostApi,
+          incomingTxReport.broadcast_tx_hash
+        )
         promiEvent.eventEmitter.emit('nativeTxConfirmed', nativeTxReceipt)
 
         promiEvent.resolve({
@@ -197,13 +269,11 @@ export class pERC20 extends NodeSelector {
         } = await this.selectedNode.getInfo()
         this.nativeContractAddress = eth.addHexPrefix(native_smart_contract_address)
         this.hostContractAddress =
-          this.hostBlockchain === constants.blockchains.Eosio
+          this.hostBlockchain === constants.blockchains.Eosio || this.hostBlockchain === constants.blockchains.Telos
             ? host_smart_contract_address
             : eth.addHexPrefix(host_smart_contract_address)
         this.nativeVaultAddress = native_vault_address ? eth.addHexPrefix(native_vault_address) : null
       }
-
-      return this.nativeContractAddress
     } catch (_err) {
       throw new Error(`Error during loading data: ${_err.message}`)
     }
