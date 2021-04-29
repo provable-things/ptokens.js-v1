@@ -59,7 +59,8 @@ import {
   pUSDT,
   pUSDC,
   pRVN,
-  pOPEN
+  pOPEN,
+  OCP
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -142,7 +143,8 @@ const pTokens = {
   pUSDT,
   pUSDC,
   pRVN,
-  pOPEN
+  pOPEN,
+  OCP
 }
 
 export { blockchains, networks, pTokens, tokens }

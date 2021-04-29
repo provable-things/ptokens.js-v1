@@ -36,6 +36,7 @@
     "ptokens-pdoge": "^0.10.0",
     "ptokens-peosio-token": "^0.10.0",
     "ptokens-perc20": "^0.10.0",
+    "ptokens-pbep20": "^0.10.0",
     "ptokens-pltc": "^0.10.0",
     "ptokens-prvn": "^0.10.0",
     "ptokens-providers": "^0.10.0",

@@ -241,7 +241,8 @@ export interface pTokens {
   pUSDC: string,
   pUSDT: string,
   pRVN: string,
-  pOPEN: string
+  pOPEN: string,
+  OCP: string
 }
 
 export interface EthereumMainnetTokens {
@@ -275,6 +276,10 @@ export interface EthereumMainnetTokens {
   OPEN: string
 }
 
+export interface BinanceSmartChainMainnetTokens {
+  OCP: string
+}
+
 export interface TelosMainnetTokens {
   TELOS: string
 }
@@ -296,10 +301,15 @@ export interface EosioTokens {
   mainnet: EosioMainnetTokens
 }
 
+export interface BinanceSmartChainTokens {
+  mainnet: BinanceSmartChainMainnetTokens
+}
+
 export interface Tokens {
   ethereum: EthereumTokens,
   eosio: EosioTokens,
-  telos: TelosTokens
+  telos: TelosTokens,
+  'binance-smart-chain': BinanceSmartChainTokens
 }
 
 export interface Constants {
@@ -465,7 +475,6 @@ export interface DogeUtils {
 }
 
 export const doge: LtcUtils
-
 
 // ltc
 export interface RavencoinUtxoList extends Array<RavencoinUtxo> {}

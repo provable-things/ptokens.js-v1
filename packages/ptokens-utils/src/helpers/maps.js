@@ -59,7 +59,8 @@ import {
   pUSDC,
   pUSDT,
   pRVN,
-  pOPEN
+  pOPEN,
+  OCP
 } from './names'
 
 export const blockchainTypes = {
@@ -132,7 +133,8 @@ export const pTokenNativeBlockchain = {
   pusdc: Ethereum,
   pusdt: Ethereum,
   prvn: Ravencoin,
-  popen: Ethereum
+  popen: Ethereum,
+  ocp: BinanceSmartChain
 }
 
 export const networkLabels = {
@@ -223,5 +225,6 @@ export const pTokensAvailables = [
   pUSDT,
   pUSDC,
   pRVN,
-  pOPEN
+  pOPEN,
+  OCP
 ]

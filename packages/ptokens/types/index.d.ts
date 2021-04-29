@@ -12,6 +12,7 @@ import { pBTCConfigs } from 'ptokens-pbtc'
 import { pLTCConfigs } from 'ptokens-pltc'
 import { pRVNConfigs } from 'ptokens-prvn'
 import { pERC20Configs } from 'ptokens-perc20'
+import { pBEP20Configs } from 'ptokens-pbep20'
 import { pEosioTokenConfigs } from 'ptokens-peosio-token'
 import { pDOGEConfigs} from 'ptokens-pdoge'
 import { HttpProvider } from 'ptokens-providers'
@@ -21,6 +22,7 @@ export interface pTokensConfigs {
   pltc?: pLTCConfigs | pLTCConfigs[],
   prvn?: pRVNConfigs | pRVNConfigs[],
   perc20?: pERC20Configs | pERC20Configs[],
+  pbep20?: pBEP20Configs | pBEP20Configs[],
   pdoge?: pDOGEConfigs | pDOGEConfigs[],
   peosioToken?: pEosioTokenConfigs | pEosioTokenConfigs[]
 }
