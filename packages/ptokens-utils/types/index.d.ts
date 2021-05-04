@@ -242,7 +242,8 @@ export interface pTokens {
   pUSDT: string,
   pRVN: string,
   pOPEN: string,
-  OCP: string
+  OCP: string,
+  ANRX: string
 }
 
 export interface EthereumMainnetTokens {
@@ -273,7 +274,8 @@ export interface EthereumMainnetTokens {
   CGG: string,
   USDC: string,
   USDT: string,
-  OPEN: string
+  OPEN: string,
+  ANRX: string
 }
 
 export interface BinanceSmartChainMainnetTokens {
