@@ -60,14 +60,13 @@ export class pBTC extends NodeSelector {
    */
   async getDepositAddress(_hostAddress) {
     const isValidAddress = {
-      [constants.blockchains.Ethereum]: (_address) => Web3Utils.isAddress(_address),
-      [constants.blockchains.BinanceSmartChain]: (_address) => Web3Utils.isAddress(_address),
-      [constants.blockchains.Xdai]: (_address) => Web3Utils.isAddress(_address),
-      [constants.blockchains.Polygon]: (_address) => Web3Utils.isAddress(_address),
-      [constants.blockchains.Eosio]: (_address) => eos.isValidAccountName(_address)
+      [constants.blockchains.Ethereum]: _address => Web3Utils.isAddress(_address),
+      [constants.blockchains.BinanceSmartChain]: _address => Web3Utils.isAddress(_address),
+      [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
+      [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
+      [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address)
     }
-    if (!isValidAddress[this.hostBlockchain](_hostAddress))
-      throw new Error('Invalid host account')
+    if (!isValidAddress[this.hostBlockchain](_hostAddress)) throw new Error('Invalid host account')
 
     const selectedNode = this.selectedNode ? this.selectedNode : await this.select()
     if (!selectedNode) throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
