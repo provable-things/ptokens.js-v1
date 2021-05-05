@@ -59,14 +59,15 @@ export class pBTC extends NodeSelector {
    * @param {String} _hostAddress
    */
   async getDepositAddress(_hostAddress) {
-    if (this.hostBlockchain === constants.blockchains.Ethereum && !Web3Utils.isAddress(_hostAddress))
-      throw new Error('Invalid Ethereum Address')
-
-    if (this.hostBlockchain === constants.blockchains.BinanceSmartChain && !Web3Utils.isAddress(_hostAddress))
-      throw new Error('Invalid Binance Smart Chain Address')
-
-    if (this.hostBlockchain === constants.blockchains.Eosio && !eos.isValidAccountName(_hostAddress))
-      throw new Error('Invalid EOS Account')
+    const isValidAddress = {
+      [constants.blockchains.Ethereum]: (_address) => Web3Utils.isAddress(_address),
+      [constants.blockchains.BinanceSmartChain]: (_address) => Web3Utils.isAddress(_address),
+      [constants.blockchains.Xdai]: (_address) => Web3Utils.isAddress(_address),
+      [constants.blockchains.Polygon]: (_address) => Web3Utils.isAddress(_address),
+      [constants.blockchains.Eosio]: (_address) => eos.isValidAccountName(_address)
+    }
+    if (!isValidAddress[this.hostBlockchain](_hostAddress))
+      throw new Error('Invalid host account')
 
     const selectedNode = this.selectedNode ? this.selectedNode : await this.select()
     if (!selectedNode) throw new Error('No node selected. Impossible to generate a BTC deposit Address.')
@@ -119,7 +120,8 @@ export class pBTC extends NodeSelector {
         if (
           this.hostBlockchain === constants.blockchains.Ethereum ||
           this.hostBlockchain === constants.blockchains.BinanceSmartChain ||
-          this.hostBlockchain === constants.blockchains.Xdai
+          this.hostBlockchain === constants.blockchains.Xdai ||
+          this.hostBlockchain === constants.blockchains.Polygon
         ) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
