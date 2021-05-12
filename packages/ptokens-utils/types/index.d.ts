@@ -243,7 +243,8 @@ export interface pTokens {
   pRVN: string,
   pOPEN: string,
   OCP: string,
-  ANRX: string
+  ANRX: string,
+  TFF: string
 }
 
 export interface EthereumMainnetTokens {
@@ -279,7 +280,8 @@ export interface EthereumMainnetTokens {
 }
 
 export interface BinanceSmartChainMainnetTokens {
-  OCP: string
+  OCP: string,
+  TFF: string
 }
 
 export interface TelosMainnetTokens {

@@ -45,7 +45,8 @@ export default {
   },
   [BinanceSmartChain]: {
     [BinanceSmartChainMainnet]: {
-      OCP: '0x3c70260eee0a2bfc4b375feb810325801f289fbd'
+      OCP: '0x3c70260eee0a2bfc4b375feb810325801f289fbd',
+      TFF: '0x2d69c55baecefc6ec815239da0a985747b50db6e'
     }
   },
   [Eosio]: {

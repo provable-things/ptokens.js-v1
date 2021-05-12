@@ -61,7 +61,8 @@ import {
   pRVN,
   pOPEN,
   OCP,
-  ANRX
+  ANRX,
+  TFF
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -146,7 +147,8 @@ const pTokens = {
   pRVN,
   pOPEN,
   OCP,
-  ANRX
+  ANRX,
+  TFF
 }
 
 export { blockchains, networks, pTokens, tokens }

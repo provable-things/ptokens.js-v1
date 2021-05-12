@@ -22,7 +22,7 @@ export class pBEP20 extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const { bscPrivateKey, bscProvider, ethPrivateKey, ethProvider } = _configs
+    const { bscPrivateKey, bscProvider, ethPrivateKey, ethProvider, polygonPrivateKey, polygonProvider } = _configs
 
     if (bscProvider) this.web3 = new Web3(bscProvider)
     if (bscPrivateKey) {
@@ -38,6 +38,15 @@ export class pBEP20 extends NodeSelector {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
+
+    if (polygonProvider) this.hostApi = new Web3(polygonProvider)
+    if (polygonPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(polygonPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(polygonPrivateKey)
     } else {
       this.hostPrivateKey = null
     }
@@ -61,7 +70,10 @@ export class pBEP20 extends NodeSelector {
           return
         }
 
-        if (this.hostBlockchain === blockchains.Ethereum && !Web3Utils.isAddress(_hostAccount)) {
+        if (
+          (this.hostBlockchain === blockchains.Ethereum || this.hostBlockchain === blockchains.Polygon) &&
+          !Web3Utils.isAddress(_hostAccount)
+        ) {
           promiEvent.reject('Invalid host account')
           return
         }
@@ -148,7 +160,7 @@ export class pBEP20 extends NodeSelector {
         const { redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
-        if (this.hostBlockchain === blockchains.Ethereum) {
+        if (this.hostBlockchain === blockchains.Ethereum || this.hostBlockchain === blockchains.Polygon) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
