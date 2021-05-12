@@ -97,7 +97,7 @@ export class NodeSelector {
         const index = Math.floor(Math.random() * filteredNodesByFeature.length)
         const selectedNode = filteredNodesByFeature[index]
         if (
-          (await this.checkConnection(selectedNode.webapi, timeout || 5000, {
+          (await this.checkConnection(selectedNode.webapi, timeout || 30000, {
             pToken: optionalPtoken,
             nativeNetwork: optionalNativeNetwork,
             nativeBlockchain: optionalNativeBlockchain,
