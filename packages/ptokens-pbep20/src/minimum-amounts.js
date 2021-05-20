@@ -11,5 +11,11 @@ export default {
     redeem: {
       [constants.blockchains.Polygon]: 1000000000
     }
+  },
+  [constants.tokens['binance-smart-chain'].mainnet.SAFEMOON]: {
+    issue: 1,
+    redeem: {
+      [constants.blockchains.Ethereum]: 1000000000
+    }
   }
 }

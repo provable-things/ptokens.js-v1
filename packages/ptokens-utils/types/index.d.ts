@@ -244,7 +244,8 @@ export interface pTokens {
   pOPEN: string,
   OCP: string,
   ANRX: string,
-  TFF: string
+  TFF: string,
+  pSAFEMOON: string
 }
 
 export interface EthereumMainnetTokens {
@@ -281,7 +282,8 @@ export interface EthereumMainnetTokens {
 
 export interface BinanceSmartChainMainnetTokens {
   OCP: string,
-  TFF: string
+  TFF: string,
+  SAFEMOON: string
 }
 
 export interface TelosMainnetTokens {

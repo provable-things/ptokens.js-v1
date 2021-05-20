@@ -62,7 +62,8 @@ import {
   pOPEN,
   OCP,
   ANRX,
-  TFF
+  TFF,
+  pSAFEMOON
 } from './names'
 
 export const blockchainTypes = {
@@ -138,7 +139,8 @@ export const pTokenNativeBlockchain = {
   popen: Ethereum,
   ocp: BinanceSmartChain,
   anrx: Ethereum,
-  tff: BinanceSmartChain
+  tff: BinanceSmartChain,
+  psafemoon: BinanceSmartChain
 }
 
 export const networkLabels = {
@@ -232,5 +234,6 @@ export const pTokensAvailables = [
   pOPEN,
   OCP,
   ANRX,
-  TFF
+  TFF,
+  pSAFEMOON
 ]

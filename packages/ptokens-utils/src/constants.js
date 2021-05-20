@@ -62,7 +62,8 @@ import {
   pOPEN,
   OCP,
   ANRX,
-  TFF
+  TFF,
+  pSAFEMOON
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -148,7 +149,8 @@ const pTokens = {
   pOPEN,
   OCP,
   ANRX,
-  TFF
+  TFF,
+  pSAFEMOON
 }
 
 export { blockchains, networks, pTokens, tokens }
