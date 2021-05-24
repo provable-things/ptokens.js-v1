@@ -123,7 +123,9 @@ export class pEosioToken extends NodeSelector {
                   quantity: eos.getAmountInEosFormat(
                     _amount,
                     this.pToken === constants.pTokens.IQ ? 3 : 4,
-                    this.pToken === constants.pTokens.IQ || this.pToken === constants.pTokens.TLOS
+                    this.pToken === constants.pTokens.IQ ||
+                      this.pToken === constants.pTokens.TLOS ||
+                      this.pToken === constants.pTokens.EFX
                       ? this.pToken.toUpperCase()
                       : this.pToken.slice(1).toUpperCase()
                   ),

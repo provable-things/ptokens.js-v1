@@ -53,7 +53,8 @@ export default {
   [Eosio]: {
     [EosioMainnet]: {
       EOS: 'eosio.token',
-      IQ: 'everipediaiq'
+      IQ: 'everipediaiq',
+      EFX: 'effecttokens'
     }
   },
   [Telos]: {

@@ -245,7 +245,8 @@ export interface pTokens {
   OCP: string,
   ANRX: string,
   TFF: string,
-  pSAFEMOON: string
+  pSAFEMOON: string,
+  EFX: string
 }
 
 export interface EthereumMainnetTokens {
@@ -296,7 +297,8 @@ export interface TelosTokens {
 
 export interface EosioMainnetTokens {
   EOS: string,
-  IQ: string
+  IQ: string,
+  EFX: string
 }
 
 export interface EthereumTokens {
