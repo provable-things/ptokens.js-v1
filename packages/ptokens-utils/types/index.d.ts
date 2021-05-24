@@ -244,7 +244,8 @@ export interface pTokens {
   pOPEN: string,
   OCP: string,
   ANRX: string,
-  TFF: string
+  TFF: string,
+  EFX: string
 }
 
 export interface EthereumMainnetTokens {
@@ -294,7 +295,8 @@ export interface TelosTokens {
 
 export interface EosioMainnetTokens {
   EOS: string,
-  IQ: string
+  IQ: string,
+  EFX: string
 }
 
 export interface EthereumTokens {
