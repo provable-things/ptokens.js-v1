@@ -59,7 +59,8 @@ export default {
   },
   [Telos]: {
     [TelosMainnet]: {
-      TLOS: 'eosio.token'
+      TLOS: 'eosio.token',
+      SEEDS: 'token.seeds'
     }
   }
 }

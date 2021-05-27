@@ -246,7 +246,8 @@ export interface pTokens {
   ANRX: string,
   TFF: string,
   pSAFEMOON: string,
-  EFX: string
+  EFX: string,
+  pSEEDS: string
 }
 
 export interface EthereumMainnetTokens {
@@ -288,7 +289,8 @@ export interface BinanceSmartChainMainnetTokens {
 }
 
 export interface TelosMainnetTokens {
-  TELOS: string
+  TELOS: string,
+  SEEDS: string
 }
 
 export interface TelosTokens {
