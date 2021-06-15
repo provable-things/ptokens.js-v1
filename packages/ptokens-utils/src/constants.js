@@ -23,6 +23,8 @@ import {
   XdaiMainnet,
   Ravencoin,
   RavencoinMainnet,
+  Lbry,
+  LbryMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -65,7 +67,8 @@ import {
   TFF,
   pSAFEMOON,
   EFX,
-  pSEEDS
+  pSEEDS,
+  pLBC
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -83,7 +86,8 @@ const blockchains = {
   BinanceSmartChain,
   Polygon,
   Xdai,
-  Ravencoin
+  Ravencoin,
+  Lbry
 }
 
 /**
@@ -106,7 +110,8 @@ const networks = {
   BinanceSmartChainMainnet,
   PolygonMainnet,
   XdaiMainnet,
-  RavencoinMainnet
+  RavencoinMainnet,
+  LbryMainnet
 }
 
 /**
@@ -154,7 +159,8 @@ const pTokens = {
   TFF,
   pSAFEMOON,
   EFX,
-  pSEEDS
+  pSEEDS,
+  pLBC
 }
 
 export { blockchains, networks, pTokens, tokens }

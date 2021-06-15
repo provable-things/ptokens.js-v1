@@ -23,6 +23,8 @@ import {
   XdaiMainnet,
   Ravencoin,
   RavencoinMainnet,
+  Lbry,
+  LbryMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -65,7 +67,8 @@ import {
   TFF,
   pSAFEMOON,
   EFX,
-  pSEEDS
+  pSEEDS,
+  pLBC
 } from './names'
 
 export const blockchainTypes = {
@@ -86,7 +89,9 @@ export const blockchainTypes = {
   polygon: Polygon,
   xdai: Xdai,
   ravencoin: Ravencoin,
-  rvn: Ravencoin
+  rvn: Ravencoin,
+  lbc: Lbry,
+  lbry: Lbry
 }
 
 export const blockchainShortTypes = {
@@ -100,7 +105,9 @@ export const blockchainShortTypes = {
   matic: 'polygon',
   polygon: 'polygon',
   xdai: 'xdai',
-  ravencoin: 'rvn'
+  ravencoin: 'rvn',
+  lbc: 'lbc',
+  lbry: 'lbc'
 }
 
 export const pTokenNativeBlockchain = {
@@ -144,7 +151,8 @@ export const pTokenNativeBlockchain = {
   tff: BinanceSmartChain,
   psafemoon: BinanceSmartChain,
   efx: Eosio,
-  pseeds: Telos
+  pseeds: Telos,
+  plbc: Lbry
 }
 
 export const networkLabels = {
@@ -190,6 +198,9 @@ export const networkLabels = {
   ravencoin: {
     mainnet: RavencoinMainnet,
     ravencoin: RavencoinMainnet
+  },
+  lbry: {
+    mainnet: LbryMainnet
   }
 }
 
@@ -241,5 +252,6 @@ export const pTokensAvailables = [
   TFF,
   pSAFEMOON,
   EFX,
-  pSEEDS
+  pSEEDS,
+  pLBC
 ]

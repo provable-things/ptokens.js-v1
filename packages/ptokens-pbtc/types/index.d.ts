@@ -23,7 +23,8 @@ export interface pBTCConfigs {
   eosPrivateKey?: string,
   eosRpc?: string | JsonRpc,
   eosSignatureProvider?: JsSignatureProvider
-  defaultNode?: Node
+  defaultNode?: Node,
+  pToken?: string
 }
 
 /*

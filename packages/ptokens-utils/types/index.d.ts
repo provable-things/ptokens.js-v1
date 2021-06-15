@@ -184,7 +184,8 @@ export interface Blockchains {
   BinanceSmartChain: string,
   Polygon: string,
   Xdai: string,
-  Ravencoin: string
+  Ravencoin: string,
+  Lbry: string
 }
 
 export interface Networks {
@@ -203,7 +204,8 @@ export interface Networks {
   BinanceSmartChainMainnet: string,
   PolygonMainnet: string,
   XdaiMainnet: string,
-  RavecoinMainnet: string
+  RavecoinMainnet: string,
+  LbryMainnet: string
 }
 
 export interface pTokens {
@@ -247,7 +249,8 @@ export interface pTokens {
   TFF: string,
   pSAFEMOON: string,
   EFX: string,
-  pSEEDS: string
+  pSEEDS: string,
+  pLBC: string
 }
 
 export interface EthereumMainnetTokens {
