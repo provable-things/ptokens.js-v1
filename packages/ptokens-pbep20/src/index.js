@@ -150,7 +150,10 @@ export class pBEP20 extends NodeSelector {
           return
         }
 
-        if (this.nativeBlockchain === blockchains.Ethereum && !Web3Utils.isAddress(_nativeAccount)) {
+        if (
+          this.nativeBlockchain === blockchains.Ethereum ||
+          (this.nativeBlockchain === blockchains.Polygon && !Web3Utils.isAddress(_nativeAccount))
+        ) {
           promiEvent.reject('Invalid native account')
           return
         }

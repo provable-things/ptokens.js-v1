@@ -250,7 +250,8 @@ export interface pTokens {
   pSAFEMOON: string,
   EFX: string,
   pSEEDS: string,
-  pLBC: string
+  pLBC: string,
+  USDO: string
 }
 
 export interface EthereumMainnetTokens {
@@ -288,7 +289,8 @@ export interface EthereumMainnetTokens {
 export interface BinanceSmartChainMainnetTokens {
   OCP: string,
   TFF: string,
-  SAFEMOON: string
+  SAFEMOON: string,
+  USDO: string
 }
 
 export interface TelosMainnetTokens {

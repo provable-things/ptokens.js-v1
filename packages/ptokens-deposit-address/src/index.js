@@ -67,12 +67,20 @@ bitcoin.networks.ravencoin = {
 
 bitcoin.networks.lbc = {
   pubKeyHash: 0x55,
-  scriptHash: 0x7a,
+  scriptHash: 0x7a
 }
 
 const {
   constants: {
-    networks: { BitcoinMainnet, BitcoinTestnet, LitecoinMainnet, LitecoinTestnet, DogecoinMainnet, RavencoinMainnet, LbryMainnet },
+    networks: {
+      BitcoinMainnet,
+      BitcoinTestnet,
+      LitecoinMainnet,
+      LitecoinTestnet,
+      DogecoinMainnet,
+      RavencoinMainnet,
+      LbryMainnet
+    },
     blockchains: { Bitcoin, Litecoin, Dogecoin, Ravencoin, Lbry }
   }
 } = utils

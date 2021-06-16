@@ -68,7 +68,8 @@ import {
   pSAFEMOON,
   EFX,
   pSEEDS,
-  pLBC
+  pLBC,
+  USDO
 } from './names'
 
 export const blockchainTypes = {
@@ -152,7 +153,8 @@ export const pTokenNativeBlockchain = {
   psafemoon: BinanceSmartChain,
   efx: Eosio,
   pseeds: Telos,
-  plbc: Lbry
+  plbc: Lbry,
+  usdo: USDO
 }
 
 export const networkLabels = {
@@ -253,5 +255,6 @@ export const pTokensAvailables = [
   pSAFEMOON,
   EFX,
   pSEEDS,
-  pLBC
+  pLBC,
+  USDO
 ]

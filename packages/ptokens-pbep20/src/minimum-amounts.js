@@ -17,5 +17,11 @@ export default {
     redeem: {
       [constants.blockchains.Ethereum]: 1000000000
     }
+  },
+  [constants.tokens['binance-smart-chain'].mainnet.USDO]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.Polygon]: 1000000000
+    }
   }
 }
