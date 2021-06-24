@@ -25,6 +25,9 @@ import {
   RavencoinMainnet,
   Lbry,
   LbryMainnet,
+  Ultra,
+  UltraMainnet,
+  UltraTestnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -88,7 +91,8 @@ const blockchains = {
   Polygon,
   Xdai,
   Ravencoin,
-  Lbry
+  Lbry,
+  Ultra
 }
 
 /**
@@ -112,7 +116,9 @@ const networks = {
   PolygonMainnet,
   XdaiMainnet,
   RavencoinMainnet,
-  LbryMainnet
+  LbryMainnet,
+  UltraMainnet,
+  UltraTestnet
 }
 
 /**

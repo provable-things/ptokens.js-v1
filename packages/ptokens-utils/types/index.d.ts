@@ -185,7 +185,8 @@ export interface Blockchains {
   Polygon: string,
   Xdai: string,
   Ravencoin: string,
-  Lbry: string
+  Lbry: string,
+  Ultra: string
 }
 
 export interface Networks {
@@ -205,7 +206,9 @@ export interface Networks {
   PolygonMainnet: string,
   XdaiMainnet: string,
   RavecoinMainnet: string,
-  LbryMainnet: string
+  LbryMainnet: string,
+  UltraMainnet: string,
+  UltraTestnet: string
 }
 
 export interface pTokens {

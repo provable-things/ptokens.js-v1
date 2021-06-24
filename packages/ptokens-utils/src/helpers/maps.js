@@ -25,6 +25,9 @@ import {
   RavencoinMainnet,
   Lbry,
   LbryMainnet,
+  Ultra,
+  UltraMainnet,
+  UltraTestnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -92,7 +95,9 @@ export const blockchainTypes = {
   ravencoin: Ravencoin,
   rvn: Ravencoin,
   lbc: Lbry,
-  lbry: Lbry
+  lbry: Lbry,
+  ultra: Ultra,
+  uos: Ultra
 }
 
 export const blockchainShortTypes = {
@@ -108,7 +113,8 @@ export const blockchainShortTypes = {
   xdai: 'xdai',
   ravencoin: 'rvn',
   lbc: 'lbc',
-  lbry: 'lbc'
+  lbry: 'lbc',
+  ultra: 'ultra'
 }
 
 export const pTokenNativeBlockchain = {
@@ -203,6 +209,10 @@ export const networkLabels = {
   },
   lbry: {
     mainnet: LbryMainnet
+  },
+  ultra: {
+    mainnet: UltraMainnet,
+    testnet: UltraTestnet
   }
 }
 
