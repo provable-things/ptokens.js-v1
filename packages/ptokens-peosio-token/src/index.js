@@ -84,8 +84,8 @@ export class pEosioToken extends NodeSelector {
 
         await this._loadData()
 
-        if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].issue)) {
-          promiEvent.reject(`Impossible to issue less than ${minimumAmounts[this.nativeContractAddress].issue}`)
+        if (BigNumber(_amount).isLessThan(minimumAmounts[this.pToken.toLowerCase()].issue)) {
+          promiEvent.reject(`Impossible to issue less than ${minimumAmounts[this.pToken.toLowerCase()].issue}`)
           return
         }
 
@@ -178,8 +178,8 @@ export class pEosioToken extends NodeSelector {
       try {
         await this._loadData()
 
-        if (BigNumber(_amount).isLessThan(minimumAmounts[this.nativeContractAddress].redeem)) {
-          promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.nativeContractAddress].redeem}`)
+        if (BigNumber(_amount).isLessThan(minimumAmounts[this.pToken.toLowerCase()].redeem)) {
+          promiEvent.reject(`Impossible to redeem less than ${minimumAmounts[this.pToken.toLowerCase()].redeem}`)
           return
         }
 

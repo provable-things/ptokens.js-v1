@@ -64,7 +64,7 @@ export class pBEP20 extends NodeSelector {
         const { blockchains } = constants
         await this._loadData()
 
-        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].issue
+        const minimumAmount = minimumAmounts[this.pToken.toLowerCase()].issue
         if (BigNumber(_amount).isLessThan(minimumAmount)) {
           promiEvent.reject(`Impossible to issue less than ${minimumAmount}`)
           return
@@ -144,7 +144,7 @@ export class pBEP20 extends NodeSelector {
 
         await this._loadData()
 
-        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].redeem[this.hostBlockchain]
+        const minimumAmount = minimumAmounts[this.pToken.toLowerCase()].redeem[this.hostBlockchain]
         if (BigNumber(_amount).isLessThan(minimumAmount)) {
           promiEvent.reject(`Impossible to redeem less than ${minimumAmount}`)
           return
@@ -152,7 +152,7 @@ export class pBEP20 extends NodeSelector {
 
         if (
           this.nativeBlockchain === blockchains.Ethereum ||
-          (this.nativeBlockchain === blockchains.Polygon && !Web3Utils.isAddress(_nativeAccount))
+          this.nativeBlockchain === blockchains.Polygon && !Web3Utils.isAddress(_nativeAccount)
         ) {
           promiEvent.reject('Invalid native account')
           return
