@@ -60,7 +60,7 @@
     "typescript": "^3.7.5"
   },
   "lint-staged": {
-    "*.js": "lerna run lint",
-    "*.+(js|ts|json)": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\""
+    "*.js": "eslint --cache --fix",
+    "*.+(js|ts|json)": "prettier --config ./.prettierrc --write"
   }
 }
