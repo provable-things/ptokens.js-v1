@@ -1,20 +1,20 @@
 import { constants } from 'ptokens-utils'
 export default {
-  [constants.tokens.ethereum.mainnet.ETH]: {
+  [constants.pTokens.pETH]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
       [constants.blockchains.Telos]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.WETH]: {
+  [constants.pTokens.pWETH]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
       [constants.blockchains.Telos]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.PNT]: {
+  [constants.pTokens.PNT]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
@@ -23,159 +23,160 @@ export default {
       [constants.blockchains.Xdai]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet.LINK]: {
+  [constants.pTokens.pLINK]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
       [constants.blockchains.Telos]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.MKR]: {
+  [constants.pTokens.pMKR]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.YFI]: {
+  [constants.pTokens.pYFI]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.PTERIA]: {
+  [constants.pTokens.PTERIA]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001,
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet.UNI]: {
+  [constants.pTokens.pUNI]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.BAND]: {
+  [constants.pTokens.pBAND]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.BAL]: {
+  [constants.pTokens.PBAL]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.COMP]: {
+  [constants.pTokens.pCOMP]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.SNX]: {
+  [constants.pTokens.pSNX]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.OMG]: {
+  [constants.pTokens.pOMG]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.DAI]: {
+  [constants.pTokens.pDAI]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.ANT]: {
+  [constants.pTokens.pANT]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.LRC]: {
+  [constants.pTokens.pLRC]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.UOS]: {
+  [constants.pTokens.pUOS]: {
     issue: 1,
     redeem: {
-      [constants.blockchains.Eosio]: 0.000000001
+      [constants.blockchains.Eosio]: 0.000000001,
+      [constants.blockchains.Ultra]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.BAT]: {
+  [constants.pTokens.pBAT]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.REP]: {
+  [constants.pTokens.pREP]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.ZRX]: {
+  [constants.pTokens.pZRX]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.PNK]: {
+  [constants.pTokens.pPNK]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.Eosio]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.OPIUM]: {
+  [constants.pTokens.pOPIUM]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet['DEFI++']]: {
+  [constants.pTokens.pDEFIPlusPlus]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet.BCP]: {
+  [constants.pTokens.pBCP]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet.CGG]: {
+  [constants.pTokens.CGG]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet.USDC]: {
+  [constants.pTokens.pUSDC]: {
     issue: 5000000,
     redeem: {
       [constants.blockchains.Telos]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.USDT]: {
+  [constants.pTokens.pUSDT]: {
     issue: 5000000,
     redeem: {
       [constants.blockchains.Telos]: 0.000000001
     }
   },
-  [constants.tokens.ethereum.mainnet.OPEN]: {
+  [constants.pTokens.pOPEN]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
     }
   },
-  [constants.tokens.ethereum.mainnet.ANRX]: {
+  [constants.pTokens.ANRX]: {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000

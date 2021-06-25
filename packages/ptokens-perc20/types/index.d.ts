@@ -8,39 +8,42 @@ import { BigNumber } from 'bignumber.js'
 import BN = require('bn.js')
 
 export interface pERC20Configs {
-  network?: string,
-  hostNetwork?: string,
-  blockchain?: string,
-  hostBlockchain?: string,
-  nativeNetwork?: string,
-  nativeBlockchain?: string,
-  ethPrivateKey?: string,
-  ethProvider?: string | object,
-  bscPrivateKey?: string,
-  bscProvider?: string | object,
-  xdaiPrivateKey?: string,
-  xdaiProvider?: string | object,
-  eosPrivateKey?: string,
-  eosRpc?: string | JsonRpc,
-  eosSignatureProvider?: JsSignatureProvider,
-  telosPrivateKey?: string,
-  telosRpc?: string | JsonRpc,
-  teolsSignatureProvider?: JsSignatureProvider,
-  defaultNode?: Node,
+  network?: string
+  hostNetwork?: string
+  blockchain?: string
+  hostBlockchain?: string
+  nativeNetwork?: string
+  nativeBlockchain?: string
+  ethPrivateKey?: string
+  ethProvider?: string | object
+  bscPrivateKey?: string
+  bscProvider?: string | object
+  xdaiPrivateKey?: string
+  xdaiProvider?: string | object
+  eosPrivateKey?: string
+  eosRpc?: string | JsonRpc
+  eosSignatureProvider?: JsSignatureProvider
+  telosPrivateKey?: string
+  telosRpc?: string | JsonRpc
+  telosSignatureProvider?: JsSignatureProvider
+  ultraPrivateKey?: string
+  ultraRpc?: string | JsonRpc
+  ultraSignatureProvider?: JsSignatureProvider
+  defaultNode?: Node
   pToken: string
 }
 
 export interface IssueOptions {
-  gas: number,
-  gasPrice: number | string | BigNumber,
+  gas: number
+  gasPrice: number | string | BigNumber
 }
 
 export interface RedeemOptions {
-  blocksBehind?: number,
-  expireSeconds?: number,
-  permission?: string,
-  actor?: string,
-  gasPrice?: string | number,
+  blocksBehind?: number
+  expireSeconds?: number
+  permission?: string
+  actor?: string
+  gasPrice?: string | number
   gas?: string | number
 }
 
@@ -69,14 +72,22 @@ export class pERC20 extends NodeSelector {
 
   hostApi?: Api
 
-  issue(_amount: string | BigNumber | BN, _hostAddress: string, _options: IssueOptions): PromiEvent<object | TransactionReceipt | Report | Result>
+  issue(
+    _amount: string | BigNumber | BN,
+    _hostAddress: string,
+    _options: IssueOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
 
-  redeem(_amount: number | string, _nativeAddress: string, _options: RedeemOptions): PromiEvent<object | Report | TransactionReceipt | Result>
+  redeem(
+    _amount: number | string,
+    _nativeAddress: string,
+    _options: RedeemOptions
+  ): PromiEvent<object | Report | TransactionReceipt | Result>
 }
 
 export interface Result {
-  amount: number,
-  nativeTx: string,
-  hostTx: string,
-  to: string,
+  amount: number
+  nativeTx: string
+  hostTx: string
+  to: string
 }

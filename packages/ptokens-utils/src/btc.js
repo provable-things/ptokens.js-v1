@@ -94,9 +94,8 @@ const monitorUtxoByAddress = async (
         return false
       }
     } catch (_err) {
-      if (retries === _maxRetries) {
-        throw _err
-      }
+      if (retries === _maxRetries) throw _err
+
       retries += 1
       return false
     }
