@@ -1,5 +1,6 @@
 import {
   EthereumMainnet,
+  EthereumRopsten,
   EosioMainnet,
   Ethereum,
   Eosio,
@@ -39,23 +40,32 @@ export default {
       CGG: '0x1fe24f25b1cf609b9c4e7e12d802e3640dfa5e43',
       USDT: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-      OPEN: '0x69e8b9528cabda89fe846c67675b5d73d463a916'
+      OPEN: '0x69e8b9528cabda89fe846c67675b5d73d463a916',
+      ANRX: '0xcae72a7a0fd9046cf6b165ca54c9e3a3872109e0'
+    },
+    [EthereumRopsten]: {
+      UOS: '0x92829bc1a5b405fe14a0b7c38a5bad9a91b1dc02'
     }
   },
   [BinanceSmartChain]: {
     [BinanceSmartChainMainnet]: {
-      OCP: '0x3c70260eee0a2bfc4b375feb810325801f289fbd'
+      OCP: '0x3c70260eee0a2bfc4b375feb810325801f289fbd',
+      TFF: '0x2d69c55baecefc6ec815239da0a985747b50db6e',
+      SAFEMOON: '0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3',
+      USDO: '0x5801d0e1c7d977d78e4890880b8e579eb4943276'
     }
   },
   [Eosio]: {
     [EosioMainnet]: {
       EOS: 'eosio.token',
-      IQ: 'everipediaiq'
+      IQ: 'everipediaiq',
+      EFX: 'effecttokens'
     }
   },
   [Telos]: {
     [TelosMainnet]: {
-      TLOS: 'eosio.token'
+      TLOS: 'eosio.token',
+      SEEDS: 'token.seeds'
     }
   }
 }

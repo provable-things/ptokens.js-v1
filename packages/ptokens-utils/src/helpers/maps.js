@@ -23,6 +23,11 @@ import {
   XdaiMainnet,
   Ravencoin,
   RavencoinMainnet,
+  Lbry,
+  LbryMainnet,
+  Ultra,
+  UltraMainnet,
+  UltraTestnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -60,7 +65,14 @@ import {
   pUSDT,
   pRVN,
   pOPEN,
-  OCP
+  OCP,
+  ANRX,
+  TFF,
+  pSAFEMOON,
+  EFX,
+  pSEEDS,
+  pLBC,
+  USDO
 } from './names'
 
 export const blockchainTypes = {
@@ -81,7 +93,11 @@ export const blockchainTypes = {
   polygon: Polygon,
   xdai: Xdai,
   ravencoin: Ravencoin,
-  rvn: Ravencoin
+  rvn: Ravencoin,
+  lbc: Lbry,
+  lbry: Lbry,
+  ultra: Ultra,
+  uos: Ultra
 }
 
 export const blockchainShortTypes = {
@@ -95,7 +111,10 @@ export const blockchainShortTypes = {
   matic: 'polygon',
   polygon: 'polygon',
   xdai: 'xdai',
-  ravencoin: 'rvn'
+  ravencoin: 'rvn',
+  lbc: 'lbc',
+  lbry: 'lbc',
+  ultra: 'ultra'
 }
 
 export const pTokenNativeBlockchain = {
@@ -134,7 +153,14 @@ export const pTokenNativeBlockchain = {
   pusdt: Ethereum,
   prvn: Ravencoin,
   popen: Ethereum,
-  ocp: BinanceSmartChain
+  ocp: BinanceSmartChain,
+  anrx: Ethereum,
+  tff: BinanceSmartChain,
+  psafemoon: BinanceSmartChain,
+  efx: Eosio,
+  pseeds: Telos,
+  plbc: Lbry,
+  usdo: USDO
 }
 
 export const networkLabels = {
@@ -180,6 +206,13 @@ export const networkLabels = {
   ravencoin: {
     mainnet: RavencoinMainnet,
     ravencoin: RavencoinMainnet
+  },
+  lbry: {
+    mainnet: LbryMainnet
+  },
+  ultra: {
+    mainnet: UltraMainnet,
+    testnet: UltraTestnet
   }
 }
 
@@ -226,5 +259,12 @@ export const pTokensAvailables = [
   pUSDC,
   pRVN,
   pOPEN,
-  OCP
+  OCP,
+  ANRX,
+  TFF,
+  pSAFEMOON,
+  EFX,
+  pSEEDS,
+  pLBC,
+  USDO
 ]

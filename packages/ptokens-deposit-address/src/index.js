@@ -65,10 +65,23 @@ bitcoin.networks.ravencoin = {
   wif: 0x80
 }
 
+bitcoin.networks.lbc = {
+  pubKeyHash: 0x55,
+  scriptHash: 0x7a
+}
+
 const {
   constants: {
-    networks: { BitcoinMainnet, BitcoinTestnet, LitecoinMainnet, LitecoinTestnet, DogecoinMainnet, RavencoinMainnet },
-    blockchains: { Bitcoin, Litecoin, Dogecoin, Ravencoin }
+    networks: {
+      BitcoinMainnet,
+      BitcoinTestnet,
+      LitecoinMainnet,
+      LitecoinTestnet,
+      DogecoinMainnet,
+      RavencoinMainnet,
+      LbryMainnet
+    },
+    blockchains: { Bitcoin, Litecoin, Dogecoin, Ravencoin, Lbry }
   }
 } = utils
 const NETWORKS = {
@@ -85,6 +98,9 @@ const NETWORKS = {
   },
   [Ravencoin]: {
     [RavencoinMainnet]: bitcoin.networks.ravencoin
+  },
+  [Lbry]: {
+    [LbryMainnet]: bitcoin.networks.lbc
   }
 }
 
@@ -184,7 +200,7 @@ export class DepositAddress {
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(nativeTxId, promiEvent.eventEmitter)
       const hostTxReceipt = await utils[
-        shortHostBlockchain === 'bsc' ? 'eth' : shortHostBlockchain
+        shortHostBlockchain === 'bsc' || shortHostBlockchain === 'polygon' ? 'eth' : shortHostBlockchain
       ].waitForTransactionConfirmation(
         this.hostApi,
         broadcastedHostTxReport.broadcast_tx_hash,

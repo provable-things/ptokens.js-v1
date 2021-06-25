@@ -9,3 +9,4 @@ coverage/
 
 #documentation build
 site/
+.eslintcache

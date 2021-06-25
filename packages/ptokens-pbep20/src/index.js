@@ -22,7 +22,7 @@ export class pBEP20 extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const { bscPrivateKey, bscProvider, ethPrivateKey, ethProvider } = _configs
+    const { bscPrivateKey, bscProvider, ethPrivateKey, ethProvider, polygonPrivateKey, polygonProvider } = _configs
 
     if (bscProvider) this.web3 = new Web3(bscProvider)
     if (bscPrivateKey) {
@@ -41,6 +41,15 @@ export class pBEP20 extends NodeSelector {
     } else {
       this.hostPrivateKey = null
     }
+
+    if (polygonProvider) this.hostApi = new Web3(polygonProvider)
+    if (polygonPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(polygonPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(polygonPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
   }
   /**
    * @param {String|BigNumber|BN} _amount in wei
@@ -55,13 +64,16 @@ export class pBEP20 extends NodeSelector {
         const { blockchains } = constants
         await this._loadData()
 
-        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].issue
+        const minimumAmount = minimumAmounts[this.pToken.toLowerCase()].issue
         if (BigNumber(_amount).isLessThan(minimumAmount)) {
           promiEvent.reject(`Impossible to issue less than ${minimumAmount}`)
           return
         }
 
-        if (this.hostBlockchain === blockchains.Ethereum && !Web3Utils.isAddress(_hostAccount)) {
+        if (
+          (this.hostBlockchain === blockchains.Ethereum || this.hostBlockchain === blockchains.Polygon) &&
+          !Web3Utils.isAddress(_hostAccount)
+        ) {
           promiEvent.reject('Invalid host account')
           return
         }
@@ -132,13 +144,16 @@ export class pBEP20 extends NodeSelector {
 
         await this._loadData()
 
-        const minimumAmount = minimumAmounts[this.nativeContractAddress.toLowerCase()].redeem[this.hostBlockchain]
+        const minimumAmount = minimumAmounts[this.pToken.toLowerCase()].redeem[this.hostBlockchain]
         if (BigNumber(_amount).isLessThan(minimumAmount)) {
           promiEvent.reject(`Impossible to redeem less than ${minimumAmount}`)
           return
         }
 
-        if (this.nativeBlockchain === blockchains.Ethereum && !Web3Utils.isAddress(_nativeAccount)) {
+        if (
+          this.nativeBlockchain === blockchains.Ethereum ||
+          this.nativeBlockchain === blockchains.Polygon && !Web3Utils.isAddress(_nativeAccount)
+        ) {
           promiEvent.reject('Invalid native account')
           return
         }
@@ -148,7 +163,7 @@ export class pBEP20 extends NodeSelector {
         const { redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
-        if (this.hostBlockchain === blockchains.Ethereum) {
+        if (this.hostBlockchain === blockchains.Ethereum || this.hostBlockchain === blockchains.Polygon) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {

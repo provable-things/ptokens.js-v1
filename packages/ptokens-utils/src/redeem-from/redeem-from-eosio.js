@@ -1,7 +1,7 @@
 import { getAmountInEosFormat } from '../eos'
 import pTokenOnEosAbi from '../abi/pTokenOnEOSContractAbi.json'
 
-const redeemFromEosio = async (_api, _amount, _nativeAddress, _decimals, _contractAddress, _pToken, _options) => {
+const redeemFromEosio = (_api, _amount, _nativeAddress, _decimals, _contractAddress, _pToken, _options) => {
   try {
     const { blocksBehind, expireSeconds, permission, actor } = _options
     _api.cachedAbis.set(_contractAddress, {

@@ -5,10 +5,7 @@ module.exports = {
       impliedStrict: true
     }
   },
-  extends: [
-    'eslint:recommended',
-    'standard'
-  ],
+  extends: ['eslint:recommended', 'standard'],
   env: {
     es6: true,
     mocha: true,
@@ -16,12 +13,12 @@ module.exports = {
   },
   // ADD ANY GLOBALS HERE!
   globals: {
-    'jest': true
+    jest: true
   },
   rules: {
     quotes: [2, 'single', { avoidEscape: true }],
     'promise/param-names': 0,
-    'camelcase': 1,
+    camelcase: 1,
     'prefer-promise-reject-errors': 1,
     'no-template-curly-in-string': 2,
     'no-unused-expressions': 1, //for testing
@@ -33,11 +30,14 @@ module.exports = {
     // best practices
     'accessor-pairs': 1,
     'array-callback-return': 0, // this best practice calls out the use of map over forEach
-    'complexity': 2,
-    'curly': [1, 'multi-or-nest', 'consistent'],
-    'space-before-function-paren': ['error', {
-      'named': 'never',
-    }],
+    complexity: 1,
+    curly: [1, 'multi-or-nest', 'consistent'],
+    'space-before-function-paren': [
+      'error',
+      {
+        named: 'never'
+      }
+    ],
     'standard/computed-property-even-spacing': 0, //prettier compatibility
     'dot-location': [2, 'property'],
     'no-empty-function': 1,
@@ -56,18 +56,14 @@ module.exports = {
     'no-new-wrappers': 1,
     'new-cap': 0, //since token name start with 'p'
     'no-param-reassign': 2,
-    'no-redeclare': [2, { 'builtinGlobals': true }],
-    'no-shadow': [1, {
-      'builtinGlobals': true,
-      'allow': [
-        'done',
-        'resolve',
-        'reject',
-        'TextEncoder',
-        'TextDecoder',
-        'cb',
-      ]
-    }],
+    'no-redeclare': [2, { builtinGlobals: true }],
+    'no-shadow': [
+      1,
+      {
+        builtinGlobals: true,
+        allow: ['done', 'resolve', 'reject', 'TextEncoder', 'TextDecoder', 'cb']
+      }
+    ],
     'no-return-await': 1,
     'no-script-url': 1,
     'no-self-compare': 1,
@@ -80,31 +76,33 @@ module.exports = {
     'no-useless-concat': 2,
     'no-useless-escape': 2,
     'no-useless-return': 0,
-    'no-console': ['error', {
-      allow: [
-        'warn',
-        'error',
-        'info',
-      ]
-    }],
-    'no-warning-comments': [1, {
-      terms: [
-        'fixme',
-        'todo',
-      ],
-      location: 'anywhere' // useful to highlight comments that need addressing
-    }],
+    'no-console': [
+      'error',
+      {
+        allow: ['warn', 'error', 'info']
+      }
+    ],
+    'no-warning-comments': [
+      1,
+      {
+        terms: ['fixme', 'todo'],
+        location: 'anywhere' // useful to highlight comments that need addressing
+      }
+    ],
     'require-await': 1,
     'vars-on-top': 2,
     'wrap-iife': [2, 'inside'],
     // strict mode
-    'strict': [2, 'safe'],
+    strict: [2, 'safe'],
     // variables
-    'no-use-before-define': [2, {
-      variables: false, //in order to declare arrow functions in alphabetical order
-      functions: true,
-      classes: true
-    }],
+    'no-use-before-define': [
+      2,
+      {
+        variables: false, //in order to declare arrow functions in alphabetical order
+        functions: true,
+        classes: true
+      }
+    ],
     // node
     'handle-callback-err': 1,
     'no-buffer-constructor': 2,

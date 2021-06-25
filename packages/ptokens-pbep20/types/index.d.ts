@@ -14,6 +14,8 @@ export interface pBEP20Configs {
   nativeBlockchain?: string,
   ethPrivateKey?: string,
   ethProvider?: string | object,
+  polygonPrivateKey?: string,
+  polygonProvider?: string | object,
   bscPrivateKey?: string,
   bscProvider?: string | object,
   defaultNode?: Node,

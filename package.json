@@ -14,7 +14,8 @@
     "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\"",
     "update-version": "lerna publish --skip-git --skip-npm --force-publish '*'",
     "test": "lerna run test",
-    "prepare": "npm run build && npm run bootstrap && npm run dtslint"
+    "prepare": "npm run build && npm run bootstrap && npm run dtslint",
+    "postinstall": "./scripts/postinstall.sh"
   },
   "keywords": [
     "ptokens",
@@ -34,6 +35,8 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@types/node": "^12.6.1",
     "babel-jest": "^24.9.0",
     "eslint": "^5.14.1",
@@ -44,8 +47,10 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "husky": "^6.0.0",
     "jest": "^24.8.0",
     "lerna": "^3.13.2",
+    "lint-staged": "^11.0.0",
     "prettier": "^1.19.1",
     "rollup": "^1.8.0",
     "rollup-plugin-auto-external": "^2.0.0",
@@ -53,5 +58,9 @@
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-json": "^4.0.0",
     "typescript": "^3.7.5"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.+(js|ts|json)": "prettier --config ./.prettierrc --write"
   }
 }

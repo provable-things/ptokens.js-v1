@@ -60,35 +60,43 @@ const monitorUtxoByAddress = async (
   _eventEmitter,
   _pollingTime,
   _broadcastEventName,
-  _confirmationEventName
+  _confirmationEventName,
+  _maxRetries = 5
 ) => {
   let isBroadcasted = false
   let txId = null
   let utxos = []
+  let retries = 0
   await polling(async () => {
     // NOTE: an user could make 2 payments to the same depositAddress -> utxos.length could become > 0 but with a wrong utxo
+    try {
+      utxos = await _makeEsploraApiCall(_network, 'GET', `/address/${_address}/utxo`)
 
-    utxos = await _makeEsploraApiCall(_network, 'GET', `/address/${_address}/utxo`)
+      if (utxos.length > 0) {
+        if (utxos[0].status.confirmed) {
+          if (!isBroadcasted) {
+            _eventEmitter.emit(_broadcastEventName, utxos[0])
+            _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+          }
 
-    if (utxos.length > 0) {
-      if (utxos[0].status.confirmed) {
-        if (!isBroadcasted) {
+          _eventEmitter.emit(_confirmationEventName, utxos[0])
+          _eventEmitter.emit('onBtcTxConfirmed', utxos[0])
+
+          txId = utxos[0].txid
+          return true
+        } else if (!isBroadcasted) {
+          isBroadcasted = true
           _eventEmitter.emit(_broadcastEventName, utxos[0])
           _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+          return false
         }
-
-        _eventEmitter.emit(_confirmationEventName, utxos[0])
-        _eventEmitter.emit('onBtcTxConfirmed', utxos[0])
-
-        txId = utxos[0].txid
-        return true
-      } else if (!isBroadcasted) {
-        isBroadcasted = true
-        _eventEmitter.emit(_broadcastEventName, utxos[0])
-        _eventEmitter.emit('onBtcTxBroadcasted', utxos[0])
+      } else {
         return false
       }
-    } else {
+    } catch (_err) {
+      if (retries === _maxRetries) throw _err
+
+      retries += 1
       return false
     }
   }, _pollingTime)
