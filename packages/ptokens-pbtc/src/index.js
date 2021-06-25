@@ -14,7 +14,7 @@ export class pBTC extends NodeSelector {
   constructor(_configs) {
     const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
       _configs,
-      nativeBlockchain || constants.blockchains.Bitcoin
+      _configs.nativeBlockchain || constants.blockchains.Bitcoin
     )
 
     super({
