@@ -9,12 +9,12 @@ const zeroAddress = '0x0000000000000000000000000000000000000000'
 /**
  * @param {String} _string
  */
-const addHexPrefix = _string => (isHexPrefixed(_string) ? _string : HEX_PREFIX + _string)
+const addHexPrefix = _string => isHexPrefixed(_string) ? _string : HEX_PREFIX + _string
 
 /**
  * @param {String} _string
  */
-const removeHexPrefix = _string => (isHexPrefixed(_string) ? _string.substr(2) : _string)
+const removeHexPrefix = _string => isHexPrefixed(_string) ? _string.substr(2) : _string
 
 /**
  *
@@ -40,9 +40,9 @@ const getAccount = _web3 =>
     _web3.eth.defaultAccount
       ? _resolve(_web3.eth.defaultAccount)
       : _web3.eth
-          .getAccounts()
-          .then(accounts => _resolve(accounts[0]))
-          .catch(err => _reject(err))
+        .getAccounts()
+        .then(accounts => _resolve(accounts[0]))
+        .catch(err => _reject(err))
   })
 
 /**
@@ -141,8 +141,8 @@ const sendSignedMethodTx = (_web3, _method, _options, _params) => {
       const { rawTransaction } = await _web3.eth.accounts.signTransaction(
         {
           nonce,
-          gasPrice: gasPrice || (await _web3.eth.getGasPrice()),
-          gasLimit: gas || (await getGasLimit(_web3)),
+          gasPrice: gasPrice || await _web3.eth.getGasPrice(),
+          gasLimit: gas || await getGasLimit(_web3),
           to: contractAddress,
           value,
           data: contract.methods[_method](..._params).encodeABI()
@@ -172,11 +172,15 @@ const sendSignedMethodTx = (_web3, _method, _options, _params) => {
 const waitForTransactionConfirmation = async (_web3, _tx, _pollingTime = 5000) => {
   let receipt = null
   await polling(async () => {
-    receipt = await _web3.eth.getTransactionReceipt(_tx)
+    try {
+      receipt = await _web3.eth.getTransactionReceipt(_tx)
 
-    if (!receipt) return false
-    else if (receipt.status) return true
-    else return false
+      if (!receipt) return false
+      else if (receipt.status) return true
+      else return false
+    } catch (_err) {
+      return false
+    }
   }, _pollingTime)
   return receipt
 }
