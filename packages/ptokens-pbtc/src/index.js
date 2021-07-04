@@ -64,7 +64,8 @@ export class pBTC extends NodeSelector {
       [constants.blockchains.BinanceSmartChain]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
-      [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address)
+      [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
+      [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address)
     }
     if (!isValidAddress[this.hostBlockchain](_hostAddress)) throw new Error('Invalid host account')
 
