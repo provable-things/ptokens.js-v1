@@ -137,14 +137,15 @@ export class pERC20 extends NodeSelector {
           return
         }
 
-        if (
-          (this.hostBlockchain === blockchains.Eosio ||
-            this.hostBlockchain === blockchains.Telos ||
-            this.hostBlockchain === blockchains.Ultra) &&
-            !eos.isValidAccountName(_hostAccount) ||
-          (this.hostBlockchain === blockchains.BinanceSmartChain || this.hostBlockchain === blockchains.Xdai) &&
-            !Web3Utils.isAddress(_hostAccount)
-        ) {
+        const isValidAddress = {
+          [constants.blockchains.Ethereum]: _address => Web3Utils.isAddress(_address),
+          [constants.blockchains.BinanceSmartChain]: _address => Web3Utils.isAddress(_address),
+          [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
+          [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
+          [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
+          [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address)
+        }
+        if (!isValidAddress[this.hostBlockchain](_hostAccount)) {
           promiEvent.reject('Invalid host account')
           return
         }
