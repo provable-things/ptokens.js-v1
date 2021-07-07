@@ -1,6 +1,6 @@
 {
   "name": "ptokens-node",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "repo holding the code for interacting with a Node",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-node",
   "main": "dist/ptokens-node.cjs.js",
@@ -30,8 +30,8 @@
     "eventemitter3": "^4.0.0",
     "jsonrpc-lite": "^2.2.0",
     "light-async-polling": "^1.0.2",
-    "ptokens-providers": "^0.12.0",
-    "ptokens-utils": "^0.12.0",
+    "ptokens-providers": "^0.13.0",
+    "ptokens-utils": "^0.13.0",
     "uuid": "^8.3.1",
     "web3-core-promievent": "^1.2.5-rc.0"
   },
