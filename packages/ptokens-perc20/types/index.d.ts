@@ -78,9 +78,23 @@ export class pERC20 extends NodeSelector {
     _options: IssueOptions
   ): PromiEvent<object | TransactionReceipt | Report | Result>
 
+  issueWithMetadata(
+    _amount: string | BigNumber | BN,
+    _hostAddress: string,
+    _metadata: string,
+    _options: IssueOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
+
   redeem(
     _amount: number | string,
     _nativeAddress: string,
+    _options: RedeemOptions
+  ): PromiEvent<object | Report | TransactionReceipt | Result>
+
+  redeemWithMetadata(
+    _amount: number | string,
+    _nativeAddress: string,
+    _metadata: string,
     _options: RedeemOptions
   ): PromiEvent<object | Report | TransactionReceipt | Result>
 }

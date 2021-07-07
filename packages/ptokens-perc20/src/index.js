@@ -97,12 +97,33 @@ export class pERC20 extends NodeSelector {
 
     this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
+
   /**
    * @param {String|BigNumber|BN} _amount in wei
    * @param {String} _hostAccount
    * @param {IssueOptions} _options
    */
   issue(_amount, _hostAccount, _options = {}) {
+    return this._issue(_amount, _hostAccount, null, _options)
+  }
+
+  /**
+   * @param {String|BigNumber|BN} _amount in wei
+   * @param {String} _hostAccount
+   * @param {String} _metadata
+   * @param {IssueOptions} _options
+   */
+  issueWithMetadata(_amount, _hostAccount, _metadata, _options = {}) {
+    return this._issue(_amount, _hostAccount, _metadata, _options)
+  }
+
+  /**
+   * @param {String|BigNumber|BN} _amount in wei
+   * @param {String} _hostAccount
+   * @param {String} _metadata
+   * @param {IssueOptions} _options
+   */
+  _issue(_amount, _hostAccount, _metadata, _options = {}) {
     const promiEvent = Web3PromiEvent()
     const start = async () => {
       try {
@@ -144,7 +165,13 @@ export class pERC20 extends NodeSelector {
                 contractAddress: eth.addHexPrefix(this.nativeVaultAddress),
                 value: this._peginEth ? _amount : 0
               },
-              this._peginEth ? [_hostAccount] : [_amount, this.nativeContractAddress, _hostAccount]
+              _metadata
+                ? this._peginEth
+                  ? [_hostAccount, _metadata]
+                  : [_amount, this.nativeContractAddress, _hostAccount, _metadata]
+                : this._peginEth
+                  ? [_hostAccount]
+                  : [_amount, this.nativeContractAddress, _hostAccount]
             )
               .once('transactionHash', _hash => {
                 ethTxHash = _hash
@@ -188,6 +215,27 @@ export class pERC20 extends NodeSelector {
    * @param {Options} _options
    */
   redeem(_amount, _nativeAccount, _options = {}) {
+    return this._redeem(_amount, _nativeAccount, null, _options)
+  }
+
+  /**
+   * @param {String|BigNumber|BN} _amount in wei
+   * @param {String} _nativeAccount
+   * @param {String} _metadata
+   * @param {IssueOptions} _options
+   */
+  redeemWithMetadata(_amount, _nativeAccount, _metadata, _options = {}) {
+    return this._redeem(_amount, _nativeAccount, _metadata, _options)
+  }
+
+  /**
+   *
+   * @param {string|number} _amount
+   * @param {string} _nativeAccount
+   * @param {string} _metadata
+   * @param {Options} _options
+   */
+  _redeem(_amount, _nativeAccount, _metadata, _options = {}) {
     const promiEvent = Web3PromiEvent()
 
     const start = async () => {
@@ -223,6 +271,7 @@ export class pERC20 extends NodeSelector {
               contractAddress: this.hostContractAddress,
               value: 0
             },
+            _metadata ? [_amount, _metadata, _nativeAccount] : [_amount, _nativeAccount],
             [_amount, _nativeAccount],
             promiEvent,
             'hostTxBroadcasted'
@@ -238,7 +287,7 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.Ultra
         ) {
           const decimals = mapDecimals[this.pToken.toLowerCase()][this.hostBlockchain][this.hostNetwork]
-          const eosOrTelosTxReceipt = await redeemFromEosio(
+          const hostTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
             _nativeAccount,
@@ -248,8 +297,8 @@ export class pERC20 extends NodeSelector {
             { blocksBehind, expireSeconds, permission, actor }
           )
 
-          promiEvent.eventEmitter.emit('hostTxConfirmed', eosOrTelosTxReceipt)
-          hostTxHash = eosOrTelosTxReceipt.transaction_id
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.transaction_id
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
