@@ -13,9 +13,9 @@ export default {
     }
   },
   [constants.pTokens.pSAFEMOON]: {
-    issue: 1,
+    issue: 1e16,
     redeem: {
-      [constants.blockchains.Ethereum]: 1000000000
+      [constants.blockchains.Ethereum]: 1e16
     }
   },
   [constants.pTokens.USDO]: {
