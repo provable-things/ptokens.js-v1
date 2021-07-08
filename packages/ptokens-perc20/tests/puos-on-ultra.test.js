@@ -41,7 +41,7 @@ beforeEach(() => {
   })
 })
 
-test('Should issue 0.02 pULTRA', async () => {
+test('Should issue 0.02 pUOS', async () => {
   const amountToIssue = BigNumber('0.02').multipliedBy(10 ** 4)
   let ethTxBrodcasted = false
   let ethTxIsConfirmed = false
@@ -123,7 +123,7 @@ test('Should issue 0.02 pULTRA', async () => {
   expect(ultraTxConfirmed).to.equal(true)
 })
 
-test('Should issue 0.02 pULTRA with metadata', async () => {
+test('Should issue 0.02 pUOS with metadata', async () => {
   const amountToIssue = BigNumber('0.02').multipliedBy(10 ** 4)
   let ethTxBrodcasted = false
   let ethTxIsConfirmed = false
@@ -210,7 +210,7 @@ test('Should issue 0.02 pULTRA with metadata', async () => {
   expect(ultraTxConfirmed).to.equal(true)
 })
 
-test('Should redeem 0.001 pULTRA', async () => {
+test('Should redeem 0.001 pUOS', async () => {
   const amountToRedeem = 0.001
   let ultraTxConfirmed = false
   let nodeHasReceivedTx = false
