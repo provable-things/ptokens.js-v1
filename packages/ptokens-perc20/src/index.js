@@ -287,12 +287,13 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.Telos ||
           this.hostBlockchain === blockchains.Ultra
         ) {
-          const decimals = mapDecimals[this.pToken.toLowerCase()][this.hostBlockchain][this.hostNetwork]
           const hostTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
             _nativeAccount,
-            decimals || 9,
+            mapDecimals[this.pToken.toLowerCase()]
+              ? mapDecimals[this.pToken.toLowerCase()][this.hostBlockchain][this.hostNetwork]
+              : 9,
             this.hostContractAddress,
             this.pToken === pTokens.pWETH ? 'peth' : this.pToken,
             { blocksBehind, expireSeconds, permission, actor }
