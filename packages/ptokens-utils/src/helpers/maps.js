@@ -160,7 +160,7 @@ export const pTokenNativeBlockchain = {
   efx: Eosio,
   pseeds: Telos,
   plbc: Lbry,
-  usdo: USDO
+  usdo: BinanceSmartChain
 }
 
 export const networkLabels = {
