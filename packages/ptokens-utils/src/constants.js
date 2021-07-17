@@ -72,7 +72,8 @@ import {
   EFX,
   pSEEDS,
   pLBC,
-  USDO
+  USDO,
+  GALA
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -168,7 +169,8 @@ const pTokens = {
   EFX,
   pSEEDS,
   pLBC,
-  USDO
+  USDO,
+  GALA
 }
 
 export { blockchains, networks, pTokens, tokens }

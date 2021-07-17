@@ -284,6 +284,7 @@ export interface pTokens {
   pSEEDS: string
   pLBC: string
   USDO: string
+  GALA: string
 }
 
 export interface EthereumMainnetTokens {
@@ -316,6 +317,7 @@ export interface EthereumMainnetTokens {
   USDT: string
   OPEN: string
   ANRX: string
+  GALA: string
 }
 
 export interface EthereumRopstenTokens {

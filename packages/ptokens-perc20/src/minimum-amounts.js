@@ -104,10 +104,10 @@ export default {
     }
   },
   [constants.pTokens.pUOS]: {
-    issue: 1,
+    issue: 50000000000000000000,
     redeem: {
-      [constants.blockchains.Eosio]: 0.000000001,
-      [constants.blockchains.Ultra]: 0.000000001
+      [constants.blockchains.Eosio]: 50,
+      [constants.blockchains.Ultra]: 50
     }
   },
   [constants.pTokens.pBAT]: {
@@ -180,6 +180,12 @@ export default {
     issue: 1000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 1000000000
+    }
+  },
+  [constants.pTokens.GALA]: {
+    issue: 1,
+    redeem: {
+      [constants.blockchains.BinanceSmartChain]: 10000000000
     }
   }
 }
