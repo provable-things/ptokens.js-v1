@@ -1,6 +1,6 @@
 import { constants } from 'ptokens-utils'
 export default {
-  [constants.pTokens.EOS]: {
+  [constants.pTokens.pEOS]: {
     issue: 0.0001,
     redeem: 1000000000
   },
