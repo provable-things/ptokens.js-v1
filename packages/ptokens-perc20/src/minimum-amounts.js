@@ -104,7 +104,7 @@ export default {
     }
   },
   [constants.pTokens.pUOS]: {
-    issue: 50000000000000000000,
+    issue: 500000,
     redeem: {
       [constants.blockchains.Eosio]: 50,
       [constants.blockchains.Ultra]: 50
