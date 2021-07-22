@@ -273,7 +273,6 @@ export class pERC20 extends NodeSelector {
               value: 0
             },
             _metadata ? [_amount, _metadata, _nativeAccount] : [_amount, _nativeAccount],
-            [_amount, _nativeAccount],
             promiEvent,
             'hostTxBroadcasted'
           )
