@@ -22,8 +22,8 @@ export default {
     }
   },
   [pTokens.pUSDC]: {
-    [blockchains.Eosio]: {
-      [networks.EosioMainnet]: 6
+    [blockchains.Telos]: {
+      [networks.TelosMainnet]: 6
     }
   }
 }
