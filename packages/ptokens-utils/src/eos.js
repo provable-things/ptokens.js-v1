@@ -4,7 +4,6 @@ import fetch from 'node-fetch'
 import encoding from 'text-encoding'
 import polling from 'light-async-polling'
 
-const EOS_MAX_ACCOUNT_LENGTH = 12
 const EOS_TRANSACTION_EXECUTED = 'executed'
 
 /**
@@ -46,7 +45,7 @@ const getAmountInEosFormat = (_amount, _decimals = 4, symbol) => {
  * @param {String} _accountName
  */
 const isValidAccountName = _accountName =>
-  new RegExp('(([a-z]|[1-5]|.){0,12})$').test(_accountName) && _accountName.length <= EOS_MAX_ACCOUNT_LENGTH
+  new RegExp('(^[a-z1-5.]{0,11}[a-z1-5]$)|(^[a-z1-5.]{12}[a-j1-5]$)').test(_accountName)
 
 /**
  * @param {Api} _api
