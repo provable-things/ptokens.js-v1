@@ -97,13 +97,13 @@ export class NodeSelector {
         const index = Math.floor(Math.random() * filteredNodesByFeature.length)
         const selectedNode = filteredNodesByFeature[index]
         if (
-          (await this.checkConnection(selectedNode.webapi, timeout || 30000, {
+          await this.checkConnection(selectedNode.webapi, timeout || 30000, {
             pToken: optionalPtoken,
             nativeNetwork: optionalNativeNetwork,
             nativeBlockchain: optionalNativeBlockchain,
             hostNetwork: optionalHostNetwork,
             hostBlockchain: optionalHostBlockchain
-          })) &&
+          }) &&
           !nodesNotReachable.includes(selectedNode)
         ) {
           return this.setSelectedNode(selectedNode.webapi, {
@@ -165,7 +165,7 @@ export class NodeSelector {
     this.nativeBlockchain = nativeBlockchain
     this.nativeNetwork = nativeNetwork
 
-    this.selectedNode = defaultNode || null
+    this.selectedNode = defaultNode ? this.setSelectedNode(defaultNode) : null
   }
 
   /**
