@@ -28,6 +28,8 @@ import {
   Ultra,
   UltraMainnet,
   UltraTestnet,
+  Arbitrum,
+  ArbitrumMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -98,7 +100,8 @@ export const blockchainTypes = {
   lbc: Lbry,
   lbry: Lbry,
   ultra: Ultra,
-  uos: Ultra
+  uos: Ultra,
+  arbitrum: Arbitrum
 }
 
 export const blockchainShortTypes = {
@@ -115,7 +118,8 @@ export const blockchainShortTypes = {
   ravencoin: 'rvn',
   lbc: 'lbc',
   lbry: 'lbc',
-  ultra: 'ultra'
+  ultra: 'ultra',
+  arbitrum: 'arbitrum'
 }
 
 export const pTokenNativeBlockchain = {
@@ -215,6 +219,9 @@ export const networkLabels = {
   ultra: {
     mainnet: UltraMainnet,
     testnet: UltraTestnet
+  },
+  arbitrum: {
+    mainnet: ArbitrumMainnet
   }
 }
 

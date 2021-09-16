@@ -200,7 +200,9 @@ export class DepositAddress {
 
       const broadcastedHostTxReport = await this.node.monitorIncomingTransaction(nativeTxId, promiEvent.eventEmitter)
       const hostTxReceipt = await utils[
-        shortHostBlockchain === 'bsc' || shortHostBlockchain === 'polygon' ? 'eth' : shortHostBlockchain
+        shortHostBlockchain === 'bsc' || shortHostBlockchain === 'polygon' || shortHostBlockchain === 'arbitrum'
+          ? 'eth'
+          : shortHostBlockchain
       ].waitForTransactionConfirmation(
         this.hostApi,
         broadcastedHostTxReport.broadcast_tx_hash,

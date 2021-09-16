@@ -64,6 +64,7 @@ export class pBTC extends NodeSelector {
       [constants.blockchains.BinanceSmartChain]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
+      [constants.blockchains.Arbitrum]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
       [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address)
     }
@@ -123,7 +124,8 @@ export class pBTC extends NodeSelector {
           this.hostBlockchain === constants.blockchains.Ethereum ||
           this.hostBlockchain === constants.blockchains.BinanceSmartChain ||
           this.hostBlockchain === constants.blockchains.Xdai ||
-          this.hostBlockchain === constants.blockchains.Polygon
+          this.hostBlockchain === constants.blockchains.Polygon ||
+          this.hostBlockchain === constants.blockchains.Arbitrum
         ) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,

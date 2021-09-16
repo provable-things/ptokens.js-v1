@@ -35,7 +35,7 @@ test('Should not get a BTC deposit address because of invalid Eth address', asyn
   try {
     await pbtc.getDepositAddress(invalidEthAddress)
   } catch (err) {
-    expect(err.message).to.be.equal('Invalid Ethereum Address')
+    expect(err.message).to.be.equal('Invalid host account')
   }
 })
 

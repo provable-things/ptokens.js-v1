@@ -34,7 +34,7 @@ test('Should not get a BTC deposit address because of invalid EOS account', asyn
   try {
     await pbtc.getDepositAddress(invalidEosAddress)
   } catch (err) {
-    expect(err.message).to.be.equal('Invalid EOS Account')
+    expect(err.message).to.be.equal('Invalid host account')
   }
 })
 
