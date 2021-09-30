@@ -75,7 +75,8 @@ import {
   pSEEDS,
   pLBC,
   USDO,
-  GALA
+  GALA,
+  ZMT
 } from './names'
 
 export const blockchainTypes = {
@@ -166,7 +167,8 @@ export const pTokenNativeBlockchain = {
   pseeds: Telos,
   plbc: Lbry,
   usdo: BinanceSmartChain,
-  gala: Ethereum
+  gala: Ethereum,
+  pzmt: Ethereum
 }
 
 export const networkLabels = {
@@ -276,5 +278,6 @@ export const pTokensAvailables = [
   pSEEDS,
   pLBC,
   USDO,
-  GALA
+  GALA,
+  ZMT
 ]

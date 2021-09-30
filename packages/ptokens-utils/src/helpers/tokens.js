@@ -42,7 +42,8 @@ export default {
       USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       OPEN: '0x69e8b9528cabda89fe846c67675b5d73d463a916',
       ANRX: '0xcae72a7a0fd9046cf6b165ca54c9e3a3872109e0',
-      GALA: '0x15d4c048f83bd7e37d49ea4c83a07267ec4203da'
+      GALA: '0x15d4c048f83bd7e37d49ea4c83a07267ec4203da',
+      ZMT: '0xaa602dE53347579f86b996D2Add74bb6F79462b2'
     },
     [EthereumRopsten]: {
       UOS: '0x92829bc1a5b405fe14a0b7c38a5bad9a91b1dc02'
