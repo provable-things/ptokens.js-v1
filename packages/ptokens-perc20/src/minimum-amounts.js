@@ -193,5 +193,11 @@ export default {
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 10000000000
     }
+  },
+  [constants.pTokens.BIST]: {
+    issue: 1,
+    redeem: {
+      [constants.blockchains.BinanceSmartChain]: 10000000000
+    }
   }
 }
