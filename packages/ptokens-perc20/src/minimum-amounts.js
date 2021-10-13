@@ -195,7 +195,7 @@ export default {
     }
   },
   [constants.pTokens.BIST]: {
-    issue: 1,
+    issue: 10000000000,
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 10000000000
     }
