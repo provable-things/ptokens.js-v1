@@ -141,6 +141,7 @@ export class pERC20 extends NodeSelector {
           [constants.blockchains.Ethereum]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.BinanceSmartChain]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
+          [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address)
@@ -190,7 +191,11 @@ export class pERC20 extends NodeSelector {
         if (this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos)
           hostTxReceipt = await eos.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
-        if (this.hostBlockchain === blockchains.Xdai || this.hostBlockchain === blockchains.BinanceSmartChain)
+        if (
+          this.hostBlockchain === blockchains.Xdai ||
+          this.hostBlockchain === blockchains.BinanceSmartChain ||
+          this.hostBlockchain === blockchains.Polygon
+        )
           hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
@@ -262,7 +267,11 @@ export class pERC20 extends NodeSelector {
         const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
         let hostTxHash
-        if (this.hostBlockchain === blockchains.BinanceSmartChain || this.hostBlockchain === blockchains.Xdai) {
+        if (
+          this.hostBlockchain === blockchains.BinanceSmartChain ||
+          this.hostBlockchain === blockchains.Xdai ||
+          this.hostBlockchain === blockchains.Polygon
+        ) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
