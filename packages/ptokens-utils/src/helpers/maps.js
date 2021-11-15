@@ -77,7 +77,8 @@ import {
   USDO,
   GALA,
   ZMT,
-  BIST
+  BIST,
+  pVAI
 } from './names'
 
 export const blockchainTypes = {
@@ -170,7 +171,8 @@ export const pTokenNativeBlockchain = {
   usdo: BinanceSmartChain,
   gala: Ethereum,
   pzmt: Ethereum,
-  bist: Ethereum
+  bist: Ethereum,
+  pvai: BinanceSmartChain
 }
 
 export const networkLabels = {
@@ -282,5 +284,6 @@ export const pTokensAvailables = [
   USDO,
   GALA,
   ZMT,
-  BIST
+  BIST,
+  pVAI
 ]

@@ -77,7 +77,8 @@ import {
   USDO,
   GALA,
   ZMT,
-  BIST
+  BIST,
+  pVAI
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -178,7 +179,8 @@ const pTokens = {
   USDO,
   GALA,
   ZMT,
-  BIST
+  BIST,
+  pVAI
 }
 
 export { blockchains, networks, pTokens, tokens }

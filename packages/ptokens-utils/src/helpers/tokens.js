@@ -55,7 +55,8 @@ export default {
       OCP: '0x3c70260eee0a2bfc4b375feb810325801f289fbd',
       TFF: '0x2d69c55baecefc6ec815239da0a985747b50db6e',
       SAFEMOON: '0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3',
-      USDO: '0x5801d0e1c7d977d78e4890880b8e579eb4943276'
+      USDO: '0x5801d0e1c7d977d78e4890880b8e579eb4943276',
+      VAI: '0x4bd17003473389a42daf6a0a729f6fdb328bbbd7'
     }
   },
   [Eosio]: {
