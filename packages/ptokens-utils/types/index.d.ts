@@ -287,6 +287,7 @@ export interface pTokens {
   GALA: string
   BIST: string
   pVAI: string
+  WSB: string
 }
 
 export interface EthereumMainnetTokens {
@@ -333,6 +334,7 @@ export interface BinanceSmartChainMainnetTokens {
   SAFEMOON: string
   USDO: string
   VAI: string
+  WSB: string
 }
 
 export interface TelosMainnetTokens {

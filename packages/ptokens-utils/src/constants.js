@@ -78,7 +78,8 @@ import {
   GALA,
   ZMT,
   BIST,
-  pVAI
+  pVAI,
+  WSB
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -180,7 +181,8 @@ const pTokens = {
   GALA,
   ZMT,
   BIST,
-  pVAI
+  pVAI,
+  WSB
 }
 
 export { blockchains, networks, pTokens, tokens }
