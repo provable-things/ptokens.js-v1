@@ -30,6 +30,8 @@ export class pERC20 extends NodeSelector {
       bscProvider,
       xdaiPrivateKey,
       xdaiProvider,
+      polygonPrivateKey,
+      polygonProvider,
       eosPrivateKey,
       eosRpc,
       eosSignatureProvider,
@@ -64,6 +66,15 @@ export class pERC20 extends NodeSelector {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(xdaiPrivateKey))
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(xdaiPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
+
+    if (polygonProvider) this.hostApi = new Web3(polygonProvider)
+    if (polygonPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(polygonPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(polygonPrivateKey)
     } else {
       this.hostPrivateKey = null
     }
