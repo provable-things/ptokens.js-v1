@@ -40,7 +40,9 @@ export class pERC20 extends NodeSelector {
       telosSignatureProvider,
       ultraPrivateKey,
       ultraRpc,
-      ultraSignatureProvider
+      ultraSignatureProvider,
+      arbitrumPrivateKey,
+      arbitrumProvider
     } = _configs
 
     if (ethProvider) this.web3 = new Web3(ethProvider)
@@ -106,6 +108,15 @@ export class pERC20 extends NodeSelector {
       this.hostApi = eos.getApi(null, ultraRpc, null)
     }
 
+    if (arbitrumProvider) this.hostApi = new Web3(arbitrumProvider)
+    if (arbitrumPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(arbitrumPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(arbitrumPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
+
     this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
 
@@ -153,6 +164,7 @@ export class pERC20 extends NodeSelector {
           [constants.blockchains.BinanceSmartChain]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
+          [constants.blockchains.Arbitrum]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address)
@@ -164,6 +176,9 @@ export class pERC20 extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
+        const destinationChainId =
+          this.version === 'v2' ? constants.chainIds[this.hostBlockchain][this.hostNetwork] : null
+
         let ethTxHash = null
         const waitForEthTransaction = () =>
           new Promise((_resolve, _reject) => {
@@ -172,19 +187,27 @@ export class pERC20 extends NodeSelector {
               this._peginEth ? 'pegInEth' : 'pegIn',
               {
                 privateKey: this.ethPrivateKey,
-                abi: abi.pERC20Vault,
+                abi: this.version === 'v1' ? abi.pERC20Vault : abi.pERC20VaultV2,
                 gas,
                 gasPrice,
                 contractAddress: eth.addHexPrefix(this.nativeVaultAddress),
                 value: this._peginEth ? _amount : 0
               },
-              _metadata
-                ? this._peginEth
-                  ? [_hostAccount, _metadata]
-                  : [_amount, this.nativeContractAddress, _hostAccount, _metadata]
-                : this._peginEth
-                  ? [_hostAccount]
-                  : [_amount, this.nativeContractAddress, _hostAccount]
+              this._version === 'v1'
+                ? _metadata
+                  ? this._peginEth
+                    ? [_hostAccount, _metadata]
+                    : [_amount, this.nativeContractAddress, _hostAccount, _metadata]
+                  : this._peginEth
+                    ? [_hostAccount]
+                    : [_amount, this.nativeContractAddress, _hostAccount]
+                : _metadata
+                  ? this._peginEth
+                    ? [_hostAccount, destinationChainId, _metadata]
+                    : [_amount, this.nativeContractAddress, _hostAccount, _metadata, destinationChainId]
+                  : this._peginEth
+                    ? [_hostAccount, destinationChainId]
+                    : [_amount, this.nativeContractAddress, _hostAccount, destinationChainId]
             )
               .once('transactionHash', _hash => {
                 ethTxHash = _hash
@@ -281,7 +304,8 @@ export class pERC20 extends NodeSelector {
         if (
           this.hostBlockchain === blockchains.BinanceSmartChain ||
           this.hostBlockchain === blockchains.Xdai ||
-          this.hostBlockchain === blockchains.Polygon
+          this.hostBlockchain === blockchains.Polygon ||
+          this.hostBlockchain === blockchains.Arbitrum
         ) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
@@ -348,7 +372,8 @@ export class pERC20 extends NodeSelector {
         const {
           native_smart_contract_address,
           host_smart_contract_address,
-          native_vault_address
+          native_vault_address,
+          versions
         } = await this.selectedNode.getInfo()
         this.nativeContractAddress = eth.addHexPrefix(native_smart_contract_address)
         this.hostContractAddress =
@@ -358,6 +383,7 @@ export class pERC20 extends NodeSelector {
             ? host_smart_contract_address
             : eth.addHexPrefix(host_smart_contract_address)
         this.nativeVaultAddress = native_vault_address ? eth.addHexPrefix(native_vault_address) : null
+        this.version = versions && versions.network ? versions.network : 'v1'
       }
     } catch (_err) {
       throw new Error(`Error during loading data: ${_err.message}`)

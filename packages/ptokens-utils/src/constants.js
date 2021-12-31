@@ -130,6 +130,12 @@ const networks = {
   ArbitrumMainnet
 }
 
+const chainIds = {
+  [Arbitrum]: {
+    [ArbitrumMainnet]: '0x00ce98c4'
+  }
+}
+
 /**
  *
  * pTokens list
@@ -185,4 +191,4 @@ const pTokens = {
   WSB
 }
 
-export { blockchains, networks, pTokens, tokens }
+export { blockchains, networks, pTokens, tokens, chainIds }

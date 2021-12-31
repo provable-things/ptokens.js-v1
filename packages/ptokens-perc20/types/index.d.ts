@@ -68,6 +68,8 @@ export class pERC20 extends NodeSelector {
 
   hostPrivatekey?: string | null
 
+  version: string
+
   web3: Web3
 
   hostApi?: Api

@@ -21,7 +21,8 @@ export default {
       [constants.blockchains.Telos]: 0.000000001,
       [constants.blockchains.BinanceSmartChain]: 1000000000,
       [constants.blockchains.Xdai]: 1000000000,
-      [constants.blockchains.Polygon]: 1000000000
+      [constants.blockchains.Polygon]: 1000000000,
+      [constants.blockchains.Arbitrum]: 1000000000
     }
   },
   [constants.pTokens.pLINK]: {

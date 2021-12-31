@@ -216,6 +216,7 @@ export interface Blockchains {
   Ravencoin: string
   Lbry: string
   Ultra: string
+  Arbitrum: string
 }
 
 export interface Networks {
@@ -238,6 +239,7 @@ export interface Networks {
   LbryMainnet: string
   UltraMainnet: string
   UltraTestnet: string
+  ArbitrumMainnet: string
 }
 
 export interface pTokens {
@@ -370,6 +372,14 @@ export interface Tokens {
   eosio: EosioTokens
   telos: TelosTokens
   'binance-smart-chain': BinanceSmartChainTokens
+}
+
+export interface ChainIdsArbitrum {
+  mainnet: string
+}
+
+export interface ChainIds {
+  arbitrum: ChainIdsArbitrum
 }
 
 export interface Constants {

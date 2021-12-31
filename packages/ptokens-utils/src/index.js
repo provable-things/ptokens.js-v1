@@ -10,6 +10,7 @@ import * as constants from './constants'
 import { redeemFromEosio } from './redeem-from/redeem-from-eosio'
 import { redeemFromEvmCompatible } from './redeem-from/redeem-from-evm-compatible'
 import pERC20VaultContractAbi from './abi/pERC20VaultContractAbi.json'
+import pERC20VaultV2ContractAbi from './abi/pERC20VaultV2ContractAbi.json'
 import pTokenOnEosAbi from './abi/pTokenOnEOSContractAbi.json'
 import pTokenOnEthAbi from './abi/pTokenOnETHContractAbi.json'
 import EosioTokenAbi from './abi/EosioTokenAbi.json'
@@ -19,6 +20,7 @@ export default {
     pTokenOnEth: pTokenOnEthAbi,
     pTokenOnEos: pTokenOnEosAbi,
     pERC20Vault: pERC20VaultContractAbi,
+    pERC20VaultV2: pERC20VaultV2ContractAbi,
     EosioToken: EosioTokenAbi
   },
   btc,
