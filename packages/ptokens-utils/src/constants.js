@@ -131,6 +131,9 @@ const networks = {
 }
 
 const chainIds = {
+  [Ethereum]: {
+    [EthereumMainnet]: '0x005fe7f9'
+  },
   [Arbitrum]: {
     [ArbitrumMainnet]: '0x00ce98c4'
   }

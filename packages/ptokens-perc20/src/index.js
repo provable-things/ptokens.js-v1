@@ -193,7 +193,7 @@ export class pERC20 extends NodeSelector {
                 contractAddress: eth.addHexPrefix(this.nativeVaultAddress),
                 value: this._peginEth ? _amount : 0
               },
-              this._version === 'v1'
+              this.version === 'v1'
                 ? _metadata
                   ? this._peginEth
                     ? [_hostAccount, _metadata]
@@ -300,6 +300,9 @@ export class pERC20 extends NodeSelector {
 
         const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
+        const destinationChainId =
+          this.version === 'v2' ? constants.chainIds[this.nativeBlockchain][this.nativeNetwork] : null
+
         let hostTxHash
         if (
           this.hostBlockchain === blockchains.BinanceSmartChain ||
@@ -316,9 +319,16 @@ export class pERC20 extends NodeSelector {
               contractAddress: this.hostContractAddress,
               value: 0
             },
-            _metadata ? [_amount, _metadata, _nativeAccount] : [_amount, _nativeAccount],
+            this.version === 'v1'
+              ? _metadata
+                ? [_amount, _metadata, _nativeAccount]
+                : [_amount, _nativeAccount]
+              : _metadata
+                ? [_amount, _metadata, _nativeAccount, destinationChainId]
+                : [_amount, _nativeAccount, destinationChainId],
             promiEvent,
-            'hostTxBroadcasted'
+            'hostTxBroadcasted',
+            this.version || 'v1'
           )
 
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
