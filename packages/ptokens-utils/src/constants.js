@@ -30,6 +30,8 @@ import {
   UltraTestnet,
   Arbitrum,
   ArbitrumMainnet,
+  Luxochain,
+  LuxochainMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -79,7 +81,8 @@ import {
   ZMT,
   BIST,
   pVAI,
-  WSB
+  WSB,
+  LUXO
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -100,7 +103,8 @@ const blockchains = {
   Ravencoin,
   Lbry,
   Ultra,
-  Arbitrum
+  Arbitrum,
+  Luxochain
 }
 
 /**
@@ -127,7 +131,8 @@ const networks = {
   LbryMainnet,
   UltraMainnet,
   UltraTestnet,
-  ArbitrumMainnet
+  ArbitrumMainnet,
+  LuxochainMainnet
 }
 
 const chainIds = {
@@ -136,6 +141,9 @@ const chainIds = {
   },
   [Arbitrum]: {
     [ArbitrumMainnet]: '0x00ce98c4'
+  },
+  [Luxochain]: {
+    [LuxochainMainnet]: '0x00d5beb0'
   }
 }
 
@@ -191,7 +199,8 @@ const pTokens = {
   ZMT,
   BIST,
   pVAI,
-  WSB
+  WSB,
+  LUXO
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

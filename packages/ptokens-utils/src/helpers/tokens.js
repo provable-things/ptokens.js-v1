@@ -44,7 +44,8 @@ export default {
       ANRX: '0xcae72a7a0fd9046cf6b165ca54c9e3a3872109e0',
       GALA: '0x15d4c048f83bd7e37d49ea4c83a07267ec4203da',
       ZMT: '0xaa602dE53347579f86b996D2Add74bb6F79462b2',
-      BIST: '0x6e8908cfa881c9f6f2c64d3436e7b80b1bf0093f'
+      BIST: '0x6e8908cfa881c9f6f2c64d3436e7b80b1bf0093f',
+      LUXO: '0xd39a2cecba2657e125ba6a5c98ad2f6b6d7e83fd'
     },
     [EthereumRopsten]: {
       UOS: '0x92829bc1a5b405fe14a0b7c38a5bad9a91b1dc02'

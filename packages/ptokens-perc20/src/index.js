@@ -42,7 +42,9 @@ export class pERC20 extends NodeSelector {
       ultraRpc,
       ultraSignatureProvider,
       arbitrumPrivateKey,
-      arbitrumProvider
+      arbitrumProvider,
+      luxochainPrivateKey,
+      luxochainProvider
     } = _configs
 
     if (ethProvider) this.web3 = new Web3(ethProvider)
@@ -117,6 +119,15 @@ export class pERC20 extends NodeSelector {
       this.hostPrivateKey = null
     }
 
+    if (luxochainProvider) this.hostApi = new Web3(luxochainProvider)
+    if (luxochainPrivateKey) {
+      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(luxochainPrivateKey))
+      this.hostApi.eth.defaultAccount = account.address
+      this.hostPrivateKey = eth.addHexPrefix(luxochainPrivateKey)
+    } else {
+      this.hostPrivateKey = null
+    }
+
     this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
 
@@ -165,6 +176,7 @@ export class pERC20 extends NodeSelector {
           [constants.blockchains.Xdai]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Arbitrum]: _address => Web3Utils.isAddress(_address),
+          [constants.blockchains.Luxochain]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address)
@@ -228,7 +240,9 @@ export class pERC20 extends NodeSelector {
         if (
           this.hostBlockchain === blockchains.Xdai ||
           this.hostBlockchain === blockchains.BinanceSmartChain ||
-          this.hostBlockchain === blockchains.Polygon
+          this.hostBlockchain === blockchains.Polygon ||
+          this.hostBlockchain === blockchains.Arbitrum ||
+          this.hostBlockchain === blockchains.Luxochain
         )
           hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
@@ -308,7 +322,8 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.BinanceSmartChain ||
           this.hostBlockchain === blockchains.Xdai ||
           this.hostBlockchain === blockchains.Polygon ||
-          this.hostBlockchain === blockchains.Arbitrum
+          this.hostBlockchain === blockchains.Arbitrum ||
+          this.hostBlockchain === blockchains.Luxochain
         ) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,

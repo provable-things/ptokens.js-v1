@@ -217,6 +217,7 @@ export interface Blockchains {
   Lbry: string
   Ultra: string
   Arbitrum: string
+  Luxochain: string
 }
 
 export interface Networks {
@@ -240,6 +241,7 @@ export interface Networks {
   UltraMainnet: string
   UltraTestnet: string
   ArbitrumMainnet: string
+  LuxochainMainnet: string
 }
 
 export interface pTokens {
@@ -290,6 +292,7 @@ export interface pTokens {
   BIST: string
   pVAI: string
   WSB: string
+  LUXO: string
 }
 
 export interface EthereumMainnetTokens {
@@ -324,13 +327,14 @@ export interface EthereumMainnetTokens {
   ANRX: string
   GALA: string
   BIST: string
+  LUXO: string
 }
 
 export interface EthereumRopstenTokens {
   UOS: string
 }
 
-export interface BinanceSmartChainMainnetTokens {
+export interface BinanceSmartC0x00d5beb0hainMainnetTokens {
   OCP: string
   TFF: string
   SAFEMOON: string

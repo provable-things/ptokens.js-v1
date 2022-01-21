@@ -30,6 +30,8 @@ import {
   UltraTestnet,
   Arbitrum,
   ArbitrumMainnet,
+  Luxochain,
+  LuxochainMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -79,7 +81,8 @@ import {
   ZMT,
   BIST,
   pVAI,
-  WSB
+  WSB,
+  LUXO
 } from './names'
 
 export const blockchainTypes = {
@@ -105,7 +108,8 @@ export const blockchainTypes = {
   lbry: Lbry,
   ultra: Ultra,
   uos: Ultra,
-  arbitrum: Arbitrum
+  arbitrum: Arbitrum,
+  luxochain: Luxochain
 }
 
 export const blockchainShortTypes = {
@@ -123,7 +127,8 @@ export const blockchainShortTypes = {
   lbc: 'lbc',
   lbry: 'lbc',
   ultra: 'ultra',
-  arbitrum: 'arbitrum'
+  arbitrum: 'arbitrum',
+  luxochain: 'luxochain'
 }
 
 export const pTokenNativeBlockchain = {
@@ -174,7 +179,8 @@ export const pTokenNativeBlockchain = {
   pzmt: Ethereum,
   bist: Ethereum,
   pvai: BinanceSmartChain,
-  wsb: BinanceSmartChain
+  wsb: BinanceSmartChain,
+  luxo: Luxochain
 }
 
 export const networkLabels = {
@@ -230,6 +236,9 @@ export const networkLabels = {
   },
   arbitrum: {
     mainnet: ArbitrumMainnet
+  },
+  luxochain: {
+    mainnet: LuxochainMainnet
   }
 }
 
@@ -288,5 +297,6 @@ export const pTokensAvailables = [
   ZMT,
   BIST,
   pVAI,
-  WSB
+  WSB,
+  LUXO
 ]
