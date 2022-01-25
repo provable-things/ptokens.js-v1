@@ -137,13 +137,17 @@ const networks = {
 
 const chainIds = {
   [Ethereum]: {
-    [EthereumMainnet]: '0x005fe7f9'
+    [EthereumMainnet]: '0x005fe7f9',
+    [EthereumRopsten]: '0x0069c322'
   },
   [Arbitrum]: {
     [ArbitrumMainnet]: '0x00ce98c4'
   },
   [Luxochain]: {
     [LuxochainMainnet]: '0x00d5beb0'
+  },
+  [BinanceSmartChain]: {
+    [BinanceSmartChainMainnet]: '0x00e4b170'
   }
 }
 
