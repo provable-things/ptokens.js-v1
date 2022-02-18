@@ -32,6 +32,8 @@ import {
   ArbitrumMainnet,
   Luxochain,
   LuxochainMainnet,
+  Algorand,
+  AlgorandMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -104,7 +106,8 @@ const blockchains = {
   Lbry,
   Ultra,
   Arbitrum,
-  Luxochain
+  Luxochain,
+  Algorand
 }
 
 /**
@@ -132,7 +135,8 @@ const networks = {
   UltraMainnet,
   UltraTestnet,
   ArbitrumMainnet,
-  LuxochainMainnet
+  LuxochainMainnet,
+  AlgorandMainnet
 }
 
 const chainIds = {
@@ -148,6 +152,9 @@ const chainIds = {
   },
   [BinanceSmartChain]: {
     [BinanceSmartChainMainnet]: '0x00e4b170'
+  },
+  [Algorand]: {
+    [AlgorandMainnet]: '0x03c38e67'
   }
 }
 

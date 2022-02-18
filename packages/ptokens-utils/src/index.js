@@ -1,3 +1,4 @@
+import * as algo from './algo'
 import * as btc from './btc'
 import * as doge from './doge'
 import * as ltc from './ltc'
@@ -23,6 +24,7 @@ export default {
     pERC20VaultV2: pERC20VaultV2ContractAbi,
     EosioToken: EosioTokenAbi
   },
+  algo,
   btc,
   doge,
   converters,

@@ -218,6 +218,7 @@ export interface Blockchains {
   Ultra: string
   Arbitrum: string
   Luxochain: string
+  Algorand: string
 }
 
 export interface Networks {
@@ -242,6 +243,7 @@ export interface Networks {
   UltraTestnet: string
   ArbitrumMainnet: string
   LuxochainMainnet: string
+  AlgorandMainnet: string
 }
 
 export interface pTokens {
@@ -655,3 +657,16 @@ export interface RvnUtils {
 }
 
 export const rvn: RvnUtils
+
+export interface AlgoUtils {
+  isValidAddress(_network: string, _address: string): boolean
+  waitForTransactionConfirmation(
+    _network: string,
+    _tx: string,
+    _pollingTime: number,
+    _broadcastEventName: string,
+    _confirmationEventName: string
+  ): Promise<RavencoinTransactionReceipt>
+}
+
+export const algo: AlgoUtils

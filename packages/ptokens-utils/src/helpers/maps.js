@@ -32,6 +32,8 @@ import {
   ArbitrumMainnet,
   Luxochain,
   LuxochainMainnet,
+  Algorand,
+  AlgorandMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -109,7 +111,8 @@ export const blockchainTypes = {
   ultra: Ultra,
   uos: Ultra,
   arbitrum: Arbitrum,
-  luxochain: Luxochain
+  luxochain: Luxochain,
+  algorand: Algorand
 }
 
 export const blockchainShortTypes = {
@@ -128,7 +131,8 @@ export const blockchainShortTypes = {
   lbry: 'lbc',
   ultra: 'ultra',
   arbitrum: 'arbitrum',
-  luxochain: 'luxochain'
+  luxochain: 'luxochain',
+  algorand: 'algorand'
 }
 
 export const pTokenNativeBlockchain = {
@@ -239,6 +243,9 @@ export const networkLabels = {
   },
   luxochain: {
     mainnet: LuxochainMainnet
+  },
+  algorand: {
+    mainnet: AlgorandMainnet
   }
 }
 

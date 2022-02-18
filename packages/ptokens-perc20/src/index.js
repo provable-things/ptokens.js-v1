@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import { abi, constants, eth, eos, helpers, redeemFrom } from 'ptokens-utils'
+import { abi, algo, constants, eth, eos, helpers, redeemFrom } from 'ptokens-utils'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import minimumAmounts from './minimum-amounts'
@@ -44,7 +44,9 @@ export class pERC20 extends NodeSelector {
       arbitrumPrivateKey,
       arbitrumProvider,
       luxochainPrivateKey,
-      luxochainProvider
+      luxochainProvider,
+      algoSignatureProvider,
+      algoClient
     } = _configs
 
     if (ethProvider) this.web3 = new Web3(ethProvider)
@@ -128,6 +130,12 @@ export class pERC20 extends NodeSelector {
       this.hostPrivateKey = null
     }
 
+    // the objects used to sign returned by WalletConnect or AlgoSigner
+    // it's not compatible with algosdk so ptokens.js expects an object called
+    // algoSignatureProvider which has a function called sign.
+    if (algoSignatureProvider) this.hostApi = algoSignatureProvider
+    if (algoClient) this.hostApi = { ...this.hostApi, ...algoClient }
+
     this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
 
@@ -179,7 +187,8 @@ export class pERC20 extends NodeSelector {
           [constants.blockchains.Luxochain]: _address => Web3Utils.isAddress(_address),
           [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
-          [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address)
+          [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address),
+          [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address)
         }
         if (!isValidAddress[this.hostBlockchain](_hostAccount)) {
           promiEvent.reject('Invalid host account')
@@ -245,6 +254,9 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.Luxochain
         )
           hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
+
+        if (this.hostBlockchain === blockchains.Algorand)
+          hostTxReceipt = await algo.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
         promiEvent.resolve({
@@ -312,7 +324,7 @@ export class pERC20 extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
+        const { redeemFromEosio, redeemFromEvmCompatible, redeemFromAlgorand } = redeemFrom
 
         const destinationChainId =
           this.version === 'v2' ? constants.chainIds[this.nativeBlockchain][this.nativeNetwork] : null
@@ -369,6 +381,17 @@ export class pERC20 extends NodeSelector {
 
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
           hostTxHash = hostTxReceipt.transaction_id
+        }
+
+        if (this.hostBlockchain === blockchains.Algorand) {
+          const hostTxReceipt = await redeemFromAlgorand(
+            this.hostApi,
+            _amount,
+            _nativeAccount
+            // todo here
+          )
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.txId
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
