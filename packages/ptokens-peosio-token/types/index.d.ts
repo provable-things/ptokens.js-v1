@@ -8,42 +8,42 @@ import { BigNumber } from 'bignumber.js'
 import BN = require('bn.js')
 
 export interface pEosioTokenConfigs {
-  network?: string,
-  hostNetwork?: string,
-  blockchain?: string,
-  hostBlockchain?: string,
-  nativeNetwork?: string,
-  nativeBlockchain?: string,
-  ethPrivateKey?: string,
-  ethProvider?: string | object,
-  bscPrivateKey?: string,
-  bscProvider?: string | object,
-  eosPrivateKey?: string,
-  eosRpc?: string | JsonRpc,
-  eosSignatureProvider?: JsSignatureProvider,
-  telosPrivateKey?: string,
-  telosRpc?: string | JsonRpc,
+  network?: string
+  hostNetwork?: string
+  blockchain?: string
+  hostBlockchain?: string
+  nativeNetwork?: string
+  nativeBlockchain?: string
+  ethPrivateKey?: string
+  ethProvider?: string | object
+  bscPrivateKey?: string
+  bscProvider?: string | object
+  eosPrivateKey?: string
+  eosRpc?: string | JsonRpc
+  eosSignatureProvider?: JsSignatureProvider
+  telosPrivateKey?: string
+  telosRpc?: string | JsonRpc
   telosSignatureProvider?: JsSignatureProvider
   defaultNode?: Node
 }
 
 export interface RedeemOptions {
-  gas: number,
+  gas: number
   gasPrice: number | string | BigNumber
 }
 
 export interface IssueOptions {
-  blocksBehind: number,
-  expireSecond: number,
-  permission: string,
-  actor: string,
+  blocksBehind: number
+  expireSecond: number
+  permission: string
+  actor: string
 }
 
 export interface Result {
-  amount: number,
-  nativeTx: string,
-  hostTx: string,
-  to: string,
+  amount: number
+  nativeTx: string
+  hostTx: string
+  to: string
 }
 
 export class pEosioToken extends NodeSelector {
@@ -65,7 +65,22 @@ export class pEosioToken extends NodeSelector {
 
   hostApi?: Web3 | Api
 
-  issue(_amount: string, _hostAddress: string, _options: IssueOptions): PromiEvent<object | TransactionReceipt | Report | Result>
+  issue(
+    _amount: string,
+    _hostAddress: string,
+    _options: IssueOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
 
-  redeem(_amount: number|string|BigNumber|BN, _account: string, _options: RedeemOptions): PromiEvent<object | TransactionReceipt | Report | Result>
+  redeem(
+    _amount: number | string | BigNumber | BN,
+    _account: string,
+    _options: RedeemOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
+
+  redeemWithMetadata(
+    _amount: number | string | BigNumber | BN,
+    _account: string,
+    _metadata: string,
+    _options: RedeemOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
 }
