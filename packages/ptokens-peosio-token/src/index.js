@@ -168,9 +168,31 @@ export class pEosioToken extends NodeSelector {
    *
    * @param {string|BigNumber|BN} _amount
    * @param {string} _account
+   *  @param {string} _metadata
+   * @param {RedeemOptions} _options
+   */
+  redeemWithMetadata(_amount, _account, _metadata, _options = {}) {
+    return this._redeem(_amount, _account, _metadata, _options)
+  }
+
+  /**
+   *
+   * @param {string|BigNumber|BN} _amount
+   * @param {string} _account
    * @param {RedeemOptions} _options
    */
   redeem(_amount, _account, _options = {}) {
+    return this._redeem(_amount, _account, null, _options)
+  }
+
+  /**
+   *
+   * @param {string|BigNumber|BN} _amount
+   * @param {string} _account
+   *  @param {string} _metadata
+   * @param {RedeemOptions} _options
+   */
+  _redeem(_amount, _account, _metadata, _options = {}) {
     const promiEvent = Web3PromiEvent()
     const { gas, gasPrice } = _options
 
@@ -203,7 +225,7 @@ export class pEosioToken extends NodeSelector {
               contractAddress: this.hostContractAddress,
               value: 0
             },
-            [_amount, _account],
+            _metadata ? [_amount, _metadata, _account] : [_amount, _account],
             promiEvent,
             'hostTxBroadcasted'
           )
