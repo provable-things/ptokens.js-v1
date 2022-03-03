@@ -295,6 +295,7 @@ export interface pTokens {
   pVAI: string
   WSB: string
   LUXO: string
+  pTET: string
 }
 
 export interface EthereumMainnetTokens {

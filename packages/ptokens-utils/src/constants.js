@@ -84,7 +84,8 @@ import {
   BIST,
   pVAI,
   WSB,
-  LUXO
+  LUXO,
+  pTET
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -211,7 +212,8 @@ const pTokens = {
   BIST,
   pVAI,
   WSB,
-  LUXO
+  LUXO,
+  pTET
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

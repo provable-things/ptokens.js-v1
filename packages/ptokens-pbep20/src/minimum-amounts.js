@@ -35,5 +35,11 @@ export default {
     redeem: {
       [constants.blockchains.Ethereum]: 1000000000000000
     }
+  },
+  [constants.pTokens.pTET]: {
+    issue: 0,
+    redeem: {
+      [constants.blockchains.Algorand]: 0
+    }
   }
 }

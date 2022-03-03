@@ -58,7 +58,8 @@ export default {
       SAFEMOON: '0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3',
       USDO: '0x5801d0e1c7d977d78e4890880b8e579eb4943276',
       VAI: '0x4bd17003473389a42daf6a0a729f6fdb328bbbd7',
-      WSB: '0x8244609023097aef71c702ccbaefc0bde5b48694'
+      WSB: '0x8244609023097aef71c702ccbaefc0bde5b48694',
+      pTET: '0x87b92df541869fcabb7e5d4e3bfc3025eb3e7577'
     }
   },
   [Eosio]: {

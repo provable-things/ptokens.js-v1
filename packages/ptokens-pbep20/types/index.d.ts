@@ -6,29 +6,29 @@ import { BigNumber } from 'bignumber.js'
 import BN = require('bn.js')
 
 export interface pBEP20Configs {
-  network?: string,
-  hostNetwork?: string,
-  blockchain?: string,
-  hostBlockchain?: string,
-  nativeNetwork?: string,
-  nativeBlockchain?: string,
-  ethPrivateKey?: string,
-  ethProvider?: string | object,
-  polygonPrivateKey?: string,
-  polygonProvider?: string | object,
-  bscPrivateKey?: string,
-  bscProvider?: string | object,
-  defaultNode?: Node,
+  network?: string
+  hostNetwork?: string
+  blockchain?: string
+  hostBlockchain?: string
+  nativeNetwork?: string
+  nativeBlockchain?: string
+  ethPrivateKey?: string
+  ethProvider?: string | object
+  polygonPrivateKey?: string
+  polygonProvider?: string | object
+  bscPrivateKey?: string
+  bscProvider?: string | object
+  defaultNode?: Node
   pToken: string
 }
 
 export interface IssueOptions {
-  gas: number,
-  gasPrice: number | string | BigNumber,
+  gas: number
+  gasPrice: number | string | BigNumber
 }
 
 export interface RedeemOptions {
-  gasPrice: number | string | BigNumber,
+  gasPrice: number | string | BigNumber
   gas: string | number
 }
 
@@ -51,14 +51,29 @@ export class pBEP20 extends NodeSelector {
 
   hostApi?: Web3
 
-  issue(_amount: string | BigNumber | BN, _hostAddress: string, _options: IssueOptions): PromiEvent<object | TransactionReceipt | Report | Result>
+  issue(
+    _amount: string | BigNumber | BN,
+    _hostAccount: string,
+    _options: IssueOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
 
-  redeem(_amount: number | string, _nativeAddress: string, _options: RedeemOptions): PromiEvent<object | Report | TransactionReceipt | Result>
+  issueWithMetadata(
+    _amount: string | BigNumber | BN,
+    _hostAccount: string,
+    _metadata: string,
+    _options: IssueOptions
+  ): PromiEvent<object | TransactionReceipt | Report | Result>
+
+  redeem(
+    _amount: number | string,
+    _nativeAddress: string,
+    _options: RedeemOptions
+  ): PromiEvent<object | Report | TransactionReceipt | Result>
 }
 
 export interface Result {
-  amount: number,
-  nativeTx: string,
-  hostTx: string,
-  to: string,
+  amount: number
+  nativeTx: string
+  hostTx: string
+  to: string
 }
