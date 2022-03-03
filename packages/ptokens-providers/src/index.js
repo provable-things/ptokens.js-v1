@@ -20,9 +20,9 @@ export class HttpProvider {
 
     this.api = _endpoint
       ? axios.create({
-          baseURL: _endpoint,
-          headers: _headers || DEFAULT_HEADERS
-        })
+        baseURL: _endpoint,
+        headers: _headers || DEFAULT_HEADERS
+      })
       : null
   }
 
@@ -42,7 +42,7 @@ export class HttpProvider {
           : undefined
       }
 
-      const details = [_apiPath, ...(_callType === 'GET' ? [options] : [_params, options])]
+      const details = [_apiPath, ..._callType === 'GET' ? [options] : [_params, options]]
 
       const { data } = await this.api[_callType.toLowerCase()](...details)
 

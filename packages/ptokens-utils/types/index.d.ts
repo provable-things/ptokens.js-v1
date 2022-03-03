@@ -296,6 +296,7 @@ export interface pTokens {
   WSB: string
   LUXO: string
   pTET: string
+  pKEYS: string
 }
 
 export interface EthereumMainnetTokens {
@@ -331,6 +332,7 @@ export interface EthereumMainnetTokens {
   GALA: string
   BIST: string
   LUXO: string
+  KEYS: string
 }
 
 export interface EthereumRopstenTokens {
