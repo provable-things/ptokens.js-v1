@@ -208,5 +208,11 @@ export default {
       [constants.blockchains.Luxochain]: 10000000000,
       [constants.blockchains.BinanceSmartChain]: 10000000000
     }
+  },
+  [constants.pTokens.pKEYS]: {
+    issue: 1000,
+    redeem: {
+      [constants.blockchains.BinanceSmartChain]: 10000000000
+    }
   }
 }

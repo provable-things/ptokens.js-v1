@@ -41,7 +41,7 @@ const broadcastTransaction = (_network, _tx) =>
 const getUtxoByAddress = (_network, _address) =>
   new Promise((_resolve, _reject) =>
     _makeDogeChainApiCall(_network, 'GET', `/unspent/${_address}/`)
-      .then(({ unspent_outputs, success, error }) => (success ? _resolve(unspent_outputs) : _reject(error)))
+      .then(({ unspent_outputs, success, error }) => success ? _resolve(unspent_outputs) : _reject(error))
       .catch(_reject)
   )
 

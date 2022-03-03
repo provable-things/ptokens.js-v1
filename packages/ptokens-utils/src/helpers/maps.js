@@ -82,7 +82,8 @@ import {
   BIST,
   pVAI,
   WSB,
-  LUXO
+  LUXO,
+  pKEYS
 } from './names'
 
 export const blockchainTypes = {
@@ -180,7 +181,8 @@ export const pTokenNativeBlockchain = {
   bist: Ethereum,
   pvai: BinanceSmartChain,
   wsb: BinanceSmartChain,
-  luxo: Luxochain
+  luxo: Luxochain,
+  pkeys: Ethereum
 }
 
 export const networkLabels = {
@@ -298,5 +300,6 @@ export const pTokensAvailables = [
   BIST,
   pVAI,
   WSB,
-  LUXO
+  LUXO,
+  pKEYS
 ]

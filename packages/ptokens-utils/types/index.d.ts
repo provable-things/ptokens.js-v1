@@ -293,6 +293,7 @@ export interface pTokens {
   pVAI: string
   WSB: string
   LUXO: string
+  pKEYS: string
 }
 
 export interface EthereumMainnetTokens {
@@ -328,6 +329,7 @@ export interface EthereumMainnetTokens {
   GALA: string
   BIST: string
   LUXO: string
+  KEYS: string
 }
 
 export interface EthereumRopstenTokens {
