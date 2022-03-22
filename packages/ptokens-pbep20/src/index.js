@@ -155,10 +155,7 @@ export class pBEP20 extends NodeSelector {
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
-        const nativeTxReceipt = await eth.waitForTransactionConfirmation(
-          this.hostApi,
-          incomingTxReport.broadcast_tx_hash
-        )
+        const nativeTxReceipt = await eth.waitForTransactionConfirmation(this.web3, incomingTxReport.broadcast_tx_hash)
         promiEvent.eventEmitter.emit('nativeTxConfirmed', nativeTxReceipt)
 
         promiEvent.resolve({
