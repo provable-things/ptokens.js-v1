@@ -15,7 +15,8 @@
     "update-version": "lerna publish --skip-git --skip-npm --force-publish '*'",
     "test": "lerna run test",
     "prepare": "npm run build && npm run bootstrap && npm run dtslint",
-    "postinstall": "./scripts/postinstall.sh"
+    "postinstall": "./scripts/postinstall.sh",
+    "dev": "lerna run --parallel dev"
   },
   "keywords": [
     "ptokens",
