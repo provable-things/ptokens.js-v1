@@ -9,6 +9,7 @@ import mapDecimals from './decimals'
 
 export class pERC20 extends NodeSelector {
   constructor(_configs) {
+    console.info('ccccccc', _configs)
     const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
       _configs,
       constants.blockchains.Ethereum
@@ -55,78 +56,89 @@ export class pERC20 extends NodeSelector {
     } else {
       this.ethPrivateKey = null
     }
-
-    if (bscProvider) this.hostApi = new Web3(bscProvider)
+    console.info('bscprovider')
+    console.info('bscprivatekey', bscPrivateKey)
+    if (bscProvider) {
+      console.info('in bscProvider')
+      this.hostApi = new Web3(bscProvider)
+    }
     if (bscPrivateKey) {
       const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(bscPrivateKey))
+      console.info('account', account)
       this.hostApi.eth.defaultAccount = account.address
       this.hostPrivateKey = eth.addHexPrefix(bscPrivateKey)
+      console.info('this.hostPrivateKey', this.hostPrivateKey)
     } else {
+      console.info('null hostPrivateKey')
       this.hostPrivateKey = null
     }
 
-    if (xdaiProvider) this.hostApi = new Web3(xdaiProvider)
-    if (xdaiPrivateKey) {
-      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(xdaiPrivateKey))
-      this.hostApi.eth.defaultAccount = account.address
-      this.hostPrivateKey = eth.addHexPrefix(xdaiPrivateKey)
-    } else {
-      this.hostPrivateKey = null
-    }
+    // if (xdaiProvider) this.hostApi = new Web3(xdaiProvider)
+    // if (xdaiPrivateKey) {
+    //   const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(xdaiPrivateKey))
+    //   this.hostApi.eth.defaultAccount = account.address
+    //   this.hostPrivateKey = eth.addHexPrefix(xdaiPrivateKey)
+    // } else {
+    //   console.info('null hostPrivateKey 1')
+    //   this.hostPrivateKey = null
+    // }
 
-    if (polygonProvider) this.hostApi = new Web3(polygonProvider)
-    if (polygonPrivateKey) {
-      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(polygonPrivateKey))
-      this.hostApi.eth.defaultAccount = account.address
-      this.hostPrivateKey = eth.addHexPrefix(polygonPrivateKey)
-    } else {
-      this.hostPrivateKey = null
-    }
+    // if (polygonProvider) this.hostApi = new Web3(polygonProvider)
+    // if (polygonPrivateKey) {
+    //   const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(polygonPrivateKey))
+    //   this.hostApi.eth.defaultAccount = account.address
+    //   this.hostPrivateKey = eth.addHexPrefix(polygonPrivateKey)
+    // } else {
+    //   console.info('null hostPrivateKey 2')
+    //   this.hostPrivateKey = null
+    // }
 
-    if (eosSignatureProvider) {
-      this.hostApi = eos.getApi(null, eosRpc, eosSignatureProvider)
-    } else if (eosPrivateKey && eosRpc) {
-      this.hostApi = eos.getApi(eosPrivateKey, eosRpc, null)
-      this.hostPrivateKey = eosPrivateKey
-    } else if (!eosSignatureProvider && !eosPrivateKey && eosRpc) {
-      this.hostApi = eos.getApi(null, eosRpc, null)
-    }
+    // if (eosSignatureProvider) {
+    //   this.hostApi = eos.getApi(null, eosRpc, eosSignatureProvider)
+    // } else if (eosPrivateKey && eosRpc) {
+    //   this.hostApi = eos.getApi(eosPrivateKey, eosRpc, null)
+    //   this.hostPrivateKey = eosPrivateKey
+    // } else if (!eosSignatureProvider && !eosPrivateKey && eosRpc) {
+    //   this.hostApi = eos.getApi(null, eosRpc, null)
+    // }
 
-    if (telosSignatureProvider) {
-      this.hostApi = eos.getApi(null, telosRpc, telosSignatureProvider)
-    } else if (telosPrivateKey && telosRpc) {
-      this.hostApi = eos.getApi(telosPrivateKey, telosRpc, null)
-      this.hostPrivateKey = telosPrivateKey
-    } else if (!telosSignatureProvider && !telosPrivateKey && telosRpc) {
-      this.hostApi = eos.getApi(null, telosRpc, null)
-    }
+    // if (telosSignatureProvider) {
+    //   this.hostApi = eos.getApi(null, telosRpc, telosSignatureProvider)
+    // } else if (telosPrivateKey && telosRpc) {
+    //   this.hostApi = eos.getApi(telosPrivateKey, telosRpc, null)
+    //   this.hostPrivateKey = telosPrivateKey
+    // } else if (!telosSignatureProvider && !telosPrivateKey && telosRpc) {
+    //   this.hostApi = eos.getApi(null, telosRpc, null)
+    // }
 
-    if (ultraSignatureProvider) {
-      this.hostApi = eos.getApi(null, ultraRpc, ultraSignatureProvider)
-    } else if (ultraPrivateKey && ultraRpc) {
-      this.hostApi = eos.getApi(ultraPrivateKey, ultraRpc, null)
-      this.hostPrivateKey = ultraPrivateKey
-    } else if (!ultraSignatureProvider && !ultraPrivateKey && ultraRpc) {
-      this.hostApi = eos.getApi(null, ultraRpc, null)
-    }
+    // if (ultraSignatureProvider) {
+    //   this.hostApi = eos.getApi(null, ultraRpc, ultraSignatureProvider)
+    // } else if (ultraPrivateKey && ultraRpc) {
+    //   this.hostApi = eos.getApi(ultraPrivateKey, ultraRpc, null)
+    //   this.hostPrivateKey = ultraPrivateKey
+    // } else if (!ultraSignatureProvider && !ultraPrivateKey && ultraRpc) {
+    //   this.hostApi = eos.getApi(null, ultraRpc, null)
+    // }
 
-    if (arbitrumProvider) this.hostApi = new Web3(arbitrumProvider)
-    if (arbitrumPrivateKey) {
-      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(arbitrumPrivateKey))
-      this.hostApi.eth.defaultAccount = account.address
-      this.hostPrivateKey = eth.addHexPrefix(arbitrumPrivateKey)
-    } else {
-      this.hostPrivateKey = null
-    }
+    // if (arbitrumProvider) this.hostApi = new Web3(arbitrumProvider)
+    // if (arbitrumPrivateKey) {
+    //   const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(arbitrumPrivateKey))
+    //   this.hostApi.eth.defaultAccount = account.address
+    //   this.hostPrivateKey = eth.addHexPrefix(arbitrumPrivateKey)
+    // } else {
+    //   console.info('null hostPrivateKey 3')
+    //   this.hostPrivateKey = null
+    // }
 
-    if (luxochainProvider) this.hostApi = new Web3(luxochainProvider)
-    if (luxochainPrivateKey) {
-      const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(luxochainPrivateKey))
-      this.hostApi.eth.defaultAccount = account.address
-      this.hostPrivateKey = eth.addHexPrefix(luxochainPrivateKey)
-    } else {
-      this.hostPrivateKey = null
-    }
+    // if (luxochainProvider) this.hostApi = new Web3(luxochainProvider)
+    // if (luxochainPrivateKey) {
+    //   const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(luxochainPrivateKey))
+    //   this.hostApi.eth.defaultAccount = account.address
+    //   this.hostPrivateKey = eth.addHexPrefix(luxochainPrivateKey)
+    // } else {
+    //   console.info('null hostPrivateKey 4')
+    //   this.hostPrivateKey = null
+    // }
 
     this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
   }
@@ -314,8 +326,8 @@ export class pERC20 extends NodeSelector {
 
         const { redeemFromEosio, redeemFromEvmCompatible } = redeemFrom
 
-        const destinationChainId =
-          this.version === 'v2' ? constants.chainIds[this.nativeBlockchain][this.nativeNetwork] : null
+        const destinationChainId = '0x00d5beb0'
+          // this.version === 'v2' ? constants.chainIds[this.nativeBlockchain][this.nativeNetwork] : null
 
         let hostTxHash
         if (
@@ -325,6 +337,7 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.Arbitrum ||
           this.hostBlockchain === blockchains.Luxochain
         ) {
+          console.info('calling redeemFromEvmCompatible', this.hostPrivateKey)
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
             {
