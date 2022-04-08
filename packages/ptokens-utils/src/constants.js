@@ -149,6 +149,9 @@ const chainIds = {
   },
   [BinanceSmartChain]: {
     [BinanceSmartChainMainnet]: '0x00e4b170'
+  },
+  [Bitcoin]: {
+    [BitcoinMainnet]: '0x01ec97de'
   }
 }
 
