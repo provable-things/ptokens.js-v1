@@ -36,6 +36,8 @@ import {
   AlgorandMainnet,
   Fantom,
   FantomMainnet,
+  Ore,
+  OreMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -92,7 +94,8 @@ import {
   OATH,
   pFTM,
   pWFTM,
-  NUCO
+  NUCO,
+  ORE
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -116,7 +119,8 @@ const blockchains = {
   Arbitrum,
   Luxochain,
   Algorand,
-  Fantom
+  Fantom,
+  Ore
 }
 
 /**
@@ -146,7 +150,8 @@ const networks = {
   ArbitrumMainnet,
   LuxochainMainnet,
   AlgorandMainnet,
-  FantomMainnet
+  FantomMainnet,
+  OreMainnet
 }
 
 const chainIds = {
@@ -236,7 +241,8 @@ const pTokens = {
   OATH,
   pFTM,
   pWFTM,
-  NUCO
+  NUCO,
+  ORE
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

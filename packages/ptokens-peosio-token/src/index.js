@@ -32,7 +32,10 @@ export class pEosioToken extends NodeSelector {
       eosSignatureProvider,
       telosPrivateKey,
       telosRpc,
-      telosSignatureProvider
+      telosSignatureProvider,
+      orePrivateKey,
+      oreRpc,
+      oreSignatureProvider
     } = _configs
 
     if (eosSignatureProvider) {
@@ -51,6 +54,15 @@ export class pEosioToken extends NodeSelector {
       this.nativePrivateKey = telosPrivateKey
     } else if (!telosSignatureProvider && !telosPrivateKey && telosRpc) {
       this.nativeApi = eos.getApi(null, telosRpc, null)
+    }
+
+    if (oreSignatureProvider) {
+      this.nativeApi = eos.getApi(null, oreRpc, oreSignatureProvider)
+    } else if (orePrivateKey && oreRpc) {
+      this.nativeApi = eos.getApi(orePrivateKey, oreRpc, null)
+      this.nativePrivateKey = orePrivateKey
+    } else if (!oreSignatureProvider && !orePrivateKey && oreRpc) {
+      this.nativeApi = eos.getApi(null, oreRpc, null)
     }
 
     if (ethProvider) this.hostApi = new Web3(ethProvider)

@@ -303,6 +303,7 @@ export interface pTokens {
   pFTM: string
   pWFTM: string
   NUCO: string
+  ORE: string
 }
 
 export interface EthereumMainnetTokens {
@@ -364,6 +365,14 @@ export interface TelosTokens {
   mainnet: TelosMainnetTokens
 }
 
+export interface OreMainnetTokens {
+  ORE: string
+}
+
+export interface OreTokens {
+  mainnet: OreMainnetTokens
+}
+
 export interface EosioMainnetTokens {
   EOS: string
   IQ: string
@@ -398,6 +407,7 @@ export interface Tokens {
   eosio: EosioTokens
   telos: TelosTokens
   'binance-smart-chain': BinanceSmartChainTokens
+  ore: OreTokens
 }
 
 export interface ChainIdsArbitrum {

@@ -9,7 +9,9 @@ import {
   BinanceSmartChain,
   BinanceSmartChainMainnet,
   Fantom,
-  FantomMainnet
+  FantomMainnet,
+  Ore,
+  OreMainnet
 } from './names'
 
 export default {
@@ -82,6 +84,11 @@ export default {
   [Fantom]: {
     [FantomMainnet]: {
       OATH: '0x21ada0d2ac28c3a5fa3cd2ee30882da8812279b6'
+    }
+  },
+  [Ore]: {
+    [OreMainnet]: {
+      ORE: 'eosio.token'
     }
   }
 }

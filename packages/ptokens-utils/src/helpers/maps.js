@@ -36,6 +36,8 @@ import {
   AlgorandMainnet,
   Fantom,
   FantomMainnet,
+  Ore,
+  OreMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -92,7 +94,8 @@ import {
   OATH,
   pFTM,
   pWFTM,
-  NUCO
+  NUCO,
+  ORE
 } from './names'
 
 export const blockchainTypes = {
@@ -121,7 +124,8 @@ export const blockchainTypes = {
   arbitrum: Arbitrum,
   luxochain: Luxochain,
   algorand: Algorand,
-  fantom: Fantom
+  fantom: Fantom,
+  ore: Ore
 }
 
 export const blockchainShortTypes = {
@@ -143,7 +147,8 @@ export const blockchainShortTypes = {
   luxochain: 'luxochain',
   algorand: 'algo',
   fantom: 'fantom',
-  ftm: 'fantom'
+  ftm: 'fantom',
+  ore: 'ore'
 }
 
 export const pTokenNativeBlockchain = {
@@ -201,7 +206,9 @@ export const pTokenNativeBlockchain = {
   oath: Fantom,
   pftm: Fantom,
   pwftm: Fantom,
-  nuco: Ethereum
+  nuco: Ethereum,
+  pkeys: Ethereum,
+  ore: Ore
 }
 
 export const networkLabels = {
@@ -266,6 +273,9 @@ export const networkLabels = {
   },
   fantom: {
     mainnet: FantomMainnet
+  },
+  ore: {
+    mainnet: OreMainnet
   }
 }
 
@@ -331,5 +341,6 @@ export const pTokensAvailables = [
   OATH,
   pFTM,
   pWFTM,
-  NUCO
+  NUCO,
+  ORE
 ]

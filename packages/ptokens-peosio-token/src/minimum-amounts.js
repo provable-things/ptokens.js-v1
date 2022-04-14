@@ -23,5 +23,9 @@ export default {
   [constants.pTokens.NUCO]: {
     issue: 1,
     redeem: 1
+  },
+  [constants.pTokens.ORE]: {
+    issue: 0.0001,
+    redeem: 1000000000
   }
 }
