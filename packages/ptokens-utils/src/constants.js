@@ -32,6 +32,8 @@ import {
   ArbitrumMainnet,
   Luxochain,
   LuxochainMainnet,
+  Fantom,
+  FantomMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -83,7 +85,8 @@ import {
   pVAI,
   WSB,
   LUXO,
-  pKEYS
+  pKEYS,
+  OATH
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -105,7 +108,8 @@ const blockchains = {
   Lbry,
   Ultra,
   Arbitrum,
-  Luxochain
+  Luxochain,
+  Fantom
 }
 
 /**
@@ -133,7 +137,8 @@ const networks = {
   UltraMainnet,
   UltraTestnet,
   ArbitrumMainnet,
-  LuxochainMainnet
+  LuxochainMainnet,
+  FantomMainnet
 }
 
 const chainIds = {
@@ -152,6 +157,9 @@ const chainIds = {
   },
   [Bitcoin]: {
     [BitcoinMainnet]: '0x01ec97de'
+  },
+  [Fantom]: {
+    [FantomMainnet]: '0x0022af98'
   }
 }
 
@@ -209,7 +217,8 @@ const pTokens = {
   pVAI,
   WSB,
   LUXO,
-  pKEYS
+  pKEYS,
+  OATH
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

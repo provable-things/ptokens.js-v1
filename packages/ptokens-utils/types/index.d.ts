@@ -218,6 +218,7 @@ export interface Blockchains {
   Ultra: string
   Arbitrum: string
   Luxochain: string
+  Fantom: string
 }
 
 export interface Networks {
@@ -242,6 +243,7 @@ export interface Networks {
   UltraTestnet: string
   ArbitrumMainnet: string
   LuxochainMainnet: string
+  FantomMainnet: string
 }
 
 export interface pTokens {
@@ -294,6 +296,7 @@ export interface pTokens {
   WSB: string
   LUXO: string
   pKEYS: string
+  OATH: string
 }
 
 export interface EthereumMainnetTokens {

@@ -32,6 +32,8 @@ import {
   ArbitrumMainnet,
   Luxochain,
   LuxochainMainnet,
+  Fantom,
+  FantomMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -83,7 +85,8 @@ import {
   pVAI,
   WSB,
   LUXO,
-  pKEYS
+  pKEYS,
+  OATH
 } from './names'
 
 export const blockchainTypes = {
@@ -110,7 +113,8 @@ export const blockchainTypes = {
   ultra: Ultra,
   uos: Ultra,
   arbitrum: Arbitrum,
-  luxochain: Luxochain
+  luxochain: Luxochain,
+  fantom: Fantom
 }
 
 export const blockchainShortTypes = {
@@ -129,7 +133,9 @@ export const blockchainShortTypes = {
   lbry: 'lbc',
   ultra: 'ultra',
   arbitrum: 'arbitrum',
-  luxochain: 'luxochain'
+  luxochain: 'luxochain',
+  fantom: 'fantom',
+  ftm: 'fantom'
 }
 
 export const pTokenNativeBlockchain = {
@@ -182,7 +188,8 @@ export const pTokenNativeBlockchain = {
   pvai: BinanceSmartChain,
   wsb: BinanceSmartChain,
   luxo: Luxochain,
-  pkeys: Ethereum
+  pkeys: Ethereum,
+  oath: Fantom
 }
 
 export const networkLabels = {
@@ -241,6 +248,9 @@ export const networkLabels = {
   },
   luxochain: {
     mainnet: LuxochainMainnet
+  },
+  fantom: {
+    mainnet: FantomMainnet
   }
 }
 
@@ -301,5 +311,6 @@ export const pTokensAvailables = [
   pVAI,
   WSB,
   LUXO,
-  pKEYS
+  pKEYS,
+  OATH
 ]

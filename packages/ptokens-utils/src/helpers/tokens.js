@@ -7,7 +7,9 @@ import {
   Telos,
   TelosMainnet,
   BinanceSmartChain,
-  BinanceSmartChainMainnet
+  BinanceSmartChainMainnet,
+  Fantom,
+  FantomMainnet
 } from './names'
 
 export default {
@@ -73,6 +75,11 @@ export default {
     [TelosMainnet]: {
       TLOS: 'eosio.token',
       SEEDS: 'token.seeds'
+    }
+  },
+  [Fantom]: {
+    [FantomMainnet]: {
+      OATH: '0x21ada0d2ac28c3a5fa3cd2ee30882da8812279b6'
     }
   }
 }

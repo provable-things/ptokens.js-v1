@@ -11,7 +11,7 @@ export class pERC20 extends NodeSelector {
   constructor(_configs) {
     const { hostBlockchain, hostNetwork, nativeBlockchain, nativeNetwork } = helpers.parseParams(
       _configs,
-      constants.blockchains.Ethereum
+      _configs.nativeBlockchain || constants.blockchains.Ethereum
     )
 
     super({
@@ -44,16 +44,39 @@ export class pERC20 extends NodeSelector {
       arbitrumPrivateKey,
       arbitrumProvider,
       luxochainPrivateKey,
-      luxochainProvider
+      luxochainProvider,
+      ftmPrivateKey,
+      ftmProvider
     } = _configs
 
-    if (ethProvider) this.web3 = new Web3(ethProvider)
-    if (ethPrivateKey) {
-      const account = this.web3.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
+    if (ftmProvider) this.web3 = new Web3(ftmProvider)
+    if (ftmPrivateKey) {
+      const account = this.web3.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ftmPrivateKey))
       this.web3.eth.defaultAccount = account.address
-      this.ethPrivateKey = eth.addHexPrefix(ethPrivateKey)
+      this.nativePrivateKey = eth.addHexPrefix(ftmPrivateKey)
     } else {
-      this.ethPrivateKey = null
+      this.nativePrivateKey = null
+    }
+
+    // if fantom is used as native chain, then eth can be used just as host
+    if (nativeBlockchain === constants.blockchains.Fantom && (ethProvider || ethPrivateKey)) {
+      if (ethProvider) this.hostApi = new Web3(ethProvider)
+      if (ethPrivateKey) {
+        const account = this.hostApi.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
+        this.hostApi.eth.defaultAccount = account.address
+        this.hostPrivateKey = eth.addHexPrefix(ethPrivateKey)
+      } else {
+        this.hostPrivateKey = null
+      }
+    } else if (ethProvider || ethPrivateKey) {
+      if (ethProvider) this.web3 = new Web3(ethProvider)
+      if (ethPrivateKey) {
+        const account = this.web3.eth.accounts.privateKeyToAccount(eth.addHexPrefix(ethPrivateKey))
+        this.web3.eth.defaultAccount = account.address
+        this.nativePrivateKey = eth.addHexPrefix(ethPrivateKey)
+      } else {
+        this.nativePrivateKey = null
+      }
     }
 
     if (bscProvider) this.hostApi = new Web3(bscProvider)
@@ -194,11 +217,11 @@ export class pERC20 extends NodeSelector {
         let ethTxHash = null
         const waitForEthTransaction = () =>
           new Promise((_resolve, _reject) => {
-            eth[this.ethPrivateKey ? 'sendSignedMethodTx' : 'makeContractSend'](
+            eth[this.nativePrivateKey ? 'sendSignedMethodTx' : 'makeContractSend'](
               this.web3,
               this._peginEth ? 'pegInEth' : 'pegIn',
               {
-                privateKey: this.ethPrivateKey,
+                privateKey: this.nativePrivateKey,
                 abi: this.version === 'v1' ? abi.pERC20Vault : abi.pERC20VaultV2,
                 gas,
                 gasPrice,
@@ -242,7 +265,8 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.BinanceSmartChain ||
           this.hostBlockchain === blockchains.Polygon ||
           this.hostBlockchain === blockchains.Arbitrum ||
-          this.hostBlockchain === blockchains.Luxochain
+          this.hostBlockchain === blockchains.Luxochain ||
+          this.hostBlockchain === blockchains.Ethereum
         )
           hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
@@ -323,7 +347,8 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === blockchains.Xdai ||
           this.hostBlockchain === blockchains.Polygon ||
           this.hostBlockchain === blockchains.Arbitrum ||
-          this.hostBlockchain === blockchains.Luxochain
+          this.hostBlockchain === blockchains.Luxochain ||
+          this.hostBlockchain === blockchains.Ethereum
         ) {
           const hostTxReceipt = await redeemFromEvmCompatible(
             this.hostApi,
