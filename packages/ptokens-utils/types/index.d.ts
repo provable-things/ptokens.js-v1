@@ -299,6 +299,7 @@ export interface pTokens {
   OATH: string
   pFTM: string
   pWFTM: string
+  NUCO: string
 }
 
 export interface EthereumMainnetTokens {
@@ -335,6 +336,7 @@ export interface EthereumMainnetTokens {
   BIST: string
   LUXO: string
   KEYS: string
+  NCDT: string
 }
 
 export interface EthereumRopstenTokens {

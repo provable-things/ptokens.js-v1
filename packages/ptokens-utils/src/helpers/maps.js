@@ -88,7 +88,8 @@ import {
   pKEYS,
   OATH,
   pFTM,
-  pWFTM
+  pWFTM,
+  NUCO
 } from './names'
 
 export const blockchainTypes = {
@@ -193,7 +194,8 @@ export const pTokenNativeBlockchain = {
   pkeys: Ethereum,
   oath: Fantom,
   pftm: Fantom,
-  pwftm: Fantom
+  pwftm: Fantom,
+  nuco: Ethereum
 }
 
 export const networkLabels = {
@@ -318,5 +320,6 @@ export const pTokensAvailables = [
   pKEYS,
   OATH,
   pFTM,
-  pWFTM
+  pWFTM,
+  NUCO
 ]

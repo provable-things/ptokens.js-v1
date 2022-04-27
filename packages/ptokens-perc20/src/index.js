@@ -391,7 +391,7 @@ export class pERC20 extends NodeSelector {
               : 9,
             this.hostContractAddress,
             this.pToken === pTokens.pWETH ? 'peth' : this.pToken,
-            { blocksBehind, expireSeconds, permission, actor }
+            { blocksBehind, expireSeconds, permission, actor, destinationChainId, version: this.version }
           )
 
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)

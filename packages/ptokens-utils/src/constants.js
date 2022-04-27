@@ -88,7 +88,8 @@ import {
   pKEYS,
   OATH,
   pFTM,
-  pWFTM
+  pWFTM,
+  NUCO
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -162,6 +163,9 @@ const chainIds = {
   },
   [Fantom]: {
     [FantomMainnet]: '0x0022af98'
+  },
+  [Telos]: {
+    [TelosMainnet]: '0x028c7109'
   }
 }
 
@@ -222,7 +226,8 @@ const pTokens = {
   pKEYS,
   OATH,
   pFTM,
-  pWFTM
+  pWFTM,
+  NUCO
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }
