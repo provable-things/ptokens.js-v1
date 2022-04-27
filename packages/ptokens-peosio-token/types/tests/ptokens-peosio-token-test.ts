@@ -5,7 +5,7 @@ const peos = new pEosioToken({
   blockchain: 'eth'
 })
 
-// $ExpectType PromiEvent<object | TransactionReceipt | Report | Result>
+// $ExpectType PromiEvent<object | Report | TransactionReceipt | Result>
 peos.issue('0.0015', '0xdf3B180694aB22C577f7114D822D28b92cadFd75', {
   blocksBehind: 30,
   expireSecond: 120,
@@ -13,7 +13,7 @@ peos.issue('0.0015', '0xdf3B180694aB22C577f7114D822D28b92cadFd75', {
   actor: 'actor'
 })
 
-// $ExpectType PromiEvent<object | TransactionReceipt | Report | Result>
+// $ExpectType PromiEvent<object | Report | TransactionReceipt | Result>
 peos.redeem(10, 'eosxxxx', {
   gas: 10,
   gasPrice: 10

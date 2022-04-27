@@ -25,5 +25,5 @@ depositAddress.toString()
 // $ExpectType boolean
 depositAddress.verify()
 
-// $ExpectType PromiEvent<TransactionReceipt | Report | BitcoinUtxo | LitecoinUtxo | IssueResult>
+// $ExpectType PromiEvent<Report | TransactionReceipt | BitcoinUtxo | LitecoinUtxo | IssueResult>
 depositAddress.waitForDeposit()
