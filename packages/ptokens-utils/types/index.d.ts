@@ -339,7 +339,7 @@ export interface EthereumRopstenTokens {
   UOS: string
 }
 
-export interface BinanceSmartC0x00d5beb0hainMainnetTokens {
+export interface BinanceSmartChainMainnetTokens {
   OCP: string
   TFF: string
   SAFEMOON: string
