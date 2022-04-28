@@ -3,6 +3,7 @@
   "description": "repo holding the code for interacting with ptokens",
   "private": true,
   "main": "./packages/ptokens/src/index.js",
+  "version": "0.14.0",
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "link": "lerna link",
@@ -28,6 +29,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/provable-things/ptokens.js.git"
+  },
+  "dependencies": {
+    "ptokens": "./packages/ptokens/"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
