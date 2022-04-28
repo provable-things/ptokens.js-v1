@@ -38,8 +38,7 @@
   },
   "devDependencies": {
     "dtslint": "0.4.2",
-    "jest": "^24.8.0",
-    "ptokens-providers": "^0.14.0"
+    "jest": "^24.8.0"
   },
   "files": [
     "dist",
