@@ -1,5 +1,5 @@
 {
-  "name": "ptokens",
+  "name": "ptokens-monorepo",
   "description": "repo holding the code for interacting with ptokens",
   "private": true,
   "main": "./packages/ptokens/src/index.js",
@@ -27,6 +27,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/provable-things/ptokens.js.git"
+  },
+  "dependencies": {
+    "ptokens": "^0.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
