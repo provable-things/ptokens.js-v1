@@ -13,7 +13,7 @@
     "lint": "lerna run lint",
     "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\"",
     "test": "lerna run test",
-    "prepare": "npm run build && npm run bootstrap && npm run dtslint",
+    "prepare": "npm run build && npm run bootstrap",
     "postinstall": "./scripts/postinstall.sh"
   },
   "keywords": [
@@ -27,9 +27,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/provable-things/ptokens.js.git"
-  },
-  "dependencies": {
-    "ptokens": "./packages/ptokens/"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
