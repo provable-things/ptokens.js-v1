@@ -86,7 +86,9 @@ import {
   WSB,
   LUXO,
   pKEYS,
-  OATH
+  OATH,
+  pFTM,
+  pWFTM
 } from './names'
 
 export const blockchainTypes = {
@@ -189,7 +191,9 @@ export const pTokenNativeBlockchain = {
   wsb: BinanceSmartChain,
   luxo: Luxochain,
   pkeys: Ethereum,
-  oath: Fantom
+  oath: Fantom,
+  pftm: Fantom,
+  pwftm: Fantom
 }
 
 export const networkLabels = {
@@ -312,5 +316,7 @@ export const pTokensAvailables = [
   WSB,
   LUXO,
   pKEYS,
-  OATH
+  OATH,
+  pFTM,
+  pWFTM
 ]

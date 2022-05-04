@@ -297,6 +297,8 @@ export interface pTokens {
   LUXO: string
   pKEYS: string
   OATH: string
+  pFTM: string
+  pWFTM: string
 }
 
 export interface EthereumMainnetTokens {

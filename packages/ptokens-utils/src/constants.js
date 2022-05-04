@@ -86,7 +86,9 @@ import {
   WSB,
   LUXO,
   pKEYS,
-  OATH
+  OATH,
+  pFTM,
+  pWFTM
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -218,7 +220,9 @@ const pTokens = {
   WSB,
   LUXO,
   pKEYS,
-  OATH
+  OATH,
+  pFTM,
+  pWFTM
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

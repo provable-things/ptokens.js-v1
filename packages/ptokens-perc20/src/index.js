@@ -151,7 +151,9 @@ export class pERC20 extends NodeSelector {
       this.hostPrivateKey = null
     }
 
-    this._peginEth = _configs.pToken.toLowerCase() === constants.pTokens.pETH
+    this._peginEth =
+      _configs.pToken.toLowerCase() === constants.pTokens.pETH ||
+      _configs.pToken.toLowerCase() === constants.pTokens.pFTM
   }
 
   /**

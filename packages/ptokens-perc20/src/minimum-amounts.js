@@ -220,5 +220,17 @@ export default {
     redeem: {
       [constants.blockchains.Ethereum]: 10000000000
     }
+  },
+  [constants.pTokens.pFTM]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.Ethereum]: 10000000000
+    }
+  },
+  [constants.pTokens.pWFTM]: {
+    issue: 1000000000,
+    redeem: {
+      [constants.blockchains.Ethereum]: 10000000000
+    }
   }
 }
