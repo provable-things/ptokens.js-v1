@@ -4,6 +4,7 @@
   "private": true,
   "main": "./packages/ptokens/src/index.js",
   "scripts": {
+    "dev": "lerna run --parallel dev",
     "bootstrap": "lerna bootstrap",
     "link": "lerna link",
     "build": "lerna run build",
