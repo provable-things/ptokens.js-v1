@@ -216,27 +216,27 @@ export default {
     }
   },
   [constants.pTokens.OATH]: {
-    issue: 10000000000,
+    issue: 500e18,
     redeem: {
-      [constants.blockchains.Ethereum]: 10000000000
+      [constants.blockchains.Ethereum]: 500e18
     }
   },
   [constants.pTokens.pFTM]: {
-    issue: 1000000000,
+    issue: 100e18,
     redeem: {
-      [constants.blockchains.Ethereum]: 10000000000
+      [constants.blockchains.Ethereum]: 100e18
     }
   },
   [constants.pTokens.pWFTM]: {
-    issue: 1000000000,
+    issue: 100e18,
     redeem: {
-      [constants.blockchains.Ethereum]: 10000000000
+      [constants.blockchains.Ethereum]: 100e18
     }
   },
   [constants.pTokens.NUCO]: {
-    issue: 1000000000,
+    issue: 1500e18,
     redeem: {
-      [constants.blockchains.Ethereum]: 1000000000
+      [constants.blockchains.Telos]: 1500
     }
   }
 }
