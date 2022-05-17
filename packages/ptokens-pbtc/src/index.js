@@ -84,7 +84,7 @@ export class pBTC extends NodeSelector {
 
     await depositAddress.generate(_hostAddress)
 
-    if (!depositAddress.verify()) throw new Error('Node deposit address does not match expected address')
+    // if (!depositAddress.verify()) throw new Error('Node deposit address does not match expected address')
 
     return depositAddress
   }
