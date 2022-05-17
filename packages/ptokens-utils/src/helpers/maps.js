@@ -141,7 +141,7 @@ export const blockchainShortTypes = {
   ultra: 'ultra',
   arbitrum: 'arbitrum',
   luxochain: 'luxochain',
-  algorand: 'algorand',
+  algorand: 'algo',
   fantom: 'fantom',
   ftm: 'fantom'
 }
