@@ -219,6 +219,7 @@ export interface Blockchains {
   Arbitrum: string
   Luxochain: string
   Algorand: string
+  Fantom: string
 }
 
 export interface Networks {
@@ -244,6 +245,7 @@ export interface Networks {
   ArbitrumMainnet: string
   LuxochainMainnet: string
   AlgorandMainnet: string
+  FantomMainnet: string
 }
 
 export interface pTokens {
@@ -297,6 +299,10 @@ export interface pTokens {
   LUXO: string
   pTET: string
   pKEYS: string
+  OATH: string
+  pFTM: string
+  pWFTM: string
+  NUCO: string
 }
 
 export interface EthereumMainnetTokens {
@@ -333,6 +339,7 @@ export interface EthereumMainnetTokens {
   BIST: string
   LUXO: string
   KEYS: string
+  NCDT: string
 }
 
 export interface EthereumRopstenTokens {

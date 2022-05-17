@@ -214,5 +214,29 @@ export default {
     redeem: {
       [constants.blockchains.BinanceSmartChain]: 10000000000
     }
+  },
+  [constants.pTokens.OATH]: {
+    issue: 500e18,
+    redeem: {
+      [constants.blockchains.Ethereum]: 500e18
+    }
+  },
+  [constants.pTokens.pFTM]: {
+    issue: 100e18,
+    redeem: {
+      [constants.blockchains.Ethereum]: 100e18
+    }
+  },
+  [constants.pTokens.pWFTM]: {
+    issue: 100e18,
+    redeem: {
+      [constants.blockchains.Ethereum]: 100e18
+    }
+  },
+  [constants.pTokens.NUCO]: {
+    issue: 1500e18,
+    redeem: {
+      [constants.blockchains.Telos]: 1500
+    }
   }
 }

@@ -16,6 +16,8 @@ export interface pERC20Configs {
   nativeBlockchain?: string
   ethPrivateKey?: string
   ethProvider?: string | object
+  ftmPrivateKey?: string
+  ftmProvider?: string | object
   bscPrivateKey?: string
   bscProvider?: string | object
   xdaiPrivateKey?: string
@@ -65,6 +67,8 @@ export class pERC20 extends NodeSelector {
   hostContractAddress: string | null
 
   nativeVaultAddress: string | null
+
+  nativePrivatekey?: string | null
 
   hostPrivatekey?: string | null
 

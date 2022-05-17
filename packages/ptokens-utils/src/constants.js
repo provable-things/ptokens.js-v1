@@ -34,6 +34,8 @@ import {
   LuxochainMainnet,
   Algorand,
   AlgorandMainnet,
+  Fantom,
+  FantomMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -86,7 +88,11 @@ import {
   WSB,
   LUXO,
   pTET,
-  pKEYS
+  pKEYS,
+  OATH,
+  pFTM,
+  pWFTM,
+  NUCO
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -109,7 +115,8 @@ const blockchains = {
   Ultra,
   Arbitrum,
   Luxochain,
-  Algorand
+  Algorand,
+  Fantom
 }
 
 /**
@@ -138,7 +145,8 @@ const networks = {
   UltraTestnet,
   ArbitrumMainnet,
   LuxochainMainnet,
-  AlgorandMainnet
+  AlgorandMainnet,
+  FantomMainnet
 }
 
 const chainIds = {
@@ -157,6 +165,15 @@ const chainIds = {
   },
   [Algorand]: {
     [AlgorandMainnet]: '0x03c38e67'
+  },
+  [Bitcoin]: {
+    [BitcoinMainnet]: '0x01ec97de'
+  },
+  [Fantom]: {
+    [FantomMainnet]: '0x0022af98'
+  },
+  [Telos]: {
+    [TelosMainnet]: '0x028c7109'
   }
 }
 
@@ -215,7 +232,11 @@ const pTokens = {
   WSB,
   LUXO,
   pTET,
-  pKEYS
+  pKEYS,
+  OATH,
+  pFTM,
+  pWFTM,
+  NUCO
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

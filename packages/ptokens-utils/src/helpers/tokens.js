@@ -7,7 +7,9 @@ import {
   Telos,
   TelosMainnet,
   BinanceSmartChain,
-  BinanceSmartChainMainnet
+  BinanceSmartChainMainnet,
+  Fantom,
+  FantomMainnet
 } from './names'
 
 export default {
@@ -46,7 +48,8 @@ export default {
       ZMT: '0xaa602dE53347579f86b996D2Add74bb6F79462b2',
       BIST: '0x6e8908cfa881c9f6f2c64d3436e7b80b1bf0093f',
       LUXO: '0xd39a2cecba2657e125ba6a5c98ad2f6b6d7e83fd',
-      KEYS: '0xe0a189C975e4928222978A74517442239a0b86ff'
+      KEYS: '0xe0a189C975e4928222978A74517442239a0b86ff',
+      NCDT: '0xE0C8b298db4cfFE05d1bEA0bb1BA414522B33C1B'
     },
     [EthereumRopsten]: {
       UOS: '0x92829bc1a5b405fe14a0b7c38a5bad9a91b1dc02'
@@ -74,6 +77,11 @@ export default {
     [TelosMainnet]: {
       TLOS: 'eosio.token',
       SEEDS: 'token.seeds'
+    }
+  },
+  [Fantom]: {
+    [FantomMainnet]: {
+      OATH: '0x21ada0d2ac28c3a5fa3cd2ee30882da8812279b6'
     }
   }
 }
