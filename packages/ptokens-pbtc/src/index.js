@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
-import { constants, eth, eos, btc, helpers, redeemFrom } from 'ptokens-utils'
+import { constants, algo, eth, eos, btc, helpers, redeemFrom } from 'ptokens-utils'
 import { DepositAddress } from 'ptokens-deposit-address'
 import Web3Utils from 'web3-utils'
 
@@ -26,7 +26,15 @@ export class pBTC extends NodeSelector {
       defaultNode: _configs.defaultNode
     })
 
-    const { ethPrivateKey, ethProvider, eosPrivateKey, eosRpc, eosSignatureProvider } = _configs
+    const {
+      ethPrivateKey,
+      ethProvider,
+      eosPrivateKey,
+      eosRpc,
+      eosSignatureProvider,
+      algoProvider,
+      algoClient
+    } = _configs
 
     if ((ethProvider || ethPrivateKey) && (eosSignatureProvider || eosPrivateKey))
       throw new Error('Bad Initialization. Impossible to use both ETH and EOS')
@@ -51,6 +59,9 @@ export class pBTC extends NodeSelector {
       this.hostApi = eos.getApi(null, eosRpc, null)
     }
 
+    if (algoProvider) this.hostApi = algoProvider
+    if (algoClient) this.algoClient = algoClient
+
     this.contractAddress = null
     this.decimals = null
   }
@@ -66,7 +77,8 @@ export class pBTC extends NodeSelector {
       [constants.blockchains.Polygon]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Arbitrum]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
-      [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address)
+      [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
+      [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address)
     }
     if (!isValidAddress[this.hostBlockchain](_hostAddress)) throw new Error('Invalid host account')
 
@@ -99,7 +111,9 @@ export class pBTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor, from } = _options
+
+        await this._loadData()
 
         if (_amount < MINIMUM_BTC_REDEEMABLE) {
           promiEvent.reject(`Impossible to burn less than ${MINIMUM_BTC_REDEEMABLE} pBTC`)
@@ -115,9 +129,10 @@ export class pBTC extends NodeSelector {
 
         if (!this.selectedNode) await this.select()
 
-        const contractAddress = await this._getContractAddress()
+        const { redeemFromEvmCompatible, redeemFromEosio, redeemFromAlgorand } = redeemFrom
 
-        const { redeemFromEvmCompatible, redeemFromEosio } = redeemFrom
+        const destinationChainId =
+          this.version === 'v2' ? constants.chainIds[this.nativeBlockchain][this.nativeNetwork] : null
 
         let hostTxHash = null
         if (
@@ -133,12 +148,13 @@ export class pBTC extends NodeSelector {
               privateKey: this.hostPrivateKey,
               gas,
               gasPrice,
-              contractAddress,
+              contractAddress: this.contractAddress,
               value: 0
             },
-            [_amount, _btcAddress],
+            this.version === 'v1' ? [_amount, _btcAddress] : [_amount, _btcAddress, destinationChainId],
             promiEvent,
-            'hostTxBroadcasted'
+            'hostTxBroadcasted',
+            this.version || 'v1'
           )
           // NOTE: 'onEthTxConfirmed' will be removed in version >= 1.0.0
           if (this.hostBlockchain === constants.blockchains.Ethereum)
@@ -157,7 +173,7 @@ export class pBTC extends NodeSelector {
             _amount,
             _btcAddress,
             8,
-            contractAddress,
+            this.contractAddress,
             constants.pTokens.pBTC,
             {
               blocksBehind,
@@ -173,6 +189,22 @@ export class pBTC extends NodeSelector {
           }
           promiEvent.eventEmitter.emit('hostTxConfirmed', eosTxReceipt)
           hostTxHash = eosTxReceipt.transaction_id
+        }
+
+        if (this.hostBlockchain === constants.blockchains.Algorand) {
+          const hostTxReceipt = await redeemFromAlgorand({
+            provider: this.hostApi,
+            client: this.algoClient,
+            amount: _amount,
+            to: this.hostIdentity,
+            assetIndex: this.hostContractAddress,
+            nativeAccount: _btcAddress,
+            from,
+            destinationChainId,
+            eventEmitter: promiEvent.eventEmitter
+          })
+          promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
+          hostTxHash = hostTxReceipt.txID().toString()
         }
 
         const broadcastedBtcTxReport = await this.selectedNode.monitorIncomingTransaction(
@@ -204,16 +236,14 @@ export class pBTC extends NodeSelector {
     return promiEvent.eventEmitter
   }
 
-  async _getContractAddress() {
+  async _loadData() {
     try {
       if (!this.contractAddress) {
         if (!this.selectedNode) await this.select()
-
-        const { smart_contract_address } = await this.selectedNode.getInfo()
-        this.contractAddress = smart_contract_address
+        const { smart_contract_address, host_smart_contract_address, versions } = await this.selectedNode.getInfo()
+        this.contractAddress = smart_contract_address || host_smart_contract_address
+        this.version = versions && versions.network ? versions.network : 'v1'
       }
-
-      return this.contractAddress
     } catch (_err) {
       throw new Error(`Error during getting contract address: ${_err.message}`)
     }
