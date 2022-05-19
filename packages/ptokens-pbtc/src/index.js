@@ -197,7 +197,7 @@ export class pBTC extends NodeSelector {
             client: this.algoClient,
             amount: _amount,
             to: this.hostIdentity,
-            assetIndex: this.hostContractAddress,
+            assetIndex: this.contractAddress,
             nativeAccount: _btcAddress,
             from,
             destinationChainId,
@@ -240,9 +240,15 @@ export class pBTC extends NodeSelector {
     try {
       if (!this.contractAddress) {
         if (!this.selectedNode) await this.select()
-        const { smart_contract_address, host_smart_contract_address, versions } = await this.selectedNode.getInfo()
+        const {
+          host_identity,
+          smart_contract_address,
+          host_smart_contract_address,
+          versions
+        } = await this.selectedNode.getInfo()
         this.contractAddress = smart_contract_address || host_smart_contract_address
         this.version = versions && versions.network ? versions.network : 'v1'
+        this.hostIdentity = host_identity
       }
     } catch (_err) {
       throw new Error(`Error during getting contract address: ${_err.message}`)

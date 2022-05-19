@@ -5,6 +5,16 @@ import {
 } from 'algosdk'
 import { encode } from '@msgpack/msgpack'
 
+function parseHexString(str) {
+  let inStr = str
+  var result = []
+  while (inStr.length >= 2) {
+    result.push(parseInt(inStr.substring(0, 2), 16))
+    inStr = inStr.substring(2, inStr.length)
+  }
+  return result
+}
+
 export const redeemFromAlgorand = async ({
   amount,
   to,
@@ -17,13 +27,14 @@ export const redeemFromAlgorand = async ({
   eventEmitter
 }) => {
   const suggestedParams = await client.getTransactionParams().do()
+  const encodedDestinationChainId = parseHexString(destinationChainId.substring(2))
   const tx = makeAssetTransferTxnWithSuggestedParamsFromObject({
     from,
     to,
     assetIndex: parseInt(assetIndex, 10),
     amount: parseInt(amount, 10),
     suggestedParams,
-    note: encode([0, [0, 228, 177, 112], nativeAccount, []])
+    note: encode([0, encodedDestinationChainId, nativeAccount, []])
   })
 
   const signedTxs = await provider.signTxn([
@@ -32,8 +43,10 @@ export const redeemFromAlgorand = async ({
     }
   ])
 
+  // tx blob is contained in .blob property for algosigner
+  const signedTxBlob = signedTxs[0].blob ? signedTxs[0].blob : signedTxs[0]
   const binarySignedTx = new Uint8Array(
-    Buffer.from(signedTxs[0].blob, 'base64')
+    Buffer.from(signedTxBlob, 'base64')
       .toString('binary')
       .split('')
       .map(x => x.charCodeAt(0))
