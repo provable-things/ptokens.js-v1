@@ -111,7 +111,7 @@ export class pBTC extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor, from } = _options
+        const { gas, gasPrice, blocksBehind, expireSeconds, permission, actor, from, swapInfo } = _options
 
         await this._loadData()
 
@@ -201,7 +201,8 @@ export class pBTC extends NodeSelector {
             nativeAccount: _btcAddress,
             from,
             destinationChainId,
-            eventEmitter: promiEvent.eventEmitter
+            eventEmitter: promiEvent.eventEmitter,
+            swapInfo
           })
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
           hostTxHash = hostTxReceipt.txID().toString()

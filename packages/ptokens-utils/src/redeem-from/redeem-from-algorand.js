@@ -1,9 +1,18 @@
 import {
   makeAssetTransferTxnWithSuggestedParamsFromObject,
   encodeUnsignedTransaction,
-  waitForConfirmation
+  waitForConfirmation,
+  getApplicationAddress,
+  makeApplicationCallTxnFromObject,
+  encodeUint64,
+  decodeAddress,
+  assignGroupID
 } from 'algosdk'
 import { encode } from '@msgpack/msgpack'
+
+function encodeStringForArgs(str) {
+  return new Uint8Array(Buffer.from(str))
+}
 
 function parseHexString(str) {
   let inStr = str
@@ -15,6 +24,14 @@ function parseHexString(str) {
   return result
 }
 
+const decodeBlob = _blob =>
+  new Uint8Array(
+    Buffer.from(_blob, 'base64')
+      .toString('binary')
+      .split('')
+      .map(x => x.charCodeAt(0))
+  )
+
 export const redeemFromAlgorand = async ({
   amount,
   to,
@@ -24,37 +41,53 @@ export const redeemFromAlgorand = async ({
   nativeAccount,
   client,
   provider,
-  eventEmitter
+  eventEmitter,
+  swapInfo
 }) => {
   const suggestedParams = await client.getTransactionParams().do()
   const encodedDestinationChainId = parseHexString(destinationChainId.substring(2))
-  const tx = makeAssetTransferTxnWithSuggestedParamsFromObject({
+  const asaTransferTx = makeAssetTransferTxnWithSuggestedParamsFromObject({
     from,
-    to,
-    assetIndex: parseInt(assetIndex, 10),
+    to: swapInfo ? getApplicationAddress(parseInt(swapInfo.appId)) : to,
+    assetIndex: parseInt(swapInfo ? swapInfo.inputAssetId : assetIndex),
     amount: parseInt(amount, 10),
     suggestedParams,
     note: encode([0, encodedDestinationChainId, nativeAccount, []])
   })
 
-  const signedTxs = await provider.signTxn([
+  let appCallTx
+  if (swapInfo) {
+    appCallTx = makeApplicationCallTxnFromObject({
+      from,
+      suggestedParams,
+      appIndex: parseInt(swapInfo.appId),
+      appArgs: [encodeStringForArgs('swap'), encodeUint64(parseInt(assetIndex, 10)), decodeAddress(to).publicKey],
+      foreignAssets: [parseInt(assetIndex), parseInt(swapInfo.inputAssetId)],
+      accounts: [to]
+    })
+    assignGroupID([asaTransferTx, appCallTx])
+  }
+
+  const toBeSignedTxs = [
     {
-      txn: Buffer.from(encodeUnsignedTransaction(tx)).toString('base64')
+      txn: Buffer.from(encodeUnsignedTransaction(asaTransferTx)).toString('base64')
     }
-  ])
+  ]
+  if (swapInfo) {
+    toBeSignedTxs.push({
+      txn: Buffer.from(encodeUnsignedTransaction(appCallTx)).toString('base64')
+    })
+  }
+  const signedTxs = await provider.signTxn(toBeSignedTxs)
 
   // tx blob is contained in .blob property for algosigner
-  const signedTxBlob = signedTxs[0].blob ? signedTxs[0].blob : signedTxs[0]
-  const binarySignedTx = new Uint8Array(
-    Buffer.from(signedTxBlob, 'base64')
-      .toString('binary')
-      .split('')
-      .map(x => x.charCodeAt(0))
-  )
+  const binaryAsaTransferSignedTx = decodeBlob(signedTxs[0].blob ? signedTxs[0].blob : signedTxs[0])
+  let binarySignedTxs = [binaryAsaTransferSignedTx]
+  if (swapInfo) binarySignedTxs.push(decodeBlob(signedTxs[1].blob ? signedTxs[1].blob : signedTxs[1]))
 
-  await client.sendRawTransaction(binarySignedTx).do()
-  const txId = tx.txID().toString()
+  await client.sendRawTransaction(binarySignedTxs).do()
+  const txId = swapInfo ? appCallTx.txID() : asaTransferTx.txID()
   eventEmitter.emit('hostTxBroadcasted', txId)
   await waitForConfirmation(client, txId, 10)
-  return tx
+  return swapInfo ? appCallTx : asaTransferTx
 }

@@ -96,7 +96,7 @@ export class pBEP20 extends NodeSelector {
 
     const start = async () => {
       try {
-        const { gas, gasPrice, from } = _options
+        const { gas, gasPrice, from, swapInfo } = _options
         const { blockchains } = constants
 
         await this._loadData()
@@ -147,7 +147,8 @@ export class pBEP20 extends NodeSelector {
             nativeAccount: _nativeAccount,
             from,
             destinationChainId,
-            eventEmitter: promiEvent.eventEmitter
+            eventEmitter: promiEvent.eventEmitter,
+            swapInfo
           })
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
           hostTxHash = hostTxReceipt.txID().toString()

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import Web3 from 'web3'
 import Web3PromiEvent from 'web3-core-promievent'
 import { NodeSelector } from 'ptokens-node-selector'
@@ -45,7 +46,7 @@ export class pERC20 extends NodeSelector {
       arbitrumProvider,
       luxochainPrivateKey,
       luxochainProvider,
-      algoSignatureProvider,
+      algoProvider,
       algoClient,
       ftmPrivateKey,
       ftmProvider
@@ -153,11 +154,8 @@ export class pERC20 extends NodeSelector {
       this.hostPrivateKey = null
     }
 
-    // the objects used to sign returned by WalletConnect or AlgoSigner
-    // it's not compatible with algosdk so ptokens.js expects an object called
-    // algoSignatureProvider which has a function called sign.
-    if (algoSignatureProvider) this.hostApi = algoSignatureProvider
-    if (algoClient) this.hostApi = { ...this.hostApi, ...algoClient }
+    if (algoProvider) this.hostApi = algoProvider
+    if (algoClient) this.algoClient = algoClient
 
     this._peginEth =
       _configs.pToken.toLowerCase() === constants.pTokens.pETH ||
@@ -332,7 +330,7 @@ export class pERC20 extends NodeSelector {
 
     const start = async () => {
       try {
-        const { blocksBehind, expireSeconds, permission, gas, gasPrice, actor } = _options
+        const { blocksBehind, expireSeconds, permission, gas, gasPrice, actor, from, swapInfo } = _options
         const { blockchains, pTokens } = constants
 
         await this._loadData()
@@ -410,15 +408,21 @@ export class pERC20 extends NodeSelector {
           hostTxHash = hostTxReceipt.transaction_id
         }
 
-        if (this.hostBlockchain === blockchains.Algorand) {
-          const hostTxReceipt = await redeemFromAlgorand(
-            this.hostApi,
-            _amount,
-            _nativeAccount
-            // todo here
-          )
+        if (this.hostBlockchain === constants.blockchains.Algorand) {
+          const hostTxReceipt = await redeemFromAlgorand({
+            provider: this.hostApi,
+            client: this.algoClient,
+            amount: _amount,
+            to: this.hostIdentity,
+            assetIndex: this.hostContractAddress,
+            nativeAccount: _nativeAccount,
+            from,
+            destinationChainId,
+            eventEmitter: promiEvent.eventEmitter,
+            swapInfo
+          })
           promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
-          hostTxHash = hostTxReceipt.txId
+          hostTxHash = hostTxReceipt.txID().toString()
         }
 
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(hostTxHash, promiEvent.eventEmitter)
@@ -448,17 +452,20 @@ export class pERC20 extends NodeSelector {
           native_smart_contract_address,
           host_smart_contract_address,
           native_vault_address,
-          versions
+          versions,
+          host_identity
         } = await this.selectedNode.getInfo()
         this.nativeContractAddress = eth.addHexPrefix(native_smart_contract_address)
         this.hostContractAddress =
           this.hostBlockchain === constants.blockchains.Eosio ||
           this.hostBlockchain === constants.blockchains.Telos ||
-          this.hostBlockchain === constants.blockchains.Ultra
+          this.hostBlockchain === constants.blockchains.Ultra ||
+          this.hostBlockchain === constants.blockchains.Algorand
             ? host_smart_contract_address
             : eth.addHexPrefix(host_smart_contract_address)
         this.nativeVaultAddress = native_vault_address ? eth.addHexPrefix(native_vault_address) : null
         this.version = versions && versions.network ? versions.network : 'v1'
+        this.hostIdentity = host_identity
       }
     } catch (_err) {
       throw new Error(`Error during loading data: ${_err.message}`)
