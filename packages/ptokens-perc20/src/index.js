@@ -213,7 +213,7 @@ export class pERC20 extends NodeSelector {
           [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address),
-          [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address)
+          [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address, true)
         }
         if (!isValidAddress[this.hostBlockchain](_hostAccount)) {
           promiEvent.reject('Invalid host account')

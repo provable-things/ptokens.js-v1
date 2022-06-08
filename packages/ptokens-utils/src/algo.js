@@ -3,7 +3,11 @@ import algosdk from 'algosdk'
 /**
  * @param {String} _address
  */
-const isValidAddress = algosdk.isValidAddress
+function isValidAddress(str, allowAppId = false) {
+  // check if appId
+  if (allowAppId && parseInt(str)) return true
+  return algosdk.isValidAddress(str)
+}
 
 /**
  * @param {Object} _client
