@@ -168,9 +168,10 @@ export default {
     }
   },
   [constants.pTokens.pUSDT]: {
-    issue: 5000000,
+    issue: 500000,
     redeem: {
-      [constants.blockchains.Telos]: 0.000000001
+      [constants.blockchains.Telos]: 0.000000001,
+      [constants.blockchains.Algorand]: 1
     }
   },
   [constants.pTokens.pOPEN]: {
