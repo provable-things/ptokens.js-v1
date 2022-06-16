@@ -66,6 +66,8 @@ export const redeemFromAlgorand = async ({
       accounts: [to]
     })
     assignGroupID([asaTransferTx, appCallTx])
+  } else {
+    assignGroupID([asaTransferTx])
   }
 
   const toBeSignedTxs = [
@@ -86,8 +88,7 @@ export const redeemFromAlgorand = async ({
   if (swapInfo) binarySignedTxs.push(decodeBlob(signedTxs[1].blob ? signedTxs[1].blob : signedTxs[1]))
 
   await client.sendRawTransaction(binarySignedTxs).do()
-  const txId = swapInfo ? appCallTx.txID() : asaTransferTx.txID()
-  eventEmitter.emit('hostTxBroadcasted', txId)
-  await waitForConfirmation(client, txId, 10)
+  eventEmitter.emit('hostTxBroadcasted', asaTransferTx.group.toString('base64'))
+  await waitForConfirmation(client, asaTransferTx.txID(), 10)
   return swapInfo ? appCallTx : asaTransferTx
 }
