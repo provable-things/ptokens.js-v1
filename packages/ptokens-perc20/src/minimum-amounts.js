@@ -161,17 +161,17 @@ export default {
     }
   },
   [constants.pTokens.pUSDC]: {
-    issue: 500000,
+    issue: 5000000,
     redeem: {
       [constants.blockchains.Telos]: 0.000000001,
-      [constants.blockchains.Algorand]: 500000
+      [constants.blockchains.Algorand]: 5000000
     }
   },
   [constants.pTokens.pUSDT]: {
-    issue: 500000,
+    issue: 5000000,
     redeem: {
       [constants.blockchains.Telos]: 0.000000001,
-      [constants.blockchains.Algorand]: 1
+      [constants.blockchains.Algorand]: 5000000
     }
   },
   [constants.pTokens.pOPEN]: {
