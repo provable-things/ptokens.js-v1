@@ -211,7 +211,8 @@ export class pERC20 extends NodeSelector {
           [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
           [constants.blockchains.Ultra]: _address => eos.isValidAccountName(_address),
-          [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address, true)
+          [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address, true),
+          [constants.blockchains.Libre]: _address => eos.isValidAccountName(_address)
         }
         if (!isValidAddress[this.hostBlockchain](_hostAccount)) {
           promiEvent.reject('Invalid host account')
@@ -266,7 +267,11 @@ export class pERC20 extends NodeSelector {
         const incomingTxReport = await this.selectedNode.monitorIncomingTransaction(ethTxHash, promiEvent.eventEmitter)
 
         let hostTxReceipt
-        if (this.hostBlockchain === blockchains.Eosio || this.hostBlockchain === blockchains.Telos)
+        if (
+          this.hostBlockchain === blockchains.Eosio ||
+          this.hostBlockchain === blockchains.Telos ||
+          this.hostBlockchain === blockchains.Libre
+        )
           hostTxReceipt = await eos.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
         if (
@@ -390,7 +395,8 @@ export class pERC20 extends NodeSelector {
         if (
           this.hostBlockchain === blockchains.Eosio ||
           this.hostBlockchain === blockchains.Telos ||
-          this.hostBlockchain === blockchains.Ultra
+          this.hostBlockchain === blockchains.Ultra ||
+          this.hostBlockchain === blockchains.Libre
         ) {
           const hostTxReceipt = await redeemFromEosio(
             this.hostApi,
@@ -460,7 +466,8 @@ export class pERC20 extends NodeSelector {
           this.hostBlockchain === constants.blockchains.Eosio ||
           this.hostBlockchain === constants.blockchains.Telos ||
           this.hostBlockchain === constants.blockchains.Ultra ||
-          this.hostBlockchain === constants.blockchains.Algorand
+          this.hostBlockchain === constants.blockchains.Algorand ||
+          this.hostBlockchain === constants.blockchains.Libre
             ? host_smart_contract_address
             : eth.addHexPrefix(host_smart_contract_address)
         this.nativeVaultAddress = native_vault_address ? eth.addHexPrefix(native_vault_address) : null

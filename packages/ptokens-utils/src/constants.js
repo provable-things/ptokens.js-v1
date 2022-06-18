@@ -38,6 +38,8 @@ import {
   FantomMainnet,
   Ore,
   OreMainnet,
+  Libre,
+  LibreMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -120,7 +122,8 @@ const blockchains = {
   Luxochain,
   Algorand,
   Fantom,
-  Ore
+  Ore,
+  Libre
 }
 
 /**
@@ -151,7 +154,8 @@ const networks = {
   LuxochainMainnet,
   AlgorandMainnet,
   FantomMainnet,
-  OreMainnet
+  OreMainnet,
+  LibreMainnet
 }
 
 const chainIds = {
@@ -172,13 +176,17 @@ const chainIds = {
     [AlgorandMainnet]: '0x03c38e67'
   },
   [Bitcoin]: {
-    [BitcoinMainnet]: '0x01ec97de'
+    [BitcoinMainnet]: '0x01ec97de',
+    [BitcoinTestnet]: '0x018afeb2'
   },
   [Fantom]: {
     [FantomMainnet]: '0x0022af98'
   },
   [Telos]: {
     [TelosMainnet]: '0x028c7109'
+  },
+  [Libre]: {
+    [LibreMainnet]: '0x026776fa'
   }
 }
 

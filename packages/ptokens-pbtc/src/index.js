@@ -78,7 +78,8 @@ export class pBTC extends NodeSelector {
       [constants.blockchains.Arbitrum]: _address => Web3Utils.isAddress(_address),
       [constants.blockchains.Eosio]: _address => eos.isValidAccountName(_address),
       [constants.blockchains.Telos]: _address => eos.isValidAccountName(_address),
-      [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address)
+      [constants.blockchains.Algorand]: _address => algo.isValidAddress(_address),
+      [constants.blockchains.Libre]: _address => eos.isValidAccountName(_address)
     }
     if (!isValidAddress[this.hostBlockchain](_hostAddress)) throw new Error('Invalid host account')
 
@@ -166,20 +167,23 @@ export class pBTC extends NodeSelector {
 
         if (
           this.hostBlockchain === constants.blockchains.Eosio ||
-          this.hostBlockchain === constants.blockchains.Telos
+          this.hostBlockchain === constants.blockchains.Telos ||
+          this.hostBlockchain === constants.blockchains.Libre
         ) {
           const eosTxReceipt = await redeemFromEosio(
             this.hostApi,
             _amount,
             _btcAddress,
-            8,
+            this.version === 'v2' ? 9 : 8,
             this.contractAddress,
             constants.pTokens.pBTC,
             {
               blocksBehind,
               expireSeconds,
               permission,
-              actor
+              actor,
+              version: this.version,
+              destinationChainId: destinationChainId
             }
           )
 

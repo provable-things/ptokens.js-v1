@@ -38,6 +38,8 @@ import {
   FantomMainnet,
   Ore,
   OreMainnet,
+  Libre,
+  LibreMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -125,7 +127,8 @@ export const blockchainTypes = {
   luxochain: Luxochain,
   algorand: Algorand,
   fantom: Fantom,
-  ore: Ore
+  ore: Ore,
+  libre: Libre
 }
 
 export const blockchainShortTypes = {
@@ -148,7 +151,8 @@ export const blockchainShortTypes = {
   algorand: 'algo',
   fantom: 'fantom',
   ftm: 'fantom',
-  ore: 'ore'
+  ore: 'ore',
+  libre: 'libre'
 }
 
 export const pTokenNativeBlockchain = {
@@ -208,7 +212,8 @@ export const pTokenNativeBlockchain = {
   pwftm: Fantom,
   nuco: Ethereum,
   pkeys: Ethereum,
-  ore: Ore
+  ore: Ore,
+  libre: Libre
 }
 
 export const networkLabels = {
@@ -223,9 +228,9 @@ export const networkLabels = {
     mainnet: EosioMainnet
   },
   bitcoin: {
-    testnet: Bitcoin,
+    bitcoin: Bitcoin,
     mainnet: BitcoinMainnet,
-    bitcoin: BitcoinTestnet
+    testnet: BitcoinTestnet
   },
   litecoin: {
     testnet: LitecoinTestnet,
@@ -276,6 +281,9 @@ export const networkLabels = {
   },
   ore: {
     mainnet: OreMainnet
+  },
+  libre: {
+    mainnet: LibreMainnet
   }
 }
 

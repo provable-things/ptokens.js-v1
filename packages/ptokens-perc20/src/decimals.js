@@ -19,6 +19,9 @@ export default {
   [pTokens.pUSDT]: {
     [blockchains.Telos]: {
       [networks.TelosMainnet]: 6
+    },
+    [blockchains.Libre]: {
+      [networks.LibreMainnet]: 9
     }
   },
   [pTokens.pUSDC]: {

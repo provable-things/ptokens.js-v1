@@ -33,6 +33,7 @@ export default {
   eth,
   eos,
   telos: eos,
+  libre: eos,
   helpers,
   ltc,
   rvn,
