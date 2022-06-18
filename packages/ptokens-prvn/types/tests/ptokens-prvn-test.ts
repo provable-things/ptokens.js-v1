@@ -8,7 +8,7 @@ const prvn = new pRVN({
 // $ExpectType Promise<DepositAddress>
 prvn.getDepositAddress('eth address')
 
-// $ExpectType PromiEvent<string | TransactionReceipt | Report | RavencoinTransactionReceipt | RedeemResult>
+// $ExpectType PromiEvent<string | Report | TransactionReceipt | RavencoinTransactionReceipt | RedeemResult>
 prvn.redeem(10, 'rvn address', {
   gas: 10,
   gasPrice: 10

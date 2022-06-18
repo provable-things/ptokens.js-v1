@@ -379,6 +379,16 @@ export interface EosioTokens {
   mainnet: EosioMainnetTokens
 }
 
+export interface BinanceSmartChainMainnetTokens {
+  OCP: string
+  TFF: string
+  SAFEMOON: string
+  USDO: string
+  VAI: string
+  WSB: string
+  pTET: string
+}
+
 export interface BinanceSmartChainTokens {
   mainnet: BinanceSmartChainMainnetTokens
 }
