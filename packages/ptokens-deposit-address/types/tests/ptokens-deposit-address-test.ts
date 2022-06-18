@@ -17,7 +17,7 @@ const depositAddress = new DepositAddress({
 })
 
 // $ExpectType Promise<string>
-depositAddress.generate("eth address")
+depositAddress.generate('eth address')
 
 // $ExpectType string
 depositAddress.toString()
@@ -25,5 +25,5 @@ depositAddress.toString()
 // $ExpectType boolean
 depositAddress.verify()
 
-// $ExpectType PromiEvent<TransactionReceipt | Report | BitcoinUtxo | LitecoinUtxo | IssueResult>
+// $ExpectType PromiEvent<Report | TransactionReceipt | BitcoinUtxo | LitecoinUtxo | IssueResult>
 depositAddress.waitForDeposit()
