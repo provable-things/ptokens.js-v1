@@ -36,6 +36,8 @@ import {
   AlgorandMainnet,
   Fantom,
   FantomMainnet,
+  Phoenix,
+  PhoenixMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -121,7 +123,8 @@ export const blockchainTypes = {
   arbitrum: Arbitrum,
   luxochain: Luxochain,
   algorand: Algorand,
-  fantom: Fantom
+  fantom: Fantom,
+  phoenix: Phoenix
 }
 
 export const blockchainShortTypes = {
@@ -143,7 +146,8 @@ export const blockchainShortTypes = {
   luxochain: 'luxochain',
   algorand: 'algo',
   fantom: 'fantom',
-  ftm: 'fantom'
+  ftm: 'fantom',
+  phoenix: 'phoenix'
 }
 
 export const pTokenNativeBlockchain = {
@@ -201,7 +205,8 @@ export const pTokenNativeBlockchain = {
   oath: Fantom,
   pftm: Fantom,
   pwftm: Fantom,
-  nuco: Ethereum
+  nuco: Ethereum,
+  phoenix: Phoenix
 }
 
 export const networkLabels = {
@@ -216,9 +221,9 @@ export const networkLabels = {
     mainnet: EosioMainnet
   },
   bitcoin: {
-    testnet: Bitcoin,
+    bitcoin: Bitcoin,
     mainnet: BitcoinMainnet,
-    bitcoin: BitcoinTestnet
+    testnet: BitcoinTestnet
   },
   litecoin: {
     testnet: LitecoinTestnet,
@@ -266,6 +271,9 @@ export const networkLabels = {
   },
   fantom: {
     mainnet: FantomMainnet
+  },
+  phoenix: {
+    mainnet: PhoenixMainnet
   }
 }
 

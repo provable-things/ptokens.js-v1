@@ -19,6 +19,9 @@ export default {
   [pTokens.pUSDT]: {
     [blockchains.Telos]: {
       [networks.TelosMainnet]: 6
+    },
+    [blockchains.Phoenix]: {
+      [networks.PhoenixMainnet]: 9
     }
   },
   [pTokens.pUSDC]: {

@@ -36,6 +36,8 @@ import {
   AlgorandMainnet,
   Fantom,
   FantomMainnet,
+  Phoenix,
+  PhoenixMainnet,
   Mainnet,
   Testnet,
   pBTC,
@@ -116,7 +118,8 @@ const blockchains = {
   Arbitrum,
   Luxochain,
   Algorand,
-  Fantom
+  Fantom,
+  Phoenix
 }
 
 /**
@@ -146,7 +149,8 @@ const networks = {
   ArbitrumMainnet,
   LuxochainMainnet,
   AlgorandMainnet,
-  FantomMainnet
+  FantomMainnet,
+  PhoenixMainnet
 }
 
 const chainIds = {
@@ -167,13 +171,17 @@ const chainIds = {
     [AlgorandMainnet]: '0x03c38e67'
   },
   [Bitcoin]: {
-    [BitcoinMainnet]: '0x01ec97de'
+    [BitcoinMainnet]: '0x01ec97de',
+    [BitcoinTestnet]: '0x018afeb2'
   },
   [Fantom]: {
     [FantomMainnet]: '0x0022af98'
   },
   [Telos]: {
     [TelosMainnet]: '0x028c7109'
+  },
+  [Phoenix]: {
+    [PhoenixMainnet]: '0x026776fa'
   }
 }
 
