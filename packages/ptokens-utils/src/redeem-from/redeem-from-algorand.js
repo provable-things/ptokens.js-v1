@@ -1,6 +1,5 @@
 import {
   makeAssetTransferTxnWithSuggestedParamsFromObject,
-  encodeUnsignedTransaction,
   waitForConfirmation,
   getApplicationAddress,
   makeApplicationCallTxnFromObject,
@@ -70,16 +69,8 @@ export const redeemFromAlgorand = async ({
     assignGroupID([asaTransferTx])
   }
 
-  const toBeSignedTxs = [
-    {
-      txn: Buffer.from(encodeUnsignedTransaction(asaTransferTx)).toString('base64')
-    }
-  ]
-  if (swapInfo) {
-    toBeSignedTxs.push({
-      txn: Buffer.from(encodeUnsignedTransaction(appCallTx)).toString('base64')
-    })
-  }
+  const toBeSignedTxs = [asaTransferTx]
+  if (swapInfo) toBeSignedTxs.push(appCallTx)
   const signedTxs = await provider.signTxn(toBeSignedTxs)
 
   // tx blob is contained in .blob property for algosigner
