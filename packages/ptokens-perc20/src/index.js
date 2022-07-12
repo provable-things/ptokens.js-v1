@@ -285,7 +285,9 @@ export class pERC20 extends NodeSelector {
           hostTxReceipt = await eth.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
 
         if (this.hostBlockchain === blockchains.Algorand)
-          hostTxReceipt = await algo.waitForTransactionConfirmation(this.hostApi, incomingTxReport.broadcast_tx_hash)
+          // fixme: as the report contains the group id, algosdk waitForConfirmation cannot be used.
+          // Anyway, confirmation is fast, so we can simulate the function with a delay.
+          await new Promise(resolve => setTimeout(resolve, 5000))
 
         promiEvent.eventEmitter.emit('hostTxConfirmed', hostTxReceipt)
         promiEvent.resolve({
