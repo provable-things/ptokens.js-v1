@@ -30,7 +30,7 @@
     "chai": "^4.2.0"
   },
   "devDependencies": {
-    "dtslint": "0.4.2",
+    "dtslint": "4.2.0",
     "jest": "^24.8.0"
   },
   "files": [

@@ -43,7 +43,7 @@
     "ptokens-utils": "^0.15.0"
   },
   "devDependencies": {
-    "dtslint": "0.4.2",
+    "dtslint": "4.2.0",
     "jest": "^24.8.0"
   },
   "author": "alle.manfredi@gmail.com @provable-things",
