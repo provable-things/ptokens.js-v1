@@ -1,6 +1,6 @@
 {
   "name": "ptokens-prvn",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "repo holding the code for interacting with pRVN",
   "repository": "https://github.com/provable-things/ptokens.js/tree/master/packages/ptokens-prvn",
   "main": "dist/ptokens-prvn.cjs.js",
@@ -29,10 +29,10 @@
     "bignumber.js": "^9.0.0",
     "chai": "^4.2.0",
     "eosjs": "^20.0.0",
-    "ptokens-deposit-address": "^0.14.0",
-    "ptokens-node": "^0.14.0",
-    "ptokens-node-selector": "^0.14.0",
-    "ptokens-utils": "^0.14.0",
+    "ptokens-deposit-address": "^0.15.0",
+    "ptokens-node": "^0.15.0",
+    "ptokens-node-selector": "^0.15.0",
+    "ptokens-utils": "^0.15.0",
     "web3": "^1.2.2",
     "web3-core-promievent": "^1.2.1",
     "web3-utils": "^1.2.4"
