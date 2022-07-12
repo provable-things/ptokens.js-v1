@@ -9,7 +9,7 @@
     "link": "lerna link",
     "build": "lerna run build",
     "init": "npm i && lerna bootstrap",
-    "dtslint": "lerna run dtslint",
+    "dtslint": "lerna --concurrency 1 run dtslint",
     "lint": "lerna run lint",
     "publish": "npm run prepare && lerna publish --dist-tag latest --skip-git",
     "format": "prettier --config ./.prettierrc --write  \"./packages/**/*.+(js|json)\"",
@@ -58,7 +58,7 @@
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-json": "^4.0.0",
-    "typescript": "^3.7.5"
+    "typescript": "^4.7.4"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix",
