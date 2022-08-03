@@ -97,7 +97,8 @@ import {
   pFTM,
   pWFTM,
   NUCO,
-  ORE
+  ORE,
+  pWOMBAT
 } from './helpers/names'
 import tokens from './helpers/tokens'
 
@@ -187,6 +188,9 @@ const chainIds = {
   },
   [Libre]: {
     [LibreMainnet]: '0x026776fa'
+  },
+  [Eosio]: {
+    [EosioMainnet]: '0x02e7261c'
   }
 }
 
@@ -250,7 +254,8 @@ const pTokens = {
   pFTM,
   pWFTM,
   NUCO,
-  ORE
+  ORE,
+  pWOMBAT
 }
 
 export { blockchains, networks, pTokens, tokens, chainIds }

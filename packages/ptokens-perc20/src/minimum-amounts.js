@@ -240,5 +240,11 @@ export default {
     redeem: {
       [constants.blockchains.Telos]: 1500
     }
+  },
+  [constants.pTokens.pWOMBAT]: {
+    issue: 2000e18,
+    redeem: {
+      [constants.blockchains.Eosio]: 2000.0
+    }
   }
 }

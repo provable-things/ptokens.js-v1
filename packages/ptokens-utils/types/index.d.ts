@@ -304,6 +304,7 @@ export interface pTokens {
   pWFTM: string
   NUCO: string
   ORE: string
+  pWOMBAT: string
 }
 
 export interface EthereumMainnetTokens {
@@ -341,6 +342,7 @@ export interface EthereumMainnetTokens {
   LUXO: string
   KEYS: string
   NCDT: string
+  WOMBAT: string
 }
 
 export interface EthereumRopstenTokens {

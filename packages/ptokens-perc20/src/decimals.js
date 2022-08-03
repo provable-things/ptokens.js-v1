@@ -28,5 +28,10 @@ export default {
     [blockchains.Telos]: {
       [networks.TelosMainnet]: 6
     }
+  },
+  [pTokens.pWOMBAT]: {
+    [blockchains.Eosio]: {
+      [networks.EosioMainnet]: 6
+    }
   }
 }

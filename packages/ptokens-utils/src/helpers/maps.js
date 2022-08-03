@@ -97,7 +97,8 @@ import {
   pFTM,
   pWFTM,
   NUCO,
-  ORE
+  ORE,
+  pWOMBAT
 } from './names'
 
 export const blockchainTypes = {
@@ -211,9 +212,9 @@ export const pTokenNativeBlockchain = {
   pftm: Fantom,
   pwftm: Fantom,
   nuco: Ethereum,
-  pkeys: Ethereum,
   ore: Ore,
-  libre: Libre
+  libre: Libre,
+  pwombat: Ethereum
 }
 
 export const networkLabels = {
@@ -350,5 +351,6 @@ export const pTokensAvailables = [
   pFTM,
   pWFTM,
   NUCO,
-  ORE
+  ORE,
+  pWOMBAT
 ]
