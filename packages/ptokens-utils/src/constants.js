@@ -191,6 +191,9 @@ const chainIds = {
   },
   [Eosio]: {
     [EosioMainnet]: '0x02e7261c'
+  },
+  [Polygon]: {
+    [PolygonMainnet]: '0x0075dd4c'
   }
 }
 
